@@ -5,17 +5,38 @@ import (
 	"sync"
 )
 
+// ErrPref - This type is provides methods useful in formatting
+// error prefix and error context strings.
+//
+// The error prefix text is designed to be configured at the
+// beginning of error messages and is most often used to
+// document the thread of code execution by listing the calling
+// sequence for specific functions and methods.
+//
+// The error context string is designed to provide additional
+// error context information associated with the currently
+// executing function or method. Typical context information
+// might include variable names, variable values and additional
+// details on function execution.
+//
 type ErrPref struct {
 	maxErrStringLength uint
 	lock               *sync.Mutex
 }
 
 // New - Returns a string concatenating the old error prefix the
-// new custom, user-defined error prefix. This is typically used
-// to create method or function chains. The old error prefix
-// contains the function chain which led to a a new function
-// and the new error prefix contains the name of the currently
-// executing method or function.
+// new custom, user-defined error prefix. The new error prefix is
+// typically used to document method or function chains in error
+// messages.
+//
+// The old error prefix contains the function chain which led to
+// the function next in line for execution.
+//
+// The error prefix text is designed to be configured at the
+// beginning of error messages and is most often used to
+// document the thread of code execution by listing the calling
+// sequence for specific functions and methods.
+//
 //
 func (ePref ErrPref) New(
 	oldErrPref string,
@@ -54,6 +75,71 @@ func (ePref ErrPref) New(
 	return oldErrPref + " - " + newErrPref
 }
 
+// NewContext - Receives an old error prefix, new error prefix and
+// a new context string which are concatenated and returned as a
+// combined string.
+//
+// The error prefix text is designed to be configured at the
+// beginning of error messages and is most often used to
+// document the thread of code execution by listing the calling
+// sequence for specific functions and methods.
+//
+// The error context string is designed to provide additional
+// error context information associated with the currently
+// executing function or method. Typical context information
+// might include variable names, variable values and additional
+// details on function execution.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  oldErrPref          string
+//     - This includes the previous error prefix string. This string
+//       will be formatted and concatenated with the new error prefix
+//       and the associated error prefix.
+//
+//
+//  newErrPref          string
+//     - The new error prefix represents the error prefix string
+//       associated with the function or method which is currently
+//       executing. This parameter is optional and will accept an
+//       empty string, but there isn't much point in calling this
+//       method without a substantive value for 'newErrPref'.
+//
+//
+//  newContext          string
+//     - This the error context information associated with the new
+//       error prefix ('newErrPref'). This parameter is optional and
+//       will accept an empty string.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method will return the consolidated error prefix text.
+//
+//       The error prefix text is designed to be configured at the
+//       beginning of error messages and is most often used to
+//       document the thread of code execution by listing the calling
+//       sequence for specific functions and methods.
+//
+//
+//
+// -----------------------------------------------------------------
+//
+// Usage Examples
+//
+//  errorPrefix = ErrPref{}.NewContext(
+//                           errorPrefix, // Assuming this is the old
+//                                        // error prefix
+//                           newErrPref,
+//                           newContext)
+//
+//
 func (ePref ErrPref) NewContext(
 	oldErrPref string,
 	newErrPref string,
@@ -169,9 +255,9 @@ func (ePref ErrPref) FmtString(errPref string) string {
 		ePref.maxErrStringLength = 40
 	}
 
-	ePrefQuark := errPrefQuark{}
+	ePrefNanobot := errPrefNanobot{}
 
-	return ePrefQuark.formatErrPrefix(
+	return ePrefNanobot.formatErrPrefix(
 		ePref.maxErrStringLength,
 		errPref)
 }
