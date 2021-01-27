@@ -43,6 +43,8 @@ func (ePrefQuark *errPrefQuark) formatErrPrefix(
 
 	errPrefix += "\n"
 
+	lErrPrefix := len(errPrefix)
+
 	errPrefixContextCollection := strings.Split(errPrefix, "\n")
 
 	lCollection := len(errPrefixContextCollection)
@@ -52,7 +54,8 @@ func (ePrefQuark *errPrefQuark) formatErrPrefix(
 	}
 
 	var b1 strings.Builder
-	b1.Grow(1024)
+	lErrPrefix += 512
+	b1.Grow(lErrPrefix)
 	var funcNames = make([]string, 0, 100)
 	var contextStrs = make([]string, 0, 100)
 	var contextIdx int
@@ -187,8 +190,8 @@ func (ePrefQuark *errPrefQuark) formatErrPrefix(
 			b1.WriteString("\n")
 		}
 
-		if b1.Len() > 512 {
-			b1.Grow(1024)
+		if b1.Len() > lErrPrefix/2 {
+			b1.Grow(lErrPrefix)
 		}
 
 	}
