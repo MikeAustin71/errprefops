@@ -54,25 +54,13 @@ func (ePref ErrPref) New(
 		ePref.maxErrStringLength = 40
 	}
 
-	newErrPref = strings.TrimLeft(strings.TrimRight(newErrPref, " "), " ")
-	newErrPref = strings.TrimRight(newErrPref, "\n")
+	ePrefMech := errPrefMechanics{}
 
-	if len(newErrPref) == 0 {
-		return oldErrPref
-	}
-
-	oldErrPref = strings.TrimLeft(strings.TrimRight(oldErrPref, " "), " ")
-	oldErrPref = strings.TrimRight(oldErrPref, "\n")
-
-	if len(oldErrPref) == 0 {
-		return newErrPref
-	}
-
-	if uint(len(oldErrPref)+len(newErrPref)+3) > ePref.maxErrStringLength {
-		return oldErrPref + "\n" + newErrPref
-	}
-
-	return oldErrPref + " - " + newErrPref
+	return ePrefMech.assembleErrPrefix(
+		oldErrPref,
+		newErrPref,
+		"",
+		ePref.maxErrStringLength)
 }
 
 // NewContext - Receives an old error prefix, new error prefix and
@@ -110,9 +98,9 @@ func (ePref ErrPref) New(
 //
 //
 //  newContext          string
-//     - This the error context information associated with the new
-//       error prefix ('newErrPref'). This parameter is optional and
-//       will accept an empty string.
+//     - This is the error context information associated with the
+//       new error prefix ('newErrPref'). This parameter is
+//       optional and will accept an empty string.
 //
 //
 // -----------------------------------------------------------------
@@ -157,41 +145,13 @@ func (ePref ErrPref) NewContext(
 		ePref.maxErrStringLength = 40
 	}
 
-	if len(newErrPref) == 0 {
-		return oldErrPref
-	}
+	ePrefMech := errPrefMechanics{}
 
-	newErrPref = strings.TrimLeft(strings.TrimRight(newErrPref, " "), " ")
-
-	newErrPref = strings.TrimRight(newErrPref, "\n")
-
-	if len(newErrPref) == 0 {
-		return oldErrPref
-	}
-
-	var newEPrefContext string
-
-	if len(newContext) == 0 {
-		newEPrefContext = newErrPref
-	} else {
-
-		newContext = strings.TrimLeft(strings.TrimRight(newContext, " "), " ")
-
-		newContext = strings.TrimRight(newContext, "\n")
-
-		if len(newContext) == 0 {
-			newEPrefContext = newErrPref
-		} else {
-
-			if uint(len(newErrPref)+len(newContext)+3) > ePref.maxErrStringLength {
-				newEPrefContext = newErrPref + "\n : " + newContext
-			} else {
-				newEPrefContext = newErrPref + " : " + newContext
-			}
-		}
-	}
-
-	return oldErrPref + "\n" + newEPrefContext
+	return ePrefMech.assembleErrPrefix(
+		oldErrPref,
+		newErrPref,
+		newContext,
+		ePref.maxErrStringLength)
 }
 
 func (ePref ErrPref) AddContext(

@@ -18,12 +18,12 @@ func (tMain *TestMain) TestMain01() {
 
 	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "something->newSomething")
 
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx8.TryCombination()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx9.TryHammer()")
+	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx8.TryAnyCombination()")
+	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx9.TryAHammer()")
 	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "x->y")
 	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx10.X()")
 	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx11.TryAnything()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx12.TryToGetAJob()")
+	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx12.TryASalad()")
 	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
 	ePrefix = errpref.ErrPref{}.NewContext(
 		ePrefix,
