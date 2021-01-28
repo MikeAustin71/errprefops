@@ -1,6 +1,8 @@
 package errpref
 
-import "sync"
+import (
+	"sync"
+)
 
 type errPrefQuark struct {
 	lock *sync.Mutex
