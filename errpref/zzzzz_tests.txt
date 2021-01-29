@@ -1,0 +1,4 @@
+=== RUN   TestNewErrPref_0010
+--- PASS: TestNewErrPref_0010 (0.00s)
+PASS
+ok  	github.com/MikeAustin71/errprefops/errpref	0.500s

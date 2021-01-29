@@ -262,7 +262,7 @@ func (ePref ErrPref) FmtString(errPref string) string {
 //     - This method will return an unsigned integer value
 //       specifying the maximum number of characters allowed
 //       in an error prefix text display line.
-
+//
 func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 	maxErrPrefixStringLength uint) {
 
@@ -282,7 +282,7 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 	return maxErrPrefixStringLength
 }
 
-// New - Returns a string concatenating the old error prefix the
+// NewErrPref - Returns a string concatenating the old error prefix the
 // new custom, user-defined error prefix. The new error prefix is
 // typically used to document method or function chains in error
 // messages.
@@ -329,7 +329,7 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 //       sequence for specific functions and methods.
 //
 //
-func (ePref ErrPref) New(
+func (ePref ErrPref) NewErrPref(
 	oldErrPref string,
 	newErrPref string) string {
 

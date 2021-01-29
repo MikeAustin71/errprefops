@@ -17,17 +17,17 @@ func (tMain *TestMain) TestMain003() (
 
 	errpref.ErrPref{}.SetMaxErrPrefTextLineLength(60)
 
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx7.TrySomethingNew()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
 
 	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "something->newSomething")
 
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx8.TryAnyCombination()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx9.TryAHammer()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
 	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "x->y")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx10.X()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx11.TryAnything()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx12.TryASalad()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
 	ePrefix = errpref.ErrPref{}.NewContext(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
@@ -63,17 +63,17 @@ func (tMain *TestMain) TestMain001() {
 
 	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx7.TrySomethingNew()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
 
 	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "something->newSomething")
 
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx8.TryAnyCombination()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx9.TryAHammer()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
 	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "x->y")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx10.X()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx11.TryAnything()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx12.TryASalad()")
-	ePrefix = errpref.ErrPref{}.New(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
+	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
 	ePrefix = errpref.ErrPref{}.NewContext(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
