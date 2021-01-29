@@ -32,7 +32,7 @@ type errPrefMolecule struct {
 //       errors triggered in the immediate vicinity of this function.
 //
 //
-//  maxErrStringLength            uint
+//  maxErrPrefixTextLineLength            uint
 //      - Specifies the maximum number of text characters which can
 //        be on a single line for a new line character ('\n') is
 //        inserted. If this value is zero, it will be set to the
@@ -123,7 +123,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 		} else {
 			//uint(lenNewErrPrefCleanStr +
 			//	lenNewErrContextCleanStr +
-			//	3) <= maxErrStringLength
+			//	3) <= maxErrPrefixTextLineLength
 			consolidatedNewEPrefContext =
 				newErrPref + " : " +
 					newContext

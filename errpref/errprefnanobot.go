@@ -117,7 +117,7 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 					if uint(len(funcName)) > maxErrStringLength {
 						b1.WriteString(funcName)
 					} else {
-						// uint(len(funcName)) <= maxErrStringLength
+						// uint(len(funcName)) <= maxErrPrefixTextLineLength
 						if uint(len(funcName)) > maxErrStringLength {
 							b1.WriteString(funcName)
 						} else {
@@ -140,7 +140,7 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 						if uint(len(funcName)) > maxErrStringLength {
 							b1.WriteString(funcName)
 						} else {
-							// uint(len(funcName)) <= maxErrStringLength
+							// uint(len(funcName)) <= maxErrPrefixTextLineLength
 							// And len(lastStr) == 0
 							lastStr = funcName
 							continue
@@ -148,7 +148,7 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 					}
 				}
 			} else {
-				// uint(len(lastStr) + len(funcName) + 3) <= maxErrStringLength
+				// uint(len(lastStr) + len(funcName) + 3) <= maxErrPrefixTextLineLength
 
 				if len(lastStr) > 0 {
 					lastStr += " - " + funcName
@@ -171,12 +171,12 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 				if uint(len(funcName)+3+len(contextStr)) > maxErrStringLength {
 					b1.WriteString(funcName + "\n" + " : " + contextStr)
 				} else {
-					// uint(len(funcName) + 3 + len(contextStr)) <= maxErrStringLength
+					// uint(len(funcName) + 3 + len(contextStr)) <= maxErrPrefixTextLineLength
 					lastStr = funcName + " : " + contextStr
 					continue
 				}
 			} else {
-				//uint(len(lastStr) + 3 + len(funcName) + 3 + len(contextStr)) <= maxErrStringLength
+				//uint(len(lastStr) + 3 + len(funcName) + 3 + len(contextStr)) <= maxErrPrefixTextLineLength
 				if len(lastStr) == 0 {
 					lastStr = funcName + " : " + contextStr
 				} else {

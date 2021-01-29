@@ -1,7 +1,6 @@
 package errpref
 
 import (
-	"strings"
 	"sync"
 )
 
@@ -19,9 +18,121 @@ import (
 // might include variable names, variable values and additional
 // details on function execution.
 //
+// Note that there are no 'pointer' methods provided for this
+// type. This is because the type is not designed to store
+// information. Its only function is to receive process and
+// return strings of error prefix information.
+//
+//
 type ErrPref struct {
-	maxErrStringLength uint
-	lock               *sync.Mutex
+	maxErrPrefixTextLineLength uint
+	lock                       *sync.Mutex
+}
+
+// AddContext - Adds error context string to a pre-existing error
+// prefix.
+//
+// Error prefix text is designed to be configured at the beginning
+// of error messages and is most often used to document the thread
+// of code execution by listing the calling sequence for a specific
+// list of functions and methods.
+//
+// The error context string is designed to provide additional
+// error context information associated with the currently
+// executing function or method. Typical context information
+// might include variable names, variable values and additional
+// details on function execution.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPref             string
+//     - A string containing error prefixes in series. This method
+//       will add an error context string to the last error prefix
+//       string in this series.
+//
+//
+//  errContext          string
+//     - This is the error context information that will be
+//       associated with the last error prefix in the error prefix
+//       string, 'errPref'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - Returns a string consisting of a revised series of error
+//       prefixes. This string is identical to input parameter,
+//       'errPref' except that the error context information
+//       provided by input parameter 'newErrContext' has been
+//       attached to the last error prefix in 'errPref'.
+//
+//
+func (ePref ErrPref) AddContext(
+	errPref string,
+	newErrContext string) string {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	ePrefQuark := errPrefQuark{}
+
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
+
+	if len(newErrContext) == 0 {
+		return errPref
+	}
+
+	ePrefAtom := errPrefAtom{}
+
+	oldErrPref,
+		newErrPref,
+		lastErrContext :=
+		ePrefAtom.extractLastErrPrefInSeries(errPref)
+
+	if len(lastErrContext) > 0 {
+		newErrContext += " " + lastErrContext
+	}
+
+	ePrefMech := errPrefMechanics{}
+
+	return ePrefMech.assembleErrPrefix(
+		oldErrPref,
+		newErrPref,
+		newErrContext,
+		ePref.maxErrPrefixTextLineLength)
+}
+
+func (ePref ErrPref) FmtString(errPref string) string {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	ePrefQuark := errPrefQuark{}
+
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
+
+	ePrefNanobot := errPrefNanobot{}
+
+	return ePrefNanobot.formatErrPrefix(
+		ePref.maxErrPrefixTextLineLength,
+		errPref)
 }
 
 // New - Returns a string concatenating the old error prefix the
@@ -29,13 +140,46 @@ type ErrPref struct {
 // typically used to document method or function chains in error
 // messages.
 //
-// The old error prefix contains the function chain which led to
-// the function next in line for execution.
+// The old error prefix contains the function chain or series which
+// led to the function next in line for execution.
 //
 // The error prefix text is designed to be configured at the
-// beginning of error messages and is most often used to
-// document the thread of code execution by listing the calling
-// sequence for specific functions and methods.
+// beginning of error messages and is most often used to document
+// the thread of code execution by listing the calling sequence for
+// specific functions and methods.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  oldErrPref          string
+//     - This includes the previous error prefix string. This string
+//       will be formatted and concatenated with the new error prefix
+//       information provided by input parameter, 'newErrPref',
+//       below.
+//
+//
+//  newErrPref          string
+//     - The new error prefix represents the error prefix string
+//       identifies with the function or method which is currently
+//       executing for purposes of documenting execution flow in
+//       error messages. This parameter is optional and will accept
+//       an empty string, but there isn't much point in calling
+//       this method without a substantive value for 'newErrPref'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method will return the consolidated error prefix text.
+//
+//       The error prefix text is designed to be configured at the
+//       beginning of error messages and is most often used to
+//       document the thread of code execution by listing the calling
+//       sequence for specific functions and methods.
 //
 //
 func (ePref ErrPref) New(
@@ -50,9 +194,10 @@ func (ePref ErrPref) New(
 
 	defer ePref.lock.Unlock()
 
-	if ePref.maxErrStringLength == 0 {
-		ePref.maxErrStringLength = 40
-	}
+	ePrefQuark := errPrefQuark{}
+
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
 
 	ePrefMech := errPrefMechanics{}
 
@@ -60,17 +205,17 @@ func (ePref ErrPref) New(
 		oldErrPref,
 		newErrPref,
 		"",
-		ePref.maxErrStringLength)
+		ePref.maxErrPrefixTextLineLength)
 }
 
 // NewContext - Receives an old error prefix, new error prefix and
 // a new context string which are concatenated and returned as a
 // combined string.
 //
-// The error prefix text is designed to be configured at the
-// beginning of error messages and is most often used to
-// document the thread of code execution by listing the calling
-// sequence for specific functions and methods.
+// Error prefix text is designed to be configured at the beginning
+// of error messages and is most often used to document the thread
+// of code execution by listing the calling sequence for a specific
+// list of functions and methods.
 //
 // The error context string is designed to provide additional
 // error context information associated with the currently
@@ -141,9 +286,10 @@ func (ePref ErrPref) NewContext(
 
 	defer ePref.lock.Unlock()
 
-	if ePref.maxErrStringLength == 0 {
-		ePref.maxErrStringLength = 40
-	}
+	ePrefQuark := errPrefQuark{}
+
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
 
 	ePrefMech := errPrefMechanics{}
 
@@ -151,12 +297,41 @@ func (ePref ErrPref) NewContext(
 		oldErrPref,
 		newErrPref,
 		newContext,
-		ePref.maxErrStringLength)
+		ePref.maxErrPrefixTextLineLength)
 }
 
-func (ePref ErrPref) AddContext(
-	errPref string,
-	errContext string) string {
+// SetMaxErrPrefTextLineLength - Sets the maximum limit on the
+// number of characters allowed in an error prefix text line output
+// display.
+//
+// -IMPORTANT -
+// Setting this value will control the maximum character limit not
+// only for this ErrPref instance, but will also control all that
+// limit for all other instances of ErrPref created in this session.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  maxErrPrefixTextLineLength      uint
+//     - This unsigned integer value will be used to set the
+//       maximum number of characters allowed in a text display
+//       line for error prefix information.
+//
+//       If 'maxErrPrefixTextLineLength' is set to a value of zero
+//       (0), this method will take no action and return.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+//
+func (ePref ErrPref) SetMaxErrPrefTextLineLength(
+	maxErrPrefixTextLineLength uint) {
 
 	if ePref.lock == nil {
 		ePref.lock = new(sync.Mutex)
@@ -166,58 +341,10 @@ func (ePref ErrPref) AddContext(
 
 	defer ePref.lock.Unlock()
 
-	if ePref.maxErrStringLength == 0 {
-		ePref.maxErrStringLength = 40
-	}
+	ePrefQuark := errPrefQuark{}
 
-	if len(errPref) == 0 {
-		return errContext
-	}
+	ePrefQuark.setErrPrefDisplayLineLength(
+		maxErrPrefixTextLineLength)
 
-	if len(errContext) == 0 {
-		return errPref
-	}
-
-	errPref = strings.TrimLeft(strings.TrimRight(errPref, " "), " ")
-
-	errPref = strings.TrimRight(errPref, "\n")
-
-	if len(errPref) == 0 {
-		return errContext
-	}
-
-	errContext = strings.TrimLeft(strings.TrimRight(errContext, " "), " ")
-
-	errContext = strings.TrimRight(errContext, "\n")
-
-	if len(errContext) == 0 {
-		return errPref
-	}
-
-	if uint(len(errPref)+len(errContext)+3) > ePref.maxErrStringLength {
-		return errPref + "\n : " + errContext
-	}
-
-	return errPref + " : " + errContext
-}
-
-func (ePref ErrPref) FmtString(errPref string) string {
-
-	if ePref.lock == nil {
-		ePref.lock = new(sync.Mutex)
-	}
-
-	ePref.lock.Lock()
-
-	defer ePref.lock.Unlock()
-
-	if ePref.maxErrStringLength == 0 {
-		ePref.maxErrStringLength = 40
-	}
-
-	ePrefNanobot := errPrefNanobot{}
-
-	return ePrefNanobot.formatErrPrefix(
-		ePref.maxErrStringLength,
-		errPref)
+	return
 }
