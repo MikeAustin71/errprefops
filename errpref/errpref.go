@@ -55,9 +55,9 @@ type ErrPref struct {
 //
 //
 //  errContext          string
-//     - This is the error context information that will be
-//       associated with the last error prefix in the error prefix
-//       string, 'errPref'.
+//     - This is the error context information that will be added
+//       and associated with the last error prefix in the error
+//       prefix string, 'errPref'.
 //
 //
 // -----------------------------------------------------------------
@@ -202,7 +202,21 @@ func (ePref ErrPref) ConvertNonPrintableChars(
 	return printableChars
 }
 
-// FmtString -
+// FmtString - Returns a formatted text representation of all error
+// prefix and error context information contained in the input
+// parameter string, 'errPref'.
+//
+// Error prefix text is designed to be configured at the beginning
+// of error messages and is most often used to document the thread
+// of code execution by listing the calling sequence for a specific
+// list of functions and methods.
+//
+// The error context descriptive text provides additional
+// information about the function or method identified in the
+// associated error prefix string. Typical context information
+// might include variable names, variable values and further
+// details on function execution.
+//
 func (ePref ErrPref) FmtString(errPref string) string {
 
 	if ePref.lock == nil {
@@ -223,6 +237,49 @@ func (ePref ErrPref) FmtString(errPref string) string {
 	return ePrefNanobot.formatErrPrefix(
 		ePref.maxErrPrefixTextLineLength,
 		errPref)
+}
+
+// GetMaxErrPrefTextLineLength - Returns the current maximum number
+// of characters allowed in an error prefix text line output
+// display.
+//
+// To change or reset this maximum limit value, see method:
+//     ErrPref.SetMaxErrPrefTextLineLength().
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  maxErrPrefixStringLength      uint
+//     - This method will return an unsigned integer value
+//       specifying the maximum number of characters allowed
+//       in an error prefix text display line.
+
+func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
+	maxErrPrefixStringLength uint) {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	ePrefQuark := errPrefQuark{}
+
+	maxErrPrefixStringLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
+
+	return maxErrPrefixStringLength
 }
 
 // New - Returns a string concatenating the old error prefix the
@@ -308,8 +365,8 @@ func (ePref ErrPref) New(
 // list of functions and methods.
 //
 // The error context string is designed to provide additional
-// error context information associated with the currently
-// executing function or method. Typical context information
+// information about the function or method identified by the
+// associated error prefix string. Typical context information
 // might include variable names, variable values and additional
 // details on function execution.
 //

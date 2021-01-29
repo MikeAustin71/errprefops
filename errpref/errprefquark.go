@@ -189,9 +189,9 @@ func (ePrefQuark *errPrefQuark) convertNonPrintableChars(
 // Return Values
 //
 //  int
-//     - This method will return an integer value specifying the
-//       maximum number of characters allowed in an error prefix
-//       text display line.
+//     - This method will return an unsigned integer value
+//       specifying the maximum number of characters allowed
+//       in an error prefix text display line.
 //
 func (ePrefQuark *errPrefQuark) getErrPrefDisplayLineLength() uint {
 
