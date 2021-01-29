@@ -26,14 +26,19 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 		return ""
 	}
 
+	ePrefQuark := errPrefQuark{}
+
 	if maxErrStringLength == 0 {
-		maxErrStringLength = 40
+		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
 	}
 
-	errPrefix = strings.TrimRight(errPrefix, " ")
-	errPrefix = strings.TrimRight(errPrefix, "\n")
+	ePrefElectron := errPrefElectron{}
+	var lenCleanStr int
 
-	if len(errPrefix) == 0 {
+	errPrefix,
+		lenCleanStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
+
+	if lenCleanStr == 0 {
 		return ""
 	}
 
@@ -180,7 +185,7 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 				if len(lastStr) == 0 {
 					lastStr = funcName + " : " + contextStr
 				} else {
-					lastStr += lastStr + " - " + funcName + " : " + contextStr
+					lastStr += " - " + funcName + " : " + contextStr
 				}
 				continue
 			}
