@@ -223,5 +223,4 @@ func (tMain *TestMain) ConvertNonPrintableChars(
 	}
 
 	return b.String()
-
 }
