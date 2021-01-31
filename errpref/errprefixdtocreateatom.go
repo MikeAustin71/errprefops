@@ -46,11 +46,6 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 			crEPrefDto.lenInLineContextDelimiter +
 			crEPrefDto.lenNewErrContextStr
 
-	lenEPrefWithoutContext :=
-		crEPrefDto.lenInLinePrefixDelimiter +
-			crEPrefDto.lenNewErrPrefStr +
-			crEPrefDto.lenNewLinePrefixDelimiter
-
 	createEPrefDtoQuark := createErrPrefixDtoQuark{}
 
 	if newLenLastStr > remainingLineLen {
@@ -65,75 +60,13 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 				lastStr,
 				remainingLineLen,
 				crEPrefDto)
-
-		if lenEPrefWithContext > remainingLineLen {
-
-			strBuilder.WriteString(
-				crEPrefDto.newErrPrefStr)
-
-			if lenEPrefWithoutContext >
-				remainingLineLen {
-
-				strBuilder.WriteString(
-					crEPrefDto.newLineContextDelimiter)
-
-				strBuilder.WriteString(
-					crEPrefDto.newErrContextStr)
-
-				if !crEPrefDto.isLastIdx {
-					strBuilder.WriteString(
-						crEPrefDto.newLinePrefixDelimiter)
-				}
-
-				newRemainingLineLen =
-					crEPrefDto.maxErrStringLength
-
-				return newLastStr, newLenLastStr, newRemainingLineLen
-				// End of lenEPrefWithoutContext >
-				//				remainingLineLen
-			} else {
-				// lenEPrefWithContext > remainingLineLen
-
-				strBuilder.WriteString(
-					crEPrefDto.inLinePrefixDelimiter)
-
-				strBuilder.WriteString(
-					crEPrefDto.newErrContextStr)
-
-				if !crEPrefDto.isLastIdx {
-					strBuilder.WriteString(
-						crEPrefDto.newLinePrefixDelimiter)
-				}
-
-				newRemainingLineLen =
-					crEPrefDto.maxErrStringLength
-				newLenLastStr = 0
-				newLastStr = ""
-			}
-			// End of if lenEPrefWithContext > remainingLineLen
-		} else {
-			// lenEPrefWithContext <= remainingLineLen
-
-			newLastStr += crEPrefDto.inLinePrefixDelimiter
-			newLastStr += crEPrefDto.newErrPrefStr
-			newLastStr += crEPrefDto.inLineContextDelimiter
-			newLastStr += crEPrefDto.newErrContextStr
-			newLenLastStr = uint(len(newLastStr))
-			newRemainingLineLen =
-				crEPrefDto.maxErrStringLength -
-					newLenLastStr
-		}
-
-		return newLastStr, newLenLastStr, newRemainingLineLen
-		// End Of newLenLastStr > remainingLineLen
 	}
-
-	//newLenLastStr <= remainingLineLen
 
 	if newLenLastStr+
 		lenEPrefWithContext > remainingLineLen {
 
 		if newLenLastStr > 0 {
+
 			newLastStr,
 				newLenLastStr,
 				remainingLineLen =
@@ -150,60 +83,22 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 			strBuilder.WriteString(
 				crEPrefDto.newErrPrefStr)
 
-			if lenEPrefWithoutContext >
-				remainingLineLen {
+			strBuilder.WriteString(
+				crEPrefDto.newLineContextDelimiter)
 
+			strBuilder.WriteString(
+				crEPrefDto.newErrContextStr)
+
+			if !crEPrefDto.isLastIdx {
 				strBuilder.WriteString(
-					crEPrefDto.newLineContextDelimiter)
-
-				strBuilder.WriteString(
-					crEPrefDto.newErrContextStr)
-
-				if !crEPrefDto.isLastIdx {
-					strBuilder.WriteString(
-						crEPrefDto.newLinePrefixDelimiter)
-				}
-
-				newRemainingLineLen =
-					crEPrefDto.maxErrStringLength
-
-				return newLastStr, newLenLastStr, newRemainingLineLen
-				// End of lenEPrefWithoutContext >
-				//				remainingLineLen
-			} else {
-				// lenEPrefWithContext > remainingLineLen
-
-				strBuilder.WriteString(
-					crEPrefDto.inLinePrefixDelimiter)
-
-				strBuilder.WriteString(
-					crEPrefDto.newErrContextStr)
-
-				if !crEPrefDto.isLastIdx {
-					strBuilder.WriteString(
-						crEPrefDto.newLinePrefixDelimiter)
-				}
-
-				newRemainingLineLen =
-					crEPrefDto.maxErrStringLength
-				newLenLastStr = 0
-				newLastStr = ""
+					crEPrefDto.newLinePrefixDelimiter)
 			}
-			// End of if lenEPrefWithContext > remainingLineLen
-		} else {
-			// lenEPrefWithContext <= remainingLineLen
 
-			newLastStr += crEPrefDto.inLinePrefixDelimiter
-			newLastStr += crEPrefDto.newErrPrefStr
-			newLastStr += crEPrefDto.inLineContextDelimiter
-			newLastStr += crEPrefDto.newErrContextStr
-			newLenLastStr = uint(len(newLastStr))
 			newRemainingLineLen =
-				crEPrefDto.maxErrStringLength -
-					newLenLastStr
-		}
+				crEPrefDto.maxErrStringLength
 
-		return newLastStr, newLenLastStr, newRemainingLineLen
+			return newLastStr, newLenLastStr, newRemainingLineLen
+		}
 		// End Of
 		//newLenLastStr +
 		//	lenEPrefWithContext > remainingLineLen
