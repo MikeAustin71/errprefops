@@ -10,6 +10,75 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain *TestMain) TestMain004() {
+
+	xPref := errpref.ErrPref{}.NewErrPref(
+		"",
+		"TestMain004()")
+
+	ePrefix := errpref.ErrPref{}.NewContext("",
+		"Tx1.Something()",
+		"A->B")
+
+	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+		"Tx2.SomethingElse()",
+		"(A+B)")
+
+	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+		"Tx3.DoSomething()",
+		"(A+B) + C = 9")
+
+	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+		"Tx4()",
+		"Copy (A+B) -> C")
+
+	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+		"Tx5.MoreAwesomeGoodness()",
+		"(A+B) x C = D")
+
+	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+		"Tx6.SomeFabulousAndComplexStuff()",
+		"(A+B)^C = C x E")
+
+	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+		"Tx8.TryAHammer()",
+		"ErrNo: 5007-6004-9175")
+	fmt.Println()
+	fmt.Println(xPref)
+	fmt.Println()
+
+	tm2 := TestMain{}
+
+	printableStr :=
+		tm2.ConvertNonPrintableChars(
+			[]rune(ePrefix),
+			true, "")
+
+	fmt.Println("Original Non-Printable Characters")
+
+	fmt.Println(printableStr)
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+
+	ePrefix = errpref.ErrPref{}.FmtString(ePrefix)
+
+	printableStr =
+		tm2.ConvertNonPrintableChars([]rune(ePrefix), true, "")
+
+	fmt.Println("Formatted Non-Printable Characters")
+
+	fmt.Println(printableStr)
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+
+	/*
+		Un-formatted:
+
+		   Formatted:
+
+	*/
+}
+
 func (tMain *TestMain) TestMain003() (
 	testResult string) {
 

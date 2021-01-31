@@ -226,6 +226,70 @@ func (ePrefQuark *errPrefQuark) getErrPrefDisplayLineLength() uint {
 	return maxErrPrefixStringLength
 }
 
+// getDelimiters - Returns the four delimiter strings used to
+// delimit error prefix and error context strings.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  inLinePrefixDelimiter      string
+//     - The string used to delimit or separate error prefix
+//       strings which do not extend beyond the maximum line length
+//       limit.
+//
+//
+//  newLinePrefixDelimiter     string
+//     - The string used to delimit or separate error prefix
+//       strings which do extend beyond the maximum line length
+//       limit.
+//
+//
+//  inLineContextDelimiter     string
+//     - The string used to delimit or separate error context
+//       strings which do not extend beyond the maximum line length
+//       limit.
+//
+//
+//  newLineContextDelimiter    string
+//     - The string used to delimit or separate error context
+//       strings which do extend beyond the maximum line length
+//       limit.
+//
+//
+func (ePrefQuark *errPrefQuark) getDelimiters() (
+	inLinePrefixDelimiter string,
+	newLinePrefixDelimiter string,
+	inLineContextDelimiter string,
+	newLineContextDelimiter string) {
+
+	if ePrefQuark.lock == nil {
+		ePrefQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefQuark.lock.Lock()
+
+	defer ePrefQuark.lock.Unlock()
+
+	inLinePrefixDelimiter = " - "
+	newLinePrefixDelimiter = "\n"
+	inLineContextDelimiter = " : "
+	newLineContextDelimiter = "\n : "
+
+	return inLinePrefixDelimiter,
+		newLinePrefixDelimiter,
+		inLineContextDelimiter,
+		newLineContextDelimiter
+}
+
 // isEmptyOrWhiteSpace - Analyzes the incoming string and returns
 // 'true' if the strings is empty or consists of all white space.
 //

@@ -14,6 +14,9 @@ type errPrefMolecule struct {
 // description.
 //
 //
+// ----------------------------------------------------------------
+//
+// Input Parameters
 //
 //  newErrPref                    string
 //     - This is the new error prefix string which will be combined
@@ -78,9 +81,17 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 
 	defer ePrefMolecule.lock.Unlock()
 
+	ePrefQuark := errPrefQuark{}
+
 	if maxErrStringLength == 0 {
-		maxErrStringLength = 40
+		maxErrStringLength =
+			ePrefQuark.getErrPrefDisplayLineLength()
 	}
+
+	_,
+		_,
+		inLineContextDelimiter,
+		newLineContextDelimiter := ePrefQuark.getDelimiters()
 
 	ePrefElectron := errPrefElectron{}
 	newErrPref,
@@ -116,8 +127,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 
 			consolidatedNewEPrefContext =
 				newErrPref +
-					"\n" +
-					" : " +
+					newLineContextDelimiter +
 					newContext
 
 		} else {
@@ -125,7 +135,8 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 			//	lenNewErrContextCleanStr +
 			//	3) <= maxErrPrefixTextLineLength
 			consolidatedNewEPrefContext =
-				newErrPref + " : " +
+				newErrPref +
+					inLineContextDelimiter +
 					newContext
 		}
 	}
