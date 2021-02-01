@@ -16,6 +16,8 @@ type createErrPrefixDtoAtom struct {
 func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithContext(
 	strBuilder *strings.Builder,
 	crEPrefDto *createErrPrefixDto,
+	delimiters *EPrefixDelimiters,
+	maxErrStringLength uint,
 	lastStr string,
 	remainingLineLen uint) (
 	newLastStr string,
@@ -36,14 +38,15 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 
 	if strBuilder == nil ||
 		crEPrefDto == nil ||
+		delimiters == nil ||
 		crEPrefDto.errPrefIsEmpty {
 		return newLastStr, newLenLastStr, newRemainingLineLen
 	}
 
 	lenEPrefWithContext :=
-		crEPrefDto.lenInLinePrefixDelimiter +
+		delimiters.GetLengthInLinePrefixDelimiter() +
 			crEPrefDto.lenNewErrPrefStr +
-			crEPrefDto.lenInLineContextDelimiter +
+			delimiters.GetLengthInLineContextDelimiter() +
 			crEPrefDto.lenNewErrContextStr
 
 	createEPrefDtoQuark := createErrPrefixDtoQuark{}
@@ -84,18 +87,18 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 				crEPrefDto.newErrPrefStr)
 
 			strBuilder.WriteString(
-				crEPrefDto.newLineContextDelimiter)
+				delimiters.GetNewLineContextDelimiter())
 
 			strBuilder.WriteString(
 				crEPrefDto.newErrContextStr)
 
 			if !crEPrefDto.isLastIdx {
 				strBuilder.WriteString(
-					crEPrefDto.newLinePrefixDelimiter)
+					delimiters.GetNewLinePrefixDelimiter())
 			}
 
 			newRemainingLineLen =
-				crEPrefDto.maxErrStringLength
+				maxErrStringLength
 
 			return newLastStr, newLenLastStr, newRemainingLineLen
 		}
@@ -109,13 +112,13 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 	// The line length of the next write block
 	// will fit on the end of the 'lastStr'
 
-	newLastStr += crEPrefDto.inLinePrefixDelimiter
+	newLastStr += delimiters.GetInLinePrefixDelimiter()
 	newLastStr += crEPrefDto.newErrPrefStr
-	newLastStr += crEPrefDto.inLineContextDelimiter
+	newLastStr += delimiters.GetInLineContextDelimiter()
 	newLastStr += crEPrefDto.newErrContextStr
 	newLenLastStr = uint(len(newLastStr))
 	newRemainingLineLen =
-		crEPrefDto.maxErrStringLength -
+		maxErrStringLength -
 			newLenLastStr
 
 	return newLastStr, newLenLastStr, newRemainingLineLen
@@ -128,6 +131,8 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutContext(
 	strBuilder *strings.Builder,
 	crEPrefDto *createErrPrefixDto,
+	delimiters *EPrefixDelimiters,
+	maxErrStringLength uint,
 	lastStr string,
 	remainingLineLen uint) (
 	newLastStr string,
@@ -153,9 +158,9 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 	}
 
 	lenEPrefWithoutContext :=
-		crEPrefDto.lenInLinePrefixDelimiter +
+		delimiters.GetLengthInLinePrefixDelimiter() +
 			crEPrefDto.lenNewErrPrefStr +
-			crEPrefDto.lenInLinePrefixDelimiter
+			delimiters.GetLengthInLinePrefixDelimiter()
 
 	createEPrefDtoQuark := createErrPrefixDtoQuark{}
 
@@ -181,18 +186,18 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 				remainingLineLen {
 
 				strBuilder.WriteString(
-					crEPrefDto.newLineContextDelimiter)
+					delimiters.GetNewLineContextDelimiter())
 
 				strBuilder.WriteString(
 					crEPrefDto.newErrContextStr)
 
 				if !crEPrefDto.isLastIdx {
 					strBuilder.WriteString(
-						crEPrefDto.newLinePrefixDelimiter)
+						delimiters.GetNewLinePrefixDelimiter())
 				}
 
 				newRemainingLineLen =
-					crEPrefDto.maxErrStringLength
+					maxErrStringLength
 
 				return newLastStr, newLenLastStr, newRemainingLineLen
 				// End of lenEPrefWithoutContext >
@@ -201,18 +206,18 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 				// lenEPrefWithoutContext <= remainingLineLen
 
 				strBuilder.WriteString(
-					crEPrefDto.inLinePrefixDelimiter)
+					delimiters.GetInLinePrefixDelimiter())
 
 				strBuilder.WriteString(
 					crEPrefDto.newErrContextStr)
 
 				if !crEPrefDto.isLastIdx {
 					strBuilder.WriteString(
-						crEPrefDto.newLinePrefixDelimiter)
+						delimiters.GetNewLinePrefixDelimiter())
 				}
 
 				newRemainingLineLen =
-					crEPrefDto.maxErrStringLength
+					maxErrStringLength
 				newLenLastStr = 0
 				newLastStr = ""
 			}
@@ -223,11 +228,11 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 			// Add the next write block to 'lastStr'
 			// Add to 'lastStr'.
 
-			newLastStr += crEPrefDto.inLinePrefixDelimiter
+			newLastStr += delimiters.GetInLinePrefixDelimiter()
 			newLastStr += crEPrefDto.newErrPrefStr
 			newLenLastStr = uint(len(newLastStr))
 			newRemainingLineLen =
-				crEPrefDto.maxErrStringLength -
+				maxErrStringLength -
 					newLenLastStr
 		}
 
@@ -258,11 +263,11 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 
 			if !crEPrefDto.isLastIdx {
 				strBuilder.WriteString(
-					crEPrefDto.newLinePrefixDelimiter)
+					delimiters.GetNewLinePrefixDelimiter())
 			}
 
 			newRemainingLineLen =
-				crEPrefDto.maxErrStringLength
+				maxErrStringLength
 			newLenLastStr = 0
 			newLastStr = ""
 			// End of if lenEPrefWithoutContext > remainingLineLen
@@ -270,11 +275,11 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 			// lenEPrefWithoutContext <= remainingLineLen
 			// Add to 'lastStr'
 
-			newLastStr += crEPrefDto.inLinePrefixDelimiter
+			newLastStr += delimiters.GetInLinePrefixDelimiter()
 			newLastStr += crEPrefDto.newErrPrefStr
 			newLenLastStr = uint(len(newLastStr))
 			newRemainingLineLen =
-				crEPrefDto.maxErrStringLength -
+				maxErrStringLength -
 					newLenLastStr
 		}
 
@@ -284,13 +289,13 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 	} else {
 		//newLenLastStr +
 		//	lenEPrefWithoutContext <= remainingLineLen
-		newLastStr += crEPrefDto.inLinePrefixDelimiter
+		newLastStr += delimiters.GetInLinePrefixDelimiter()
 		newLastStr += crEPrefDto.newErrPrefStr
-		newLastStr += crEPrefDto.inLineContextDelimiter
+		newLastStr += delimiters.GetInLineContextDelimiter()
 		newLastStr += crEPrefDto.newErrContextStr
 		newLenLastStr = uint(len(newLastStr))
 		newRemainingLineLen =
-			crEPrefDto.maxErrStringLength -
+			maxErrStringLength -
 				newLenLastStr
 	}
 
