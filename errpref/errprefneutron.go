@@ -14,8 +14,7 @@ type errPrefNeutron struct {
 // these two elements and returns them in a two-dimensional string
 // array as a collection of error prefixes and error contexts.
 func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
-	errPrefix string,
-	maxErrStringLength uint) (
+	errPrefix string) (
 	prefixContextCol []createErrPrefixDto) {
 
 	if ePrefNeutron.lock == nil {

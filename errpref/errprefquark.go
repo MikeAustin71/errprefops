@@ -266,10 +266,7 @@ func (ePrefQuark *errPrefQuark) getErrPrefDisplayLineLength() uint {
 //
 //
 func (ePrefQuark *errPrefQuark) getDelimiters() (
-	inLinePrefixDelimiter string,
-	newLinePrefixDelimiter string,
-	inLineContextDelimiter string,
-	newLineContextDelimiter string) {
+	delimiters EPrefixDelimiters) {
 
 	if ePrefQuark.lock == nil {
 		ePrefQuark.lock = new(sync.Mutex)
@@ -279,15 +276,15 @@ func (ePrefQuark *errPrefQuark) getDelimiters() (
 
 	defer ePrefQuark.lock.Unlock()
 
-	inLinePrefixDelimiter = " - "
-	newLinePrefixDelimiter = "\n"
-	inLineContextDelimiter = " : "
-	newLineContextDelimiter = "\n : "
+	delimiters.SetInLinePrefixDelimiter(" - ")
 
-	return inLinePrefixDelimiter,
-		newLinePrefixDelimiter,
-		inLineContextDelimiter,
-		newLineContextDelimiter
+	delimiters.SetNewLinePrefixDelimiter("\n")
+
+	delimiters.SetInLineContextDelimiter(" : ")
+
+	delimiters.SetNewLineContextDelimiter("\n : ")
+
+	return delimiters
 }
 
 // isEmptyOrWhiteSpace - Analyzes the incoming string and returns
