@@ -75,9 +75,13 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 			ePrefQuark.getErrPrefDisplayLineLength()
 	}
 
-	delimiters := ePrefQuark.getDelimiters()
-
 	ePrefElectron := errPrefElectron{}
+
+	delimiters := ePrefElectron.getDelimiters()
+
+	if maxErrStringLength != delimiters.GetMaxErrStringLength() {
+		delimiters.SetMaxErrStringLength(maxErrStringLength)
+	}
 
 	var lenOldErrPrefCleanStr,
 		lenNewErrPrefCleanStr int
