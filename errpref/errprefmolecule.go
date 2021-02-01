@@ -178,15 +178,15 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	if strBuilder == nil ||
 		crEPrefDto == nil ||
 		delimiters == nil ||
-		crEPrefDto.errPrefIsEmpty {
+		crEPrefDto.isValid {
 		return newLastStr, newLenLastStr, newRemainingLineLen
 	}
 
 	lenEPrefWithContext :=
 		delimiters.GetLengthInLinePrefixDelimiter() +
-			crEPrefDto.lenNewErrPrefStr +
+			crEPrefDto.lenErrorPrefixStr +
 			delimiters.GetLengthInLineContextDelimiter() +
-			crEPrefDto.lenNewErrContextStr
+			crEPrefDto.lenErrorContextStr
 
 	createEPrefDtoQuark := errorPrefixDtoQuark{}
 
@@ -225,13 +225,13 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 		if lenEPrefWithContext > remainingLineLen {
 
 			strBuilder.WriteString(
-				crEPrefDto.newErrPrefStr)
+				crEPrefDto.errorPrefixStr)
 
 			strBuilder.WriteString(
 				delimiters.GetNewLineContextDelimiter())
 
 			strBuilder.WriteString(
-				crEPrefDto.newErrContextStr)
+				crEPrefDto.errorContextStr)
 
 			if !crEPrefDto.isLastIdx {
 				strBuilder.WriteString(
@@ -254,9 +254,9 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	// will fit on the end of the 'lastStr'
 
 	newLastStr += delimiters.GetInLinePrefixDelimiter()
-	newLastStr += crEPrefDto.newErrPrefStr
+	newLastStr += crEPrefDto.errorPrefixStr
 	newLastStr += delimiters.GetInLineContextDelimiter()
-	newLastStr += crEPrefDto.newErrContextStr
+	newLastStr += crEPrefDto.errorContextStr
 	newLenLastStr = uint(len(newLastStr))
 	newRemainingLineLen =
 		delimiters.GetMaxErrStringLength() -
@@ -293,13 +293,13 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 
 	if strBuilder == nil ||
 		crEPrefDto == nil ||
-		crEPrefDto.errPrefIsEmpty {
+		crEPrefDto.isValid {
 		return newLastStr, newLenLastStr, newRemainingLineLen
 	}
 
 	lenEPrefWithoutContext :=
 		delimiters.GetLengthInLinePrefixDelimiter() +
-			crEPrefDto.lenNewErrPrefStr +
+			crEPrefDto.lenErrorPrefixStr +
 			delimiters.GetLengthInLinePrefixDelimiter()
 
 	createEPrefDtoQuark := errorPrefixDtoQuark{}
@@ -321,7 +321,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 		if lenEPrefWithoutContext > remainingLineLen {
 
 			strBuilder.WriteString(
-				crEPrefDto.newErrPrefStr)
+				crEPrefDto.errorPrefixStr)
 
 			if lenEPrefWithoutContext >
 				remainingLineLen {
@@ -330,7 +330,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 					delimiters.GetNewLineContextDelimiter())
 
 				strBuilder.WriteString(
-					crEPrefDto.newErrContextStr)
+					crEPrefDto.errorContextStr)
 
 				if !crEPrefDto.isLastIdx {
 					strBuilder.WriteString(
@@ -350,7 +350,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 					delimiters.GetInLinePrefixDelimiter())
 
 				strBuilder.WriteString(
-					crEPrefDto.newErrContextStr)
+					crEPrefDto.errorContextStr)
 
 				if !crEPrefDto.isLastIdx {
 					strBuilder.WriteString(
@@ -374,7 +374,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 
 			newLastStr += delimiters.GetInLinePrefixDelimiter()
 
-			newLastStr += crEPrefDto.newErrPrefStr
+			newLastStr += crEPrefDto.errorPrefixStr
 
 			newLenLastStr = uint(len(newLastStr))
 
@@ -407,7 +407,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 		if lenEPrefWithoutContext > remainingLineLen {
 
 			strBuilder.WriteString(
-				crEPrefDto.newErrPrefStr)
+				crEPrefDto.errorPrefixStr)
 
 			if !crEPrefDto.isLastIdx {
 				strBuilder.WriteString(
@@ -427,7 +427,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 			// Add to 'lastStr'
 
 			newLastStr += delimiters.GetInLinePrefixDelimiter()
-			newLastStr += crEPrefDto.newErrPrefStr
+			newLastStr += crEPrefDto.errorPrefixStr
 			newLenLastStr = uint(len(newLastStr))
 			newRemainingLineLen =
 				delimiters.GetMaxErrStringLength() -
@@ -441,9 +441,9 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 		//newLenLastStr +
 		//	lenEPrefWithoutContext <= remainingLineLen
 		newLastStr += delimiters.GetInLinePrefixDelimiter()
-		newLastStr += crEPrefDto.newErrPrefStr
+		newLastStr += crEPrefDto.errorPrefixStr
 		newLastStr += delimiters.GetInLineContextDelimiter()
-		newLastStr += crEPrefDto.newErrContextStr
+		newLastStr += crEPrefDto.errorContextStr
 		newLenLastStr = uint(len(newLastStr))
 		newRemainingLineLen =
 			delimiters.GetMaxErrStringLength() -

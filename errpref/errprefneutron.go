@@ -98,7 +98,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 		element := ErrorPrefixDto{}.New()
 
-		element.errPrefIsEmpty = false
+		element.isValid = false
 
 		if isLastIdx {
 			element.isLastIdx = true
@@ -107,22 +107,22 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		}
 
 		if contextIdx == -1 {
-			element.newErrPrefStr = s
-			element.lenNewErrPrefStr = uint(len(s))
-			element.funcHasContext = false
-			element.newErrContextStr = ""
-			element.lenNewErrContextStr = 0
+			element.errorPrefixStr = s
+			element.lenErrorPrefixStr = uint(len(s))
+			element.errPrefixHasContextStr = false
+			element.errorContextStr = ""
+			element.lenErrorContextStr = 0
 
 			prefixContextCol = append(prefixContextCol, element)
 
 		} else {
 
-			element.newErrPrefStr = s[0:contextIdx]
-			element.lenNewErrPrefStr = uint(len(element.newErrPrefStr))
-			element.funcHasContext = false
-			element.newErrContextStr = s[contextIdx+
+			element.errorPrefixStr = s[0:contextIdx]
+			element.lenErrorPrefixStr = uint(len(element.errorPrefixStr))
+			element.errPrefixHasContextStr = false
+			element.errorContextStr = s[contextIdx+
 				idxLenInLineContextDelimiter:]
-			element.lenNewErrContextStr = uint(len(element.newErrContextStr))
+			element.lenErrorContextStr = uint(len(element.errorContextStr))
 
 			prefixContextCol = append(prefixContextCol, element)
 		}
