@@ -1,6 +1,9 @@
 package errpref
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 type EPrefixDelimiters struct {
 	inLinePrefixDelimiter      string
@@ -11,7 +14,6 @@ type EPrefixDelimiters struct {
 	lenInLineContextDelimiter  uint
 	newLineContextDelimiter    string
 	lenNewLineContextDelimiter uint
-	maxErrStringLength         uint
 	lock                       *sync.Mutex
 }
 
@@ -225,26 +227,6 @@ func (ePrefDelims *EPrefixDelimiters) GetLengthNewLinePrefixDelimiter() uint {
 	return ePrefDelims.lenNewLinePrefixDelimiter
 }
 
-// GetMaxErrStringLength - Returns the current the value for
-// maximum error string length.This limit controls the line length
-// for text displays of error prefix strings.
-//
-// The value of maximum error string length is returned as an
-// unsigned integer.
-//
-func (ePrefDelims *EPrefixDelimiters) GetMaxErrStringLength() uint {
-
-	if ePrefDelims.lock == nil {
-		ePrefDelims.lock = new(sync.Mutex)
-	}
-
-	ePrefDelims.lock.Lock()
-
-	defer ePrefDelims.lock.Unlock()
-
-	return ePrefDelims.maxErrStringLength
-}
-
 // GetNewLineContextDelimiter - Returns ePrefDelims.newLineContextDelimiter
 func (ePrefDelims *EPrefixDelimiters) GetNewLineContextDelimiter() string {
 
@@ -271,6 +253,116 @@ func (ePrefDelims *EPrefixDelimiters) GetNewLinePrefixDelimiter() string {
 	defer ePrefDelims.lock.Unlock()
 
 	return ePrefDelims.newLinePrefixDelimiter
+}
+
+// IsValidInstanceError - Returns a boolean flag and error type
+// signalling whether the current EPrefixDelimiters instance is
+// valid and populated with data.
+//
+// If this method returns a value of 'false', it signals that the
+// current EPrefixDelimiters instance is invalid and not fully
+// populated with data. In this case the method will also return an
+// appropriate error message.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - This boolean flag signals whether the current
+//       EPrefixDelimiters instance is valid and fully populated
+//       with data.
+//
+//       If this method returns a value of 'false', it signals that
+//       the current EPrefixDelimiters instance is invalid and not
+//       fully populated with data.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered
+//       during processing, the returned error Type will
+//       encapsulate an error message. Note that this error message
+//       will incorporate the method chain and text passed by input
+//       parameter, 'ePrefix'. The 'ePrefix' text will be prefixed
+//       to the beginning of the error message.
+//
+//       This method will return an appropriate error message if
+//       the current EPrefixDelimiters instance is judged to be
+//       invalid.
+//
+func (ePrefDelims *EPrefixDelimiters) IsValidInstanceError(
+	ePrefix string) (
+	bool,
+	error) {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	ePrefix += "EPrefixDelimiters.IsValidInstanceError() "
+
+	ePrefDelims.lenInLinePrefixDelimiter =
+		uint(len(ePrefDelims.inLinePrefixDelimiter))
+
+	if ePrefDelims.lenInLinePrefixDelimiter == 0 {
+		return false,
+			fmt.Errorf("%v\n"+
+				"Error: The In Line Prefix Delimiter is an "+
+				"empty string!\n",
+				ePrefix)
+	}
+
+	ePrefDelims.lenNewLinePrefixDelimiter =
+		uint(len(ePrefDelims.newLinePrefixDelimiter))
+
+	if ePrefDelims.lenNewLinePrefixDelimiter == 0 {
+		return false,
+			fmt.Errorf("%v\n"+
+				"Error: The In New Prefix Delimiter is an "+
+				"empty string!\n",
+				ePrefix)
+	}
+
+	ePrefDelims.lenInLineContextDelimiter =
+		uint(len(ePrefDelims.inLineContextDelimiter))
+
+	if ePrefDelims.lenInLineContextDelimiter == 0 {
+		return false,
+			fmt.Errorf("%v\n"+
+				"Error: The In Line Context Delimiter is an "+
+				"empty string!\n",
+				ePrefix)
+	}
+
+	ePrefDelims.lenNewLineContextDelimiter =
+		uint(len(ePrefDelims.newLineContextDelimiter))
+
+	if ePrefDelims.lenNewLineContextDelimiter == 0 {
+		return false,
+			fmt.Errorf("%v\n"+
+				"Error: The In New Prefix Delimiter is an "+
+				"empty string!\n",
+				ePrefix)
+	}
+
+	return true, nil
 }
 
 // SetInLineContextDelimiter - Sets ePrefDelims.inLineContextDelimiter
@@ -321,27 +413,6 @@ func (ePrefDelims *EPrefixDelimiters) SetInLinePrefixDelimiter(
 		uint(len(ePrefDelims.inLinePrefixDelimiter))
 
 	return
-}
-
-// SetMaxErrStringLength - Sets ePrefDelims.maxErrStringLength
-//
-// This method sets the value for maximum error string length. This
-// limit controls the line length for text displays of error prefix
-// strings.
-//
-func (ePrefDelims *EPrefixDelimiters) SetMaxErrStringLength(
-	maxErrStringLength uint) {
-
-	if ePrefDelims.lock == nil {
-		ePrefDelims.lock = new(sync.Mutex)
-	}
-
-	ePrefDelims.lock.Lock()
-
-	defer ePrefDelims.lock.Unlock()
-
-	ePrefDelims.maxErrStringLength = maxErrStringLength
-
 }
 
 // SetNewLineContextDelimiter - Sets ePrefDelims.newLineContextDelimiter

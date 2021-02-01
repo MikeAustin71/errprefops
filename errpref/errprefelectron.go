@@ -173,10 +173,5 @@ func (ePrefElectron *errPrefElectron) getDelimiters() (
 
 	delimiters.SetNewLineContextDelimiter("\n : ")
 
-	ePrefQuark := errPrefQuark{}
-
-	delimiters.SetMaxErrStringLength(
-		ePrefQuark.getErrPrefDisplayLineLength())
-
 	return delimiters
 }

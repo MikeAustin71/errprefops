@@ -127,3 +127,41 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	return prefixContextCol
 }
+
+func (ePrefNeutron *errPrefNeutron) writeLastStr(
+	strBuilder *strings.Builder,
+	ePrefLineLenCalc *EPrefixLineLenCalcs) {
+
+	if ePrefNeutron.lock == nil {
+		ePrefNeutron.lock = new(sync.Mutex)
+	}
+
+	ePrefNeutron.lock.Lock()
+
+	defer ePrefNeutron.lock.Unlock()
+
+	newLastStr = lastStr
+	newLenLastStr = uint(len(lastStr))
+	newRemainingLineLen = remainingLineLen
+
+	if strBuilder == nil ||
+		crEPrefDto == nil ||
+		delimiters == nil ||
+		newLenLastStr == 0 {
+		return newLastStr, newLenLastStr, newRemainingLineLen
+	}
+
+	strBuilder.WriteString(lastStr)
+
+	if !crEPrefDto.isLastIdx {
+		strBuilder.WriteString(
+			delimiters.GetNewLinePrefixDelimiter())
+	}
+
+	newLastStr = ""
+	newLenLastStr = 0
+	newRemainingLineLen =
+		delimiters.GetMaxErrStringLength()
+
+	return newLastStr, newLenLastStr, newRemainingLineLen
+}

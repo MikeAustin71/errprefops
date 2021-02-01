@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -83,9 +84,9 @@ func (errorPrefixDto *ErrorPrefixDto) GetIsLastIndex() bool {
 	return errorPrefixDto.isLastIdx
 }
 
-// GetIsValid - Returns the 'isValid' flag signaling whether the
-// current ErrorPrefixDto instance is empty, or populated with
-// data.
+// IsValidInstanceError - Returns the 'isValid' flag and an error object
+// signaling whether the current ErrorPrefixDto instance is
+// invalid.
 //
 // If the returned boolean value is 'true', it signals that the
 // current ErrorPrefixDto is valid and populated with data.
@@ -96,7 +97,10 @@ func (errorPrefixDto *ErrorPrefixDto) GetIsLastIndex() bool {
 //
 //
 //
-func (errorPrefixDto *ErrorPrefixDto) GetIsValid() bool {
+func (errorPrefixDto *ErrorPrefixDto) IsValidInstanceError(
+	ePrefix string) (
+	bool,
+	error) {
 
 	if errorPrefixDto.lock == nil {
 		errorPrefixDto.lock = new(sync.Mutex)
@@ -106,7 +110,34 @@ func (errorPrefixDto *ErrorPrefixDto) GetIsValid() bool {
 
 	defer errorPrefixDto.lock.Unlock()
 
-	return errorPrefixDto.isValid
+	ePrefix += "ErrorPrefixDto.IsValidInstanceError() "
+
+	errorPrefixDto.lenErrorPrefixStr =
+		uint(len(errorPrefixDto.errorPrefixStr))
+
+	if errorPrefixDto.lenErrorPrefixStr == 0 {
+
+		errorPrefixDto.isValid = false
+
+		return errorPrefixDto.isValid,
+			fmt.Errorf("%v\n"+
+				"Error: Error Prefix is an empty string!\n",
+				ePrefix)
+
+	}
+
+	errorPrefixDto.lenErrorContextStr =
+		uint(len(errorPrefixDto.errorContextStr))
+
+	if errorPrefixDto.lenErrorPrefixStr == 0 {
+		errorPrefixDto.errPrefixHasContextStr = false
+	} else {
+		errorPrefixDto.errPrefixHasContextStr = true
+	}
+
+	errorPrefixDto.isValid = true
+
+	return errorPrefixDto.isValid, nil
 }
 
 // GetLengthErrContextStr - Returns the number of characters
