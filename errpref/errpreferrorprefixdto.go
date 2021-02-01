@@ -214,6 +214,27 @@ func (errorPrefixDto *ErrorPrefixDto) SetErrContextStr(
 
 }
 
+// SetErrPrefixHasContext - Sets an internal boolean flag
+// specifying whether the Error Prefix String for this
+// ErrorPrefixDto instance has an associated Error Context String.
+//
+// If this boolean flag is set to 'true' is signals that this
+// Error Prefix String has an associated Error Context String.
+//
+func (errorPrefixDto *ErrorPrefixDto) SetErrPrefixHasContext(
+	errPrefixHasContextStr bool) {
+
+	if errorPrefixDto.lock == nil {
+		errorPrefixDto.lock = new(sync.Mutex)
+	}
+
+	errorPrefixDto.lock.Lock()
+
+	defer errorPrefixDto.lock.Unlock()
+
+	errorPrefixDto.errPrefixHasContextStr = errPrefixHasContextStr
+}
+
 // SetErrPrefixStr - Sets the value of the error prefix string.
 //
 // In addition, this method also calculates and set the value of

@@ -73,11 +73,6 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	isLastIdx := false
 
-	//inLinePrefixDelimiter,
-	//newLinePrefixDelimiter,
-	//inLineContextDelimiter,
-	//newLineContextDelimiter
-
 	for i := 0; i < lCollection; i++ {
 
 		if i == lastIdx {
@@ -98,8 +93,6 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 		element := ErrorPrefixDto{}.New()
 
-		element.isValid = false
-
 		if isLastIdx {
 			element.isLastIdx = true
 		} else {
@@ -107,25 +100,29 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		}
 
 		if contextIdx == -1 {
-			element.errorPrefixStr = s
-			element.lenErrorPrefixStr = uint(len(s))
-			element.errPrefixHasContextStr = false
-			element.errorContextStr = ""
-			element.lenErrorContextStr = 0
+
+			element.SetErrPrefixStr(s)
+
+			element.SetErrPrefixHasContext(false)
+
+			element.isValid = true
 
 			prefixContextCol = append(prefixContextCol, element)
 
 		} else {
 
-			element.errorPrefixStr = s[0:contextIdx]
-			element.lenErrorPrefixStr = uint(len(element.errorPrefixStr))
-			element.errPrefixHasContextStr = false
-			element.errorContextStr = s[contextIdx+
-				idxLenInLineContextDelimiter:]
-			element.lenErrorContextStr = uint(len(element.errorContextStr))
+			element.SetErrPrefixStr(s[0:contextIdx])
+
+			element.SetErrPrefixHasContext(true)
+
+			element.SetErrContextStr(s[contextIdx+
+				idxLenInLineContextDelimiter:])
+
+			element.isValid = true
 
 			prefixContextCol = append(prefixContextCol, element)
 		}
+
 	}
 
 	return prefixContextCol
