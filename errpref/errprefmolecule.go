@@ -88,9 +88,10 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 			ePrefQuark.getErrPrefDisplayLineLength()
 	}
 
-	delimiters := ePrefQuark.getDelimiters()
-
 	ePrefElectron := errPrefElectron{}
+
+	delimiters := ePrefElectron.getDelimiters()
+
 	newErrPref,
 		lenNewErrPrefCleanStr =
 		ePrefElectron.cleanErrorPrefixStr(newErrPref)

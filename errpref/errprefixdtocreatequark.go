@@ -13,7 +13,8 @@ func (createEPrefDtoQuark *createErrPrefixDtoQuark) writeLastStr(
 	strBuilder *strings.Builder,
 	lastStr string,
 	remainingLineLen uint,
-	crEPrefDto *createErrPrefixDto) (
+	crEPrefDto *createErrPrefixDto,
+	delimiters *EPrefixDelimiters) (
 	newLastStr string,
 	newLenLastStr uint,
 	newRemainingLineLen uint) {
@@ -32,6 +33,7 @@ func (createEPrefDtoQuark *createErrPrefixDtoQuark) writeLastStr(
 
 	if strBuilder == nil ||
 		crEPrefDto == nil ||
+		delimiters == nil ||
 		newLenLastStr == 0 {
 		return newLastStr, newLenLastStr, newRemainingLineLen
 	}
@@ -40,13 +42,13 @@ func (createEPrefDtoQuark *createErrPrefixDtoQuark) writeLastStr(
 
 	if !crEPrefDto.isLastIdx {
 		strBuilder.WriteString(
-			crEPrefDto.newLinePrefixDelimiter)
+			delimiters.GetNewLinePrefixDelimiter())
 	}
 
 	newLastStr = ""
 	newLenLastStr = 0
 	newRemainingLineLen =
-		crEPrefDto.maxErrStringLength
+		delimiters.GetMaxErrStringLength()
 
 	return newLastStr, newLenLastStr, newRemainingLineLen
 }

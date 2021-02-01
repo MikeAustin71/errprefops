@@ -31,11 +31,9 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		return prefixContextCol
 	}
 
-	ePrefQuark := errPrefQuark{}
-
-	delimiters := ePrefQuark.getDelimiters()
-
 	ePrefElectron := errPrefElectron{}
+
+	delimiters := ePrefElectron.getDelimiters()
 
 	var lenCleanStr int
 

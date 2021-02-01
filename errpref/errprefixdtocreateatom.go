@@ -13,24 +13,23 @@ type createErrPrefixDtoAtom struct {
 // Designed for Error Prefixes that DO have an associated error
 // context string.
 //
-func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithContext(
+func (createEPrefDtoAtom *createErrPrefixDtoAtom) writeNewEPrefWithContext(
 	strBuilder *strings.Builder,
 	crEPrefDto *createErrPrefixDto,
 	delimiters *EPrefixDelimiters,
-	maxErrStringLength uint,
 	lastStr string,
 	remainingLineLen uint) (
 	newLastStr string,
 	newLenLastStr uint,
 	newRemainingLineLen uint) {
 
-	if createEPrefDtoElectron.lock == nil {
-		createEPrefDtoElectron.lock = new(sync.Mutex)
+	if createEPrefDtoAtom.lock == nil {
+		createEPrefDtoAtom.lock = new(sync.Mutex)
 	}
 
-	createEPrefDtoElectron.lock.Lock()
+	createEPrefDtoAtom.lock.Lock()
 
-	defer createEPrefDtoElectron.lock.Unlock()
+	defer createEPrefDtoAtom.lock.Unlock()
 
 	newRemainingLineLen = remainingLineLen
 	newLastStr = lastStr
@@ -62,7 +61,8 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 				strBuilder,
 				lastStr,
 				remainingLineLen,
-				crEPrefDto)
+				crEPrefDto,
+				delimiters)
 	}
 
 	if newLenLastStr+
@@ -77,7 +77,8 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 					strBuilder,
 					lastStr,
 					remainingLineLen,
-					crEPrefDto)
+					crEPrefDto,
+					delimiters)
 
 		}
 
@@ -98,7 +99,7 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 			}
 
 			newRemainingLineLen =
-				maxErrStringLength
+				delimiters.GetMaxErrStringLength()
 
 			return newLastStr, newLenLastStr, newRemainingLineLen
 		}
@@ -118,7 +119,7 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 	newLastStr += crEPrefDto.newErrContextStr
 	newLenLastStr = uint(len(newLastStr))
 	newRemainingLineLen =
-		maxErrStringLength -
+		delimiters.GetMaxErrStringLength() -
 			newLenLastStr
 
 	return newLastStr, newLenLastStr, newRemainingLineLen
@@ -128,24 +129,23 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithConte
 // Designed for Error Prefixes that do NOT have an associated error
 // context string.
 //
-func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutContext(
+func (createEPrefDtoAtom *createErrPrefixDtoAtom) writeNewEPrefWithOutContext(
 	strBuilder *strings.Builder,
 	crEPrefDto *createErrPrefixDto,
 	delimiters *EPrefixDelimiters,
-	maxErrStringLength uint,
 	lastStr string,
 	remainingLineLen uint) (
 	newLastStr string,
 	newLenLastStr uint,
 	newRemainingLineLen uint) {
 
-	if createEPrefDtoElectron.lock == nil {
-		createEPrefDtoElectron.lock = new(sync.Mutex)
+	if createEPrefDtoAtom.lock == nil {
+		createEPrefDtoAtom.lock = new(sync.Mutex)
 	}
 
-	createEPrefDtoElectron.lock.Lock()
+	createEPrefDtoAtom.lock.Lock()
 
-	defer createEPrefDtoElectron.lock.Unlock()
+	defer createEPrefDtoAtom.lock.Unlock()
 
 	newRemainingLineLen = remainingLineLen
 	newLastStr = lastStr
@@ -175,7 +175,8 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 				strBuilder,
 				lastStr,
 				remainingLineLen,
-				crEPrefDto)
+				crEPrefDto,
+				delimiters)
 
 		if lenEPrefWithoutContext > remainingLineLen {
 
@@ -197,7 +198,7 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 				}
 
 				newRemainingLineLen =
-					maxErrStringLength
+					delimiters.GetMaxErrStringLength()
 
 				return newLastStr, newLenLastStr, newRemainingLineLen
 				// End of lenEPrefWithoutContext >
@@ -217,9 +218,12 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 				}
 
 				newRemainingLineLen =
-					maxErrStringLength
+					delimiters.GetMaxErrStringLength()
+
 				newLenLastStr = 0
+
 				newLastStr = ""
+
 			}
 			// End of if lenEPrefWithoutContext > remainingLineLen
 
@@ -229,10 +233,13 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 			// Add to 'lastStr'.
 
 			newLastStr += delimiters.GetInLinePrefixDelimiter()
+
 			newLastStr += crEPrefDto.newErrPrefStr
+
 			newLenLastStr = uint(len(newLastStr))
+
 			newRemainingLineLen =
-				maxErrStringLength -
+				delimiters.GetMaxErrStringLength() -
 					newLenLastStr
 		}
 
@@ -252,7 +259,8 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 					strBuilder,
 					lastStr,
 					remainingLineLen,
-					crEPrefDto)
+					crEPrefDto,
+					delimiters)
 
 		}
 
@@ -267,9 +275,12 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 			}
 
 			newRemainingLineLen =
-				maxErrStringLength
+				delimiters.GetMaxErrStringLength()
+
 			newLenLastStr = 0
+
 			newLastStr = ""
+
 			// End of if lenEPrefWithoutContext > remainingLineLen
 		} else {
 			// lenEPrefWithoutContext <= remainingLineLen
@@ -279,7 +290,7 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 			newLastStr += crEPrefDto.newErrPrefStr
 			newLenLastStr = uint(len(newLastStr))
 			newRemainingLineLen =
-				maxErrStringLength -
+				delimiters.GetMaxErrStringLength() -
 					newLenLastStr
 		}
 
@@ -295,7 +306,7 @@ func (createEPrefDtoElectron *createErrPrefixDtoElectron) writeNewEPrefWithOutCo
 		newLastStr += crEPrefDto.newErrContextStr
 		newLenLastStr = uint(len(newLastStr))
 		newRemainingLineLen =
-			maxErrStringLength -
+			delimiters.GetMaxErrStringLength() -
 				newLenLastStr
 	}
 

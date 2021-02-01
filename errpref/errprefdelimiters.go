@@ -11,6 +11,7 @@ type EPrefixDelimiters struct {
 	lenInLineContextDelimiter  uint
 	newLineContextDelimiter    string
 	lenNewLineContextDelimiter uint
+	maxErrStringLength         uint
 	lock                       *sync.Mutex
 }
 
@@ -224,6 +225,26 @@ func (ePrefDelims *EPrefixDelimiters) GetLengthNewLinePrefixDelimiter() uint {
 	return ePrefDelims.lenNewLinePrefixDelimiter
 }
 
+// GetMaxErrStringLength - Returns the current the value for
+// maximum error string length.This limit controls the line length
+// for text displays of error prefix strings.
+//
+// The value of maximum error string length is returned as an
+// unsigned integer.
+//
+func (ePrefDelims *EPrefixDelimiters) GetMaxErrStringLength() uint {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	return ePrefDelims.maxErrStringLength
+}
+
 // GetNewLineContextDelimiter - Returns ePrefDelims.newLineContextDelimiter
 func (ePrefDelims *EPrefixDelimiters) GetNewLineContextDelimiter() string {
 
@@ -300,6 +321,27 @@ func (ePrefDelims *EPrefixDelimiters) SetInLinePrefixDelimiter(
 		uint(len(ePrefDelims.inLinePrefixDelimiter))
 
 	return
+}
+
+// SetMaxErrStringLength - Sets ePrefDelims.maxErrStringLength
+//
+// This method sets the value for maximum error string length. This
+// limit controls the line length for text displays of error prefix
+// strings.
+//
+func (ePrefDelims *EPrefixDelimiters) SetMaxErrStringLength(
+	maxErrStringLength uint) {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	ePrefDelims.maxErrStringLength = maxErrStringLength
+
 }
 
 // SetNewLineContextDelimiter - Sets ePrefDelims.newLineContextDelimiter

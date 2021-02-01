@@ -112,3 +112,61 @@ func (ePrefElectron *errPrefElectron) cleanErrorContextStr(
 	lenCleanStr = len(errContext)
 	return cleanStr, lenCleanStr
 }
+
+// getDelimiters - Returns the four delimiter strings used to
+// delimit error prefix and error context strings.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  delimiters                 EPrefixDelimiters
+//     - A structure containing delimiter strings used to terminate
+//       error prefix and error context lines of text.
+//
+//       type EPrefixDelimiters struct {
+//         inLinePrefixDelimiter      string
+//         lenInLinePrefixDelimiter   uint
+//         newLinePrefixDelimiter     string
+//         lenNewLinePrefixDelimiter  uint
+//         inLineContextDelimiter     string
+//         lenInLineContextDelimiter  uint
+//         newLineContextDelimiter    string
+//         lenNewLineContextDelimiter uint
+//         maxErrStringLength         uint
+//       }
+//
+func (ePrefElectron *errPrefElectron) getDelimiters() (
+	delimiters EPrefixDelimiters) {
+
+	if ePrefElectron.lock == nil {
+		ePrefElectron.lock = new(sync.Mutex)
+	}
+
+	ePrefElectron.lock.Lock()
+
+	defer ePrefElectron.lock.Unlock()
+
+	delimiters.SetInLinePrefixDelimiter(" - ")
+
+	delimiters.SetNewLinePrefixDelimiter("\n")
+
+	delimiters.SetInLineContextDelimiter(" : ")
+
+	delimiters.SetNewLineContextDelimiter("\n : ")
+
+	ePrefQuark := errPrefQuark{}
+
+	delimiters.SetMaxErrStringLength(
+		ePrefQuark.getErrPrefDisplayLineLength())
+
+	return delimiters
+}

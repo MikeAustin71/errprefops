@@ -306,7 +306,13 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 		return ""
 	}
 
-	delimiters := ePrefQuark.getDelimiters()
+	ePrefElectron := errPrefElectron{}
+
+	delimiters := ePrefElectron.getDelimiters()
+
+	if maxErrStringLength != delimiters.GetMaxErrStringLength() {
+		delimiters.SetMaxErrStringLength(maxErrStringLength)
+	}
 
 	errPrefixStrLen := len(errPrefix)
 
