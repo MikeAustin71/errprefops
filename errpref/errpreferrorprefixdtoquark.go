@@ -5,27 +5,27 @@ import (
 	"sync"
 )
 
-type createErrPrefixDtoQuark struct {
+type errorPrefixDtoQuark struct {
 	lock *sync.Mutex
 }
 
-func (createEPrefDtoQuark *createErrPrefixDtoQuark) writeLastStr(
+func (errPrefixDtoQuark *errorPrefixDtoQuark) writeLastStr(
 	strBuilder *strings.Builder,
 	lastStr string,
 	remainingLineLen uint,
-	crEPrefDto *createErrPrefixDto,
+	crEPrefDto *ErrorPrefixDto,
 	delimiters *EPrefixDelimiters) (
 	newLastStr string,
 	newLenLastStr uint,
 	newRemainingLineLen uint) {
 
-	if createEPrefDtoQuark.lock == nil {
-		createEPrefDtoQuark.lock = new(sync.Mutex)
+	if errPrefixDtoQuark.lock == nil {
+		errPrefixDtoQuark.lock = new(sync.Mutex)
 	}
 
-	createEPrefDtoQuark.lock.Lock()
+	errPrefixDtoQuark.lock.Lock()
 
-	defer createEPrefDtoQuark.lock.Unlock()
+	defer errPrefixDtoQuark.lock.Unlock()
 
 	newLastStr = lastStr
 	newLenLastStr = uint(len(lastStr))

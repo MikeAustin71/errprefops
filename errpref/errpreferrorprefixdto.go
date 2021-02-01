@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-type createErrPrefixDto struct {
+type ErrorPrefixDto struct {
 	errPrefIsEmpty      bool
 	isLastIdx           bool // Signals the last index in the array
 	newErrPrefStr       string
@@ -16,9 +16,9 @@ type createErrPrefixDto struct {
 }
 
 // New - Creates and returns a new instance of type,
-// 'createErrPrefixDto'.
+// 'ErrorPrefixDto'.
 //
-func (crErrPrefDto createErrPrefixDto) New() createErrPrefixDto {
+func (crErrPrefDto ErrorPrefixDto) New() ErrorPrefixDto {
 
 	if crErrPrefDto.lock == nil {
 		crErrPrefDto.lock = new(sync.Mutex)
@@ -28,5 +28,5 @@ func (crErrPrefDto createErrPrefixDto) New() createErrPrefixDto {
 
 	defer crErrPrefDto.lock.Unlock()
 
-	return createErrPrefixDto{}
+	return ErrorPrefixDto{}
 }

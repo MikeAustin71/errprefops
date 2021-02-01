@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"strings"
 	"sync"
 )
 
@@ -146,4 +147,308 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 		lenConsolidatedNewEPrefContext,
 		lenNewErrPrefCleanStr,
 		lenNewErrContextCleanStr
+}
+
+// writeNewEPrefWithContext
+// Designed for Error Prefixes that DO have an associated error
+// context string.
+//
+func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
+	strBuilder *strings.Builder,
+	crEPrefDto *ErrorPrefixDto,
+	delimiters *EPrefixDelimiters,
+	lastStr string,
+	remainingLineLen uint) (
+	newLastStr string,
+	newLenLastStr uint,
+	newRemainingLineLen uint) {
+
+	if ePrefMolecule.lock == nil {
+		ePrefMolecule.lock = new(sync.Mutex)
+	}
+
+	ePrefMolecule.lock.Lock()
+
+	defer ePrefMolecule.lock.Unlock()
+
+	newRemainingLineLen = remainingLineLen
+	newLastStr = lastStr
+	newLenLastStr = uint(len(lastStr))
+
+	if strBuilder == nil ||
+		crEPrefDto == nil ||
+		delimiters == nil ||
+		crEPrefDto.errPrefIsEmpty {
+		return newLastStr, newLenLastStr, newRemainingLineLen
+	}
+
+	lenEPrefWithContext :=
+		delimiters.GetLengthInLinePrefixDelimiter() +
+			crEPrefDto.lenNewErrPrefStr +
+			delimiters.GetLengthInLineContextDelimiter() +
+			crEPrefDto.lenNewErrContextStr
+
+	createEPrefDtoQuark := errorPrefixDtoQuark{}
+
+	if newLenLastStr > remainingLineLen {
+		// The lastStr is already longer than
+		// remaining line length
+
+		newLastStr,
+			newLenLastStr,
+			remainingLineLen =
+			createEPrefDtoQuark.writeLastStr(
+				strBuilder,
+				lastStr,
+				remainingLineLen,
+				crEPrefDto,
+				delimiters)
+	}
+
+	if newLenLastStr+
+		lenEPrefWithContext > remainingLineLen {
+
+		if newLenLastStr > 0 {
+
+			newLastStr,
+				newLenLastStr,
+				remainingLineLen =
+				createEPrefDtoQuark.writeLastStr(
+					strBuilder,
+					lastStr,
+					remainingLineLen,
+					crEPrefDto,
+					delimiters)
+
+		}
+
+		if lenEPrefWithContext > remainingLineLen {
+
+			strBuilder.WriteString(
+				crEPrefDto.newErrPrefStr)
+
+			strBuilder.WriteString(
+				delimiters.GetNewLineContextDelimiter())
+
+			strBuilder.WriteString(
+				crEPrefDto.newErrContextStr)
+
+			if !crEPrefDto.isLastIdx {
+				strBuilder.WriteString(
+					delimiters.GetNewLinePrefixDelimiter())
+			}
+
+			newRemainingLineLen =
+				delimiters.GetMaxErrStringLength()
+
+			return newLastStr, newLenLastStr, newRemainingLineLen
+		}
+		// End Of
+		//newLenLastStr +
+		//	lenEPrefWithContext > remainingLineLen
+	}
+
+	//newLenLastStr +
+	//	lenEPrefWithContext <= remainingLineLen
+	// The line length of the next write block
+	// will fit on the end of the 'lastStr'
+
+	newLastStr += delimiters.GetInLinePrefixDelimiter()
+	newLastStr += crEPrefDto.newErrPrefStr
+	newLastStr += delimiters.GetInLineContextDelimiter()
+	newLastStr += crEPrefDto.newErrContextStr
+	newLenLastStr = uint(len(newLastStr))
+	newRemainingLineLen =
+		delimiters.GetMaxErrStringLength() -
+			newLenLastStr
+
+	return newLastStr, newLenLastStr, newRemainingLineLen
+}
+
+// writeNewEPrefWithOutContext
+// Designed for Error Prefixes that do NOT have an associated error
+// context string.
+//
+func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
+	strBuilder *strings.Builder,
+	crEPrefDto *ErrorPrefixDto,
+	delimiters *EPrefixDelimiters,
+	lastStr string,
+	remainingLineLen uint) (
+	newLastStr string,
+	newLenLastStr uint,
+	newRemainingLineLen uint) {
+
+	if ePrefMolecule.lock == nil {
+		ePrefMolecule.lock = new(sync.Mutex)
+	}
+
+	ePrefMolecule.lock.Lock()
+
+	defer ePrefMolecule.lock.Unlock()
+
+	newRemainingLineLen = remainingLineLen
+	newLastStr = lastStr
+	newLenLastStr = uint(len(lastStr))
+
+	if strBuilder == nil ||
+		crEPrefDto == nil ||
+		crEPrefDto.errPrefIsEmpty {
+		return newLastStr, newLenLastStr, newRemainingLineLen
+	}
+
+	lenEPrefWithoutContext :=
+		delimiters.GetLengthInLinePrefixDelimiter() +
+			crEPrefDto.lenNewErrPrefStr +
+			delimiters.GetLengthInLinePrefixDelimiter()
+
+	createEPrefDtoQuark := errorPrefixDtoQuark{}
+
+	if newLenLastStr > remainingLineLen {
+		// The lastStr is already longer than
+		// remaining line length
+
+		newLastStr,
+			newLenLastStr,
+			remainingLineLen =
+			createEPrefDtoQuark.writeLastStr(
+				strBuilder,
+				lastStr,
+				remainingLineLen,
+				crEPrefDto,
+				delimiters)
+
+		if lenEPrefWithoutContext > remainingLineLen {
+
+			strBuilder.WriteString(
+				crEPrefDto.newErrPrefStr)
+
+			if lenEPrefWithoutContext >
+				remainingLineLen {
+
+				strBuilder.WriteString(
+					delimiters.GetNewLineContextDelimiter())
+
+				strBuilder.WriteString(
+					crEPrefDto.newErrContextStr)
+
+				if !crEPrefDto.isLastIdx {
+					strBuilder.WriteString(
+						delimiters.GetNewLinePrefixDelimiter())
+				}
+
+				newRemainingLineLen =
+					delimiters.GetMaxErrStringLength()
+
+				return newLastStr, newLenLastStr, newRemainingLineLen
+				// End of lenEPrefWithoutContext >
+				//				remainingLineLen
+			} else {
+				// lenEPrefWithoutContext <= remainingLineLen
+
+				strBuilder.WriteString(
+					delimiters.GetInLinePrefixDelimiter())
+
+				strBuilder.WriteString(
+					crEPrefDto.newErrContextStr)
+
+				if !crEPrefDto.isLastIdx {
+					strBuilder.WriteString(
+						delimiters.GetNewLinePrefixDelimiter())
+				}
+
+				newRemainingLineLen =
+					delimiters.GetMaxErrStringLength()
+
+				newLenLastStr = 0
+
+				newLastStr = ""
+
+			}
+			// End of if lenEPrefWithoutContext > remainingLineLen
+
+		} else {
+			// lenEPrefWithoutContext <= remainingLineLen
+			// Add the next write block to 'lastStr'
+			// Add to 'lastStr'.
+
+			newLastStr += delimiters.GetInLinePrefixDelimiter()
+
+			newLastStr += crEPrefDto.newErrPrefStr
+
+			newLenLastStr = uint(len(newLastStr))
+
+			newRemainingLineLen =
+				delimiters.GetMaxErrStringLength() -
+					newLenLastStr
+		}
+
+		return newLastStr, newLenLastStr, newRemainingLineLen
+		// End Of
+		// newLenLastStr > remainingLineLen
+	}
+
+	if newLenLastStr+
+		lenEPrefWithoutContext > remainingLineLen {
+
+		if newLenLastStr > 0 {
+			newLastStr,
+				newLenLastStr,
+				remainingLineLen =
+				createEPrefDtoQuark.writeLastStr(
+					strBuilder,
+					lastStr,
+					remainingLineLen,
+					crEPrefDto,
+					delimiters)
+
+		}
+
+		if lenEPrefWithoutContext > remainingLineLen {
+
+			strBuilder.WriteString(
+				crEPrefDto.newErrPrefStr)
+
+			if !crEPrefDto.isLastIdx {
+				strBuilder.WriteString(
+					delimiters.GetNewLinePrefixDelimiter())
+			}
+
+			newRemainingLineLen =
+				delimiters.GetMaxErrStringLength()
+
+			newLenLastStr = 0
+
+			newLastStr = ""
+
+			// End of if lenEPrefWithoutContext > remainingLineLen
+		} else {
+			// lenEPrefWithoutContext <= remainingLineLen
+			// Add to 'lastStr'
+
+			newLastStr += delimiters.GetInLinePrefixDelimiter()
+			newLastStr += crEPrefDto.newErrPrefStr
+			newLenLastStr = uint(len(newLastStr))
+			newRemainingLineLen =
+				delimiters.GetMaxErrStringLength() -
+					newLenLastStr
+		}
+
+		// End Of
+		//newLenLastStr +
+		//	lenEPrefWithoutContext > remainingLineLen
+	} else {
+		//newLenLastStr +
+		//	lenEPrefWithoutContext <= remainingLineLen
+		newLastStr += delimiters.GetInLinePrefixDelimiter()
+		newLastStr += crEPrefDto.newErrPrefStr
+		newLastStr += delimiters.GetInLineContextDelimiter()
+		newLastStr += crEPrefDto.newErrContextStr
+		newLenLastStr = uint(len(newLastStr))
+		newRemainingLineLen =
+			delimiters.GetMaxErrStringLength() -
+				newLenLastStr
+	}
+
+	return newLastStr, newLenLastStr, newRemainingLineLen
 }

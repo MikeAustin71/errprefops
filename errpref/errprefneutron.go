@@ -15,7 +15,7 @@ type errPrefNeutron struct {
 // array as a collection of error prefixes and error contexts.
 func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 	errPrefix string) (
-	prefixContextCol []createErrPrefixDto) {
+	prefixContextCol []ErrorPrefixDto) {
 
 	if ePrefNeutron.lock == nil {
 		ePrefNeutron.lock = new(sync.Mutex)
@@ -25,7 +25,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	defer ePrefNeutron.lock.Unlock()
 
-	prefixContextCol = make([]createErrPrefixDto, 0, 150)
+	prefixContextCol = make([]ErrorPrefixDto, 0, 150)
 
 	if len(errPrefix) == 0 {
 		return prefixContextCol
@@ -96,7 +96,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		contextIdx = strings.Index(s,
 			delimiters.GetInLineContextDelimiter())
 
-		element := createErrPrefixDto{}.New()
+		element := ErrorPrefixDto{}.New()
 
 		element.errPrefIsEmpty = false
 
