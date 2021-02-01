@@ -11,10 +11,14 @@ type errPrefElectron struct {
 
 // cleanErrorPrefixStr - Receives error prefix strings (not error
 // context strings) and proceeds to scrub and remove invalid
-// sub-strings and characters. After this process is completed, the
-// 'cleaned' string along with the length of the newly cleaned
-// string is returned to the calling function.
+// sub-strings and characters.
 //
+// This is a 'trim' operation which removes the target strings from
+// both sides of the 'errPref' string.
+//
+// After this process is completed, the 'cleaned' string along with
+// the length of the newly cleaned string is returned to the
+// calling function.
 //
 func (ePrefElectron *errPrefElectron) cleanErrorPrefixStr(
 	errPref string) (
@@ -48,7 +52,9 @@ func (ePrefElectron *errPrefElectron) cleanErrorPrefixStr(
 
 	for i := 0; i < 3; i++ {
 		for j := 0; j < lenDirtyChars; j++ {
+
 			errPref = strings.TrimLeft(strings.TrimRight(errPref, dirtyChars[j]), dirtyChars[j])
+
 		}
 	}
 
@@ -63,10 +69,14 @@ func (ePrefElectron *errPrefElectron) cleanErrorPrefixStr(
 
 // cleanErrorContextStr - Receives error context strings (not error
 // prefix strings) and proceeds to scrub and remove invalid
-// sub-strings and characters. After this process is completed, the
-// 'cleaned' string along with the length of the newly cleaned
-// string is returned to the calling function.
+// sub-strings and characters.
 //
+// This is a 'trim' operation which removes the target strings from
+// both sides of the 'errContext' string.
+//
+// After this process is completed, the 'cleaned' string along with
+// the length of the newly cleaned string is returned to the
+// calling function.
 //
 func (ePrefElectron *errPrefElectron) cleanErrorContextStr(
 	errContext string) (
