@@ -33,14 +33,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	ePrefQuark := errPrefQuark{}
 
-	if maxErrStringLength == 0 {
-		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
-	}
-
-	inLinePrefixDelimiter,
-		newLinePrefixDelimiter,
-		inLineContextDelimiter,
-		newLineContextDelimiter := ePrefQuark.getDelimiters()
+	delimiters := ePrefQuark.getDelimiters()
 
 	ePrefElectron := errPrefElectron{}
 
@@ -55,18 +48,19 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	errPrefix = strings.ReplaceAll(
 		errPrefix,
-		newLineContextDelimiter,
-		inLineContextDelimiter)
+		delimiters.GetNewLineContextDelimiter(),
+		delimiters.GetInLineContextDelimiter())
 
 	errPrefix = strings.ReplaceAll(
 		errPrefix,
-		inLinePrefixDelimiter, newLinePrefixDelimiter)
+		delimiters.GetInLinePrefixDelimiter(),
+		delimiters.GetNewLinePrefixDelimiter())
 
-	errPrefix += newLinePrefixDelimiter
+	errPrefix += delimiters.GetNewLinePrefixDelimiter()
 
 	errPrefixContextCollection := strings.Split(
 		errPrefix,
-		newLinePrefixDelimiter)
+		delimiters.GetNewLinePrefixDelimiter())
 
 	lCollection := len(errPrefixContextCollection)
 
@@ -75,19 +69,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 	}
 
 	var contextIdx int
-	var idxLenInLineContextDelimiter = len(inLineContextDelimiter) - 1
-
-	lenInLinePrefixDelimiter :=
-		uint(len(inLinePrefixDelimiter))
-
-	lenNewLinePrefixDelimiter :=
-		uint(len(newLinePrefixDelimiter))
-
-	lenInLineContextDelimiter :=
-		uint(len(inLineContextDelimiter))
-
-	lenNewLineContextDelimiter :=
-		uint(len(newLineContextDelimiter))
+	var idxLenInLineContextDelimiter = int(delimiters.GetLengthInLineContextDelimiter() - 1)
 
 	lastIdx := lCollection - 1
 
@@ -113,7 +95,8 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 			continue
 		}
 
-		contextIdx = strings.Index(s, inLineContextDelimiter)
+		contextIdx = strings.Index(s,
+			delimiters.GetInLineContextDelimiter())
 
 		element := createErrPrefixDto{}.New()
 
@@ -124,18 +107,6 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		} else {
 			element.isLastIdx = false
 		}
-
-		element.inLinePrefixDelimiter = inLinePrefixDelimiter
-		element.lenInLinePrefixDelimiter = lenInLinePrefixDelimiter
-		element.newLinePrefixDelimiter = newLinePrefixDelimiter
-		element.lenNewLinePrefixDelimiter = lenNewLinePrefixDelimiter
-		element.inLineContextDelimiter = inLineContextDelimiter
-		element.lenInLineContextDelimiter = lenInLineContextDelimiter
-		element.newLineContextDelimiter = newLineContextDelimiter
-		element.lenNewLineContextDelimiter = lenNewLineContextDelimiter
-		element.totLenInLineEPrefWDelim = 0
-		element.totLenInLineEPrefCtxWDelim = 0
-		element.maxErrStringLength = maxErrStringLength
 
 		if contextIdx == -1 {
 			element.newErrPrefStr = s

@@ -88,10 +88,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 			ePrefQuark.getErrPrefDisplayLineLength()
 	}
 
-	_,
-		_,
-		inLineContextDelimiter,
-		newLineContextDelimiter := ePrefQuark.getDelimiters()
+	delimiters := ePrefQuark.getDelimiters()
 
 	ePrefElectron := errPrefElectron{}
 	newErrPref,
@@ -127,7 +124,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 
 			consolidatedNewEPrefContext =
 				newErrPref +
-					newLineContextDelimiter +
+					delimiters.GetNewLineContextDelimiter() +
 					newContext
 
 		} else {
@@ -136,7 +133,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 			//	3) <= maxErrPrefixTextLineLength
 			consolidatedNewEPrefContext =
 				newErrPref +
-					inLineContextDelimiter +
+					delimiters.GetInLineContextDelimiter() +
 					newContext
 		}
 	}

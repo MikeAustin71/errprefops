@@ -75,10 +75,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 			ePrefQuark.getErrPrefDisplayLineLength()
 	}
 
-	inLinePrefixDelimiter,
-		newLinePrefixDelimiter,
-		_,
-		_ := ePrefQuark.getDelimiters()
+	delimiters := ePrefQuark.getDelimiters()
 
 	ePrefElectron := errPrefElectron{}
 
@@ -127,7 +124,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 			consolidatedOldNewErrPref =
 				oldErrPref +
-					newLinePrefixDelimiter +
+					delimiters.GetNewLinePrefixDelimiter() +
 					newErrPref
 
 		} else {
@@ -136,7 +133,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 			//		maxErrPrefixTextLineLength
 			consolidatedOldNewErrPref =
 				oldErrPref +
-					inLinePrefixDelimiter +
+					delimiters.GetInLinePrefixDelimiter() +
 					newErrPref
 		}
 	}
