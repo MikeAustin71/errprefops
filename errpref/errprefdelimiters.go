@@ -14,6 +14,92 @@ type EPrefixDelimiters struct {
 	lock                       *sync.Mutex
 }
 
+// CopyIn - Receives an instance of type EPrefixDelimiters and proceeds to
+// copy the internal member data variable values to the current
+// EPrefixDelimiters instance.
+//
+func (ePrefDelims *EPrefixDelimiters) CopyIn(
+	incomingDelimiters *EPrefixDelimiters) {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	ePrefDelims.inLinePrefixDelimiter =
+		incomingDelimiters.inLinePrefixDelimiter
+
+	ePrefDelims.lenInLinePrefixDelimiter =
+		incomingDelimiters.lenInLinePrefixDelimiter
+
+	ePrefDelims.newLinePrefixDelimiter =
+		incomingDelimiters.newLinePrefixDelimiter
+
+	ePrefDelims.lenNewLinePrefixDelimiter =
+		incomingDelimiters.lenNewLinePrefixDelimiter
+
+	ePrefDelims.inLineContextDelimiter =
+		incomingDelimiters.inLineContextDelimiter
+
+	ePrefDelims.lenNewLinePrefixDelimiter =
+		incomingDelimiters.lenNewLinePrefixDelimiter
+
+	ePrefDelims.newLineContextDelimiter =
+		incomingDelimiters.newLineContextDelimiter
+
+	ePrefDelims.lenNewLineContextDelimiter =
+		incomingDelimiters.lenNewLineContextDelimiter
+
+	return
+}
+
+// CopyOut - Creates and returns a deep copy of the current
+// EPrefixDelimiters. After completion of this operation, the
+// returned copy and the current EPrefixDelimiters instance are
+// identical in all respects.
+//
+func (ePrefDelims *EPrefixDelimiters) CopyOut() EPrefixDelimiters {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	newErrPrefDelims := EPrefixDelimiters{}
+
+	newErrPrefDelims.inLinePrefixDelimiter =
+		ePrefDelims.inLinePrefixDelimiter
+
+	newErrPrefDelims.lenInLinePrefixDelimiter =
+		ePrefDelims.lenInLinePrefixDelimiter
+
+	newErrPrefDelims.newLinePrefixDelimiter =
+		ePrefDelims.newLinePrefixDelimiter
+
+	newErrPrefDelims.lenNewLinePrefixDelimiter =
+		ePrefDelims.lenNewLinePrefixDelimiter
+
+	newErrPrefDelims.inLineContextDelimiter =
+		ePrefDelims.inLineContextDelimiter
+
+	newErrPrefDelims.lenNewLinePrefixDelimiter =
+		ePrefDelims.lenNewLinePrefixDelimiter
+
+	newErrPrefDelims.newLineContextDelimiter =
+		ePrefDelims.newLineContextDelimiter
+
+	newErrPrefDelims.lenNewLineContextDelimiter =
+		ePrefDelims.lenNewLineContextDelimiter
+
+	return newErrPrefDelims
+}
+
 // GetInLineContextDelimiter - Returns ePrefDelims.inLineContextDelimiter
 func (ePrefDelims *EPrefixDelimiters) GetInLineContextDelimiter() string {
 
