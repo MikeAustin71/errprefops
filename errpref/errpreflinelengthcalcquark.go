@@ -5,11 +5,11 @@ import (
 	"sync"
 )
 
-type errPrefixDelimitersQuark struct {
+type ePrefixLineLenCalcQuark struct {
 	lock *sync.Mutex
 }
 
-// testValidityOfErrorPrefixInfo - Performs a diagnostic review of
+// testValidityOfEPrefixLineLenCalc - Performs a diagnostic review of
 // the input parameter 'delimiters', an instance of
 // ErrPrefixDelimiters. The purpose of this diagnostic review is to
 // determine whether this ErrPrefixDelimiters instance is valid in all
@@ -52,80 +52,58 @@ type errPrefixDelimitersQuark struct {
 //       If the input parameter object, 'errPrefixDto', is valid,
 //       this error parameter will be set to 'nil'.
 //
-func (ePrefDelimsQuark *errPrefixDelimitersQuark) testValidityOfErrPrefixDelimiters(
-	delimiters *ErrPrefixDelimiters,
+func (ePrefLineLenCalcQuark *ePrefixLineLenCalcQuark) testValidityOfEPrefixLineLenCalc(
+	ePrefLineLenCalc *EPrefixLineLenCalc,
 	ePrefix string) (
 	isValid bool,
 	err error) {
 
-	if ePrefDelimsQuark.lock == nil {
-		ePrefDelimsQuark.lock = new(sync.Mutex)
+	if ePrefLineLenCalcQuark.lock == nil {
+		ePrefLineLenCalcQuark.lock = new(sync.Mutex)
 	}
 
-	ePrefDelimsQuark.lock.Lock()
+	ePrefLineLenCalcQuark.lock.Lock()
 
-	defer ePrefDelimsQuark.lock.Unlock()
+	defer ePrefLineLenCalcQuark.lock.Unlock()
 
-	ePrefix += "errPrefixDelimitersQuark.testValidityOfErrPrefixDelimiters() "
+	ePrefix += "ePrefixLineLenCalcQuark.testValidityOfEPrefixLineLenCalc() "
 	isValid = false
 
-	if delimiters == nil {
+	if ePrefLineLenCalc == nil {
 		err = fmt.Errorf("%v\n"+
-			"Input parameter 'delimiters' is INVALID!\n"+
-			"'delimiters' is a nil pointer!\n",
+			"Input parameter 'ePrefLineLenCalc' is INVALID!\n"+
+			"'ePrefLineLenCalc' is a nil pointer!\n",
 			ePrefix)
 
 		return isValid, err
 	}
 
-	delimiters.lenInLinePrefixDelimiter =
-		uint(len(delimiters.inLinePrefixDelimiter))
+	err = ePrefLineLenCalc.ePrefDelimiters.IsValidInstanceError(
+		ePrefix +
+			"ePrefLineLenCalc.ePrefDelimiters validity check\n")
 
-	if delimiters.lenInLinePrefixDelimiter == 0 {
-		err =
-			fmt.Errorf("%v\n"+
-				"Error: The In Line Prefix Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
+	if err != nil {
+		return isValid, err
+	}
+
+	if ePrefLineLenCalc.errorPrefixInfo == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Internal member variable 'ePrefLineLenCalc.errorPrefixInfo'\n"+
+			"is a 'nil' pointer!\n",
+			ePrefix)
 
 		return isValid, err
 	}
 
-	delimiters.lenNewLinePrefixDelimiter =
-		uint(len(delimiters.newLinePrefixDelimiter))
+	ePrefLineLenCalc.lenCurrentLineStr =
+		uint(len(ePrefLineLenCalc.currentLineStr))
 
-	if delimiters.lenNewLinePrefixDelimiter == 0 {
-		err =
-			fmt.Errorf("%v\n"+
-				"Error: The In New Prefix Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
-
-		return isValid, err
-	}
-
-	delimiters.lenInLineContextDelimiter =
-		uint(len(delimiters.inLineContextDelimiter))
-
-	if delimiters.lenInLineContextDelimiter == 0 {
-		err =
-			fmt.Errorf("%v\n"+
-				"Error: The In Line Context Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
-
-		return isValid, err
-	}
-
-	delimiters.lenNewLineContextDelimiter =
-		uint(len(delimiters.newLineContextDelimiter))
-
-	if delimiters.lenNewLineContextDelimiter == 0 {
-		err =
-			fmt.Errorf("%v\n"+
-				"Error: The In New Prefix Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
+	if ePrefLineLenCalc.maxErrStringLength == 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: Internal member variable 'ePrefLineLenCalc.maxErrStringLength'\n"+
+			"is invalid!\n"+
+			"ePrefLineLenCalc.maxErrStringLength == 0\n",
+			ePrefix)
 
 		return isValid, err
 	}

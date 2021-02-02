@@ -14,12 +14,128 @@ import (
 //
 type EPrefixLineLenCalc struct {
 	ePrefDelimiters     ErrPrefixDelimiters
-	errorPrefixDto      *ErrorPrefixInfo
+	errorPrefixInfo     *ErrorPrefixInfo
 	currentLineStr      string
 	lenCurrentLineStr   uint
 	remainingLineLength uint
 	maxErrStringLength  uint
 	lock                *sync.Mutex
+}
+
+// IsValidInstance - Returns a boolean flag signalling whether the
+// current EPrefixLineLenCalc instance is valid, or not.
+//
+// If this method returns a boolean value of 'false', it signals
+// that the current EPrefixLineLenCalc instance is invalid.
+//
+// If this method returns a boolean value of 'true', it signals
+// that the current EPrefixLineLenCalc instance is valid in all
+// respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - This boolean flag signals whether the current
+//       EPrefixLineLenCalc instance is valid.
+//
+//       If this method returns a value of 'false', it signals that
+//       the current EPrefixLineLenCalc instance is invalid.
+//
+//       If this method returns a value of 'true', it signals that
+//       the current EPrefixLineLenCalc instance is valid in all
+//       respects.
+//
+func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
+	ePrefix string) bool {
+
+	if ePrefLineLenCalc.lock == nil {
+		ePrefLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefLineLenCalc.lock.Lock()
+
+	defer ePrefLineLenCalc.lock.Unlock()
+
+	ePrefix += "EPrefixLineLenCalc.IsValidInstance() "
+
+	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
+
+	isValid,
+		_ := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
+		ePrefLineLenCalc,
+		ePrefix+
+			"ePrefLineLenCalc\n")
+
+	return isValid
+}
+
+// IsValidInstanceError - Returns an error type signalling whether
+// the current EPrefixLineLenCalc instance is valid, or not.
+//
+// If this method returns an error value NOT equal to 'nil', it
+// signals that the current EPrefixLineLenCalc instance is
+// invalid.
+//
+// If this method returns an error value which IS equal to 'nil',
+// it signals that the current EPrefixLineLenCalc instance is
+// valid in all respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this returned error type is set equal to 'nil', it
+//       signals that the current EPrefixLineLenCalc is valid in
+//       all respects.
+//
+//       If this returned error type is NOT equal to 'nil', it
+//       signals that the current EPrefixLineLenCalc is invalid.
+//
+func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
+	ePrefix string) error {
+
+	if ePrefLineLenCalc.lock == nil {
+		ePrefLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefLineLenCalc.lock.Lock()
+
+	defer ePrefLineLenCalc.lock.Unlock()
+
+	ePrefix += "EPrefixLineLenCalc.IsValidInstanceError() "
+
+	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
+
+	_,
+		err := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
+		ePrefLineLenCalc,
+		ePrefix+
+			"ePrefLineLenCalc\n")
+
+	return err
 }
 
 // GetCurrLineStr - Return the current line string. This string
@@ -133,8 +249,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 			ePrefix)
 	}
 
-	_,
-		err := ePrefDelimiters.IsValidInstanceError(ePrefix)
+	err := ePrefDelimiters.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -162,7 +277,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 //
 // Input Parameters
 //
-//  errorPrefixDto      *ErrorPrefixInfo
+//  errorPrefixInfo      *ErrorPrefixInfo
 //     - This Error Prefix Data Transfer Object stores information
 //       on the error prefix and error context strings.
 //
@@ -213,7 +328,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
 
 	if errorPrefixDto == nil {
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'errorPrefixDto' is a "+
+			"Error: Input parameter 'errorPrefixInfo' is a "+
 			"'nil' pointer\n",
 			ePrefix)
 	}
@@ -222,14 +337,14 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'errorPrefixDto' validity check\n"+
+			"Error: Input parameter 'errorPrefixInfo' validity check\n"+
 			"returned an error message!\n"+
 			"%v\n",
 			ePrefix,
 			err.Error())
 	}
 
-	ePrefLineLenCalc.errorPrefixDto = errorPrefixDto
+	ePrefLineLenCalc.errorPrefixInfo = errorPrefixDto
 
 	return nil
 }
