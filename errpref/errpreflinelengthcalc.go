@@ -5,9 +5,15 @@ import (
 	"sync"
 )
 
-// Error Prefix Line Length Calculator
+// EPrefixLineLenCalc - Error Prefix Line Length Calculator
+// This type is used to perform calculations on the line length of
+// error prefix text output strings. Among the calculations
+// performed, these associated methods determine how many error
+// prefix and error context strings can be accommodated on the same
+// line of text give a maximum line length limit.
+//
 type EPrefixLineLenCalc struct {
-	ePrefDelimiters     *EPrefixDelimiters
+	ePrefDelimiters     ErrPrefixDelimiters
 	errorPrefixDto      *ErrorPrefixDto
 	currentLineStr      string
 	lenCurrentLineStr   uint
@@ -67,13 +73,13 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
 //
 // Input Parameters
 //
-//  ePrefDelimiters     *EPrefixDelimiters
+//  ePrefDelimiters     *ErrPrefixDelimiters
 //     - A pointer to an Error Prefix Delimiters object. This
 //       delimiters object contains information on the delimiter
 //       strings used to terminate error prefix and error context
 //       strings.
 //
-//       type EPrefixDelimiters struct {
+//       type ErrPrefixDelimiters struct {
 //         inLinePrefixDelimiter      string
 //         lenInLinePrefixDelimiter   uint
 //         newLinePrefixDelimiter     string
@@ -107,7 +113,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
 //       to the beginning of the error message.
 //
 func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
-	ePrefDelimiters *EPrefixDelimiters,
+	ePrefDelimiters *ErrPrefixDelimiters,
 	ePrefix string) error {
 
 	if ePrefLineLenCalc.lock == nil {
@@ -139,8 +145,10 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 			err.Error())
 	}
 
-	ePrefLineLenCalc.ePrefDelimiters = ePrefDelimiters
-	return nil
+	return ePrefLineLenCalc.ePrefDelimiters.CopyIn(
+		ePrefDelimiters,
+		ePrefix)
+
 }
 
 // SetEPrefDto - Sets the Error Prefix Data Transfer Object member
@@ -210,8 +218,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
 			ePrefix)
 	}
 
-	_,
-		err := errorPrefixDto.IsValidInstanceError(ePrefix)
+	err := errorPrefixDto.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+

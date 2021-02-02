@@ -1,11 +1,10 @@
 package errpref
 
 import (
-	"fmt"
 	"sync"
 )
 
-type EPrefixDelimiters struct {
+type ErrPrefixDelimiters struct {
 	inLinePrefixDelimiter      string
 	lenInLinePrefixDelimiter   uint
 	newLinePrefixDelimiter     string
@@ -17,12 +16,13 @@ type EPrefixDelimiters struct {
 	lock                       *sync.Mutex
 }
 
-// CopyIn - Receives an instance of type EPrefixDelimiters and proceeds to
-// copy the internal member data variable values to the current
-// EPrefixDelimiters instance.
+// CopyIn - Receives an instance of type ErrPrefixDelimiters and
+// proceeds to copy the internal member data variable values to the
+// current ErrPrefixDelimiters instance.
 //
-func (ePrefDelims *EPrefixDelimiters) CopyIn(
-	incomingDelimiters *EPrefixDelimiters) {
+func (ePrefDelims *ErrPrefixDelimiters) CopyIn(
+	incomingDelimiters *ErrPrefixDelimiters,
+	ePrefix string) error {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -32,39 +32,22 @@ func (ePrefDelims *EPrefixDelimiters) CopyIn(
 
 	defer ePrefDelims.lock.Unlock()
 
-	ePrefDelims.inLinePrefixDelimiter =
-		incomingDelimiters.inLinePrefixDelimiter
+	ePrefix += "ErrPrefixDelimiters.CopyIn() "
 
-	ePrefDelims.lenInLinePrefixDelimiter =
-		incomingDelimiters.lenInLinePrefixDelimiter
+	ePrefDelimsElectron := errPrefixDelimitersElectron{}
 
-	ePrefDelims.newLinePrefixDelimiter =
-		incomingDelimiters.newLinePrefixDelimiter
-
-	ePrefDelims.lenNewLinePrefixDelimiter =
-		incomingDelimiters.lenNewLinePrefixDelimiter
-
-	ePrefDelims.inLineContextDelimiter =
-		incomingDelimiters.inLineContextDelimiter
-
-	ePrefDelims.lenNewLinePrefixDelimiter =
-		incomingDelimiters.lenNewLinePrefixDelimiter
-
-	ePrefDelims.newLineContextDelimiter =
-		incomingDelimiters.newLineContextDelimiter
-
-	ePrefDelims.lenNewLineContextDelimiter =
-		incomingDelimiters.lenNewLineContextDelimiter
-
-	return
+	return ePrefDelimsElectron.copyIn(
+		ePrefDelims,
+		incomingDelimiters,
+		ePrefix)
 }
 
 // CopyOut - Creates and returns a deep copy of the current
-// EPrefixDelimiters. After completion of this operation, the
-// returned copy and the current EPrefixDelimiters instance are
+// ErrPrefixDelimiters. After completion of this operation, the
+// returned copy and the current ErrPrefixDelimiters instance are
 // identical in all respects.
 //
-func (ePrefDelims *EPrefixDelimiters) CopyOut() EPrefixDelimiters {
+func (ePrefDelims *ErrPrefixDelimiters) CopyOut() ErrPrefixDelimiters {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -74,7 +57,7 @@ func (ePrefDelims *EPrefixDelimiters) CopyOut() EPrefixDelimiters {
 
 	defer ePrefDelims.lock.Unlock()
 
-	newErrPrefDelims := EPrefixDelimiters{}
+	newErrPrefDelims := ErrPrefixDelimiters{}
 
 	newErrPrefDelims.inLinePrefixDelimiter =
 		ePrefDelims.inLinePrefixDelimiter
@@ -104,7 +87,7 @@ func (ePrefDelims *EPrefixDelimiters) CopyOut() EPrefixDelimiters {
 }
 
 // GetInLineContextDelimiter - Returns ePrefDelims.inLineContextDelimiter
-func (ePrefDelims *EPrefixDelimiters) GetInLineContextDelimiter() string {
+func (ePrefDelims *ErrPrefixDelimiters) GetInLineContextDelimiter() string {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -118,7 +101,7 @@ func (ePrefDelims *EPrefixDelimiters) GetInLineContextDelimiter() string {
 }
 
 // GetInLinePrefixDelimiter - Returns ePrefDelims.inLinePrefixDelimiter
-func (ePrefDelims *EPrefixDelimiters) GetInLinePrefixDelimiter() string {
+func (ePrefDelims *ErrPrefixDelimiters) GetInLinePrefixDelimiter() string {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -135,7 +118,7 @@ func (ePrefDelims *EPrefixDelimiters) GetInLinePrefixDelimiter() string {
 // characters in the 'In Line Context Delimiter' string as an unsigned
 // integer.
 //
-func (ePrefDelims *EPrefixDelimiters) GetLengthInLineContextDelimiter() uint {
+func (ePrefDelims *ErrPrefixDelimiters) GetLengthInLineContextDelimiter() uint {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -159,7 +142,7 @@ func (ePrefDelims *EPrefixDelimiters) GetLengthInLineContextDelimiter() uint {
 // characters in the 'In Line Prefix Delimiter' string as an unsigned
 // integer.
 //
-func (ePrefDelims *EPrefixDelimiters) GetLengthInLinePrefixDelimiter() uint {
+func (ePrefDelims *ErrPrefixDelimiters) GetLengthInLinePrefixDelimiter() uint {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -183,7 +166,7 @@ func (ePrefDelims *EPrefixDelimiters) GetLengthInLinePrefixDelimiter() uint {
 // characters in the 'New Line Context Delimiter' string as an
 // unsigned integer.
 //
-func (ePrefDelims *EPrefixDelimiters) GetLengthNewLineContextDelimiter() uint {
+func (ePrefDelims *ErrPrefixDelimiters) GetLengthNewLineContextDelimiter() uint {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -207,7 +190,7 @@ func (ePrefDelims *EPrefixDelimiters) GetLengthNewLineContextDelimiter() uint {
 // characters in the 'New Line Prefix Delimiter' string as an unsigned
 // integer.
 //
-func (ePrefDelims *EPrefixDelimiters) GetLengthNewLinePrefixDelimiter() uint {
+func (ePrefDelims *ErrPrefixDelimiters) GetLengthNewLinePrefixDelimiter() uint {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -228,7 +211,7 @@ func (ePrefDelims *EPrefixDelimiters) GetLengthNewLinePrefixDelimiter() uint {
 }
 
 // GetNewLineContextDelimiter - Returns ePrefDelims.newLineContextDelimiter
-func (ePrefDelims *EPrefixDelimiters) GetNewLineContextDelimiter() string {
+func (ePrefDelims *ErrPrefixDelimiters) GetNewLineContextDelimiter() string {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -242,7 +225,7 @@ func (ePrefDelims *EPrefixDelimiters) GetNewLineContextDelimiter() string {
 }
 
 // GetNewLinePrefixDelimiter - Returns ePrefDelims.newLinePrefixDelimiter
-func (ePrefDelims *EPrefixDelimiters) GetNewLinePrefixDelimiter() string {
+func (ePrefDelims *ErrPrefixDelimiters) GetNewLinePrefixDelimiter() string {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -255,14 +238,72 @@ func (ePrefDelims *EPrefixDelimiters) GetNewLinePrefixDelimiter() string {
 	return ePrefDelims.newLinePrefixDelimiter
 }
 
-// IsValidInstanceError - Returns a boolean flag and error type
-// signalling whether the current EPrefixDelimiters instance is
-// valid and populated with data.
+// IsValidInstance - Returns a boolean flag signalling whether the
+// current ErrPrefixDelimiters instance is valid, or not.
 //
-// If this method returns a value of 'false', it signals that the
-// current EPrefixDelimiters instance is invalid and not fully
-// populated with data. In this case the method will also return an
-// appropriate error message.
+// If this method returns a boolean value of 'false', it signals
+// that the current ErrPrefixDelimiters instance is invalid.
+//
+// If this method returns a boolean value of 'true', it signals
+// that the current ErrPrefixDelimiters instance is valid in all
+// respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - This boolean flag signals whether the current
+//       ErrPrefixDelimiters instance is valid.
+//
+//       If this method returns a value of 'false', it signals that
+//       the current ErrPrefixDelimiters instance is invalid.
+//
+//       If this method returns a value of 'true', it signals that
+//       the current ErrPrefixDelimiters instance is valid in all
+//       respects.
+//
+func (ePrefDelims *ErrPrefixDelimiters) IsValidInstance(
+	ePrefix string) bool {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	ePrefix += "ErrPrefixDelimiters.IsValidInstance() "
+
+	ePrefDelimsQuark := errPrefixDelimitersQuark{}
+
+	isValid,
+		_ := ePrefDelimsQuark.testValidityOfErrPrefixDelimiters(
+		ePrefDelims,
+		ePrefix)
+
+	return isValid
+}
+
+// IsValidInstanceError - Returns an error type signalling whether
+// the current ErrPrefixDelimiters instance is valid, or not.
+//
+// If this method returns an error value NOT equal to 'nil', it
+// signals that the current ErrPrefixDelimiters instance is
+// invalid.
+//
+// If this method returns an error value which IS equal to 'nil',
+// it signals that the current ErrPrefixDelimiters instance is
+// valid in all respects.
 //
 //
 // ----------------------------------------------------------------
@@ -280,33 +321,16 @@ func (ePrefDelims *EPrefixDelimiters) GetNewLinePrefixDelimiter() string {
 //
 // Return Values
 //
-//  bool
-//     - This boolean flag signals whether the current
-//       EPrefixDelimiters instance is valid and fully populated
-//       with data.
-//
-//       If this method returns a value of 'false', it signals that
-//       the current EPrefixDelimiters instance is invalid and not
-//       fully populated with data.
-//
-//
 //  error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If errors are encountered
-//       during processing, the returned error Type will
-//       encapsulate an error message. Note that this error message
-//       will incorporate the method chain and text passed by input
-//       parameter, 'ePrefix'. The 'ePrefix' text will be prefixed
-//       to the beginning of the error message.
+//     - If this returned error type is set equal to 'nil', it
+//       signals that the current ErrPrefixDelimiters is valid in
+//       all respects.
 //
-//       This method will return an appropriate error message if
-//       the current EPrefixDelimiters instance is judged to be
-//       invalid.
+//       If this returned error type is NOT equal to 'nil', it
+//       signals that the current ErrPrefixDelimiters is invalid.
 //
-func (ePrefDelims *EPrefixDelimiters) IsValidInstanceError(
-	ePrefix string) (
-	bool,
-	error) {
+func (ePrefDelims *ErrPrefixDelimiters) IsValidInstanceError(
+	ePrefix string) error {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -316,53 +340,16 @@ func (ePrefDelims *EPrefixDelimiters) IsValidInstanceError(
 
 	defer ePrefDelims.lock.Unlock()
 
-	ePrefix += "EPrefixDelimiters.IsValidInstanceError() "
+	ePrefix += "ErrPrefixDelimiters.IsValidInstanceError() "
 
-	ePrefDelims.lenInLinePrefixDelimiter =
-		uint(len(ePrefDelims.inLinePrefixDelimiter))
+	ePrefDelimsQuark := errPrefixDelimitersQuark{}
 
-	if ePrefDelims.lenInLinePrefixDelimiter == 0 {
-		return false,
-			fmt.Errorf("%v\n"+
-				"Error: The In Line Prefix Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
-	}
+	_,
+		err := ePrefDelimsQuark.testValidityOfErrPrefixDelimiters(
+		ePrefDelims,
+		ePrefix)
 
-	ePrefDelims.lenNewLinePrefixDelimiter =
-		uint(len(ePrefDelims.newLinePrefixDelimiter))
-
-	if ePrefDelims.lenNewLinePrefixDelimiter == 0 {
-		return false,
-			fmt.Errorf("%v\n"+
-				"Error: The In New Prefix Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
-	}
-
-	ePrefDelims.lenInLineContextDelimiter =
-		uint(len(ePrefDelims.inLineContextDelimiter))
-
-	if ePrefDelims.lenInLineContextDelimiter == 0 {
-		return false,
-			fmt.Errorf("%v\n"+
-				"Error: The In Line Context Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
-	}
-
-	ePrefDelims.lenNewLineContextDelimiter =
-		uint(len(ePrefDelims.newLineContextDelimiter))
-
-	if ePrefDelims.lenNewLineContextDelimiter == 0 {
-		return false,
-			fmt.Errorf("%v\n"+
-				"Error: The In New Prefix Delimiter is an "+
-				"empty string!\n",
-				ePrefix)
-	}
-
-	return true, nil
+	return err
 }
 
 // SetInLineContextDelimiter - Sets ePrefDelims.inLineContextDelimiter
@@ -371,7 +358,7 @@ func (ePrefDelims *EPrefixDelimiters) IsValidInstanceError(
 // and stores it in an internal member variable. This value may
 // be accessed through a 'Getter' method.
 //
-func (ePrefDelims *EPrefixDelimiters) SetInLineContextDelimiter(
+func (ePrefDelims *ErrPrefixDelimiters) SetInLineContextDelimiter(
 	inLineContextDelimiter string) {
 
 	if ePrefDelims.lock == nil {
@@ -396,7 +383,7 @@ func (ePrefDelims *EPrefixDelimiters) SetInLineContextDelimiter(
 // and stores it in an internal member variable. This value may
 // be accessed through a 'Getter' method.
 //
-func (ePrefDelims *EPrefixDelimiters) SetInLinePrefixDelimiter(
+func (ePrefDelims *ErrPrefixDelimiters) SetInLinePrefixDelimiter(
 	inLinePrefixDelimiter string) {
 
 	if ePrefDelims.lock == nil {
@@ -421,7 +408,7 @@ func (ePrefDelims *EPrefixDelimiters) SetInLinePrefixDelimiter(
 // and stores it in an internal member variable. This value may
 // be accessed through a 'Getter' method.
 //
-func (ePrefDelims *EPrefixDelimiters) SetNewLineContextDelimiter(
+func (ePrefDelims *ErrPrefixDelimiters) SetNewLineContextDelimiter(
 	newLineContextDelimiter string) {
 
 	if ePrefDelims.lock == nil {
@@ -446,7 +433,7 @@ func (ePrefDelims *EPrefixDelimiters) SetNewLineContextDelimiter(
 // and stores it in an internal member variable. This value may
 // be accessed through a 'Getter' method.
 //
-func (ePrefDelims *EPrefixDelimiters) SetNewLinePrefixDelimiter(
+func (ePrefDelims *ErrPrefixDelimiters) SetNewLinePrefixDelimiter(
 	newLinePrefixDelimiter string) {
 
 	if ePrefDelims.lock == nil {
@@ -470,7 +457,7 @@ func (ePrefDelims *EPrefixDelimiters) SetNewLinePrefixDelimiter(
 // internal member variables and may be accessed using 'Getter'
 // methods.
 //
-func (ePrefDelims *EPrefixDelimiters) SetLineLengthValues() {
+func (ePrefDelims *ErrPrefixDelimiters) SetLineLengthValues() {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)

@@ -156,7 +156,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	strBuilder *strings.Builder,
 	crEPrefDto *ErrorPrefixDto,
-	delimiters *EPrefixDelimiters,
+	delimiters *ErrPrefixDelimiters,
 	lastStr string,
 	remainingLineLen uint) (
 	newLastStr string,
@@ -272,7 +272,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 	strBuilder *strings.Builder,
 	crEPrefDto *ErrorPrefixDto,
-	delimiters *EPrefixDelimiters,
+	delimiters *ErrPrefixDelimiters,
 	lastStr string,
 	remainingLineLen uint) (
 	newLastStr string,

@@ -138,11 +138,11 @@ func (ePrefElectron *errPrefElectron) cleanErrorContextStr(
 //
 // Return Values
 //
-//  delimiters                 EPrefixDelimiters
+//  delimiters                 ErrPrefixDelimiters
 //     - A structure containing delimiter strings used to terminate
 //       error prefix and error context lines of text.
 //
-//       type EPrefixDelimiters struct {
+//       type ErrPrefixDelimiters struct {
 //         inLinePrefixDelimiter      string
 //         lenInLinePrefixDelimiter   uint
 //         newLinePrefixDelimiter     string
@@ -155,7 +155,7 @@ func (ePrefElectron *errPrefElectron) cleanErrorContextStr(
 //       }
 //
 func (ePrefElectron *errPrefElectron) getDelimiters() (
-	delimiters EPrefixDelimiters) {
+	delimiters ErrPrefixDelimiters) {
 
 	if ePrefElectron.lock == nil {
 		ePrefElectron.lock = new(sync.Mutex)
