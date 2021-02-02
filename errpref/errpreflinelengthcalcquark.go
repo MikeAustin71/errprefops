@@ -95,6 +95,14 @@ func (ePrefLineLenCalcQuark *ePrefixLineLenCalcQuark) testValidityOfEPrefixLineL
 		return isValid, err
 	}
 
+	err = ePrefLineLenCalc.errorPrefixInfo.IsValidInstanceError(
+		ePrefix +
+			"Testing validity of 'ePrefLineLenCalc.errorPrefixInfo'\n")
+
+	if err != nil {
+		return isValid, err
+	}
+
 	if ePrefLineLenCalc.maxErrStringLength == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Internal member variable 'ePrefLineLenCalc.maxErrStringLength'\n"+

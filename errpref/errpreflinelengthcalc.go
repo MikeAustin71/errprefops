@@ -20,6 +20,69 @@ type EPrefixLineLenCalc struct {
 	lock               *sync.Mutex
 }
 
+// CopyIn - Receives an instance of type EPrefixLineLenCalc and
+// proceeds to copy the internal member data variable values to the
+// current EPrefixLineLenCalc instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  incomingLineLenCalc        *EPrefixLineLenCalc
+//     - A pointer to an instance of EPrefixLineLenCalc. This method
+//       will NOT change the values of internal member variables
+//       contained in this instance.
+//
+//       All data values in this EPrefixLineLenCalc instance will
+//       be copied to current EPrefixLineLenCalc instance
+//       ('ePrefixLineLenCalc').
+//
+//       If this EPrefixLineLenCalc instance proves to be invalid,
+//       an error will be returned.
+//
+//
+//  ePrefix                    string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'ePrefix'.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) CopyIn(
+	incomingLineLenCalc *EPrefixLineLenCalc,
+	ePrefix string) error {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	ePrefix += "EPrefixLineLenCalc.CopyIn() "
+
+	ePrefLineLenCalcElectron := ePrefixLineLenCalcElectron{}
+
+	return ePrefLineLenCalcElectron.copyIn(
+		ePrefixLineLenCalc,
+		incomingLineLenCalc,
+		ePrefix)
+}
+
 // IsValidInstance - Returns a boolean flag signalling whether the
 // current EPrefixLineLenCalc instance is valid, or not.
 //
@@ -53,16 +116,16 @@ type EPrefixLineLenCalc struct {
 //       the current EPrefixLineLenCalc instance is valid in all
 //       respects.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
 	ePrefix string) bool {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
 	ePrefix += "EPrefixLineLenCalc.IsValidInstance() "
 
@@ -70,9 +133,9 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
 
 	isValid,
 		_ := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
-		ePrefLineLenCalc,
+		ePrefixLineLenCalc,
 		ePrefix+
-			"ePrefLineLenCalc\n")
+			"ePrefixLineLenCalc\n")
 
 	return isValid
 }
@@ -112,16 +175,16 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
 //       If this returned error type is NOT equal to 'nil', it
 //       signals that the current EPrefixLineLenCalc is invalid.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
 	ePrefix string) error {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
 	ePrefix += "EPrefixLineLenCalc.IsValidInstanceError() "
 
@@ -129,9 +192,9 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
 
 	_,
 		err := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
-		ePrefLineLenCalc,
+		ePrefixLineLenCalc,
 		ePrefix+
-			"ePrefLineLenCalc\n")
+			"ePrefixLineLenCalc\n")
 
 	return err
 }
@@ -145,15 +208,15 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
 // If currentLineStringLen is greater than Maximum Error String
 // Length, the Remaining String Length is zero.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
 	var (
 		lenCurrentLineStr,
@@ -161,17 +224,17 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
 	)
 
 	lenCurrentLineStr =
-		uint(len(ePrefLineLenCalc.currentLineStr))
+		uint(len(ePrefixLineLenCalc.currentLineStr))
 
 	if lenCurrentLineStr >
-		ePrefLineLenCalc.maxErrStringLength {
+		ePrefixLineLenCalc.maxErrStringLength {
 
 		remainingLineLength = 0
 
 	} else {
 
 		remainingLineLength =
-			ePrefLineLenCalc.maxErrStringLength -
+			ePrefixLineLenCalc.maxErrStringLength -
 				lenCurrentLineStr
 
 	}
@@ -186,33 +249,33 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
 // characters to the maximum allowed line length, the text line
 // will be written out to the display device.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
-	return ePrefLineLenCalc.currentLineStr
+	return ePrefixLineLenCalc.currentLineStr
 }
 
-func (ePrefLineLenCalc *EPrefixLineLenCalc) GetCurrLineStringLength() uint {
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStringLength() uint {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
 	var lenCurrentLineStr uint
 
 	lenCurrentLineStr =
-		uint(len(ePrefLineLenCalc.currentLineStr))
+		uint(len(ePrefixLineLenCalc.currentLineStr))
 
 	return lenCurrentLineStr
 }
@@ -224,17 +287,17 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetCurrLineStringLength() uint {
 // The value of maximum error string length is returned as an
 // unsigned integer.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
-	return ePrefLineLenCalc.maxErrStringLength
+	return ePrefixLineLenCalc.maxErrStringLength
 }
 
 // SetCurrentLineStr - Sets the Current Line String. This string
@@ -250,18 +313,18 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
 // Be sure to set Maximum Error String Length first, before
 // calling this method.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
 	currentLineStr string) {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
-	ePrefLineLenCalc.currentLineStr = currentLineStr
+	ePrefixLineLenCalc.currentLineStr = currentLineStr
 
 	return
 }
@@ -316,17 +379,17 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
 //       parameter, 'ePrefix'. The 'ePrefix' text will be prefixed
 //       to the beginning of the error message.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 	ePrefDelimiters *ErrPrefixDelimiters,
 	ePrefix string) error {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
 	ePrefix += "EPrefixLineLenCalc.SetEPrefDelimiters() "
 
@@ -348,7 +411,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 			err.Error())
 	}
 
-	return ePrefLineLenCalc.ePrefDelimiters.CopyIn(
+	return ePrefixLineLenCalc.ePrefDelimiters.CopyIn(
 		ePrefDelimiters,
 		ePrefix+
 			"ePrefDelimiters\n")
@@ -401,17 +464,17 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 //       parameter, 'ePrefix'. The 'ePrefix' text will be prefixed
 //       to the beginning of the error message.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) SetErrPrefixInfo(
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetErrPrefixInfo(
 	errPrefixInfo *ErrorPrefixInfo,
 	ePrefix string) error {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
 	ePrefix += "EPrefixLineLenCalc.SetErrPrefixInfo() "
 
@@ -433,7 +496,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetErrPrefixInfo(
 			err.Error())
 	}
 
-	ePrefLineLenCalc.errorPrefixInfo = errPrefixInfo
+	ePrefixLineLenCalc.errorPrefixInfo = errPrefixInfo
 
 	return nil
 }
@@ -446,17 +509,17 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetErrPrefixInfo(
 //
 // Set this value first, before setting Current Line Length
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) SetMaxErrStringLength(
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetMaxErrStringLength(
 	maxErrStringLength uint) {
 
-	if ePrefLineLenCalc.lock == nil {
-		ePrefLineLenCalc.lock = new(sync.Mutex)
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
 	}
 
-	ePrefLineLenCalc.lock.Lock()
+	ePrefixLineLenCalc.lock.Lock()
 
-	defer ePrefLineLenCalc.lock.Unlock()
+	defer ePrefixLineLenCalc.lock.Unlock()
 
-	ePrefLineLenCalc.maxErrStringLength = maxErrStringLength
+	ePrefixLineLenCalc.maxErrStringLength = maxErrStringLength
 
 }

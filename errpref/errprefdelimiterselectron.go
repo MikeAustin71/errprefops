@@ -147,7 +147,7 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyIn(
 // Input Parameters
 //
 //  delimiters          *ErrPrefixDelimiters
-//     - A pointer to an instance of ErrorPrefixInfo. This method
+//     - A pointer to an instance of ErrPrefixDelimiters. This method
 //       will NOT change the values of internal member variables
 //       contained in this object.
 //
@@ -243,6 +243,8 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyOut(
 
 	newDelimiters.lenNewLineContextDelimiter =
 		delimiters.lenNewLineContextDelimiter
+
+	newDelimiters.lock = new(sync.Mutex)
 
 	return newDelimiters, nil
 }

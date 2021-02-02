@@ -364,6 +364,23 @@ func (errorPrefixInfo ErrorPrefixInfo) New() ErrorPrefixInfo {
 	return ErrorPrefixInfo{}
 }
 
+// Ptr - Returns a pointer to a new instance of ErrorPrefixInfo.
+//
+func (errorPrefixInfo ErrorPrefixInfo) Ptr() *ErrorPrefixInfo {
+
+	if errorPrefixInfo.lock == nil {
+		errorPrefixInfo.lock = new(sync.Mutex)
+	}
+
+	errorPrefixInfo.lock.Lock()
+
+	defer errorPrefixInfo.lock.Unlock()
+
+	newErrPrefixInfo := ErrorPrefixInfo{}
+
+	return &newErrPrefixInfo
+}
+
 // SetErrContextStr - Sets the Error Context String value.
 //
 // In addition, this method also calculates and set the value of

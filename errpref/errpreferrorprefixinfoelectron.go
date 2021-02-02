@@ -190,10 +190,10 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyOut(
 
 	ePrefix += "errorPrefixInfoElectron.copyOut() "
 
-	newErrPrefixDto := ErrorPrefixInfo{}
+	newErrPrefixInfo := ErrorPrefixInfo{}
 
 	if errPrefixInfo == nil {
-		return newErrPrefixDto,
+		return newErrPrefixInfo,
 			fmt.Errorf("%v\n"+
 				"\nInput parameter 'errPrefixInfo' is INVALID!\n"+
 				"'errPrefixInfo' is a nil pointer!\n",
@@ -211,26 +211,28 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyOut(
 			"errPrefixInfo\n")
 
 	if err != nil {
-		return newErrPrefixDto, err
+		return newErrPrefixInfo, err
 	}
 
-	newErrPrefixDto.isLastIdx =
+	newErrPrefixInfo.isLastIdx =
 		errPrefixInfo.isLastIdx
 
-	newErrPrefixDto.errorPrefixStr =
+	newErrPrefixInfo.errorPrefixStr =
 		errPrefixInfo.errorPrefixStr
 
-	newErrPrefixDto.lenErrorPrefixStr =
+	newErrPrefixInfo.lenErrorPrefixStr =
 		errPrefixInfo.lenErrorPrefixStr
 
-	newErrPrefixDto.errorContextStr =
+	newErrPrefixInfo.errorContextStr =
 		errPrefixInfo.errorContextStr
 
-	newErrPrefixDto.lenErrorContextStr =
+	newErrPrefixInfo.lenErrorContextStr =
 		errPrefixInfo.lenErrorContextStr
 
-	newErrPrefixDto.errPrefixHasContextStr =
+	newErrPrefixInfo.errPrefixHasContextStr =
 		errPrefixInfo.errPrefixHasContextStr
 
-	return newErrPrefixDto, nil
+	newErrPrefixInfo.lock = new(sync.Mutex)
+
+	return newErrPrefixInfo, nil
 }
