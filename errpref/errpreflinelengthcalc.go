@@ -83,6 +83,65 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) CopyIn(
 		ePrefix)
 }
 
+// CopyOut - Creates and returns a deep copy of the current
+// EPrefixLineLenCalc. After completion of this operation, the
+// returned copy and the current EPrefixLineLenCalc instance are
+// identical in all respects.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  EPrefixLineLenCalc
+//     - If this method completes successfully, a deep copy of the
+//       current EPrefixLineLenCalc instance will be returned through
+//       this parameter as a completely new instance of
+//       EPrefixLineLenCalc.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'ePrefix'. The
+//       'ePrefix' text will be prefixed to the beginning of the returned
+//       error message.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) CopyOut(
+	ePrefix string) (
+	EPrefixLineLenCalc,
+	error) {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	ePrefix += "EPrefixLineLenCalc.CopyOut() "
+
+	ePrefLineLenCalcElectron := ePrefixLineLenCalcElectron{}
+
+	return ePrefLineLenCalcElectron.copyOut(
+		ePrefixLineLenCalc,
+		ePrefix)
+}
+
 // IsValidInstance - Returns a boolean flag signalling whether the
 // current EPrefixLineLenCalc instance is valid, or not.
 //
