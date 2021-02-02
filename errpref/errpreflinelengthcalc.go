@@ -178,6 +178,51 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
 	return ePrefLineLenCalc.maxErrStringLength
 }
 
+// SetCurrentLineStr - Sets the Current Line String. This string
+// represents the characters which have been collected thus far
+// from error prefix and error context information. The current
+// line string is used to control maximum line length and stores
+// the characters which have not yet been written out to the
+// text display.
+//
+// This method calculates current line length and remaining line
+// length before storing the data in internal member variables.
+//
+// Be sure to set Maximum Error String Length first, before
+// calling this method.
+//
+func (ePrefLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
+	currentLineStr string) {
+
+	if ePrefLineLenCalc.lock == nil {
+		ePrefLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefLineLenCalc.lock.Lock()
+
+	defer ePrefLineLenCalc.lock.Unlock()
+
+	ePrefLineLenCalc.currentLineStr = currentLineStr
+
+	ePrefLineLenCalc.lenCurrentLineStr =
+		uint(len(ePrefLineLenCalc.currentLineStr))
+
+	if ePrefLineLenCalc.lenCurrentLineStr >
+
+		ePrefLineLenCalc.maxErrStringLength {
+		ePrefLineLenCalc.remainingLineLength = 0
+
+	} else {
+
+		ePrefLineLenCalc.remainingLineLength =
+			ePrefLineLenCalc.maxErrStringLength -
+				ePrefLineLenCalc.lenCurrentLineStr
+
+	}
+
+	return
+}
+
 // SetEPrefDelimiters - Sets the Error Prefix Delimiters member
 // variable.
 //
@@ -262,14 +307,15 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 
 	return ePrefLineLenCalc.ePrefDelimiters.CopyIn(
 		ePrefDelimiters,
-		ePrefix)
+		ePrefix+
+			"ePrefDelimiters\n")
 
 }
 
-// SetEPrefDto - Sets the Error Prefix Data Transfer Object member
+// SetErrPrefixInfo - Sets the Error Prefix Information Object member
 // variable.
 //
-// The Error Prefix Data Transfer Object stores information on the
+// The Error Prefix Information Object stores information on the
 // error prefix and error context strings.
 //
 //
@@ -277,9 +323,9 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 //
 // Input Parameters
 //
-//  errorPrefixInfo      *ErrorPrefixInfo
-//     - This Error Prefix Data Transfer Object stores information
-//       on the error prefix and error context strings.
+//  errPrefixInfo       *ErrorPrefixInfo
+//     - This Error Prefix Information Object stores information on
+//       the error prefix and error context strings.
 //
 //       type ErrorPrefixInfo struct {
 //         isValid                bool
@@ -312,8 +358,8 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 //       parameter, 'ePrefix'. The 'ePrefix' text will be prefixed
 //       to the beginning of the error message.
 //
-func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
-	errorPrefixDto *ErrorPrefixInfo,
+func (ePrefLineLenCalc *EPrefixLineLenCalc) SetErrPrefixInfo(
+	errPrefixInfo *ErrorPrefixInfo,
 	ePrefix string) error {
 
 	if ePrefLineLenCalc.lock == nil {
@@ -324,27 +370,27 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
 
 	defer ePrefLineLenCalc.lock.Unlock()
 
-	ePrefix += "EPrefixLineLenCalc.SetEPrefDto() "
+	ePrefix += "EPrefixLineLenCalc.SetErrPrefixInfo() "
 
-	if errorPrefixDto == nil {
+	if errPrefixInfo == nil {
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'errorPrefixInfo' is a "+
+			"Error: Input parameter 'errPrefixInfo' is a "+
 			"'nil' pointer\n",
 			ePrefix)
 	}
 
-	err := errorPrefixDto.IsValidInstanceError(ePrefix)
+	err := errPrefixInfo.IsValidInstanceError(ePrefix)
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'errorPrefixInfo' validity check\n"+
+			"Error: Input parameter 'errPrefixInfo' validity check\n"+
 			"returned an error message!\n"+
 			"%v\n",
 			ePrefix,
 			err.Error())
 	}
 
-	ePrefLineLenCalc.errorPrefixInfo = errorPrefixDto
+	ePrefLineLenCalc.errorPrefixInfo = errPrefixInfo
 
 	return nil
 }
@@ -354,6 +400,8 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
 // This method sets the value for maximum error string length. This
 // limit controls the line length for text displays of error prefix
 // strings.
+//
+// Set this value first, before setting Current Line Length
 //
 func (ePrefLineLenCalc *EPrefixLineLenCalc) SetMaxErrStringLength(
 	maxErrStringLength uint) {

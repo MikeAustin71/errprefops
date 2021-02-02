@@ -15,6 +15,7 @@ type ePrefixLineLenCalcQuark struct {
 // determine whether this ErrPrefixDelimiters instance is valid in all
 // respects.
 //
+// Note: This method automatically calculates line lengths.
 //
 // ----------------------------------------------------------------
 //
@@ -106,6 +107,15 @@ func (ePrefLineLenCalcQuark *ePrefixLineLenCalcQuark) testValidityOfEPrefixLineL
 			ePrefix)
 
 		return isValid, err
+	}
+
+	if ePrefLineLenCalc.lenCurrentLineStr >
+		ePrefLineLenCalc.maxErrStringLength {
+		ePrefLineLenCalc.remainingLineLength = 0
+	} else {
+		ePrefLineLenCalc.remainingLineLength =
+			ePrefLineLenCalc.maxErrStringLength -
+				ePrefLineLenCalc.lenCurrentLineStr
 	}
 
 	isValid = true
