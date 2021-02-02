@@ -20,6 +20,33 @@ type EPrefixLineLenCalc struct {
 	lock               *sync.Mutex
 }
 
+// CurrLineLenExceedsMaxLineLen - If the length of the Current Line
+// String (EPrefixLineLenCalc.currentLineStr) is greater than the
+// Maximum Error String Length (EPrefixLineLenCalc.maxErrStringLength),
+// this method returns 'true'.
+//
+//  currentLineStrLen > maxErrStringLength == true
+//  currentLineStrLen <= maxErrStringLength == false
+//
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) CurrLineLenExceedsMaxLineLen() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if uint(len(ePrefixLineLenCalc.currentLineStr)) >
+		ePrefixLineLenCalc.maxErrStringLength {
+		return true
+	}
+
+	return false
+}
+
 // CopyIn - Receives an instance of type EPrefixLineLenCalc and
 // proceeds to copy the internal member data variable values to the
 // current EPrefixLineLenCalc instance.
@@ -321,7 +348,21 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
 	return ePrefixLineLenCalc.currentLineStr
 }
 
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStringLength() uint {
+// GetCurrLineStrLength - Returns an unsigned integer value
+// representing the number of characters in or string length of
+// the Current Line String.
+//
+// The Current Line String contains the characters which have been
+// collected thus far from error prefix and error context
+// information. The current line string is used to control maximum
+// line length and stores the characters which have not yet been
+// written out to the text display.
+//
+// As soon as the Current Line String fills up with characters to
+// the maximum allowed line length, the text line will be written
+// out to the display device.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStrLength() uint {
 
 	if ePrefixLineLenCalc.lock == nil {
 		ePrefixLineLenCalc.lock = new(sync.Mutex)
@@ -366,11 +407,9 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
 // the characters which have not yet been written out to the
 // text display.
 //
-// This method calculates current line length and remaining line
-// length before storing the data in internal member variables.
-//
-// Be sure to set Maximum Error String Length first, before
-// calling this method.
+// Be sure to set the Maximum Error String Length. Both the Current
+// Line String and the  Maximum Error String Length are essential
+// to line length calculations.
 //
 func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
 	currentLineStr string) {
