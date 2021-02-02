@@ -13,13 +13,11 @@ import (
 // line of text give a maximum line length limit.
 //
 type EPrefixLineLenCalc struct {
-	ePrefDelimiters     ErrPrefixDelimiters
-	errorPrefixInfo     *ErrorPrefixInfo
-	currentLineStr      string
-	lenCurrentLineStr   uint
-	remainingLineLength uint
-	maxErrStringLength  uint
-	lock                *sync.Mutex
+	ePrefDelimiters    ErrPrefixDelimiters
+	errorPrefixInfo    *ErrorPrefixInfo
+	currentLineStr     string
+	maxErrStringLength uint
+	lock               *sync.Mutex
 }
 
 // IsValidInstance - Returns a boolean flag signalling whether the
@@ -138,6 +136,49 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
 	return err
 }
 
+// GetRemainingLineLength - Returns the remaining line length. This is
+// the difference between current line length and Maximum Error
+// String Length.
+//
+//   remainingLineLen = maxErrStringLen - currentLineStringLen
+//
+// If currentLineStringLen is greater than Maximum Error String
+// Length, the Remaining String Length is zero.
+//
+func (ePrefLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
+
+	if ePrefLineLenCalc.lock == nil {
+		ePrefLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefLineLenCalc.lock.Lock()
+
+	defer ePrefLineLenCalc.lock.Unlock()
+
+	var (
+		lenCurrentLineStr,
+		remainingLineLength uint
+	)
+
+	lenCurrentLineStr =
+		uint(len(ePrefLineLenCalc.currentLineStr))
+
+	if lenCurrentLineStr >
+		ePrefLineLenCalc.maxErrStringLength {
+
+		remainingLineLength = 0
+
+	} else {
+
+		remainingLineLength =
+			ePrefLineLenCalc.maxErrStringLength -
+				lenCurrentLineStr
+
+	}
+
+	return remainingLineLength
+}
+
 // GetCurrLineStr - Return the current line string. This string
 // includes the characters which have been formatted and included
 // in a single text line but which have not yet been written out
@@ -156,6 +197,24 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
 	defer ePrefLineLenCalc.lock.Unlock()
 
 	return ePrefLineLenCalc.currentLineStr
+}
+
+func (ePrefLineLenCalc *EPrefixLineLenCalc) GetCurrLineStringLength() uint {
+
+	if ePrefLineLenCalc.lock == nil {
+		ePrefLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefLineLenCalc.lock.Lock()
+
+	defer ePrefLineLenCalc.lock.Unlock()
+
+	var lenCurrentLineStr uint
+
+	lenCurrentLineStr =
+		uint(len(ePrefLineLenCalc.currentLineStr))
+
+	return lenCurrentLineStr
 }
 
 // GetMaxErrStringLength - Returns the current the value for
@@ -203,22 +262,6 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
 	defer ePrefLineLenCalc.lock.Unlock()
 
 	ePrefLineLenCalc.currentLineStr = currentLineStr
-
-	ePrefLineLenCalc.lenCurrentLineStr =
-		uint(len(ePrefLineLenCalc.currentLineStr))
-
-	if ePrefLineLenCalc.lenCurrentLineStr >
-
-		ePrefLineLenCalc.maxErrStringLength {
-		ePrefLineLenCalc.remainingLineLength = 0
-
-	} else {
-
-		ePrefLineLenCalc.remainingLineLength =
-			ePrefLineLenCalc.maxErrStringLength -
-				ePrefLineLenCalc.lenCurrentLineStr
-
-	}
 
 	return
 }

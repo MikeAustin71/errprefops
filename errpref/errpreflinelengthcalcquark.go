@@ -15,7 +15,6 @@ type ePrefixLineLenCalcQuark struct {
 // determine whether this ErrPrefixDelimiters instance is valid in all
 // respects.
 //
-// Note: This method automatically calculates line lengths.
 //
 // ----------------------------------------------------------------
 //
@@ -96,9 +95,6 @@ func (ePrefLineLenCalcQuark *ePrefixLineLenCalcQuark) testValidityOfEPrefixLineL
 		return isValid, err
 	}
 
-	ePrefLineLenCalc.lenCurrentLineStr =
-		uint(len(ePrefLineLenCalc.currentLineStr))
-
 	if ePrefLineLenCalc.maxErrStringLength == 0 {
 		err = fmt.Errorf("%v\n"+
 			"Error: Internal member variable 'ePrefLineLenCalc.maxErrStringLength'\n"+
@@ -107,15 +103,6 @@ func (ePrefLineLenCalcQuark *ePrefixLineLenCalcQuark) testValidityOfEPrefixLineL
 			ePrefix)
 
 		return isValid, err
-	}
-
-	if ePrefLineLenCalc.lenCurrentLineStr >
-		ePrefLineLenCalc.maxErrStringLength {
-		ePrefLineLenCalc.remainingLineLength = 0
-	} else {
-		ePrefLineLenCalc.remainingLineLength =
-			ePrefLineLenCalc.maxErrStringLength -
-				ePrefLineLenCalc.lenCurrentLineStr
 	}
 
 	isValid = true
