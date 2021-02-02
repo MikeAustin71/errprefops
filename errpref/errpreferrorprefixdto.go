@@ -1,12 +1,10 @@
 package errpref
 
 import (
-	"fmt"
 	"sync"
 )
 
 type ErrorPrefixDto struct {
-	isValid                bool
 	isLastIdx              bool // Signals the last index in the array
 	errorPrefixStr         string
 	lenErrorPrefixStr      uint
@@ -14,6 +12,131 @@ type ErrorPrefixDto struct {
 	errorContextStr        string
 	lenErrorContextStr     uint
 	lock                   *sync.Mutex
+}
+
+// CopyIn - Copies the data fields from an incoming instance of
+// ErrorPrefixDto ('inComingErrPrefixDto') to the data fields of
+// the current ErrorPrefixDto instance ('errorPrefixDto').
+//
+// If 'inComingErrPrefixDto' is judged to be invalid, this method
+// will return an error.
+//
+// All of the data fields in current ErrorPrefixDto instance
+// ('errorPrefixDto') will be modified and overwritten.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  inComingErrPrefixDto       *ErrorPrefixDto
+//     - A pointer to an instance of ErrorPrefixDto. This method
+//       will NOT change the values of internal member variables
+//       contained in this instance.
+//
+//       All data values in this ErrorPrefixDto instance will be
+//       copied to current ErrorPrefixDto instance
+//       ('errorPrefixDto').
+//
+//       If this ErrorPrefixDto instance proves to be invalid, an
+//       error will be returned.
+//
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                 error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'ePrefix'.
+//
+func (errorPrefixDto *ErrorPrefixDto) CopyIn(
+	inComingErrPrefixDto *ErrorPrefixDto,
+	ePrefix string) error {
+
+	if errorPrefixDto.lock == nil {
+		errorPrefixDto.lock = new(sync.Mutex)
+	}
+
+	errorPrefixDto.lock.Lock()
+
+	defer errorPrefixDto.lock.Unlock()
+	ePrefix += "ErrorPrefixDto.CopyIn()\n"
+
+	ePrefDtoElectron := errorPrefixDtoElectron{}
+
+	return ePrefDtoElectron.copyIn(
+		errorPrefixDto,
+		inComingErrPrefixDto,
+		ePrefix)
+}
+
+// CopyOut - Creates a deep copy of the data fields contained in
+// the current ErrorPrefixDto instance, and returns that data as a
+// new instance of ErrorPrefixDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrorPrefixDto
+//     - If this method completes successfully, a deep copy of the
+//       current ErrorPrefixDto instance will be returned through
+//       this parameter as a completely new instance of
+//       ErrorPrefixDto.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'ePrefix'. The
+//       'ePrefix' text will be prefixed to the beginning of the returned
+//       error message.
+//
+func (errorPrefixDto *ErrorPrefixDto) CopyOut(
+	ePrefix string) (
+	ErrorPrefixDto,
+	error) {
+
+	if errorPrefixDto.lock == nil {
+		errorPrefixDto.lock = new(sync.Mutex)
+	}
+
+	errorPrefixDto.lock.Lock()
+
+	defer errorPrefixDto.lock.Unlock()
+
+	ePrefix += "ErrorPrefixDto.CopyOut() "
+
+	ePrefDtoElectron := errorPrefixDtoElectron{}
+
+	return ePrefDtoElectron.copyOut(
+		errorPrefixDto,
+		ePrefix)
 }
 
 // GetErrContextStr - Returns the Error Context String.
@@ -84,23 +207,91 @@ func (errorPrefixDto *ErrorPrefixDto) GetIsLastIndex() bool {
 	return errorPrefixDto.isLastIdx
 }
 
-// IsValidInstanceError - Returns the 'isValid' flag and an error object
-// signaling whether the current ErrorPrefixDto instance is
-// invalid.
+// IsValidInstance - Returns a boolean flag signaling whether the
+// current ErrorPrefixDto instance is invalid.
 //
 // If the returned boolean value is 'true', it signals that the
-// current ErrorPrefixDto is valid and populated with data.
+// current ErrorPrefixDto instance is valid and populated with data.
 //
-// If the returned boolean value is 'false', it signals that the
-// current ErrorPrefixDto is empty and NOT populated with valid
+// If the boolean value is 'false', it signals that the current
+// ErrorPrefixDto instance is invalid.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  isValid             bool
+//     - If the current ErrorPrefixDto instance, 'errorPrefixDto',
+//       contains invalid data, this boolean value is set to 'false'.
+//
+//       If the current ErrorPrefixDto instance, 'errorPrefixDto',
+//       is valid, this boolean value is set to 'true'.
+//
+func (errorPrefixDto *ErrorPrefixDto) IsValidInstance() (
+	isValid bool) {
+
+	if errorPrefixDto.lock == nil {
+		errorPrefixDto.lock = new(sync.Mutex)
+	}
+
+	errorPrefixDto.lock.Lock()
+
+	defer errorPrefixDto.lock.Unlock()
+
+	ePrefDtoQuark := errorPrefixDtoQuark{}
+
+	isValid,
+		_ = ePrefDtoQuark.testValidityOfErrorPrefixDto(
+		errorPrefixDto,
+		"")
+
+	return isValid
+}
+
+// IsValidInstanceError - Returns an error object signaling whether
+// the current ErrorPrefixDto instance is invalid.
+//
+// If the returned error value is 'nil', it signals that the
+// current ErrorPrefixDto instance is valid and populated with
 // data.
 //
+// If the returned error value is NOT 'nil', it signals that the
+// current ErrorPrefixDto is invalid. In this case, the error
+// object will contain an appropriate error message.
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Be sure to leave a space at the end of
+//       'ePrefix'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the current ErrorPrefixDto instance, 'errorPrefixDto',
+//       contains invalid data, a detailed error message will be
+//       returned identifying the invalid data item.
+//
+//       If the current ErrorPrefixDto instance, 'errorPrefixDto',
+//       is valid, this error parameter will be set to 'nil'.
 //
 func (errorPrefixDto *ErrorPrefixDto) IsValidInstanceError(
-	ePrefix string) (
-	bool,
-	error) {
+	ePrefix string) error {
 
 	if errorPrefixDto.lock == nil {
 		errorPrefixDto.lock = new(sync.Mutex)
@@ -112,32 +303,14 @@ func (errorPrefixDto *ErrorPrefixDto) IsValidInstanceError(
 
 	ePrefix += "ErrorPrefixDto.IsValidInstanceError() "
 
-	errorPrefixDto.lenErrorPrefixStr =
-		uint(len(errorPrefixDto.errorPrefixStr))
+	ePrefDtoQuark := errorPrefixDtoQuark{}
 
-	if errorPrefixDto.lenErrorPrefixStr == 0 {
+	_,
+		err := ePrefDtoQuark.testValidityOfErrorPrefixDto(
+		errorPrefixDto,
+		ePrefix)
 
-		errorPrefixDto.isValid = false
-
-		return errorPrefixDto.isValid,
-			fmt.Errorf("%v\n"+
-				"Error: Error Prefix is an empty string!\n",
-				ePrefix)
-
-	}
-
-	errorPrefixDto.lenErrorContextStr =
-		uint(len(errorPrefixDto.errorContextStr))
-
-	if errorPrefixDto.lenErrorPrefixStr == 0 {
-		errorPrefixDto.errPrefixHasContextStr = false
-	} else {
-		errorPrefixDto.errPrefixHasContextStr = true
-	}
-
-	errorPrefixDto.isValid = true
-
-	return errorPrefixDto.isValid, nil
+	return err
 }
 
 // GetLengthErrContextStr - Returns the number of characters
@@ -188,31 +361,6 @@ func (errorPrefixDto ErrorPrefixDto) New() ErrorPrefixDto {
 	defer errorPrefixDto.lock.Unlock()
 
 	return ErrorPrefixDto{}
-}
-
-// SetIsEmpty - Sets the 'isValid' flag signaling whether the
-// current ErrorPrefixDto instance is empty, or populated with
-// data.
-//
-// If the 'isValid' flag is set to 'true', it signals that the
-// current ErrorPrefixDto is valid and populated with data.
-//
-// If the 'isValid' flag is set to  'false', it signals that the
-// current ErrorPrefixDto is empty and NOT populated with valid
-// data.
-//
-//
-func (errorPrefixDto *ErrorPrefixDto) SetIsEmpty(isValid bool) {
-
-	if errorPrefixDto.lock == nil {
-		errorPrefixDto.lock = new(sync.Mutex)
-	}
-
-	errorPrefixDto.lock.Lock()
-
-	defer errorPrefixDto.lock.Unlock()
-
-	errorPrefixDto.isValid = isValid
 }
 
 // SetErrContextStr - Sets the Error Context String value.
