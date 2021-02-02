@@ -9,7 +9,7 @@ type errPrefixDelimitersQuark struct {
 	lock *sync.Mutex
 }
 
-// testValidityOfErrorPrefixDto - Performs a diagnostic review of
+// testValidityOfErrorPrefixInfo - Performs a diagnostic review of
 // the input parameter 'delimiters', an instance of
 // ErrPrefixDelimiters. The purpose of this diagnostic review is to
 // determine whether this ErrPrefixDelimiters instance is valid in all

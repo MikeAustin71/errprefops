@@ -5,14 +5,14 @@ import (
 	"sync"
 )
 
-type errorPrefixDtoQuark struct {
+type errorPrefixInfoQuark struct {
 	lock *sync.Mutex
 }
 
-// testValidityOfErrorPrefixDto - Performs a diagnostic review of
-// the input parameter 'errPrefixDto', an instance of
-// ErrorPrefixDto. The purpose of this diagnostic review is to
-// determine whether this ErrorPrefixDto instance is valid in all
+// testValidityOfErrorPrefixInfo - Performs a diagnostic review of
+// the input parameter 'errPrefixInfo', an instance of
+// ErrorPrefixInfo. The purpose of this diagnostic review is to
+// determine whether this ErrorPrefixInfo instance is valid in all
 // respects.
 //
 //
@@ -20,8 +20,8 @@ type errorPrefixDtoQuark struct {
 //
 // Input Parameters
 //
-//  errPrefixDto        *ErrorPrefixDto
-//     - A pointer to an instance of ErrorPrefixDto. This object
+//  errPrefixInfo       *ErrorPrefixInfo
+//     - A pointer to an instance of ErrorPrefixInfo. This object
 //       will be evaluated to determine whether or not it is a
 //       valid instance.
 //
@@ -39,21 +39,21 @@ type errorPrefixDtoQuark struct {
 //
 //  isValid             bool
 //     - This returned boolean value will signal whether the input
-//       parameter, 'errPrefixDto', is valid, or not. If the
-//       'errPrefixDto' object contains valid data,  this method
+//       parameter, 'errPrefixInfo', is valid, or not. If the
+//       'errPrefixInfo' object contains valid data,  this method
 //       returns 'true'. If the data is invalid, this method will
 //       return 'false'.
 //
 //  err                 error
-//     - If the input parameter object, 'errPrefixDto', contains
+//     - If the input parameter object, 'errPrefixInfo', contains
 //       invalid data, a detailed error message will be returned
 //       identifying the invalid data item.
 //
-//       If the input parameter object, 'errPrefixDto', is valid,
+//       If the input parameter object, 'errPrefixInfo', is valid,
 //       this error parameter will be set to 'nil'.
 //
-func (ePrefDtoQuark *errorPrefixDtoQuark) testValidityOfErrorPrefixDto(
-	errPrefixDto *ErrorPrefixDto,
+func (ePrefDtoQuark *errorPrefixInfoQuark) testValidityOfErrorPrefixInfo(
+	errPrefixInfo *ErrorPrefixInfo,
 	ePrefix string) (
 	isValid bool,
 	err error) {
@@ -66,22 +66,22 @@ func (ePrefDtoQuark *errorPrefixDtoQuark) testValidityOfErrorPrefixDto(
 
 	defer ePrefDtoQuark.lock.Unlock()
 
-	ePrefix += "errorPrefixDtoQuark.testValidityOfErrorPrefixDto() "
+	ePrefix += "errorPrefixInfoQuark.testValidityOfErrorPrefixInfo() "
 	isValid = false
 
-	if errPrefixDto == nil {
+	if errPrefixInfo == nil {
 		err = fmt.Errorf("%v\n"+
-			"\nInput parameter 'errPrefixDto' is INVALID!\n"+
-			"'errPrefixDto' is a nil pointer!\n",
+			"\nInput parameter 'errPrefixInfo' is INVALID!\n"+
+			"'errPrefixInfo' is a nil pointer!\n",
 			ePrefix)
 
 		return isValid, err
 	}
 
-	errPrefixDto.lenErrorPrefixStr =
-		uint(len(errPrefixDto.errorPrefixStr))
+	errPrefixInfo.lenErrorPrefixStr =
+		uint(len(errPrefixInfo.errorPrefixStr))
 
-	if errPrefixDto.lenErrorPrefixStr == 0 {
+	if errPrefixInfo.lenErrorPrefixStr == 0 {
 
 		err =
 			fmt.Errorf("%v\n"+
@@ -90,13 +90,13 @@ func (ePrefDtoQuark *errorPrefixDtoQuark) testValidityOfErrorPrefixDto(
 		return isValid, err
 	}
 
-	errPrefixDto.lenErrorContextStr =
-		uint(len(errPrefixDto.errorContextStr))
+	errPrefixInfo.lenErrorContextStr =
+		uint(len(errPrefixInfo.errorContextStr))
 
-	if errPrefixDto.lenErrorPrefixStr == 0 {
-		errPrefixDto.errPrefixHasContextStr = false
+	if errPrefixInfo.lenErrorPrefixStr == 0 {
+		errPrefixInfo.errPrefixHasContextStr = false
 	} else {
-		errPrefixDto.errPrefixHasContextStr = true
+		errPrefixInfo.errPrefixHasContextStr = true
 	}
 
 	isValid = true

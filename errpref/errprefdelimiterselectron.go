@@ -80,7 +80,7 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyIn(
 
 	defer ePrefDelimsElectron.lock.Unlock()
 
-	ePrefix += "errorPrefixDtoElectron.copyIn() "
+	ePrefix += "errorPrefixInfoElectron.copyIn() "
 
 	if targetDelimiters == nil {
 		return fmt.Errorf("%v\n"+
@@ -147,7 +147,7 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyIn(
 // Input Parameters
 //
 //  delimiters          *ErrPrefixDelimiters
-//     - A pointer to an instance of ErrorPrefixDto. This method
+//     - A pointer to an instance of ErrorPrefixInfo. This method
 //       will NOT change the values of internal member variables
 //       contained in this object.
 //

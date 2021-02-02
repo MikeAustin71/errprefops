@@ -155,7 +155,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 //
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	strBuilder *strings.Builder,
-	crEPrefDto *ErrorPrefixDto,
+	crEPrefDto *ErrorPrefixInfo,
 	delimiters *ErrPrefixDelimiters,
 	lastStr string,
 	remainingLineLen uint) (
@@ -188,7 +188,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 			delimiters.GetLengthInLineContextDelimiter() +
 			crEPrefDto.lenErrorContextStr
 
-	createEPrefDtoQuark := errorPrefixDtoQuark{}
+	createEPrefDtoQuark := errorPrefixInfoQuark{}
 
 	if newLenLastStr > remainingLineLen {
 		// The lastStr is already longer than
@@ -271,7 +271,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 //
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 	strBuilder *strings.Builder,
-	crEPrefDto *ErrorPrefixDto,
+	crEPrefDto *ErrorPrefixInfo,
 	delimiters *ErrPrefixDelimiters,
 	lastStr string,
 	remainingLineLen uint) (
@@ -302,7 +302,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 			crEPrefDto.lenErrorPrefixStr +
 			delimiters.GetLengthInLinePrefixDelimiter()
 
-	createEPrefDtoQuark := errorPrefixDtoQuark{}
+	createEPrefDtoQuark := errorPrefixInfoQuark{}
 
 	if newLenLastStr > remainingLineLen {
 		// The lastStr is already longer than

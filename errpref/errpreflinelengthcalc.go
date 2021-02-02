@@ -14,7 +14,7 @@ import (
 //
 type EPrefixLineLenCalc struct {
 	ePrefDelimiters     ErrPrefixDelimiters
-	errorPrefixDto      *ErrorPrefixDto
+	errorPrefixDto      *ErrorPrefixInfo
 	currentLineStr      string
 	lenCurrentLineStr   uint
 	remainingLineLength uint
@@ -162,11 +162,11 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 //
 // Input Parameters
 //
-//  errorPrefixDto      *ErrorPrefixDto
+//  errorPrefixDto      *ErrorPrefixInfo
 //     - This Error Prefix Data Transfer Object stores information
 //       on the error prefix and error context strings.
 //
-//       type ErrorPrefixDto struct {
+//       type ErrorPrefixInfo struct {
 //         isValid                bool
 //         isLastIdx              bool // Signals the last index in the array
 //         errorPrefixStr         string
@@ -198,7 +198,7 @@ func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 //       to the beginning of the error message.
 //
 func (ePrefLineLenCalc *EPrefixLineLenCalc) SetEPrefDto(
-	errorPrefixDto *ErrorPrefixDto,
+	errorPrefixDto *ErrorPrefixInfo,
 	ePrefix string) error {
 
 	if ePrefLineLenCalc.lock == nil {
