@@ -24,6 +24,7 @@ type ErrorPrefixDto struct {
 // All of the data fields in current ErrorPrefixDto instance
 // ('errorPrefixDto') will be modified and overwritten.
 //
+//
 // ----------------------------------------------------------------
 //
 // Input Parameters
@@ -42,7 +43,7 @@ type ErrorPrefixDto struct {
 //       error will be returned.
 //
 //
-//  ePrefix             string
+//  ePrefix                    string
 //     - This is an error prefix which is included in all returned
 //       error messages. Usually, it contains the names of the calling
 //       method or methods. Note: Be sure to leave a space at the end
@@ -53,7 +54,7 @@ type ErrorPrefixDto struct {
 //
 // Return Values
 //
-//  err                 error
+//  err                        error
 //     - If this method completes successfully, the returned error Type
 //       is set to 'nil'. If errors are encountered during processing,
 //       the returned error Type will encapsulate an error message.

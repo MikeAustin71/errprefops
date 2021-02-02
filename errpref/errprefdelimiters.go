@@ -20,6 +20,43 @@ type ErrPrefixDelimiters struct {
 // proceeds to copy the internal member data variable values to the
 // current ErrPrefixDelimiters instance.
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  incomingDelimiters         *ErrPrefixDelimiters
+//     - A pointer to an instance of ErrPrefixDelimiters. This method
+//       will NOT change the values of internal member variables
+//       contained in this instance.
+//
+//       All data values in this ErrPrefixDelimiters instance will
+//       be copied to current ErrPrefixDelimiters instance
+//       ('ePrefDelims').
+//
+//       If this ErrPrefixDelimiters instance proves to be invalid,
+//       an error will be returned.
+//
+//
+//  ePrefix                    string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'ePrefix'.
+//
 func (ePrefDelims *ErrPrefixDelimiters) CopyIn(
 	incomingDelimiters *ErrPrefixDelimiters,
 	ePrefix string) error {
@@ -47,7 +84,42 @@ func (ePrefDelims *ErrPrefixDelimiters) CopyIn(
 // returned copy and the current ErrPrefixDelimiters instance are
 // identical in all respects.
 //
-func (ePrefDelims *ErrPrefixDelimiters) CopyOut() ErrPrefixDelimiters {
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDelimiters
+//     - If this method completes successfully, a deep copy of the
+//       current ErrPrefixDelimiters instance will be returned through
+//       this parameter as a completely new instance of
+//       ErrPrefixDelimiters.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'ePrefix'. The
+//       'ePrefix' text will be prefixed to the beginning of the returned
+//       error message.
+//
+func (ePrefDelims *ErrPrefixDelimiters) CopyOut(
+	ePrefix string) (
+	ErrPrefixDelimiters,
+	error) {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -57,33 +129,14 @@ func (ePrefDelims *ErrPrefixDelimiters) CopyOut() ErrPrefixDelimiters {
 
 	defer ePrefDelims.lock.Unlock()
 
-	newErrPrefDelims := ErrPrefixDelimiters{}
+	ePrefix += "ErrPrefixDelimiters.CopyOut() "
 
-	newErrPrefDelims.inLinePrefixDelimiter =
-		ePrefDelims.inLinePrefixDelimiter
+	ePrefDelimsElectron := errPrefixDelimitersElectron{}
 
-	newErrPrefDelims.lenInLinePrefixDelimiter =
-		ePrefDelims.lenInLinePrefixDelimiter
-
-	newErrPrefDelims.newLinePrefixDelimiter =
-		ePrefDelims.newLinePrefixDelimiter
-
-	newErrPrefDelims.lenNewLinePrefixDelimiter =
-		ePrefDelims.lenNewLinePrefixDelimiter
-
-	newErrPrefDelims.inLineContextDelimiter =
-		ePrefDelims.inLineContextDelimiter
-
-	newErrPrefDelims.lenNewLinePrefixDelimiter =
-		ePrefDelims.lenNewLinePrefixDelimiter
-
-	newErrPrefDelims.newLineContextDelimiter =
-		ePrefDelims.newLineContextDelimiter
-
-	newErrPrefDelims.lenNewLineContextDelimiter =
-		ePrefDelims.lenNewLineContextDelimiter
-
-	return newErrPrefDelims
+	return ePrefDelimsElectron.copyOut(
+		ePrefDelims,
+		ePrefix+
+			"ePrefDelims\n")
 }
 
 // GetInLineContextDelimiter - Returns ePrefDelims.inLineContextDelimiter
