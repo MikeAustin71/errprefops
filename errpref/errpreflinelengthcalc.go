@@ -20,103 +20,6 @@ type EPrefixLineLenCalc struct {
 	lock               *sync.Mutex
 }
 
-// EPrefNoContextExceedsRemainLineLen - Returns 'true' if the
-// length of the in-line of in-line error prefix delimiter plus the
-// length of the error prefix string exceeds the remaining unused
-// line length.
-//
-//   in-line error prefix delimiter +
-//   error prefix   > Remaining line Length
-//    This method returns 'true'.
-//
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefNoContextExceedsRemainLineLen() bool {
-
-	if ePrefixLineLenCalc.lock == nil {
-		ePrefixLineLenCalc.lock = new(sync.Mutex)
-	}
-
-	ePrefixLineLenCalc.lock.Lock()
-
-	defer ePrefixLineLenCalc.lock.Unlock()
-
-	var errPrefixLen uint
-
-	errPrefixLen =
-		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
-			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
-
-	currLineLen :=
-		uint(len(ePrefixLineLenCalc.currentLineStr))
-
-	if currLineLen > ePrefixLineLenCalc.maxErrStringLength {
-		return true
-	}
-
-	remainingLineLen :=
-		ePrefixLineLenCalc.maxErrStringLength -
-			currLineLen
-
-	if errPrefixLen > remainingLineLen {
-		return true
-	}
-
-	return false
-}
-
-// EPrefixWithContextExceedsRemainLineLen - Returns 'true' if the
-// combination of in-line error prefix delimiter plus error prefix
-// plus in-line error context delimiter plus error context string
-// exceeds the remaining unused line length.
-//
-//   in-line error prefix delimiter +
-//   error prefix +
-//   in-line error context delimiter +
-//   error context                     > Remaining line Length
-//    This method returns 'true'.
-//
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefixWithContextExceedsRemainLineLen() bool {
-
-	if ePrefixLineLenCalc.lock == nil {
-		ePrefixLineLenCalc.lock = new(sync.Mutex)
-	}
-
-	ePrefixLineLenCalc.lock.Lock()
-
-	defer ePrefixLineLenCalc.lock.Unlock()
-
-	var prefixWithContextLen uint
-
-	prefixWithContextLen =
-		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
-			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
-
-	if ePrefixLineLenCalc.errorPrefixInfo.GetErrPrefixHasContextStr() {
-
-		prefixWithContextLen +=
-			ePrefixLineLenCalc.ePrefDelimiters.
-				GetLengthInLineContextDelimiter() +
-				ePrefixLineLenCalc.errorPrefixInfo.
-					GetLengthErrContextStr()
-	}
-
-	currLineLen :=
-		uint(len(ePrefixLineLenCalc.currentLineStr))
-
-	if currLineLen > ePrefixLineLenCalc.maxErrStringLength {
-		return true
-	}
-
-	remainingLineLen :=
-		ePrefixLineLenCalc.maxErrStringLength -
-			currLineLen
-
-	if prefixWithContextLen > remainingLineLen {
-		return true
-	}
-
-	return false
-}
-
 // CurrLineLenExceedsMaxLineLen - If the length of the Current Line
 // String (EPrefixLineLenCalc.currentLineStr) is greater than the
 // Maximum Error String Length (EPrefixLineLenCalc.maxErrStringLength),
@@ -266,6 +169,434 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) CopyOut(
 		ePrefix)
 }
 
+// EPrefWithoutContextExceedsRemainLineLen - Returns 'true' if the
+// length of the in-line of in-line error prefix delimiter plus the
+// length of the error prefix string exceeds the remaining unused
+// line length.
+//
+//   in-line error prefix delimiter +
+//   error prefix   > Remaining line Length
+//    This method returns 'true'.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefWithoutContextExceedsRemainLineLen() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	var errPrefixLen uint
+
+	errPrefixLen =
+		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
+			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
+
+	currLineLen :=
+		uint(len(ePrefixLineLenCalc.currentLineStr))
+
+	if currLineLen > ePrefixLineLenCalc.maxErrStringLength {
+		return true
+	}
+
+	remainingLineLen :=
+		ePrefixLineLenCalc.maxErrStringLength -
+			currLineLen
+
+	if errPrefixLen > remainingLineLen {
+		return true
+	}
+
+	return false
+}
+
+// EPrefixWithContextExceedsRemainLineLen - Returns 'true' if the
+// combination of in-line error prefix delimiter plus error prefix
+// plus in-line error context delimiter plus error context string
+// exceeds the remaining unused line length.
+//
+//   in-line error prefix delimiter +
+//   error prefix +
+//   in-line error context delimiter +
+//   error context                     > Remaining line Length
+//    This method returns 'true'.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefixWithContextExceedsRemainLineLen() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	var prefixWithContextLen uint
+
+	prefixWithContextLen =
+		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
+			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
+
+	if ePrefixLineLenCalc.errorPrefixInfo.GetErrPrefixHasContextStr() {
+
+		prefixWithContextLen +=
+			ePrefixLineLenCalc.ePrefDelimiters.
+				GetLengthInLineContextDelimiter() +
+				ePrefixLineLenCalc.errorPrefixInfo.
+					GetLengthErrContextStr()
+	}
+
+	currLineLen :=
+		uint(len(ePrefixLineLenCalc.currentLineStr))
+
+	if currLineLen > ePrefixLineLenCalc.maxErrStringLength {
+		return true
+	}
+
+	remainingLineLen :=
+		ePrefixLineLenCalc.maxErrStringLength -
+			currLineLen
+
+	if prefixWithContextLen > remainingLineLen {
+		return true
+	}
+
+	return false
+}
+
+// ErrPrefixHasContext - Returns a boolean flag signaling whether
+// the error prefix has an associated error context.
+//
+// If this method returns 'true', it means that the encapsulated
+// error prefix DOES HAVE an associated error context string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) ErrPrefixHasContext() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if ePrefixLineLenCalc.errorPrefixInfo == nil {
+		return false
+	}
+
+	return ePrefixLineLenCalc.
+		errorPrefixInfo.
+		GetErrPrefixHasContextStr()
+}
+
+// ErrorContextIsEmpty - Returns a boolean flag signalling whether
+// the Error Context String is an empty string.
+//
+// If this method returns 'true', it means that the Error Context
+// String is empty and has a zero string length.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) ErrorContextIsEmpty() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if ePrefixLineLenCalc.errorPrefixInfo == nil {
+		return true
+	}
+
+	if ePrefixLineLenCalc.
+		errorPrefixInfo.GetLengthErrContextStr() == 0 {
+		return true
+	}
+
+	return false
+}
+
+// ErrorPrefixIsEmpty - Returns a boolean flag signalling whether
+// the Error Prefix String is an empty string.
+//
+// If this method returns 'true', it means that the Error Prefix
+// String is empty and has a zero string length.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) ErrorPrefixIsEmpty() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if ePrefixLineLenCalc.errorPrefixInfo == nil {
+		return true
+	}
+
+	if ePrefixLineLenCalc.
+		errorPrefixInfo.GetLengthErrPrefixStr() == 0 {
+		return true
+	}
+
+	return false
+}
+
+// GetErrorContextStr - Returns the error context string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetErrorContextStr() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if ePrefixLineLenCalc.errorPrefixInfo == nil {
+		return "Error: ePrefixLineLenCalc.errorPrefixInfo == nil\n"
+	}
+
+	return ePrefixLineLenCalc.errorPrefixInfo.GetErrContextStr()
+}
+
+// GetCurrLineStr - Return the current line string. This string
+// includes the characters which have been formatted and included
+// in a single text line but which have not yet been written out
+// text display. As soon as the current line string fills up with
+// characters to the maximum allowed line length, the text line
+// will be written out to the display device.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	return ePrefixLineLenCalc.currentLineStr
+}
+
+// GetCurrLineStrLength - Returns an unsigned integer value
+// representing the number of characters in or string length of
+// the Current Line String.
+//
+// The Current Line String contains the characters which have been
+// collected thus far from error prefix and error context
+// information. The current line string is used to control maximum
+// line length and stores the characters which have not yet been
+// written out to the text display.
+//
+// As soon as the Current Line String fills up with characters to
+// the maximum allowed line length, the text line will be written
+// out to the display device.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStrLength() uint {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	var lenCurrentLineStr uint
+
+	lenCurrentLineStr =
+		uint(len(ePrefixLineLenCalc.currentLineStr))
+
+	return lenCurrentLineStr
+}
+
+// GetDelimiterInLineErrContext - Returns the In-Line Error Context
+// delimiter as a string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetDelimiterInLineErrContext() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	return ePrefixLineLenCalc.
+		ePrefDelimiters.
+		GetInLineContextDelimiter()
+}
+
+// GetDelimiterNewLineErrContext - Returns the New Line Error
+// Context delimiter as a string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetDelimiterNewLineErrContext() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	return ePrefixLineLenCalc.
+		ePrefDelimiters.
+		GetNewLineContextDelimiter()
+}
+
+// GetDelimiterInLineErrPrefix - Returns the In-Line Error Prefix
+// delimiter as a string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetDelimiterInLineErrPrefix() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	return ePrefixLineLenCalc.
+		ePrefDelimiters.
+		GetInLinePrefixDelimiter()
+}
+
+// GetDelimiterNewLineErrPrefix - Returns the New Line Error Prefix
+// delimiter as a string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetDelimiterNewLineErrPrefix() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	return ePrefixLineLenCalc.
+		ePrefDelimiters.
+		GetNewLinePrefixDelimiter()
+}
+
+// GetErrorPrefixStr - Returns the error prefix string.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetErrorPrefixStr() string {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if ePrefixLineLenCalc.errorPrefixInfo == nil {
+		return "Error: ePrefixLineLenCalc.errorPrefixInfo == nil\n"
+	}
+
+	return ePrefixLineLenCalc.errorPrefixInfo.GetErrPrefixStr()
+}
+
+// GetMaxErrStringLength - Returns the current the value for
+// maximum error string length. This limit controls the line length
+// for text displays of error prefix strings.
+//
+// The value of maximum error string length is returned as an
+// unsigned integer.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	return ePrefixLineLenCalc.maxErrStringLength
+}
+
+// GetRemainingLineLength - Returns the remaining line length. This is
+// the difference between current line length and Maximum Error
+// String Length.
+//
+//   remainingLineLen = maxErrStringLen - currentLineStringLen
+//
+// If currentLineStringLen is greater than Maximum Error String
+// Length, the Remaining String Length is zero.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	var (
+		lenCurrentLineStr,
+		remainingLineLength uint
+	)
+
+	lenCurrentLineStr =
+		uint(len(ePrefixLineLenCalc.currentLineStr))
+
+	if lenCurrentLineStr >
+		ePrefixLineLenCalc.maxErrStringLength {
+
+		remainingLineLength = 0
+
+	} else {
+
+		remainingLineLength =
+			ePrefixLineLenCalc.maxErrStringLength -
+				lenCurrentLineStr
+
+	}
+
+	return remainingLineLength
+}
+
+// IsErrPrefixLastIndex - Returns a boolean flag signalling whether
+// the encapsulated ErrorPrefixInfo object is the last element in
+// an array.
+//
+// If this method returns 'true', it means that the encapsulated
+// ErrorPrefixInfo object is the last element in an array of
+// ErrorPrefixInfo objects.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsErrPrefixLastIndex() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	if ePrefixLineLenCalc.errorPrefixInfo == nil {
+		return true
+	}
+
+	return ePrefixLineLenCalc.errorPrefixInfo.GetIsLastIndex()
+}
+
 // IsValidInstance - Returns a boolean flag signalling whether the
 // current EPrefixLineLenCalc instance is valid, or not.
 //
@@ -299,8 +630,7 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) CopyOut(
 //       the current EPrefixLineLenCalc instance is valid in all
 //       respects.
 //
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
-	ePrefix string) bool {
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstance() bool {
 
 	if ePrefixLineLenCalc.lock == nil {
 		ePrefixLineLenCalc.lock = new(sync.Mutex)
@@ -310,15 +640,12 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstance(
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	ePrefix += "EPrefixLineLenCalc.IsValidInstance() "
-
 	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
 
 	isValid,
 		_ := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
 		ePrefixLineLenCalc,
-		ePrefix+
-			"ePrefixLineLenCalc\n")
+		"")
 
 	return isValid
 }
@@ -382,16 +709,9 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
 	return err
 }
 
-// GetRemainingLineLength - Returns the remaining line length. This is
-// the difference between current line length and Maximum Error
-// String Length.
+// New - Returns a new, empty instance of type EPrefixLineLenCalc.
 //
-//   remainingLineLen = maxErrStringLen - currentLineStringLen
-//
-// If currentLineStringLen is greater than Maximum Error String
-// Length, the Remaining String Length is zero.
-//
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
+func (ePrefixLineLenCalc EPrefixLineLenCalc) New() EPrefixLineLenCalc {
 
 	if ePrefixLineLenCalc.lock == nil {
 		ePrefixLineLenCalc.lock = new(sync.Mutex)
@@ -401,38 +721,15 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetRemainingLineLength() uint {
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	var (
-		lenCurrentLineStr,
-		remainingLineLength uint
-	)
+	newEPrefixLineLenCalc := EPrefixLineLenCalc{}
 
-	lenCurrentLineStr =
-		uint(len(ePrefixLineLenCalc.currentLineStr))
-
-	if lenCurrentLineStr >
-		ePrefixLineLenCalc.maxErrStringLength {
-
-		remainingLineLength = 0
-
-	} else {
-
-		remainingLineLength =
-			ePrefixLineLenCalc.maxErrStringLength -
-				lenCurrentLineStr
-
-	}
-
-	return remainingLineLength
+	return newEPrefixLineLenCalc
 }
 
-// GetCurrLineStr - Return the current line string. This string
-// includes the characters which have been formatted and included
-// in a single text line but which have not yet been written out
-// text display. As soon as the current line string fills up with
-// characters to the maximum allowed line length, the text line
-// will be written out to the display device.
+// Ptr - Returns a pointer to a new, empty instance of type
+// EPrefixLineLenCalc.
 //
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
+func (ePrefixLineLenCalc EPrefixLineLenCalc) Ptr() *EPrefixLineLenCalc {
 
 	if ePrefixLineLenCalc.lock == nil {
 		ePrefixLineLenCalc.lock = new(sync.Mutex)
@@ -442,59 +739,9 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStr() string {
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	return ePrefixLineLenCalc.currentLineStr
-}
+	newEPrefixLineLenCalc := EPrefixLineLenCalc{}
 
-// GetCurrLineStrLength - Returns an unsigned integer value
-// representing the number of characters in or string length of
-// the Current Line String.
-//
-// The Current Line String contains the characters which have been
-// collected thus far from error prefix and error context
-// information. The current line string is used to control maximum
-// line length and stores the characters which have not yet been
-// written out to the text display.
-//
-// As soon as the Current Line String fills up with characters to
-// the maximum allowed line length, the text line will be written
-// out to the display device.
-//
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetCurrLineStrLength() uint {
-
-	if ePrefixLineLenCalc.lock == nil {
-		ePrefixLineLenCalc.lock = new(sync.Mutex)
-	}
-
-	ePrefixLineLenCalc.lock.Lock()
-
-	defer ePrefixLineLenCalc.lock.Unlock()
-
-	var lenCurrentLineStr uint
-
-	lenCurrentLineStr =
-		uint(len(ePrefixLineLenCalc.currentLineStr))
-
-	return lenCurrentLineStr
-}
-
-// GetMaxErrStringLength - Returns the current the value for
-// maximum error string length. This limit controls the line length
-// for text displays of error prefix strings.
-//
-// The value of maximum error string length is returned as an
-// unsigned integer.
-//
-func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetMaxErrStringLength() uint {
-
-	if ePrefixLineLenCalc.lock == nil {
-		ePrefixLineLenCalc.lock = new(sync.Mutex)
-	}
-
-	ePrefixLineLenCalc.lock.Lock()
-
-	defer ePrefixLineLenCalc.lock.Unlock()
-
-	return ePrefixLineLenCalc.maxErrStringLength
+	return &newEPrefixLineLenCalc
 }
 
 // SetCurrentLineStr - Sets the Current Line String. This string
@@ -535,11 +782,10 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
 //
 // Input Parameters
 //
-//  ePrefDelimiters     *ErrPrefixDelimiters
-//     - A pointer to an Error Prefix Delimiters object. This
-//       delimiters object contains information on the delimiter
-//       strings used to terminate error prefix and error context
-//       strings.
+//  ePrefDelimiters     ErrPrefixDelimiters
+//     - An Error Prefix Delimiters object. This delimiters object
+//       contains information on the delimiter strings used to
+//       terminate error prefix and error context strings.
 //
 //       type ErrPrefixDelimiters struct {
 //         inLinePrefixDelimiter      string
@@ -575,7 +821,7 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetCurrentLineStr(
 //       to the beginning of the error message.
 //
 func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
-	ePrefDelimiters *ErrPrefixDelimiters,
+	ePrefDelimiters ErrPrefixDelimiters,
 	ePrefix string) error {
 
 	if ePrefixLineLenCalc.lock == nil {
@@ -587,13 +833,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 	defer ePrefixLineLenCalc.lock.Unlock()
 
 	ePrefix += "EPrefixLineLenCalc.SetEPrefDelimiters() "
-
-	if ePrefDelimiters == nil {
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'ePrefDelimiters' is a "+
-			"'nil' pointer\n",
-			ePrefix)
-	}
 
 	err := ePrefDelimiters.IsValidInstanceError(ePrefix)
 
@@ -607,7 +846,7 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetEPrefDelimiters(
 	}
 
 	return ePrefixLineLenCalc.ePrefDelimiters.CopyIn(
-		ePrefDelimiters,
+		&ePrefDelimiters,
 		ePrefix+
 			"ePrefDelimiters\n")
 

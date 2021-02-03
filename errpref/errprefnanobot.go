@@ -293,6 +293,7 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 	if maxErrStringLength == 0 {
 		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
 	}
+	localErrPrefix := "errPrefNanobot.formatErrPrefix() "
 
 	ePrefNeutron := errPrefNeutron{}
 
@@ -303,16 +304,27 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 	lenPrefixContextCol := len(prefixContextCol)
 
 	if lenPrefixContextCol == 0 {
-		return ""
+		return localErrPrefix +
+			"len(prefixContextCol)==0\n"
 	}
 
 	ePrefElectron := errPrefElectron{}
 
 	delimiters := ePrefElectron.getDelimiters()
 
-	if maxErrStringLength != delimiters.GetMaxErrStringLength() {
-		delimiters.SetMaxErrStringLength(maxErrStringLength)
+	lineLenCalculator := EPrefixLineLenCalc{}.Ptr()
+
+	err :=
+		lineLenCalculator.SetEPrefDelimiters(
+			delimiters,
+			localErrPrefix)
+
+	if err != nil {
+		return err.Error()
 	}
+
+	lineLenCalculator.SetMaxErrStringLength(
+		maxErrStringLength)
 
 	errPrefixStrLen := len(errPrefix)
 
@@ -320,7 +332,47 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 
 	b1.Grow(errPrefixStrLen + 512)
 
+	lineLenCalculator.SetCurrentLineStr("")
+
+	lastIdx := lenPrefixContextCol - 1
+
+	ePrefMolecule := errPrefMolecule{}
+
 	for i := 0; i < lenPrefixContextCol; i++ {
+
+		if i == lastIdx {
+			prefixContextCol[i].SetIsLastIndex(true)
+		}
+
+		err =
+			lineLenCalculator.SetErrPrefixInfo(
+				&prefixContextCol[i],
+				localErrPrefix)
+
+		if err != nil {
+			return err.Error()
+		}
+
+		err =
+			lineLenCalculator.IsValidInstanceError(
+				localErrPrefix)
+
+		if err != nil {
+			return err.Error()
+		}
+
+		if lineLenCalculator.ErrPrefixHasContext() {
+
+			err = ePrefMolecule.writeNewEPrefWithContext(
+				&b1,
+				lineLenCalculator)
+
+			if err != nil {
+				return err.Error()
+			}
+
+			continue
+		}
 
 	}
 

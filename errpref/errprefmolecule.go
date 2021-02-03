@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"fmt"
 	"strings"
 	"sync"
 )
@@ -155,13 +156,7 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 //
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	strBuilder *strings.Builder,
-	crEPrefDto *ErrorPrefixInfo,
-	delimiters *ErrPrefixDelimiters,
-	lastStr string,
-	remainingLineLen uint) (
-	newLastStr string,
-	newLenLastStr uint,
-	newRemainingLineLen uint) {
+	lineLenCalc *EPrefixLineLenCalc) error {
 
 	if ePrefMolecule.lock == nil {
 		ePrefMolecule.lock = new(sync.Mutex)
@@ -171,77 +166,65 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 
 	defer ePrefMolecule.lock.Unlock()
 
-	newRemainingLineLen = remainingLineLen
-	newLastStr = lastStr
-	newLenLastStr = uint(len(lastStr))
+	localErrPrefix := "errPrefMolecule.writeNewEPrefWithContext() "
 
-	if strBuilder == nil ||
-		crEPrefDto == nil ||
-		delimiters == nil ||
-		crEPrefDto.isValid {
-		return newLastStr, newLenLastStr, newRemainingLineLen
+	if strBuilder == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is a 'nil' pointer!\n",
+			localErrPrefix)
 	}
 
-	lenEPrefWithContext :=
-		delimiters.GetLengthInLinePrefixDelimiter() +
-			crEPrefDto.lenErrorPrefixStr +
-			delimiters.GetLengthInLineContextDelimiter() +
-			crEPrefDto.lenErrorContextStr
+	if lineLenCalc == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineLenCalc' is a 'nil' pointer!\n",
+			localErrPrefix)
+	}
 
-	createEPrefDtoQuark := errorPrefixInfoQuark{}
+	err := lineLenCalc.IsValidInstanceError(
+		localErrPrefix + "lineLenCalc\n")
 
-	if newLenLastStr > remainingLineLen {
+	if err != nil {
+		return err
+	}
+
+	ePrefNeutron := errPrefNeutron{}
+
+	if lineLenCalc.CurrLineLenExceedsMaxLineLen() {
 		// The lastStr is already longer than
-		// remaining line length
+		// than the maximum line length.
 
-		newLastStr,
-			newLenLastStr,
-			remainingLineLen =
-			createEPrefDtoQuark.writeLastStr(
-				strBuilder,
-				lastStr,
-				remainingLineLen,
-				crEPrefDto,
-				delimiters)
+		ePrefNeutron.writeLastStr(
+			strBuilder,
+			lineLenCalc)
 	}
 
-	if newLenLastStr+
-		lenEPrefWithContext > remainingLineLen {
+	if lineLenCalc.EPrefixWithContextExceedsRemainLineLen() {
 
-		if newLenLastStr > 0 {
+		if lineLenCalc.GetCurrLineStrLength() > 0 {
 
-			newLastStr,
-				newLenLastStr,
-				remainingLineLen =
-				createEPrefDtoQuark.writeLastStr(
-					strBuilder,
-					lastStr,
-					remainingLineLen,
-					crEPrefDto,
-					delimiters)
+			ePrefNeutron.writeLastStr(
+				strBuilder,
+				lineLenCalc)
 
 		}
 
-		if lenEPrefWithContext > remainingLineLen {
+		if lineLenCalc.EPrefixWithContextExceedsRemainLineLen() {
 
 			strBuilder.WriteString(
-				crEPrefDto.errorPrefixStr)
+				lineLenCalc.GetErrorPrefixStr())
 
 			strBuilder.WriteString(
-				delimiters.GetNewLineContextDelimiter())
+				lineLenCalc.GetDelimiterNewLineErrContext())
 
 			strBuilder.WriteString(
-				crEPrefDto.errorContextStr)
+				lineLenCalc.GetErrorContextStr())
 
-			if !crEPrefDto.isLastIdx {
+			if !lineLenCalc.IsErrPrefixLastIndex() {
 				strBuilder.WriteString(
-					delimiters.GetNewLinePrefixDelimiter())
+					lineLenCalc.GetDelimiterNewLineErrPrefix())
 			}
 
-			newRemainingLineLen =
-				delimiters.GetMaxErrStringLength()
-
-			return newLastStr, newLenLastStr, newRemainingLineLen
+			return nil
 		}
 		// End Of
 		//newLenLastStr +
@@ -253,16 +236,16 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	// The line length of the next write block
 	// will fit on the end of the 'lastStr'
 
-	newLastStr += delimiters.GetInLinePrefixDelimiter()
-	newLastStr += crEPrefDto.errorPrefixStr
-	newLastStr += delimiters.GetInLineContextDelimiter()
-	newLastStr += crEPrefDto.errorContextStr
-	newLenLastStr = uint(len(newLastStr))
-	newRemainingLineLen =
-		delimiters.GetMaxErrStringLength() -
-			newLenLastStr
+	newLastStr := lineLenCalc.GetCurrLineStr()
 
-	return newLastStr, newLenLastStr, newRemainingLineLen
+	newLastStr += lineLenCalc.GetDelimiterInLineErrPrefix()
+	newLastStr += lineLenCalc.GetErrorPrefixStr()
+	newLastStr += lineLenCalc.GetDelimiterInLineErrContext()
+	newLastStr += lineLenCalc.GetErrorContextStr()
+
+	lineLenCalc.SetCurrentLineStr(newLastStr)
+
+	return nil
 }
 
 // writeNewEPrefWithOutContext
@@ -271,13 +254,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 //
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 	strBuilder *strings.Builder,
-	crEPrefDto *ErrorPrefixInfo,
-	delimiters *ErrPrefixDelimiters,
-	lastStr string,
-	remainingLineLen uint) (
-	newLastStr string,
-	newLenLastStr uint,
-	newRemainingLineLen uint) {
+	lineLenCalc *EPrefixLineLenCalc) error {
 
 	if ePrefMolecule.lock == nil {
 		ePrefMolecule.lock = new(sync.Mutex)
@@ -287,168 +264,71 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 
 	defer ePrefMolecule.lock.Unlock()
 
-	newRemainingLineLen = remainingLineLen
-	newLastStr = lastStr
-	newLenLastStr = uint(len(lastStr))
+	localErrPrefix := "errPrefMolecule.writeNewEPrefWithOutContext() "
 
-	if strBuilder == nil ||
-		crEPrefDto == nil ||
-		crEPrefDto.isValid {
-		return newLastStr, newLenLastStr, newRemainingLineLen
+	if strBuilder == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is a 'nil' pointer!\n",
+			localErrPrefix)
 	}
 
-	lenEPrefWithoutContext :=
-		delimiters.GetLengthInLinePrefixDelimiter() +
-			crEPrefDto.lenErrorPrefixStr +
-			delimiters.GetLengthInLinePrefixDelimiter()
+	if lineLenCalc == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'lineLenCalc' is a 'nil' pointer!\n",
+			localErrPrefix)
+	}
 
-	createEPrefDtoQuark := errorPrefixInfoQuark{}
+	err := lineLenCalc.IsValidInstanceError(
+		localErrPrefix + "lineLenCalc\n")
 
-	if newLenLastStr > remainingLineLen {
+	if err != nil {
+		return err
+	}
+
+	ePrefNeutron := errPrefNeutron{}
+
+	if lineLenCalc.CurrLineLenExceedsMaxLineLen() {
 		// The lastStr is already longer than
-		// remaining line length
+		// than the maximum line length.
 
-		newLastStr,
-			newLenLastStr,
-			remainingLineLen =
-			createEPrefDtoQuark.writeLastStr(
+		ePrefNeutron.writeLastStr(
+			strBuilder,
+			lineLenCalc)
+	}
+
+	if lineLenCalc.EPrefWithoutContextExceedsRemainLineLen() {
+
+		if lineLenCalc.GetCurrLineStrLength() > 0 {
+
+			ePrefNeutron.writeLastStr(
 				strBuilder,
-				lastStr,
-				remainingLineLen,
-				crEPrefDto,
-				delimiters)
+				lineLenCalc)
 
-		if lenEPrefWithoutContext > remainingLineLen {
+		}
+
+		if lineLenCalc.EPrefWithoutContextExceedsRemainLineLen() {
 
 			strBuilder.WriteString(
-				crEPrefDto.errorPrefixStr)
+				lineLenCalc.GetErrorPrefixStr())
 
-			if lenEPrefWithoutContext >
-				remainingLineLen {
-
+			if !lineLenCalc.IsErrPrefixLastIndex() {
 				strBuilder.WriteString(
-					delimiters.GetNewLineContextDelimiter())
-
-				strBuilder.WriteString(
-					crEPrefDto.errorContextStr)
-
-				if !crEPrefDto.isLastIdx {
-					strBuilder.WriteString(
-						delimiters.GetNewLinePrefixDelimiter())
-				}
-
-				newRemainingLineLen =
-					delimiters.GetMaxErrStringLength()
-
-				return newLastStr, newLenLastStr, newRemainingLineLen
-				// End of lenEPrefWithoutContext >
-				//				remainingLineLen
-			} else {
-				// lenEPrefWithoutContext <= remainingLineLen
-
-				strBuilder.WriteString(
-					delimiters.GetInLinePrefixDelimiter())
-
-				strBuilder.WriteString(
-					crEPrefDto.errorContextStr)
-
-				if !crEPrefDto.isLastIdx {
-					strBuilder.WriteString(
-						delimiters.GetNewLinePrefixDelimiter())
-				}
-
-				newRemainingLineLen =
-					delimiters.GetMaxErrStringLength()
-
-				newLenLastStr = 0
-
-				newLastStr = ""
-
-			}
-			// End of if lenEPrefWithoutContext > remainingLineLen
-
-		} else {
-			// lenEPrefWithoutContext <= remainingLineLen
-			// Add the next write block to 'lastStr'
-			// Add to 'lastStr'.
-
-			newLastStr += delimiters.GetInLinePrefixDelimiter()
-
-			newLastStr += crEPrefDto.errorPrefixStr
-
-			newLenLastStr = uint(len(newLastStr))
-
-			newRemainingLineLen =
-				delimiters.GetMaxErrStringLength() -
-					newLenLastStr
-		}
-
-		return newLastStr, newLenLastStr, newRemainingLineLen
-		// End Of
-		// newLenLastStr > remainingLineLen
-	}
-
-	if newLenLastStr+
-		lenEPrefWithoutContext > remainingLineLen {
-
-		if newLenLastStr > 0 {
-			newLastStr,
-				newLenLastStr,
-				remainingLineLen =
-				createEPrefDtoQuark.writeLastStr(
-					strBuilder,
-					lastStr,
-					remainingLineLen,
-					crEPrefDto,
-					delimiters)
-
-		}
-
-		if lenEPrefWithoutContext > remainingLineLen {
-
-			strBuilder.WriteString(
-				crEPrefDto.errorPrefixStr)
-
-			if !crEPrefDto.isLastIdx {
-				strBuilder.WriteString(
-					delimiters.GetNewLinePrefixDelimiter())
+					lineLenCalc.GetDelimiterNewLineErrPrefix())
 			}
 
-			newRemainingLineLen =
-				delimiters.GetMaxErrStringLength()
-
-			newLenLastStr = 0
-
-			newLastStr = ""
-
+			return nil
 			// End of if lenEPrefWithoutContext > remainingLineLen
-		} else {
-			// lenEPrefWithoutContext <= remainingLineLen
-			// Add to 'lastStr'
-
-			newLastStr += delimiters.GetInLinePrefixDelimiter()
-			newLastStr += crEPrefDto.errorPrefixStr
-			newLenLastStr = uint(len(newLastStr))
-			newRemainingLineLen =
-				delimiters.GetMaxErrStringLength() -
-					newLenLastStr
 		}
-
-		// End Of
-		//newLenLastStr +
-		//	lenEPrefWithoutContext > remainingLineLen
-	} else {
-		//newLenLastStr +
-		//	lenEPrefWithoutContext <= remainingLineLen
-		newLastStr += delimiters.GetInLinePrefixDelimiter()
-		newLastStr += crEPrefDto.errorPrefixStr
-		newLastStr += delimiters.GetInLineContextDelimiter()
-		newLastStr += crEPrefDto.errorContextStr
-		newLenLastStr = uint(len(newLastStr))
-		newRemainingLineLen =
-			delimiters.GetMaxErrStringLength() -
-				newLenLastStr
 	}
 
-	return newLastStr, newLenLastStr, newRemainingLineLen
+	newLastStr := lineLenCalc.GetCurrLineStr()
+
+	newLastStr += lineLenCalc.GetDelimiterInLineErrPrefix()
+	newLastStr += lineLenCalc.GetErrorPrefixStr()
+	newLastStr += lineLenCalc.GetDelimiterInLineErrContext()
+	newLastStr += lineLenCalc.GetErrorContextStr()
+
+	lineLenCalc.SetCurrentLineStr(newLastStr)
+
+	return nil
 }

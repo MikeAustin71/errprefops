@@ -105,8 +105,6 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 			element.SetErrPrefixHasContext(false)
 
-			element.isValid = true
-
 			prefixContextCol = append(prefixContextCol, element)
 
 		} else {
@@ -118,8 +116,6 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 			element.SetErrContextStr(s[contextIdx+
 				idxLenInLineContextDelimiter:])
 
-			element.isValid = true
-
 			prefixContextCol = append(prefixContextCol, element)
 		}
 
@@ -130,7 +126,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 func (ePrefNeutron *errPrefNeutron) writeLastStr(
 	strBuilder *strings.Builder,
-	ePrefLineLenCalc *EPrefixLineLenCalcs) {
+	ePrefLineLenCalc *EPrefixLineLenCalc) {
 
 	if ePrefNeutron.lock == nil {
 		ePrefNeutron.lock = new(sync.Mutex)
@@ -140,28 +136,21 @@ func (ePrefNeutron *errPrefNeutron) writeLastStr(
 
 	defer ePrefNeutron.lock.Unlock()
 
-	newLastStr = lastStr
-	newLenLastStr = uint(len(lastStr))
-	newRemainingLineLen = remainingLineLen
-
 	if strBuilder == nil ||
-		crEPrefDto == nil ||
-		delimiters == nil ||
-		newLenLastStr == 0 {
-		return newLastStr, newLenLastStr, newRemainingLineLen
+		ePrefLineLenCalc == nil ||
+		!ePrefLineLenCalc.IsValidInstance() {
+		return
 	}
 
-	strBuilder.WriteString(lastStr)
+	strBuilder.WriteString(
+		ePrefLineLenCalc.GetCurrLineStr())
 
-	if !crEPrefDto.isLastIdx {
+	if !ePrefLineLenCalc.IsErrPrefixLastIndex() {
 		strBuilder.WriteString(
-			delimiters.GetNewLinePrefixDelimiter())
+			ePrefLineLenCalc.GetDelimiterNewLineErrPrefix())
 	}
 
-	newLastStr = ""
-	newLenLastStr = 0
-	newRemainingLineLen =
-		delimiters.GetMaxErrStringLength()
+	ePrefLineLenCalc.SetCurrentLineStr("")
 
-	return newLastStr, newLenLastStr, newRemainingLineLen
+	return
 }
