@@ -9,6 +9,22 @@ type ePrefixLineLenCalcQuark struct {
 	lock *sync.Mutex
 }
 
+// ptr() - Returns a pointer to a new instance of
+// ePrefixLineLenCalcQuark.
+//
+func (ePrefLineLenCalcQuark ePrefixLineLenCalcQuark) ptr() *ePrefixLineLenCalcQuark {
+
+	if ePrefLineLenCalcQuark.lock == nil {
+		ePrefLineLenCalcQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefLineLenCalcQuark.lock.Lock()
+
+	defer ePrefLineLenCalcQuark.lock.Unlock()
+
+	return &ePrefixLineLenCalcQuark{}
+}
+
 // testValidityOfEPrefixLineLenCalc - Performs a diagnostic review of
 // the input parameter 'delimiters', an instance of
 // ErrPrefixDelimiters. The purpose of this diagnostic review is to

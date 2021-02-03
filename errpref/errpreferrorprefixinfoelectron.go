@@ -236,3 +236,19 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyOut(
 
 	return newErrPrefixInfo, nil
 }
+
+// ptr() - Returns a pointer to a new instance of
+// ePrefixLineLenCalcQuark.
+//
+func (ePrefInfoElectron errorPrefixInfoElectron) ptr() *errorPrefixInfoElectron {
+
+	if ePrefInfoElectron.lock == nil {
+		ePrefInfoElectron.lock = new(sync.Mutex)
+	}
+
+	ePrefInfoElectron.lock.Lock()
+
+	defer ePrefInfoElectron.lock.Unlock()
+
+	return &errorPrefixInfoElectron{}
+}

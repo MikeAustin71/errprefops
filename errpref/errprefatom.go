@@ -168,3 +168,20 @@ func (ePrefAtom *errPrefAtom) extractLastErrPrefInSeries(
 
 	return oldErrPref, newErrPref, newErrContext
 }
+
+// ptr() - Returns a pointer to a new instance of errPrefAtom.
+//
+func (ePrefAtom errPrefAtom) ptr() *errPrefAtom {
+
+	if ePrefAtom.lock == nil {
+		ePrefAtom.lock = new(sync.Mutex)
+	}
+
+	ePrefAtom.lock.Lock()
+
+	defer ePrefAtom.lock.Unlock()
+
+	newErrPrefAtom := errPrefAtom{}
+
+	return &newErrPrefAtom
+}

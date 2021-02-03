@@ -124,7 +124,58 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 	return prefixContextCol
 }
 
-func (ePrefNeutron *errPrefNeutron) writeLastStr(
+// ptr() - Returns a pointer to a new instance of
+// errPrefNeutron.
+//
+func (ePrefNeutron errPrefNeutron) ptr() *errPrefNeutron {
+
+	if ePrefNeutron.lock == nil {
+		ePrefNeutron.lock = new(sync.Mutex)
+	}
+
+	ePrefNeutron.lock.Lock()
+
+	defer ePrefNeutron.lock.Unlock()
+
+	return &errPrefNeutron{}
+}
+
+// writeCurrentLineStr - Writes the contents of a current
+// line of error prefix and error context characters to
+// a sting builder for text display output.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder          *strings.Builder
+//     - A pointer to a string builder. The contents of the current
+//       line of text will be written to this string builder.
+//
+//
+//  ePrefLineLenCalc    *EPrefixLineLenCalc
+//     - A pointer to an instance of EPrefixLineLenCalc, the Error
+//       Prefix Line Length Calculator. This types encapsulates all
+//       the data necessary to perform line length calculations and
+//       format the error prefix and error context strings for
+//       text display output.
+//
+//       type EPrefixLineLenCalc struct {
+//         ePrefDelimiters    ErrPrefixDelimiters
+//         errorPrefixInfo    *ErrorPrefixInfo
+//         currentLineStr     string
+//         maxErrStringLength uint
+//       }
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePrefNeutron *errPrefNeutron) writeCurrentLineStr(
 	strBuilder *strings.Builder,
 	ePrefLineLenCalc *EPrefixLineLenCalc) {
 

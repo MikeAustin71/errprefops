@@ -150,6 +150,23 @@ func (ePrefMolecule *errPrefMolecule) assembleNewErrPref(
 		lenNewErrContextCleanStr
 }
 
+// ptr() - Returns a pointer to a new instance of errPrefMolecule.
+//
+func (ePrefMolecule errPrefMolecule) ptr() *errPrefMolecule {
+
+	if ePrefMolecule.lock == nil {
+		ePrefMolecule.lock = new(sync.Mutex)
+	}
+
+	ePrefMolecule.lock.Lock()
+
+	defer ePrefMolecule.lock.Unlock()
+
+	newErrPrefMolecule := errPrefMolecule{}
+
+	return &newErrPrefMolecule
+}
+
 // writeNewEPrefWithContext
 // Designed for Error Prefixes that DO have an associated error
 // context string.
@@ -193,7 +210,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 		// The lastStr is already longer than
 		// than the maximum line length.
 
-		ePrefNeutron.writeLastStr(
+		ePrefNeutron.writeCurrentLineStr(
 			strBuilder,
 			lineLenCalc)
 	}
@@ -202,7 +219,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 
 		if lineLenCalc.GetCurrLineStrLength() > 0 {
 
-			ePrefNeutron.writeLastStr(
+			ePrefNeutron.writeCurrentLineStr(
 				strBuilder,
 				lineLenCalc)
 
@@ -291,7 +308,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 		// The lastStr is already longer than
 		// than the maximum line length.
 
-		ePrefNeutron.writeLastStr(
+		ePrefNeutron.writeCurrentLineStr(
 			strBuilder,
 			lineLenCalc)
 	}
@@ -300,7 +317,7 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 
 		if lineLenCalc.GetCurrLineStrLength() > 0 {
 
-			ePrefNeutron.writeLastStr(
+			ePrefNeutron.writeCurrentLineStr(
 				strBuilder,
 				lineLenCalc)
 

@@ -175,3 +175,19 @@ func (ePrefElectron *errPrefElectron) getDelimiters() (
 
 	return delimiters
 }
+
+// ptr() - Returns a pointer to a new instance of
+// errPrefElectron.
+//
+func (ePrefElectron errPrefElectron) ptr() *errPrefElectron {
+
+	if ePrefElectron.lock == nil {
+		ePrefElectron.lock = new(sync.Mutex)
+	}
+
+	ePrefElectron.lock.Lock()
+
+	defer ePrefElectron.lock.Unlock()
+
+	return &errPrefElectron{}
+}
