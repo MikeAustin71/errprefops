@@ -20,6 +20,103 @@ type EPrefixLineLenCalc struct {
 	lock               *sync.Mutex
 }
 
+// EPrefNoContextExceedsRemainLineLen - Returns 'true' if the
+// length of the in-line of in-line error prefix delimiter plus the
+// length of the error prefix string exceeds the remaining unused
+// line length.
+//
+//   in-line error prefix delimiter +
+//   error prefix   > Remaining line Length
+//    This method returns 'true'.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefNoContextExceedsRemainLineLen() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	var errPrefixLen uint
+
+	errPrefixLen =
+		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
+			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
+
+	currLineLen :=
+		uint(len(ePrefixLineLenCalc.currentLineStr))
+
+	if currLineLen > ePrefixLineLenCalc.maxErrStringLength {
+		return true
+	}
+
+	remainingLineLen :=
+		ePrefixLineLenCalc.maxErrStringLength -
+			currLineLen
+
+	if errPrefixLen > remainingLineLen {
+		return true
+	}
+
+	return false
+}
+
+// EPrefixWithContextExceedsRemainLineLen - Returns 'true' if the
+// combination of in-line error prefix delimiter plus error prefix
+// plus in-line error context delimiter plus error context string
+// exceeds the remaining unused line length.
+//
+//   in-line error prefix delimiter +
+//   error prefix +
+//   in-line error context delimiter +
+//   error context                     > Remaining line Length
+//    This method returns 'true'.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefixWithContextExceedsRemainLineLen() bool {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	var prefixWithContextLen uint
+
+	prefixWithContextLen =
+		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
+			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
+
+	if ePrefixLineLenCalc.errorPrefixInfo.GetErrPrefixHasContextStr() {
+
+		prefixWithContextLen +=
+			ePrefixLineLenCalc.ePrefDelimiters.
+				GetLengthInLineContextDelimiter() +
+				ePrefixLineLenCalc.errorPrefixInfo.
+					GetLengthErrContextStr()
+	}
+
+	currLineLen :=
+		uint(len(ePrefixLineLenCalc.currentLineStr))
+
+	if currLineLen > ePrefixLineLenCalc.maxErrStringLength {
+		return true
+	}
+
+	remainingLineLen :=
+		ePrefixLineLenCalc.maxErrStringLength -
+			currLineLen
+
+	if prefixWithContextLen > remainingLineLen {
+		return true
+	}
+
+	return false
+}
+
 // CurrLineLenExceedsMaxLineLen - If the length of the Current Line
 // String (EPrefixLineLenCalc.currentLineStr) is greater than the
 // Maximum Error String Length (EPrefixLineLenCalc.maxErrStringLength),
