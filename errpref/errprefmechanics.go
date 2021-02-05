@@ -163,10 +163,8 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 
 	defer ePrefMech.lock.Unlock()
 
-	ePrefQuark := errPrefQuark{}
-
 	if maxErrStringLength == 0 {
-		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
+		maxErrStringLength = errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 	}
 	localErrPrefix := "errPrefMechanics.formatErrPrefix() "
 
@@ -181,7 +179,24 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 			"len(prefixContextCol)==0\n"
 	}
 
-	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
-		maxErrStringLength,
-		prefixContextCol)
+	return errPrefNanobot{}.ptr().
+		formatErrPrefixComponents(
+			maxErrStringLength,
+			prefixContextCol)
+}
+
+// ptr() - Returns a pointer to a new instance of
+// errPrefMechanics.
+//
+func (ePrefMech errPrefMechanics) ptr() *errPrefMechanics {
+
+	if ePrefMech.lock == nil {
+		ePrefMech.lock = new(sync.Mutex)
+	}
+
+	ePrefMech.lock.Lock()
+
+	defer ePrefMech.lock.Unlock()
+
+	return &errPrefMechanics{}
 }
