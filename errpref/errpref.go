@@ -29,90 +29,6 @@ type ErrPref struct {
 	lock                       *sync.Mutex
 }
 
-// AddContext - Adds error context string to a pre-existing error
-// prefix.
-//
-// Error prefix text is designed to be configured at the beginning
-// of error messages and is most often used to document the thread
-// of code execution by listing the calling sequence for a specific
-// list of functions and methods.
-//
-// The error context string is designed to provide additional
-// error context information associated with the currently
-// executing function or method. Typical context information
-// might include variable names, variable values and additional
-// details on function execution.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  errPref             string
-//     - A string containing error prefixes in series. This method
-//       will add an error context string to the last error prefix
-//       string in this series.
-//
-//
-//  errContext          string
-//     - This is the error context information that will be added
-//       and associated with the last error prefix in the error
-//       prefix string, 'errPref'.
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  string
-//     - Returns a string consisting of a revised series of error
-//       prefixes. This string is identical to input parameter,
-//       'errPref' except that the error context information
-//       provided by input parameter 'newErrContext' has been
-//       attached to the last error prefix in 'errPref'.
-//
-//
-func (ePref ErrPref) AddContext(
-	errPref string,
-	newErrContext string) string {
-
-	if ePref.lock == nil {
-		ePref.lock = new(sync.Mutex)
-	}
-
-	ePref.lock.Lock()
-
-	defer ePref.lock.Unlock()
-
-	ePrefQuark := errPrefQuark{}
-
-	ePref.maxErrPrefixTextLineLength =
-		ePrefQuark.getErrPrefDisplayLineLength()
-
-	if len(newErrContext) == 0 {
-		return errPref
-	}
-
-	ePrefAtom := errPrefAtom{}
-
-	oldErrPref,
-		newErrPref,
-		lastErrContext :=
-		ePrefAtom.extractLastErrPrefInSeries(errPref)
-
-	if len(lastErrContext) > 0 {
-		newErrContext += " " + lastErrContext
-	}
-
-	ePrefMech := errPrefMechanics{}
-
-	return ePrefMech.assembleErrPrefix(
-		oldErrPref,
-		newErrPref,
-		newErrContext,
-		ePref.maxErrPrefixTextLineLength)
-}
-
 // ConvertNonPrintableChars - Receives a string containing
 // non-printable characters and converts them to 'printable'
 // characters returned in a string.
@@ -337,21 +253,18 @@ func (ePref ErrPref) NewErrPref(
 
 	defer ePref.lock.Unlock()
 
-	ePrefQuark := errPrefQuark{}
-
 	ePref.maxErrPrefixTextLineLength =
-		ePrefQuark.getErrPrefDisplayLineLength()
+		errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 
-	ePrefMech := errPrefMechanics{}
-
-	return ePrefMech.assembleErrPrefix(
-		oldErrPref,
-		newErrPref,
-		"",
-		ePref.maxErrPrefixTextLineLength)
+	return errPrefMechanics{}.ptr().
+		assembleErrPrefix(
+			oldErrPref,
+			newErrPref,
+			"",
+			ePref.maxErrPrefixTextLineLength)
 }
 
-// NewContext - Receives an old error prefix, new error prefix and
+// NewCtxt - Receives an old error prefix, new error prefix and
 // a new context string which are concatenated and returned as a
 // combined string.
 //
@@ -409,14 +322,14 @@ func (ePref ErrPref) NewErrPref(
 //
 // Usage Examples
 //
-//  errorPrefix = ErrPref{}.NewContext(
+//  errorPrefix = ErrPref{}.NewCtxt(
 //                           errorPrefix, // Assuming this is the old
 //                                        // error prefix
 //                           newErrPref,
 //                           newContext)
 //
 //
-func (ePref ErrPref) NewContext(
+func (ePref ErrPref) NewCtxt(
 	oldErrPref string,
 	newErrPref string,
 	newContext string) string {
@@ -440,6 +353,90 @@ func (ePref ErrPref) NewContext(
 		oldErrPref,
 		newErrPref,
 		newContext,
+		ePref.maxErrPrefixTextLineLength)
+}
+
+// SetCtxt - Sets or resets the error context for the last error
+// prefix. This operation either adds, or replaces, the error
+// context string associated with the last error prefix in input
+// parameter, 'oldErrPref'.
+//
+// If the last error prefix already has an error context string, it
+// will be replaced by input parameter, 'newErrContext'.
+//
+// If the last error prefix does NOT have an associated error
+// context, this new error context string will be associated
+// with that error prefix.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  oldErrPref          string
+//     - This includes the previous error prefix string. This error
+//       prefix string is comprised of a series of error prefix
+//       and error context pairs. The new error context string will
+//       be configured and associated with the last error prefix in
+//       this series of error prefixes.
+//
+//  newErrContext       string
+//     - This string holds the new error context information. If
+//       the last error prefix in 'oldErrPref' already has an
+//       associated error context, that context will be deleted and
+//       replaced by 'newErrContext'. If, however, the last error
+//       prefix in 'oldErrPref' does NOT have an associated error
+//       context, this 'newErrContext' string will be added and
+//       associated with the last error prefix in 'oldErrPref'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePref ErrPref) SetCtxt(
+	oldErrPref string,
+	newErrContext string) string {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	ePrefQuark := errPrefQuark{}
+
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
+
+	// Must have at least one error prefix
+	// before you can add an error context
+
+	if len(oldErrPref) == 0 {
+		return oldErrPref
+	}
+
+	if len(newErrContext) == 0 {
+		return oldErrPref
+	}
+
+	ePrefMech := errPrefMechanics{}
+
+	return ePrefMech.setErrorContext(
+		oldErrPref,
+		newErrContext,
 		ePref.maxErrPrefixTextLineLength)
 }
 

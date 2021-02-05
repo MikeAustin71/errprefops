@@ -10,16 +10,16 @@ func TestNewErrPref_0010(t *testing.T) {
 
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
 
-	ePrefix = ErrPref{}.AddContext(ePrefix, "something->newSomething")
+	ePrefix = ErrPref{}.SetCtxt(ePrefix, "something->newSomething")
 
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
-	ePrefix = ErrPref{}.AddContext(ePrefix, "x->y")
+	ePrefix = ErrPref{}.SetCtxt(ePrefix, "x->y")
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
 	ePrefix = ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
-	ePrefix = ErrPref{}.NewContext(
+	ePrefix = ErrPref{}.NewCtxt(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")

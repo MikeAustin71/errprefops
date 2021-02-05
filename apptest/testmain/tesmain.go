@@ -16,31 +16,31 @@ func (tMain *TestMain) TestMain004() {
 		"",
 		"TestMain004()")
 
-	ePrefix := errpref.ErrPref{}.NewContext("",
+	ePrefix := errpref.ErrPref{}.NewCtxt("",
 		"Tx1.Something()",
 		"A->B")
 
-	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+	ePrefix = errpref.ErrPref{}.NewCtxt(ePrefix,
 		"Tx2.SomethingElse()",
 		"(A+B)")
 
-	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+	ePrefix = errpref.ErrPref{}.NewCtxt(ePrefix,
 		"Tx3.DoSomething()",
 		"(A+B) + C = 9")
 
-	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+	ePrefix = errpref.ErrPref{}.NewCtxt(ePrefix,
 		"Tx4()",
 		"Copy (A+B) -> C")
 
-	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+	ePrefix = errpref.ErrPref{}.NewCtxt(ePrefix,
 		"Tx5.MoreAwesomeGoodness()",
 		"(A+B) x C = D")
 
-	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+	ePrefix = errpref.ErrPref{}.NewCtxt(ePrefix,
 		"Tx6.SomeFabulousAndComplexStuff()",
 		"(A+B)^C = C x E")
 
-	ePrefix = errpref.ErrPref{}.NewContext(ePrefix,
+	ePrefix = errpref.ErrPref{}.NewCtxt(ePrefix,
 		"Tx8.TryAHammer()",
 		"ErrNo: 5007-6004-9175")
 	fmt.Println()
@@ -88,16 +88,16 @@ func (tMain *TestMain) TestMain003() (
 
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
 
-	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "something->newSomething")
+	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "something->newSomething")
 
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
-	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "x->y")
+	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "x->y")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
-	ePrefix = errpref.ErrPref{}.NewContext(
+	ePrefix = errpref.ErrPref{}.NewCtxt(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")
@@ -134,16 +134,16 @@ func (tMain *TestMain) TestMain001() {
 
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
 
-	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "something->newSomething")
+	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "something->newSomething")
 
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
-	ePrefix = errpref.ErrPref{}.AddContext(ePrefix, "x->y")
+	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "x->y")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
 	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
-	ePrefix = errpref.ErrPref{}.NewContext(
+	ePrefix = errpref.ErrPref{}.NewCtxt(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")

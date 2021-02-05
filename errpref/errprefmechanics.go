@@ -200,3 +200,70 @@ func (ePrefMech errPrefMechanics) ptr() *errPrefMechanics {
 
 	return &errPrefMechanics{}
 }
+
+func (ePrefMech *errPrefMechanics) setErrorContext(
+	oldErrPref string,
+	newErrContext string,
+	maxErrStringLength uint) string {
+
+	if ePrefMech.lock == nil {
+		ePrefMech.lock = new(sync.Mutex)
+	}
+
+	ePrefMech.lock.Lock()
+
+	defer ePrefMech.lock.Unlock()
+
+	if maxErrStringLength == 0 {
+		maxErrStringLength =
+			errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
+	}
+
+	var (
+		lenOldErrPrefCleanStr,
+		lenNewErrContextCleanStr,
+		lenPrefixContextCol int
+	)
+
+	ePrefElectron := errPrefElectron{}
+
+	oldErrPref,
+		lenOldErrPrefCleanStr =
+		ePrefElectron.cleanErrorPrefixStr(oldErrPref)
+
+	if lenOldErrPrefCleanStr == 0 {
+		return ""
+	}
+
+	newErrContext,
+		lenNewErrContextCleanStr =
+		ePrefElectron.cleanErrorContextStr(newErrContext)
+
+	if lenNewErrContextCleanStr == 0 {
+		return oldErrPref
+	}
+
+	var prefixContextCol []ErrorPrefixInfo
+
+	prefixContextCol =
+		errPrefNeutron{}.ptr().getEPrefContextArray(
+			oldErrPref)
+
+	lenPrefixContextCol = len(prefixContextCol)
+
+	if lenPrefixContextCol == 0 {
+		return ""
+	}
+
+	lenPrefixContextCol--
+
+	prefixContextCol[lenPrefixContextCol].
+		SetErrPrefixHasContext(true)
+
+	prefixContextCol[lenPrefixContextCol].
+		SetErrContextStr(newErrContext)
+
+	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
+		maxErrStringLength,
+		prefixContextCol)
+}
