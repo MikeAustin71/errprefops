@@ -69,7 +69,6 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 	defer ePrefMech.lock.Unlock()
 
-
 	if maxErrStringLength == 0 {
 		maxErrStringLength =
 			errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
@@ -91,14 +90,13 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 		lenNewErrPrefCleanStr =
 		ePrefElectron.cleanErrorPrefixStr(newErrPref)
 
-		if lenOldErrPrefCleanStr +
-			lenNewErrPrefCleanStr == 0 {
+	if lenOldErrPrefCleanStr+
+		lenNewErrPrefCleanStr == 0 {
 
-
-			return "Error: Cleaned Old Error Prefix and" +
-					" Cleaned New Error Prefix\n" +
-					"strings have zero string length!\n"
-		}
+		return "Error: Cleaned Old Error Prefix and" +
+			" Cleaned New Error Prefix\n" +
+			"strings have zero string length!\n"
+	}
 
 	newContext,
 		lenNewErrContextCleanStr =
@@ -106,7 +104,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 	var prefixContextCol []ErrorPrefixInfo
 
-		var lenPrefixContextCol int
+	var lenPrefixContextCol int
 
 	prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
 
@@ -126,26 +124,31 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 				SetIsLastIndex(false)
 
 		}
+
 	}
 
-	 newErrPrefInfo :=  ErrorPrefixInfo{}
+	newErrPrefInfo := ErrorPrefixInfo{}
 
-	 newErrPrefInfo.SetIsLastIndex(true)
-	 newErrPrefInfo.SetErrPrefixStr(newErrPref)
+	newErrPrefInfo.SetIsLastIndex(true)
+	newErrPrefInfo.SetErrPrefixStr(newErrPref)
 
-	 if lenNewErrContextCleanStr > 0 {
-		 newErrPrefInfo.SetErrPrefixHasContext(true)
-		 newErrPrefInfo.SetErrContextStr(newContext)
-	 } else {
-		 newErrPrefInfo.SetErrPrefixHasContext(false)
-	 }
+	if lenNewErrContextCleanStr > 0 {
 
-	prefixContextCol = append(prefixContextCol,newErrPrefInfo)
+		newErrPrefInfo.SetErrPrefixHasContext(true)
+		newErrPrefInfo.SetErrContextStr(newContext)
+
+	} else {
+
+		newErrPrefInfo.SetErrPrefixHasContext(false)
+
+	}
+
+	prefixContextCol = append(prefixContextCol, newErrPrefInfo)
 
 	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
 		maxErrStringLength,
-		prefixContextCol)}
-
+		prefixContextCol)
+}
 
 // formatErrPrefix - Returns a string of formatted error prefix information
 func (ePrefMech *errPrefMechanics) formatErrPrefix(
@@ -182,4 +185,3 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 		maxErrStringLength,
 		prefixContextCol)
 }
-
