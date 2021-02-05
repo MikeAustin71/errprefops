@@ -227,10 +227,8 @@ func (ePref ErrPref) FmtString(errPref string) string {
 
 	defer ePref.lock.Unlock()
 
-	ePrefQuark := errPrefQuark{}
-
 	ePref.maxErrPrefixTextLineLength =
-		ePrefQuark.getErrPrefDisplayLineLength()
+		errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 
 	ePrefNanobot := errPrefNanobot{}
 

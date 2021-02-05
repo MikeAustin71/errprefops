@@ -275,10 +275,12 @@ type errPrefNanobot struct {
 //	return b1.String()
 //}
 
-// formatErrPrefix - Returns a string of formatted error prefix information
-func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
+// formatErrPrefixComponents - Returns a string of formatted error
+// prefix information based on an array of error prefix elements.
+//
+func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 	maxErrStringLength uint,
-	errPrefix string) string {
+	prefixContextCol []ErrorPrefixInfo) string {
 
 	if ePrefNanobot.lock == nil {
 		ePrefNanobot.lock = new(sync.Mutex)
@@ -288,18 +290,9 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 
 	defer ePrefNanobot.lock.Unlock()
 
-	ePrefQuark := errPrefQuark{}
 
-	if maxErrStringLength == 0 {
-		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
-	}
-	localErrPrefix := "errPrefNanobot.formatErrPrefix() "
 
-	ePrefNeutron := errPrefNeutron{}
-
-	prefixContextCol :=
-		ePrefNeutron.getEPrefContextArray(
-			errPrefix)
+	localErrPrefix := "errPrefNanobot.formatErrPrefixComponents() "
 
 	lenPrefixContextCol := len(prefixContextCol)
 
@@ -308,11 +301,16 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 			"len(prefixContextCol)==0\n"
 	}
 
-	ePrefElectron := errPrefElectron{}
+	if maxErrStringLength == 0 {
+		maxErrStringLength =
+			errPrefQuark{}.ptr().
+				getErrPrefDisplayLineLength()
+	}
 
-	delimiters := ePrefElectron.getDelimiters()
+	delimiters := errPrefElectron{}.
+		ptr().getDelimiters()
 
-	lineLenCalculator := EPrefixLineLenCalc{}.Ptr()
+	lineLenCalculator := EPrefixLineLenCalc{}
 
 	err :=
 		lineLenCalculator.SetEPrefDelimiters(
@@ -326,11 +324,9 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 	lineLenCalculator.SetMaxErrStringLength(
 		maxErrStringLength)
 
-	errPrefixStrLen := len(errPrefix)
-
 	var b1 strings.Builder
 
-	b1.Grow(errPrefixStrLen + 512)
+	b1.Grow(1024)
 
 	lineLenCalculator.SetCurrentLineStr("")
 
@@ -365,13 +361,22 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 
 			err = ePrefMolecule.writeNewEPrefWithContext(
 				&b1,
-				lineLenCalculator)
+				&lineLenCalculator)
 
 			if err != nil {
 				return err.Error()
 			}
 
 			continue
+		} else {
+
+			err = ePrefMolecule.writeNewEPrefWithOutContext(
+				&b1,
+				&lineLenCalculator)
+
+			if err != nil {
+				return err.Error()
+			}
 		}
 
 	}
@@ -381,4 +386,20 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefix(
 	//}
 
 	return b1.String()
+}
+
+// ptr() - Returns a pointer to a new instance of
+// errPrefNanobot.
+//
+func (ePrefNanobot errPrefNanobot) ptr() *errPrefNanobot {
+
+	if ePrefNanobot.lock == nil {
+		ePrefNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefNanobot.lock.Lock()
+
+	defer ePrefNanobot.lock.Unlock()
+
+	return &errPrefNanobot{}
 }

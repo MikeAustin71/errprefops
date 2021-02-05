@@ -1,6 +1,8 @@
 package errpref
 
-import "sync"
+import (
+	"sync"
+)
 
 type errPrefMechanics struct {
 	lock *sync.Mutex
@@ -47,7 +49,7 @@ type errPrefMechanics struct {
 //
 // Return Values
 //
-//  consolidatedOldNewErrPref     string
+//  string
 //     - This method will concatenate the old error prefix, new
 //       error prefix and the new error context. This consolidated
 //       error prefix will then be returned to the calling
@@ -57,8 +59,98 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 	oldErrPref string,
 	newErrPref string,
 	newContext string,
-	maxErrStringLength uint) (
-	consolidatedOldNewErrPref string) {
+	maxErrStringLength uint) string {
+
+	if ePrefMech.lock == nil {
+		ePrefMech.lock = new(sync.Mutex)
+	}
+
+	ePrefMech.lock.Lock()
+
+	defer ePrefMech.lock.Unlock()
+
+
+	if maxErrStringLength == 0 {
+		maxErrStringLength =
+			errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
+	}
+
+	var (
+		lenOldErrPrefCleanStr,
+		lenNewErrContextCleanStr,
+		lenNewErrPrefCleanStr int
+	)
+
+	ePrefElectron := errPrefElectron{}
+
+	oldErrPref,
+		lenOldErrPrefCleanStr =
+		ePrefElectron.cleanErrorPrefixStr(oldErrPref)
+
+	newErrPref,
+		lenNewErrPrefCleanStr =
+		ePrefElectron.cleanErrorPrefixStr(newErrPref)
+
+		if lenOldErrPrefCleanStr +
+			lenNewErrPrefCleanStr == 0 {
+
+
+			return "Error: Cleaned Old Error Prefix and" +
+					" Cleaned New Error Prefix\n" +
+					"strings have zero string length!\n"
+		}
+
+	newContext,
+		lenNewErrContextCleanStr =
+		ePrefElectron.cleanErrorContextStr(newContext)
+
+	var prefixContextCol []ErrorPrefixInfo
+
+		var lenPrefixContextCol int
+
+	prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
+
+	lenPrefixContextCol = 0
+
+	if lenOldErrPrefCleanStr > 0 {
+
+		prefixContextCol =
+			errPrefNeutron{}.ptr().getEPrefContextArray(
+				oldErrPref)
+
+		lenPrefixContextCol = len(prefixContextCol)
+
+		if lenPrefixContextCol > 0 {
+
+			prefixContextCol[lenPrefixContextCol-1].
+				SetIsLastIndex(false)
+
+		}
+	}
+
+	 newErrPrefInfo :=  ErrorPrefixInfo{}
+
+	 newErrPrefInfo.SetIsLastIndex(true)
+	 newErrPrefInfo.SetErrPrefixStr(newErrPref)
+
+	 if lenNewErrContextCleanStr > 0 {
+		 newErrPrefInfo.SetErrPrefixHasContext(true)
+		 newErrPrefInfo.SetErrContextStr(newContext)
+	 } else {
+		 newErrPrefInfo.SetErrPrefixHasContext(false)
+	 }
+
+	prefixContextCol = append(prefixContextCol,newErrPrefInfo)
+
+	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
+		maxErrStringLength,
+		prefixContextCol)}
+
+
+// formatErrPrefix - Returns a string of formatted error prefix information
+func (ePrefMech *errPrefMechanics) formatErrPrefix(
+	maxErrStringLength uint,
+	errPrefix string) string {
 
 	if ePrefMech.lock == nil {
 		ePrefMech.lock = new(sync.Mutex)
@@ -71,76 +163,23 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 	ePrefQuark := errPrefQuark{}
 
 	if maxErrStringLength == 0 {
-		maxErrStringLength =
-			ePrefQuark.getErrPrefDisplayLineLength()
+		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
+	}
+	localErrPrefix := "errPrefMechanics.formatErrPrefix() "
+
+	prefixContextCol :=
+		errPrefNeutron{}.ptr().getEPrefContextArray(
+			errPrefix)
+
+	lenPrefixContextCol := len(prefixContextCol)
+
+	if lenPrefixContextCol == 0 {
+		return localErrPrefix +
+			"len(prefixContextCol)==0\n"
 	}
 
-	ePrefElectron := errPrefElectron{}
-
-	delimiters := ePrefElectron.getDelimiters()
-
-	if maxErrStringLength != delimiters.GetMaxErrStringLength() {
-		delimiters.SetMaxErrStringLength(maxErrStringLength)
-	}
-
-	var lenOldErrPrefCleanStr,
-		lenNewErrPrefCleanStr int
-
-	oldErrPref,
-		lenOldErrPrefCleanStr =
-		ePrefElectron.cleanErrorPrefixStr(oldErrPref)
-
-	ePrefMolecule := errPrefMolecule{}
-
-	newErrPref,
-		lenNewErrPrefCleanStr,
-		_,
-		_ =
-		ePrefMolecule.assembleNewErrPref(
-			newErrPref,
-			newContext,
-			maxErrStringLength)
-
-	if lenOldErrPrefCleanStr == 0 &&
-		lenNewErrPrefCleanStr == 0 {
-
-		consolidatedOldNewErrPref = ""
-
-	} else if lenOldErrPrefCleanStr == 0 &&
-		lenNewErrPrefCleanStr > 0 {
-
-		consolidatedOldNewErrPref =
-			newErrPref
-
-	} else if lenOldErrPrefCleanStr > 0 &&
-		lenNewErrPrefCleanStr == 0 {
-
-		consolidatedOldNewErrPref =
-			oldErrPref
-
-	} else {
-		//lenOldErrPrefCleanStr > 0 &&
-		//lenNewErrPrefCleanStr > 0
-
-		if uint(lenOldErrPrefCleanStr+
-			lenNewErrPrefCleanStr+3) >
-			maxErrStringLength {
-
-			consolidatedOldNewErrPref =
-				oldErrPref +
-					delimiters.GetNewLinePrefixDelimiter() +
-					newErrPref
-
-		} else {
-			//uint(lenOldErrPrefCleanStr +
-			//	lenNewErrPrefCleanStr + 3) <=
-			//		maxErrPrefixTextLineLength
-			consolidatedOldNewErrPref =
-				oldErrPref +
-					delimiters.GetInLinePrefixDelimiter() +
-					newErrPref
-		}
-	}
-
-	return consolidatedOldNewErrPref
+	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
+		maxErrStringLength,
+		prefixContextCol)
 }
+

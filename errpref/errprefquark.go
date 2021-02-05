@@ -251,6 +251,22 @@ func (ePrefQuark *errPrefQuark) isEmptyOrWhiteSpace(
 	return true
 }
 
+// ptr() - Returns a pointer to a new instance of
+// errPrefQuark.
+//
+func (ePrefQuark errPrefQuark) ptr() *errPrefQuark {
+
+	if ePrefQuark.lock == nil {
+		ePrefQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefQuark.lock.Lock()
+
+	defer ePrefQuark.lock.Unlock()
+
+	return &errPrefQuark{}
+}
+
 // setErrPrefDisplayLineLength - Sets the value of the maximum
 // error prefix line length. This maximum limit controls the length
 // of text lines produced for display of error prefix information.

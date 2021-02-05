@@ -94,9 +94,9 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		element := ErrorPrefixInfo{}.New()
 
 		if isLastIdx {
-			element.isLastIdx = true
+			element.SetIsLastIndex(true)
 		} else {
-			element.isLastIdx = false
+			element.SetIsLastIndex(false)
 		}
 
 		if contextIdx == -1 {
