@@ -167,9 +167,40 @@ func (ePrefMolecule errPrefMolecule) ptr() *errPrefMolecule {
 	return &newErrPrefMolecule
 }
 
-// writeNewEPrefWithContext
-// Designed for Error Prefixes that DO have an associated error
-// context string.
+// writeNewEPrefWithContext - Writes Error Prefix strings to a
+// string builder. This algorithm is designed for Error Prefixes
+// that DO have an associated error context string.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder          *strings.Builder
+//     - This method will write output characters to this string
+//       builder.
+//
+//
+//  lineLenCalc         *EPrefixLineLenCalc
+//     - Pointer to an instance of EPrefixLineLenCalc. This object
+//       contains all the data and line length calculations
+//       necessary to format the error prefix string and associated
+//       error context information. The formatted string will be
+//       written to the string builder object passed through input
+//       parameter 'strBuilder'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the current instance of NumStrFmtSpecCurrencyValueDto
+//       contains invalid data, a detailed error message will be
+//       returned identifying the invalid data item.
+//
+//       If the current instance is valid, this error parameter
+//       will be set to nil.
 //
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	strBuilder *strings.Builder,
@@ -265,9 +296,40 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	return nil
 }
 
-// writeNewEPrefWithOutContext
-// Designed for Error Prefixes that do NOT have an associated error
-// context string.
+// writeNewEPrefWithOutContext - Writes Error Prefix strings to a
+// string builder. This algorithm is designed for Error Prefixes
+// that do NOT have an associated error context string.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  strBuilder          *strings.Builder
+//     - This method will write output characters to this string
+//       builder.
+//
+//
+//  lineLenCalc         *EPrefixLineLenCalc
+//     - Pointer to an instance of EPrefixLineLenCalc. This object
+//       contains all the data and line length calculations
+//       necessary to format the error prefix string and associated
+//       error context information. The formatted string will be
+//       written to the string builder object passed through input
+//       parameter 'strBuilder'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If the current instance of NumStrFmtSpecCurrencyValueDto
+//       contains invalid data, a detailed error message will be
+//       returned identifying the invalid data item.
+//
+//       If the current instance is valid, this error parameter
+//       will be set to nil.
 //
 func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 	strBuilder *strings.Builder,
