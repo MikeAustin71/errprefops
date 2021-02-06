@@ -172,7 +172,7 @@ func (ePrefElectron *errPrefElectron) getDelimiters() (
 
 	delimiters.SetInLineContextDelimiter(" : ")
 
-	delimiters.SetNewLineContextDelimiter("\n : ")
+	delimiters.SetNewLineContextDelimiter("\n :  ")
 
 	return delimiters
 }
