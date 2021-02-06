@@ -283,10 +283,16 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 	//	lenEPrefWithContext <= remainingLineLen
 	// The line length of the next write block
 	// will fit on the end of the 'lastStr'
+	newLastStr := ""
 
-	newLastStr := lineLenCalc.GetCurrLineStr()
+	if lineLenCalc.GetCurrLineStrLength() > 0 {
 
-	newLastStr += lineLenCalc.GetDelimiterInLineErrPrefix()
+		newLastStr = lineLenCalc.GetCurrLineStr()
+
+		newLastStr += lineLenCalc.GetDelimiterInLineErrPrefix()
+
+	}
+
 	newLastStr += lineLenCalc.GetErrorPrefixStr()
 	newLastStr += lineLenCalc.GetDelimiterInLineErrContext()
 	newLastStr += lineLenCalc.GetErrorContextStr()
