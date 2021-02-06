@@ -12,7 +12,7 @@ type TestMain struct {
 
 func (tMain *TestMain) TestMain004() {
 
-	xPref := errpref.ErrPref{}.NewErrPref(
+	xPref := errpref.ErrPref{}.NewEPref(
 		"",
 		"TestMain004()")
 
@@ -60,7 +60,7 @@ func (tMain *TestMain) TestMain004() {
 	fmt.Println("--------------------------------------------------")
 	fmt.Println()
 
-	ePrefix = errpref.ErrPref{}.FmtString(ePrefix)
+	ePrefix = errpref.ErrPref{}.FmtStr(ePrefix)
 
 	printableStr =
 		tm2.ConvertNonPrintableChars([]rune(ePrefix), true, "")
@@ -86,23 +86,23 @@ func (tMain *TestMain) TestMain003() (
 
 	errpref.ErrPref{}.SetMaxErrPrefTextLineLength(60)
 
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx7.TrySomethingNew()")
 
 	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "something->newSomething")
 
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx8.TryAnyCombination()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx9.TryAHammer()")
 	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "x->y")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx10.X()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx11.TryAnything()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx12.TryASalad()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
 	ePrefix = errpref.ErrPref{}.NewCtxt(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")
 
-	ePrefix = errpref.ErrPref{}.FmtString(ePrefix)
+	ePrefix = errpref.ErrPref{}.FmtStr(ePrefix)
 
 	fmt.Printf(ePrefix)
 
@@ -132,23 +132,23 @@ func (tMain *TestMain) TestMain001() {
 
 	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx7.TrySomethingNew()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx7.TrySomethingNew()")
 
 	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "something->newSomething")
 
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx8.TryAnyCombination()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx9.TryAHammer()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx8.TryAnyCombination()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx9.TryAHammer()")
 	ePrefix = errpref.ErrPref{}.SetCtxt(ePrefix, "x->y")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx10.X()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx11.TryAnything()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx12.TryASalad()")
-	ePrefix = errpref.ErrPref{}.NewErrPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx10.X()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx11.TryAnything()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx12.TryASalad()")
+	ePrefix = errpref.ErrPref{}.NewEPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
 	ePrefix = errpref.ErrPref{}.NewCtxt(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")
 
-	ePrefix = errpref.ErrPref{}.FmtString(ePrefix)
+	ePrefix = errpref.ErrPref{}.FmtStr(ePrefix)
 
 	fmt.Printf(ePrefix)
 

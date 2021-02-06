@@ -118,7 +118,7 @@ func (ePref ErrPref) ConvertNonPrintableChars(
 	return printableChars
 }
 
-// FmtString - Returns a formatted text representation of all error
+// FmtStr - Returns a formatted text representation of all error
 // prefix and error context information contained in the input
 // parameter string, 'errPref'.
 //
@@ -133,7 +133,7 @@ func (ePref ErrPref) ConvertNonPrintableChars(
 // might include variable names, variable values and further
 // details on function execution.
 //
-func (ePref ErrPref) FmtString(errPref string) string {
+func (ePref ErrPref) FmtStr(errPref string) string {
 
 	if ePref.lock == nil {
 		ePref.lock = new(sync.Mutex)
@@ -194,7 +194,7 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 	return maxErrPrefixStringLength
 }
 
-// NewErrPref - Returns a string concatenating the old error prefix the
+// NewEPref - Returns a string concatenating the old error prefix the
 // new custom, user-defined error prefix. The new error prefix is
 // typically used to document method or function chains in error
 // messages.
@@ -241,7 +241,7 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 //       sequence for specific functions and methods.
 //
 //
-func (ePref ErrPref) NewErrPref(
+func (ePref ErrPref) NewEPref(
 	oldErrPref string,
 	newErrPref string) string {
 
