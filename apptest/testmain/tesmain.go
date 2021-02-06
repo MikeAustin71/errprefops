@@ -10,14 +10,15 @@ type TestMain struct {
 	testStr01 string
 }
 
-func (tMain *TestMain) TestMain005() {
+func (tMain *TestMain) TestMain006() {
 
-	funcName := "TestMain005()"
+	funcName := "TestMain006()"
 
 	initialStr :=
-		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
+		"Tx1.Something() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()\nTx6.DoSomethingElse()\n"
 
-	outputStr := errpref.ErrPref{}.FmtStr(
+	actualStr := errpref.ErrPref{}.FmtStr(
 		initialStr)
 
 	fmt.Println()
@@ -32,7 +33,59 @@ func (tMain *TestMain) TestMain005() {
 	fmt.Println("--------------------------------------------------")
 	fmt.Println()
 	fmt.Println("Formatted String With Non-Printable Characters")
-	fmt.Println(outputStr)
+	fmt.Println(actualStr)
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Initial String With Printable Characters")
+
+	tMain2 := TestMain{}
+
+	initialStr = tMain2.ConvertNonPrintableChars(
+		[]rune(initialStr), true, funcName)
+	fmt.Println(initialStr)
+	fmt.Println()
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Printable Characters")
+
+	actualStr = tMain2.ConvertNonPrintableChars(
+		[]rune(actualStr), true, funcName)
+	fmt.Println(actualStr)
+	fmt.Println()
+
+	fmt.Println()
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Comparison: 'actualStr' vs expectedStr")
+	fmt.Println(actualStr)
+	fmt.Println(initialStr)
+	fmt.Println()
+
+}
+func (tMain *TestMain) TestMain005() {
+
+	funcName := "TestMain005()"
+
+	initialStr :=
+		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
+
+	actualStr := errpref.ErrPref{}.FmtStr(
+		initialStr)
+
+	fmt.Println()
+	fmt.Println(funcName)
+
+	fmt.Println("--------------------------------------------------")
+
+	fmt.Println("Initial String With Non-Printable Characters")
+
+	fmt.Printf(initialStr)
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Non-Printable Characters")
+	fmt.Println(actualStr)
 	fmt.Println("--------------------------------------------------")
 	fmt.Println()
 	fmt.Println("Initial String With Printable Characters")
@@ -42,15 +95,23 @@ func (tMain *TestMain) TestMain005() {
 	initialStr = tMain2.ConvertNonPrintableChars(
 		[]rune(initialStr), true, funcName)
 
+	fmt.Println(initialStr)
+
 	fmt.Println("--------------------------------------------------")
 	fmt.Println()
 	fmt.Println("Formatted String With Printable Characters")
 
-	outputStr = tMain2.ConvertNonPrintableChars(
-		[]rune(outputStr), true, funcName)
-	fmt.Println(outputStr)
-	fmt.Println()
+	actualStr = tMain2.ConvertNonPrintableChars(
+		[]rune(actualStr), true, funcName)
+	fmt.Println(actualStr)
 
+	fmt.Println()
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Comparison: 'actualStr' vs expectedStr")
+	fmt.Println(actualStr)
+	fmt.Println(initialStr)
+	fmt.Println()
 }
 
 func (tMain *TestMain) TestMain004() {

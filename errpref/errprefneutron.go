@@ -35,12 +35,15 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	delimiters := ePrefElectron.getDelimiters()
 
-	var lenCleanStr int
+	var (
+		lenCleanPrefixStr,
+		lenCleanContextStr int
+	)
 
 	errPrefix,
-		lenCleanStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
+		lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
 
-	if lenCleanStr == 0 {
+	if lenCleanPrefixStr == 0 {
 		return prefixContextCol
 	}
 
@@ -68,6 +71,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	var contextIdx int
 	var idxLenInLineContextDelimiter = int(delimiters.GetLengthInLineContextDelimiter() - 1)
+	var errCtxStr string
 
 	lastIdx := lCollection - 1
 
@@ -76,9 +80,9 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 		s := errPrefixContextCollection[i]
 
 		s,
-			lenCleanStr = ePrefElectron.cleanErrorPrefixStr(s)
+			lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(s)
 
-		if lenCleanStr == 0 {
+		if lenCleanPrefixStr == 0 {
 			continue
 		}
 
@@ -111,10 +115,22 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 			element.SetErrPrefixStr(s[0:contextIdx])
 
+			errCtxStr = s[contextIdx+
+				idxLenInLineContextDelimiter:]
+
+			errCtxStr,
+				lenCleanContextStr = ePrefElectron.cleanErrorContextStr(
+				errCtxStr)
+
+			if lenCleanContextStr == 0 {
+				element.SetErrPrefixHasContext(false)
+				prefixContextCol = append(prefixContextCol, element)
+				continue
+			}
+
 			element.SetErrPrefixHasContext(true)
 
-			element.SetErrContextStr(s[contextIdx+
-				idxLenInLineContextDelimiter:])
+			element.SetErrContextStr(errCtxStr)
 
 			prefixContextCol = append(prefixContextCol, element)
 		}
