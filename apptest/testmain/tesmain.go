@@ -10,6 +10,42 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain *TestMain) TestMain005() {
+
+	funcName := "TestMain005()"
+
+	initialStr :=
+		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
+
+	outputStr := errpref.ErrPref{}.FmtStr(
+		initialStr)
+
+	fmt.Println()
+	fmt.Println(funcName)
+
+	fmt.Println("--------------------------------------------------")
+
+	fmt.Println("Initial String With Non-Printable Characters")
+
+	fmt.Printf(initialStr)
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Non-Printable Characters")
+	fmt.Println(outputStr)
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Printable Characters")
+
+	tMain2 := TestMain{}
+
+	outputStr = tMain2.ConvertNonPrintableChars(
+		[]rune(outputStr), false, funcName)
+	fmt.Println(outputStr)
+	fmt.Println()
+
+}
+
 func (tMain *TestMain) TestMain004() {
 
 	xPref := errpref.ErrPref{}.NewEPref(

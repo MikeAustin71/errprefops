@@ -45,7 +45,8 @@ func (ePrefElectron *errPrefElectron) cleanErrorPrefixStr(
 	dirtyChars := []string{
 		"\n",
 		" ",
-		" - ",
+		"-",
+		":",
 	}
 
 	lenDirtyChars := len(dirtyChars)

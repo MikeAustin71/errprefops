@@ -93,7 +93,7 @@ func (ePrefDtoQuark *errorPrefixInfoQuark) testValidityOfErrorPrefixInfo(
 	errPrefixInfo.lenErrorContextStr =
 		uint(len(errPrefixInfo.errorContextStr))
 
-	if errPrefixInfo.lenErrorPrefixStr == 0 {
+	if errPrefixInfo.lenErrorContextStr == 0 {
 		errPrefixInfo.errPrefixHasContextStr = false
 	} else {
 		errPrefixInfo.errPrefixHasContextStr = true

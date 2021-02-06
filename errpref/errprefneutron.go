@@ -71,13 +71,7 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	lastIdx := lCollection - 1
 
-	isLastIdx := false
-
 	for i := 0; i < lCollection; i++ {
-
-		if i == lastIdx {
-			isLastIdx = true
-		}
 
 		s := errPrefixContextCollection[i]
 
@@ -93,7 +87,13 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 		element := ErrorPrefixInfo{}.New()
 
-		if isLastIdx {
+		if i == 0 {
+			element.SetIsFirstIndex(true)
+		} else {
+			element.SetIsFirstIndex(false)
+		}
+
+		if i == lastIdx {
 			element.SetIsLastIndex(true)
 		} else {
 			element.SetIsLastIndex(false)

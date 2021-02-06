@@ -9,271 +9,167 @@ type errPrefNanobot struct {
 	lock *sync.Mutex
 }
 
-// oldFormatErrPrefix - Returns a string of formatted error prefix information
-//func (ePrefNanobot *errPrefNanobot) oldFormatErrPrefix(
-//	maxErrStringLength uint,
-//	errPrefix string) string {
-//
-//	if ePrefNanobot.lock == nil {
-//		ePrefNanobot.lock = new(sync.Mutex)
-//	}
-//
-//	ePrefNanobot.lock.Lock()
-//
-//	defer ePrefNanobot.lock.Unlock()
-//
-//	if len(errPrefix) == 0 {
-//		return ""
-//	}
-//
-//	ePrefQuark := errPrefQuark{}
-//
-//	if maxErrStringLength == 0 {
-//		maxErrStringLength = ePrefQuark.getErrPrefDisplayLineLength()
-//	}
-//
-//	delimiters := ePrefQuark.getDelimiters()
-//
-//	ePrefElectron := errPrefElectron{}
-//	var lenCleanStr int
-//
-//	errPrefix,
-//		lenCleanStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
-//
-//	if lenCleanStr == 0 {
-//		return ""
-//	}
-//
-//	errPrefix = strings.ReplaceAll(
-//		errPrefix,
-//		delimiters.GetNewLineContextDelimiter(),
-//		delimiters.GetInLineContextDelimiter())
-//
-//	errPrefix = strings.ReplaceAll(
-//		errPrefix,
-//		delimiters.GetInLinePrefixDelimiter(),
-//		delimiters.GetNewLinePrefixDelimiter())
-//
-//	errPrefix += delimiters.GetNewLinePrefixDelimiter()
-//
-//	lErrPrefix := len(errPrefix)
-//
-//	errPrefixContextCollection := strings.Split(
-//		errPrefix,
-//		delimiters.GetNewLinePrefixDelimiter())
-//
-//	lCollection := len(errPrefixContextCollection)
-//
-//	if lCollection == 0 {
-//		return ""
-//	}
-//
-//	lenInLineContextDelimiter :=
-//		int(delimiters.GetLengthInLineContextDelimiter())
-//
-//	var b1 strings.Builder
-//	lErrPrefix += 512
-//	b1.Grow(lErrPrefix)
-//	var funcNames = make([]string, 0, 100)
-//	var contextStrs = make([]string, 0, 100)
-//	var contextIdx int
-//
-//	for _, s := range errPrefixContextCollection {
-//
-//		s,
-//		lenCleanStr = ePrefElectron.cleanErrorPrefixStr(s)
-//
-//		if lenCleanStr == 0 {
-//			continue
-//		}
-//
-//		contextIdx = strings.Index(s,
-//			delimiters.GetInLineContextDelimiter())
-//
-//		if contextIdx == -1 {
-//			funcNames = append(funcNames, s)
-//			contextStrs = append(contextStrs, "0")
-//		} else {
-//
-//			funcNames = append(funcNames, s[0:contextIdx])
-//			contextStrs = append(contextStrs, s[
-//			contextIdx+lenInLineContextDelimiter-1:])
-//		}
-//
-//	}
-//
-//	lenInLinePrefixDelimiter :=
-//		int(delimiters.GetLengthInLinePrefixDelimiter())
-//
-//	lCollection = len(funcNames)
-//
-//	if lCollection == 0 {
-//		return ""
-//	}
-//
-//	var contextStr, funcName string
-//	lastStr := ""
-//	lastIdx := lCollection - 1
-//
-//	for i := 0; i < lCollection; i++ {
-//		funcName = funcNames[i]
-//		contextStr = contextStrs[i]
-//
-//		if contextStr == "0" {
-//			contextStr = ""
-//		}
-//
-//		if len(funcName) == 0 {
-//			continue
-//		}
-//
-//		if len(contextStr) == 0 {
-//			// len(funcName) > 0 len(contextStr) == 0
-//
-//			if uint(len(lastStr)+len(funcName)) >
-//				maxErrStringLength {
-//
-//				if len(lastStr) > 0 {
-//
-//					b1.WriteString(lastStr)
-//					lastStr = ""
-//
-//					if uint(len(funcName)) > maxErrStringLength {
-//
-//						b1.WriteString(funcName)
-//
-//					} else {
-//						// uint(len(funcName)) <= maxErrPrefixTextLineLength
-//						if uint(len(funcName) + lenInLinePrefixDelimiter) > maxErrStringLength {
-//
-//							b1.WriteString(funcName)
-//
-//						} else {
-//
-//							if len(lastStr) > 0 {
-//
-//								lastStr +=
-//								delimiters.GetInLinePrefixDelimiter() +
-//									funcName
-//
-//							} else {
-//
-//								lastStr = funcName
-//
-//							}
-//
-//							continue
-//						}
-//					}
-//				} else {
-//					// len(lastStr) == 0
-//
-//					if uint(len(funcName)) > maxErrStringLength {
-//
-//						b1.WriteString(funcName)
-//
-//					} else {
-//						// uint(len(funcName)) <= maxErrStringLength
-//
-//						if uint(len(funcName)) > maxErrStringLength {
-//
-//							b1.WriteString(funcName)
-//
-//						} else {
-//							// uint(len(funcName)) <= maxErrPrefixTextLineLength
-//							// And len(lastStr) == 0
-//
-//							lastStr = funcName
-//
-//							continue
-//						}
-//					}
-//				}
-//			} else {
-//				// uint(len(lastStr) + len(funcName) + 3) <= maxErrPrefixTextLineLength
-//
-//				if len(lastStr) > 0 {
-//
-//					lastStr +=
-//						delimiters.GetInLinePrefixDelimiter() +
-//							funcName
-//
-//				} else {
-//
-//					lastStr = funcName
-//
-//				}
-//
-//				continue
-//			}
-//		} else {
-//			// funcName Len > 0 && contextStr Len > 0
-//
-//			if uint(
-//				len(lastStr)+
-//					lenInLinePrefixDelimiter+
-//					len(funcName)+
-//					lenInLineContextDelimiter+
-//					len(contextStr)) > maxErrStringLength {
-//
-//				if len(lastStr) > 0 {
-//					b1.WriteString(lastStr + "\n")
-//					lastStr = ""
-//				}
-//
-//				if
-//					uint(len(funcName)+
-//						lenInLineContextDelimiter+
-//						len(contextStr)) > maxErrStringLength {
-//
-//					b1.WriteString(funcName +
-//						delimiters.GetNewLineContextDelimiter() +
-//						contextStr)
-//
-//				} else {
-//					// uint(len(funcName) + 3 + len(contextStr)) <= maxErrPrefixTextLineLength
-//					lastStr = funcName +
-//						delimiters.GetInLineContextDelimiter() +
-//						contextStr
-//
-//					continue
-//				}
-//			} else {
-//				//uint(len(lastStr) + 3 + len(funcName) + 3 + len(contextStr)) <= maxErrPrefixTextLineLength
-//				if len(lastStr) == 0 {
-//
-//					lastStr =
-//						funcName +
-//							delimiters.GetInLineContextDelimiter() +
-//							contextStr
-//
-//				} else {
-//					lastStr +=
-//						delimiters.GetInLinePrefixDelimiter() +
-//							funcName +
-//							delimiters.GetInLineContextDelimiter() +
-//							contextStr
-//				}
-//				continue
-//			}
-//		}
-//
-//		if i != lastIdx {
-//			b1.WriteString("\n")
-//		}
-//
-//		if b1.Len() > lErrPrefix/2 {
-//			b1.Grow(lErrPrefix)
-//		}
-//
-//	}
-//
-//	if len(lastStr) > 0 {
-//		b1.WriteString(lastStr)
-//	}
-//
-//	return b1.String()
-//}
+// extractLastErrPrefInStringSeries - Receives a string containing error
+// prefixes and proceeds to extract and return the last error
+// prefix in the series along with the last error context and the
+// modified error prefix series.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPref             string
+//     - A string containing error prefixes in series. This method
+//       will extract the last error prefix and error context from
+//       this string.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  oldErrPref          string
+//     - This string holds the modified series of error prefixes.
+//       It is identical to input parameter, 'errPref', except that
+//       the last error prefix and error context have been removed.
+//
+//
+//  newErrPref          string
+//     - A string containing the last error prefix extracted from
+//       input parameter, 'errPref'.
+//
+//
+//  newErrContext       string
+//     - A string containing the last error context description
+//       extracted from input parameter, 'errPref'.
+//
+func (ePrefNanobot *errPrefNanobot) extractLastErrPrefInStringSeries(
+	errPref string) (
+	oldErrPref string,
+	newErrPref string,
+	newErrContext string) {
+
+	if ePrefNanobot.lock == nil {
+		ePrefNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefNanobot.lock.Lock()
+
+	defer ePrefNanobot.lock.Unlock()
+
+	ePrefElectron := errPrefElectron{}
+	var lenCleanStr int
+
+	errPref,
+		lenCleanStr =
+		ePrefElectron.cleanErrorPrefixStr(errPref)
+
+	if lenCleanStr == 0 {
+		return oldErrPref, newErrPref, newErrContext
+	}
+
+	delimiters := ePrefElectron.getDelimiters()
+
+	var lastIdxDashPref, lastIdxNewLinePref,
+		lastPrefixIdx int
+
+	lastIdxDashPref =
+		strings.LastIndex(
+			errPref,
+			delimiters.GetInLinePrefixDelimiter())
+
+	lastIdxNewLinePref =
+		strings.LastIndex(
+			errPref,
+			delimiters.GetNewLinePrefixDelimiter())
+
+	if lastIdxDashPref > lastIdxNewLinePref {
+
+		lastPrefixIdx = lastIdxDashPref
+
+	} else if lastIdxNewLinePref > lastIdxDashPref {
+
+		lastPrefixIdx = lastIdxNewLinePref
+
+	} else {
+		// lastIdxNewLinePref == lastIdxDashPref
+		// This signals that there is only one
+		// error prefix in the series.
+
+		lastPrefixIdx = 0
+	}
+
+	if lastPrefixIdx > 0 {
+		oldErrPref = errPref[0:lastPrefixIdx]
+
+		oldErrPref,
+			lenCleanStr =
+			ePrefElectron.cleanErrorPrefixStr(oldErrPref)
+
+	}
+
+	tempNewErrPref := errPref[lastPrefixIdx:]
+
+	tempNewErrPref,
+		lenCleanStr =
+		ePrefElectron.cleanErrorPrefixStr(tempNewErrPref)
+
+	if lenCleanStr == 0 {
+		return oldErrPref, newErrPref, newErrContext
+	}
+
+	var (
+		lastIdxColonContext, lastIdxNewLineContext,
+		lastContextIdx int
+	)
+
+	lastIdxNewLineContext =
+		strings.LastIndex(
+			tempNewErrPref,
+			delimiters.GetNewLineContextDelimiter())
+
+	lastIdxColonContext =
+		strings.LastIndex(
+			tempNewErrPref,
+			delimiters.GetInLineContextDelimiter())
+
+	if lastIdxNewLineContext > lastIdxColonContext {
+
+		lastContextIdx = lastIdxNewLineContext
+
+	} else if lastIdxNewLineContext < lastIdxColonContext {
+
+		lastContextIdx = lastIdxColonContext
+
+	} else {
+		//  lastIdxNewLineContext == lastIdxColonContext
+		// This signals that there is no context
+		// present in tempNewErrPref
+		lastContextIdx = -1
+	}
+
+	if lastContextIdx > -1 {
+		newErrPref = tempNewErrPref[0:lastContextIdx]
+		newErrContext = tempNewErrPref[lastContextIdx:]
+
+		newErrPref,
+			_ =
+			ePrefElectron.cleanErrorPrefixStr(newErrPref)
+
+		newErrContext,
+			_ =
+			ePrefElectron.cleanErrorContextStr(newErrContext)
+
+	} else {
+		// lastContextIdx = -1
+		// This signals that there is no context
+		// present in tempNewErrPref
+		newErrPref = tempNewErrPref
+	}
+
+	return oldErrPref, newErrPref, newErrContext
+}
 
 // formatErrPrefixComponents - Returns a string of formatted error
 // prefix information based on an array of error prefix elements.
@@ -289,8 +185,6 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 	ePrefNanobot.lock.Lock()
 
 	defer ePrefNanobot.lock.Unlock()
-
-
 
 	localErrPrefix := "errPrefNanobot.formatErrPrefixComponents() "
 
@@ -381,9 +275,12 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 
 	}
 
-	//if len(lastLineStr) > 0 {
-	//	b1.WriteString(lastLineStr)
-	//}
+	if lineLenCalculator.GetCurrLineStrLength() > 0 {
+		b1.WriteString(lineLenCalculator.GetDelimiterNewLineErrPrefix())
+		errPrefNeutron{}.ptr().writeCurrentLineStr(
+			&b1,
+			&lineLenCalculator)
+	}
 
 	return b1.String()
 }

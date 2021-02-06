@@ -338,12 +338,17 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 		}
 	}
 
-	newLastStr := lineLenCalc.GetCurrLineStr()
+	newLastStr := ""
 
-	newLastStr += lineLenCalc.GetDelimiterInLineErrPrefix()
+	if lineLenCalc.GetCurrLineStrLength() > 0 {
+
+		newLastStr = lineLenCalc.GetCurrLineStr()
+
+		newLastStr += lineLenCalc.GetDelimiterInLineErrPrefix()
+
+	}
+
 	newLastStr += lineLenCalc.GetErrorPrefixStr()
-	newLastStr += lineLenCalc.GetDelimiterInLineErrContext()
-	newLastStr += lineLenCalc.GetErrorContextStr()
 
 	lineLenCalc.SetCurrentLineStr(newLastStr)
 

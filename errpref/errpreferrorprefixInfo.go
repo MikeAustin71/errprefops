@@ -5,6 +5,7 @@ import (
 )
 
 type ErrorPrefixInfo struct {
+	isFirstIdx             bool // Signals the first index in the array
 	isLastIdx              bool // Signals the last index in the array
 	errorPrefixStr         string
 	lenErrorPrefixStr      uint
@@ -187,6 +188,25 @@ func (errorPrefixInfo *ErrorPrefixInfo) GetErrPrefixHasContextStr() bool {
 	defer errorPrefixInfo.lock.Unlock()
 
 	return errorPrefixInfo.errPrefixHasContextStr
+}
+
+// GetIsFirstIndex - Returns a boolean flag signaling whether the
+// current ErrorPrefixInfo instance is the First element in an array.
+//
+// If the returned boolean value is 'true', it signals that this
+// ErrorPrefixInfo object is the First element in an array.
+//
+func (errorPrefixInfo *ErrorPrefixInfo) GetIsFirstIndex() bool {
+
+	if errorPrefixInfo.lock == nil {
+		errorPrefixInfo.lock = new(sync.Mutex)
+	}
+
+	errorPrefixInfo.lock.Lock()
+
+	defer errorPrefixInfo.lock.Unlock()
+
+	return errorPrefixInfo.isFirstIdx
 }
 
 // GetIsLastIndex - Returns a boolean flag signaling whether the
@@ -455,9 +475,33 @@ func (errorPrefixInfo *ErrorPrefixInfo) SetErrPrefixStr(
 		uint(len(errorPrefixInfo.errorPrefixStr))
 }
 
+// SetIsFirstIndex - Sets an internal flag designating whether the
+// current ErrorPrefixInfo instance is the first element in an array
+// of ErrorPrefixInfo objects.
+//
+// If the input parameter 'isFirstIndex' is 'true', it signals that
+// this ErrorPrefixInfo object is the FIRST element in an array.
+//
+func (errorPrefixInfo *ErrorPrefixInfo) SetIsFirstIndex(isFirstIndex bool) {
+
+	if errorPrefixInfo.lock == nil {
+		errorPrefixInfo.lock = new(sync.Mutex)
+	}
+
+	errorPrefixInfo.lock.Lock()
+
+	defer errorPrefixInfo.lock.Unlock()
+
+	errorPrefixInfo.isFirstIdx = isFirstIndex
+
+}
+
 // SetIsLastIndex - Sets an internal flag designating whether the
 // current ErrorPrefixInfo instance is the last element in an array
 // of ErrorPrefixInfo objects.
+//
+// If the input parameter 'isLastIdx' is 'true', it signals that
+// this ErrorPrefixInfo object is the LAST element in an array.
 //
 func (errorPrefixInfo *ErrorPrefixInfo) SetIsLastIndex(isLastIdx bool) {
 
