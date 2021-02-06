@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"fmt"
 	"strings"
 	"sync"
 )
@@ -9,13 +10,70 @@ type errPrefNeutron struct {
 	lock *sync.Mutex
 }
 
-// errPrefix - Receives an error prefix string containing error
-// prefix strings and error context strings. This method separates
-// these two elements and returns them in a two-dimensional string
-// array as a collection of error prefixes and error contexts.
-func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
-	errPrefix string) (
-	prefixContextCol []ErrorPrefixInfo) {
+// createNewEPrefInfo - Creates a single ErrorPrefixInfo object
+// from an error prefix and an error context string. This method is
+// only designed to operate on a single pair of pair of strings
+// containing one error prefix and one error context.
+//
+// The error context string is optional and empty error strings
+// will still result in the generation and return of a valid
+// ErrorPrefixInfo object.
+//
+// If the input parameter, 'newErrPrefix' is an empty string, this
+// method will generate an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newErrPrefix        string
+//     - This is the new error prefix string which will be
+//       configured in the ErrorPrefixInfo object returned by this
+//       method.
+//
+//
+//  newErrContext       string
+//     - An optional error context description. This is the error
+//       context information associated with the new error prefix
+//       ('newErrPrefix'). Typically context descriptions might
+//       include variable names or input values. The text
+//       description is expected to help identify and explain any
+//       errors triggered in the immediate vicinity of the function
+//       documented by error prefix 'newErrPrefix'.
+//
+//
+//  ePrefixStr          string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  errPrefixInfo       ErrorPrefixInfo
+//     - This returned ErrorPrefixInfo will encapsulate the error
+//       prefix and error context strings passed through input
+//       parameters 'newErrPrefix' and 'newErrContext'.
+//
+//
+//  err                 error
+//     - If this method encounters a processing error during
+//       execution, a detailed error message will be
+//       returned identifying the invalid data item.
+//
+//       If the current instance is valid, this error parameter
+//       will be set to nil.
+//
+func (ePrefNeutron *errPrefNeutron) createNewEPrefInfo(
+	newErrPrefix string,
+	newErrContext string,
+	ePrefixStr string) (
+	errPrefixInfo ErrorPrefixInfo,
+	err error) {
 
 	if ePrefNeutron.lock == nil {
 		ePrefNeutron.lock = new(sync.Mutex)
@@ -25,119 +83,46 @@ func (ePrefNeutron *errPrefNeutron) getEPrefContextArray(
 
 	defer ePrefNeutron.lock.Unlock()
 
-	prefixContextCol = make([]ErrorPrefixInfo, 0, 150)
+	ePrefixStr += "errPrefNeutron.createNewEPrefInfo()"
 
-	if len(errPrefix) == 0 {
-		return prefixContextCol
-	}
+	errPrefixInfo = ErrorPrefixInfo{}
+
+	var (
+		lenPrefixStr,
+		lenContextStr int
+	)
 
 	ePrefElectron := errPrefElectron{}
 
-	delimiters := ePrefElectron.getDelimiters()
+	newErrPrefix,
+		lenPrefixStr = ePrefElectron.cleanErrorPrefixStr(newErrPrefix)
 
-	var (
-		lenCleanPrefixStr,
-		lenCleanContextStr int
-	)
+	if lenPrefixStr == 0 {
 
-	errPrefix,
-		lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
+		err = fmt.Errorf("%v\n"+
+			"Error: Cleaned Error Prefix String is EMPTY!\n",
+			ePrefixStr)
 
-	if lenCleanPrefixStr == 0 {
-		return prefixContextCol
+		return errPrefixInfo, err
 	}
 
-	errPrefix = strings.ReplaceAll(
-		errPrefix,
-		delimiters.GetNewLineContextDelimiter(),
-		delimiters.GetInLineContextDelimiter())
+	newErrContext,
+		lenContextStr = ePrefElectron.cleanErrorContextStr(newErrContext)
 
-	errPrefix = strings.ReplaceAll(
-		errPrefix,
-		delimiters.GetInLinePrefixDelimiter(),
-		delimiters.GetNewLinePrefixDelimiter())
+	errPrefixInfo.SetIsFirstIndex(false)
 
-	errPrefix += delimiters.GetNewLinePrefixDelimiter()
+	errPrefixInfo.SetIsLastIndex(false)
 
-	errPrefixContextCollection := strings.Split(
-		errPrefix,
-		delimiters.GetNewLinePrefixDelimiter())
+	errPrefixInfo.SetErrPrefixStr(newErrPrefix)
 
-	lCollection := len(errPrefixContextCollection)
-
-	if lCollection == 0 {
-		return prefixContextCol
+	if lenContextStr > 0 {
+		errPrefixInfo.SetErrPrefixHasContext(true)
+		errPrefixInfo.SetErrContextStr(newErrContext)
+	} else {
+		errPrefixInfo.SetErrPrefixHasContext(false)
 	}
 
-	var contextIdx int
-	var idxLenInLineContextDelimiter = int(delimiters.GetLengthInLineContextDelimiter() - 1)
-	var errCtxStr string
-
-	lastIdx := lCollection - 1
-
-	for i := 0; i < lCollection; i++ {
-
-		s := errPrefixContextCollection[i]
-
-		s,
-			lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(s)
-
-		if lenCleanPrefixStr == 0 {
-			continue
-		}
-
-		contextIdx = strings.Index(s,
-			delimiters.GetInLineContextDelimiter())
-
-		element := ErrorPrefixInfo{}.New()
-
-		if i == 0 {
-			element.SetIsFirstIndex(true)
-		} else {
-			element.SetIsFirstIndex(false)
-		}
-
-		if i == lastIdx {
-			element.SetIsLastIndex(true)
-		} else {
-			element.SetIsLastIndex(false)
-		}
-
-		if contextIdx == -1 {
-
-			element.SetErrPrefixStr(s)
-
-			element.SetErrPrefixHasContext(false)
-
-			prefixContextCol = append(prefixContextCol, element)
-
-		} else {
-
-			element.SetErrPrefixStr(s[0:contextIdx])
-
-			errCtxStr = s[contextIdx+
-				idxLenInLineContextDelimiter:]
-
-			errCtxStr,
-				lenCleanContextStr = ePrefElectron.cleanErrorContextStr(
-				errCtxStr)
-
-			if lenCleanContextStr == 0 {
-				element.SetErrPrefixHasContext(false)
-				prefixContextCol = append(prefixContextCol, element)
-				continue
-			}
-
-			element.SetErrPrefixHasContext(true)
-
-			element.SetErrContextStr(errCtxStr)
-
-			prefixContextCol = append(prefixContextCol, element)
-		}
-
-	}
-
-	return prefixContextCol
+	return errPrefixInfo, err
 }
 
 // ptr() - Returns a pointer to a new instance of

@@ -136,18 +136,18 @@ func TestNewErrPref_0010(t *testing.T) {
 
 	ErrPref{}.SetMaxErrPrefTextLineLength(60)
 
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx7.TrySomethingNew()")
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx7.TrySomethingNew()")
 
 	ePrefix = ErrPref{}.SetCtxt(ePrefix, "something->newSomething")
 
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx8.TryAnyCombination()")
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx9.TryAHammer()")
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx8.TryAnyCombination()")
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx9.TryAHammer()")
 	ePrefix = ErrPref{}.SetCtxt(ePrefix, "x->y")
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx10.X()")
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx11.TryAnything()")
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx12.TryASalad()")
-	ePrefix = ErrPref{}.NewEPref(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
-	ePrefix = ErrPref{}.NewCtxt(
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx10.X()")
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx11.TryAnything()")
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx12.TryASalad()")
+	ePrefix = ErrPref{}.EPrefCtx(ePrefix, "Tx13.SomeFabulousAndComplexStuff()")
+	ePrefix = ErrPref{}.EPrefCtx(
 		ePrefix,
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")

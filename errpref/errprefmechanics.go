@@ -17,25 +17,26 @@ type errPrefMechanics struct {
 //
 // Input Parameters
 //
-//  oldErrPref                    string
+//  oldErrPrefix                  string
 //     - The existing or previous error prefix string. This text
 //       string usually consists of a series of function names and
 //       associated error context strings.
 //
 //
-//  newErrPref                    string
+//  newErrPrefix                  string
 //     - This is the new error prefix string which will be added to
 //       existing error prefix string represented by input
 //       parameter, 'oldErrPref'.
 //
 //
-//  newContext                    string
+//  newErrContext                 string
 //     - An optional error context description. This is the error
 //       context information associated with the new error prefix
 //       ('newErrPref'). Typically context descriptions might
 //       include variable names or input values. The text
 //       description is expected to help identify and explain any
-//       errors triggered in the immediate vicinity of this function.
+//       errors triggered in the immediate vicinity of the function
+//       documented by error prefix 'newErrPrefix'.
 //
 //
 //  maxErrPrefixTextLineLength            uint
@@ -56,9 +57,9 @@ type errPrefMechanics struct {
 //       function.
 //
 func (ePrefMech *errPrefMechanics) assembleErrPrefix(
-	oldErrPref string,
-	newErrPref string,
-	newContext string,
+	oldErrPrefix string,
+	newErrPrefix string,
+	newErrContext string,
 	maxErrStringLength uint) string {
 
 	if ePrefMech.lock == nil {
@@ -75,32 +76,29 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 	}
 
 	var (
-		lenOldErrPrefCleanStr,
-		lenNewErrContextCleanStr,
-		lenNewErrPrefCleanStr int
+		lenOldErrPrefCleanStr int
 	)
+
+	var errPrefixInfo ErrorPrefixInfo
+	var err error
+
+	eMsgPrefix := "errPrefMechanics.assembleErrPrefix() "
+
+	errPrefixInfo,
+		err = errPrefNeutron{}.ptr().createNewEPrefInfo(
+		newErrPrefix,
+		newErrContext,
+		eMsgPrefix)
+
+	if err != nil {
+		return ""
+	}
 
 	ePrefElectron := errPrefElectron{}
 
-	oldErrPref,
+	oldErrPrefix,
 		lenOldErrPrefCleanStr =
-		ePrefElectron.cleanErrorPrefixStr(oldErrPref)
-
-	newErrPref,
-		lenNewErrPrefCleanStr =
-		ePrefElectron.cleanErrorPrefixStr(newErrPref)
-
-	if lenOldErrPrefCleanStr+
-		lenNewErrPrefCleanStr == 0 {
-
-		return "Error: Cleaned Old Error Prefix and" +
-			" Cleaned New Error Prefix\n" +
-			"strings have zero string length!\n"
-	}
-
-	newContext,
-		lenNewErrContextCleanStr =
-		ePrefElectron.cleanErrorContextStr(newContext)
+		ePrefElectron.cleanErrorPrefixStr(oldErrPrefix)
 
 	var prefixContextCol []ErrorPrefixInfo
 
@@ -113,8 +111,8 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 	if lenOldErrPrefCleanStr > 0 {
 
 		prefixContextCol =
-			errPrefNeutron{}.ptr().getEPrefContextArray(
-				oldErrPref)
+			errPrefAtom{}.ptr().getEPrefContextArray(
+				oldErrPrefix)
 
 		lenPrefixContextCol = len(prefixContextCol)
 
@@ -127,23 +125,9 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 	}
 
-	newErrPrefInfo := ErrorPrefixInfo{}
+	errPrefixInfo.SetIsLastIndex(true)
 
-	newErrPrefInfo.SetIsLastIndex(true)
-	newErrPrefInfo.SetErrPrefixStr(newErrPref)
-
-	if lenNewErrContextCleanStr > 0 {
-
-		newErrPrefInfo.SetErrPrefixHasContext(true)
-		newErrPrefInfo.SetErrContextStr(newContext)
-
-	} else {
-
-		newErrPrefInfo.SetErrPrefixHasContext(false)
-
-	}
-
-	prefixContextCol = append(prefixContextCol, newErrPrefInfo)
+	prefixContextCol = append(prefixContextCol, errPrefixInfo)
 
 	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
 		maxErrStringLength,
@@ -169,7 +153,7 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 	localErrPrefix := "errPrefMechanics.formatErrPrefix() "
 
 	prefixContextCol :=
-		errPrefNeutron{}.ptr().getEPrefContextArray(
+		errPrefAtom{}.ptr().getEPrefContextArray(
 			errPrefix)
 
 	lenPrefixContextCol := len(prefixContextCol)
@@ -246,7 +230,7 @@ func (ePrefMech *errPrefMechanics) setErrorContext(
 	var prefixContextCol []ErrorPrefixInfo
 
 	prefixContextCol =
-		errPrefNeutron{}.ptr().getEPrefContextArray(
+		errPrefAtom{}.ptr().getEPrefContextArray(
 			oldErrPref)
 
 	lenPrefixContextCol = len(prefixContextCol)

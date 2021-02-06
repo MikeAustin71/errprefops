@@ -33,6 +33,8 @@ type ErrPref struct {
 // non-printable characters and converts them to 'printable'
 // characters returned in a string.
 //
+// This method is primarily used for testing an evaluation.
+//
 // Examples of non-printable characters are '\n', '\t' or 0x06
 // (Acknowledge). These example characters would be translated into
 // printable string characters as: "\\n", "\\t" and "[ACK]".
@@ -194,7 +196,7 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 	return maxErrPrefixStringLength
 }
 
-// NewEPref - Returns a string concatenating the old error prefix the
+// EPref - Returns a string concatenating the old error prefix the
 // new custom, user-defined error prefix. The new error prefix is
 // typically used to document method or function chains in error
 // messages.
@@ -241,7 +243,7 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 //       sequence for specific functions and methods.
 //
 //
-func (ePref ErrPref) NewEPref(
+func (ePref ErrPref) EPref(
 	oldErrPref string,
 	newErrPref string) string {
 
@@ -253,18 +255,21 @@ func (ePref ErrPref) NewEPref(
 
 	defer ePref.lock.Unlock()
 
-	ePref.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
+	ePrefQuark := errPrefQuark{}
 
-	return errPrefMechanics{}.ptr().
-		assembleErrPrefix(
-			oldErrPref,
-			newErrPref,
-			"",
-			ePref.maxErrPrefixTextLineLength)
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
+
+	ePrefMech := errPrefMechanics{}
+
+	return ePrefMech.assembleErrPrefix(
+		oldErrPref,
+		newErrPref,
+		"",
+		ePref.maxErrPrefixTextLineLength)
 }
 
-// NewCtxt - Receives an old error prefix, new error prefix and
+// EPrefCtx - Receives an old error prefix, new error prefix and
 // a new context string which are concatenated and returned as a
 // combined string.
 //
@@ -322,14 +327,14 @@ func (ePref ErrPref) NewEPref(
 //
 // Usage Examples
 //
-//  errorPrefix = ErrPref{}.NewCtxt(
+//  errorPrefix = ErrPref{}.EPrefCtx(
 //                           errorPrefix, // Assuming this is the old
 //                                        // error prefix
 //                           newErrPref,
 //                           newContext)
 //
 //
-func (ePref ErrPref) NewCtxt(
+func (ePref ErrPref) EPrefCtx(
 	oldErrPref string,
 	newErrPref string,
 	newContext string) string {
