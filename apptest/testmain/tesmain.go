@@ -35,12 +35,19 @@ func (tMain *TestMain) TestMain005() {
 	fmt.Println(outputStr)
 	fmt.Println("--------------------------------------------------")
 	fmt.Println()
-	fmt.Println("Formatted String With Printable Characters")
+	fmt.Println("Initial String With Printable Characters")
 
 	tMain2 := TestMain{}
 
+	initialStr = tMain2.ConvertNonPrintableChars(
+		[]rune(initialStr), true, funcName)
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Printable Characters")
+
 	outputStr = tMain2.ConvertNonPrintableChars(
-		[]rune(outputStr), false, funcName)
+		[]rune(outputStr), true, funcName)
 	fmt.Println(outputStr)
 	fmt.Println()
 
