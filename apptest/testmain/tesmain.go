@@ -10,6 +10,69 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain *TestMain) TestMain010() {
+
+	funcName := "TestMain010()"
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	actualStr := errpref.ErrPref{}.EPref(
+		initialStr,
+		"")
+
+	//expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+	//	"[SPACE]:[SPACE][SPACE]A->B\\n" +
+	//	"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+	//	"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+	//	"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999"
+
+	fmt.Println()
+	fmt.Println(funcName)
+
+	fmt.Println("--------------------------------------------------")
+
+	fmt.Println("Initial String With Non-Printable Characters")
+
+	fmt.Printf(initialStr)
+
+	fmt.Println()
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Non-Printable Characters")
+	fmt.Println(actualStr)
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Initial String With Printable Characters")
+
+	tMain2 := TestMain{}
+
+	initialStr = tMain2.ConvertNonPrintableChars(
+		[]rune(initialStr), true, funcName)
+	fmt.Println(initialStr)
+	fmt.Println()
+
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Formatted String With Printable Characters")
+
+	actualStr = tMain2.ConvertNonPrintableChars(
+		[]rune(actualStr), true, funcName)
+	fmt.Println(actualStr)
+	fmt.Println()
+
+	fmt.Println()
+	fmt.Println("--------------------------------------------------")
+	fmt.Println()
+	fmt.Println("Comparison: 'actualStr' vs expectedStr")
+	fmt.Println(actualStr)
+	fmt.Println(initialStr)
+	fmt.Println()
+
+}
+
 func (tMain *TestMain) TestMain009() {
 
 	funcName := "TestMain009()"

@@ -6,7 +6,7 @@ import (
 
 func main() {
 	tm := testmain.TestMain{}
-	tm.TestMain007()
+	tm.TestMain010()
 }
 
 /*

@@ -75,30 +75,20 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 			errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 	}
 
-	var (
-		lenOldErrPrefCleanStr int
-	)
-
+	var lenOldErrPrefCleanStr int
 	var errPrefixInfo ErrorPrefixInfo
-	var err error
 
 	eMsgPrefix := "errPrefMechanics.assembleErrPrefix() "
 
+	oldErrPrefix,
+		lenOldErrPrefCleanStr =
+		errPrefElectron{}.ptr().cleanErrorPrefixStr(oldErrPrefix)
+
 	errPrefixInfo,
-		err = errPrefNeutron{}.ptr().createNewEPrefInfo(
+		_ = errPrefNeutron{}.ptr().createNewEPrefInfo(
 		newErrPrefix,
 		newErrContext,
 		eMsgPrefix)
-
-	if err != nil {
-		return ""
-	}
-
-	ePrefElectron := errPrefElectron{}
-
-	oldErrPrefix,
-		lenOldErrPrefCleanStr =
-		ePrefElectron.cleanErrorPrefixStr(oldErrPrefix)
 
 	var prefixContextCol []ErrorPrefixInfo
 
@@ -116,18 +106,24 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 		lenPrefixContextCol = len(prefixContextCol)
 
-		if lenPrefixContextCol > 0 {
+		if errPrefixInfo.GetIsPopulated() &&
+			lenPrefixContextCol > 0 {
 
 			prefixContextCol[lenPrefixContextCol-1].
 				SetIsLastIndex(false)
-
 		}
-
 	}
 
-	errPrefixInfo.SetIsLastIndex(true)
+	if errPrefixInfo.GetIsPopulated() {
 
-	prefixContextCol = append(prefixContextCol, errPrefixInfo)
+		errPrefixInfo.SetIsLastIndex(true)
+
+		prefixContextCol = append(prefixContextCol, errPrefixInfo)
+	}
+
+	if len(prefixContextCol) == 0 {
+		return ""
+	}
 
 	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
 		maxErrStringLength,
