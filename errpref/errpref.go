@@ -23,6 +23,48 @@ import (
 // information. Its only function is to receive process and
 // return strings of error prefix information.
 //
+// ------------------------------------------------------------------------
+//
+// - IMPORTANT -
+// None of the error prefix strings returned by the methods on this
+// type are terminated with a new line character ('\n'). That means
+// that none of the strings end with a new line character.
+//
+// If you prefer that error prefix strings be terminated with a new
+// line character, you have two options:
+//
+//   1. Add the terminating new line character in your code.
+//
+//                   OR
+//
+//   2. Use the Error Prefix Data Transfer Object type
+//      'ErrPrefixDto'.
+//
+// ------------------------------------------------------------------------
+//
+// Recommended Usage Examples
+//
+//  ePrefix = ErrPref{}.EPrefCtx(
+//    ePrefix,
+//    "Tx7.TrySomethingNew()",
+//     "")
+//
+//  ePrefix = ErrPref{}.EPref(
+//     ePrefix,
+//     "Tx14.SomeFabulousAndComplexStuff()")
+//
+//      actualStr := ErrPref{}.SetCtxt(
+//       initialStr,
+//        "A!=B")
+//
+//  Example Error Prefix String with Context information.
+//
+//       "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+//       " :  A->B\\n" +
+//       "Tx2.SomethingElse() : A==B\\n" +
+//       "Tx3.DoSomething() : A==10\\n" +
+//       "Tx4() : A/10==4 - Tx5() : A!=B"
+//
 //
 type ErrPref struct {
 	maxErrPrefixTextLineLength uint
@@ -257,6 +299,21 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 // the thread of code execution by listing the calling sequence for
 // specific functions and methods.
 //
+// - IMPORTANT -
+// None of the error prefix strings returned by the methods on this
+// type are terminated with a new line character ('\n'). That means
+// that none of the strings end with a new line character.
+//
+// If you prefer that error prefix strings be terminated with a new
+// line character, you have two options:
+//
+//   1. Add the terminating new line character in your code.
+//
+//                   OR
+//
+//   2. Use the Error Prefix Data Transfer Object type
+//      'ErrPrefixDto'.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -331,6 +388,21 @@ func (ePref ErrPref) EPref(
 // associated error prefix string. Typical context information
 // might include variable names, variable values and additional
 // details on function execution.
+//
+// - IMPORTANT -
+// None of the error prefix strings returned by the methods on this
+// type are terminated with a new line character ('\n'). That means
+// that none of the strings end with a new line character.
+//
+// If you prefer that error prefix strings be terminated with a new
+// line character, you have two options:
+//
+//   1. Add the terminating new line character in your code.
+//
+//                   OR
+//
+//   2. Use the Error Prefix Data Transfer Object type
+//      'ErrPrefixDto'.
 //
 //
 // ----------------------------------------------------------------
@@ -421,6 +493,16 @@ func (ePref ErrPref) EPrefCtx(
 // context, this new error context string will be associated
 // with that error prefix.
 //
+// If you prefer that error prefix strings be terminated with a new
+// line character, you have two options:
+//
+//   1. Add the terminating new line character in your code.
+//
+//                   OR
+//
+//   2. Use the Error Prefix Data Transfer Object type
+//      'ErrPrefixDto'.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -447,7 +529,13 @@ func (ePref ErrPref) EPrefCtx(
 //
 // Return Values
 //
-//  --- NONE ---
+//  string
+//     - This method will return the consolidated error prefix text.
+//
+//       The error prefix text is designed to be configured at the
+//       beginning of error messages and is most often used to
+//       document the thread of code execution by listing the calling
+//       sequence for specific functions and methods.
 //
 func (ePref ErrPref) SetCtxt(
 	oldErrPref string,
