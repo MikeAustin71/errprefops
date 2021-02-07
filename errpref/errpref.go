@@ -493,6 +493,11 @@ func (ePref ErrPref) EPrefCtx(
 // context, this new error context string will be associated
 // with that error prefix.
 //
+// - IMPORTANT -
+// None of the error prefix strings returned by the methods on this
+// type are terminated with a new line character ('\n'). That means
+// that none of the strings end with a new line character.
+//
 // If you prefer that error prefix strings be terminated with a new
 // line character, you have two options:
 //

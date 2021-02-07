@@ -9,6 +9,104 @@ type errPrefNanobot struct {
 	lock *sync.Mutex
 }
 
+// addEPrefInfo - Receives new error prefix and context strings.
+// The method then proceeds to convert this pair of strings to an
+// ErrorPrefixInfo object before adding that object to the end of
+// an array of ErrorPrefixInfo objects.
+//
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newErrPrefix        string
+//     - The new error prefix string. Typically this is the
+//       name of the function or method associated which is
+//       currently executing.
+//
+//
+//  newErrContext       string
+//     - This is the error context information associated with the
+//       new error prefix ('newErrPrefix'). This parameter is
+//       optional and will accept an empty string.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePrefNanobot *errPrefNanobot) addEPrefInfo(
+	newErrPrefix string,
+	newErrContext string,
+	errPrefixCollection []ErrorPrefixInfo) {
+
+	if ePrefNanobot.lock == nil {
+		ePrefNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefNanobot.lock.Lock()
+
+	defer ePrefNanobot.lock.Unlock()
+
+	var (
+		lenPrefixCleanStr,
+		lenContextCleanStr,
+		lenCollection int
+	)
+
+	ePrefElectron := errPrefElectron{}
+
+	newErrPrefix,
+		lenPrefixCleanStr =
+		ePrefElectron.cleanErrorPrefixStr(
+			newErrPrefix)
+
+	if lenPrefixCleanStr == 0 {
+		return
+	}
+
+	newErrContext,
+		lenContextCleanStr =
+		ePrefElectron.cleanErrorContextStr(
+			newErrContext)
+
+	newErrorPrefixInfo := ErrorPrefixInfo{}
+
+	newErrorPrefixInfo.SetErrPrefixStr(
+		newErrPrefix)
+
+	if lenContextCleanStr > 0 {
+
+		newErrorPrefixInfo.SetErrContextStr(
+			newErrContext)
+
+	}
+
+	if errPrefixCollection == nil {
+		errPrefixCollection = make([]ErrorPrefixInfo, 0, 100)
+	}
+
+	lenCollection = len(errPrefixCollection)
+
+	if lenCollection > 0 {
+		errPrefixCollection[0].SetIsFirstIndex(true)
+		errPrefixCollection[lenCollection-1].SetIsLastIndex(false)
+		newErrorPrefixInfo.SetIsLastIndex(true)
+	} else {
+		newErrorPrefixInfo.SetIsFirstIndex(true)
+		newErrorPrefixInfo.SetIsLastIndex(true)
+	}
+
+	errPrefixCollection = append(
+		errPrefixCollection,
+		newErrorPrefixInfo)
+
+	return
+}
+
 func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 	errPref string) ErrorPrefixInfo {
 
@@ -332,4 +430,95 @@ func (ePrefNanobot errPrefNanobot) ptr() *errPrefNanobot {
 	defer ePrefNanobot.lock.Unlock()
 
 	return &errPrefNanobot{}
+}
+
+// setLastCtx - Sets or resets the error context for the last
+// error prefix in the error prefix collection passed as an input
+// parameter. This operation either adds, or replaces, the error
+// context string associated with the last error prefix the
+// current list of error prefixes contained in the error prefix
+// collection.
+//
+// If the last error prefix already has an error context string, it
+// will be replaced by input parameter, 'newErrContext'.
+//
+// If the last error prefix does NOT have an associated error
+// context, this new error context string will be associated
+// with that error prefix.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newErrContext       string
+//     - This string holds the new error context information. If
+//       the last error prefix in the 'errPrefixCollection' already
+//       has an associated error context, that context will be
+//       deleted and replaced by 'newErrContext'. If, however, the
+//       last error prefix does NOT have an associated error
+//       context, this 'newErrContext' string will be added and
+//       associated with that last error prefix.
+//
+//       If 'newErrContext' is 'empty', this method will take no
+//       action and exit.
+//
+//
+//  errPrefixCollection []ErrorPrefixInfo
+//      - An array of ErrorPrefixInfo objects. Each object defines
+//        an error prefix/context pair. The 'newErrContext' string
+//        will be configured as the error context data for the last
+//        ErrorPrefixInfo object in this collection.
+//
+//        If the 'errPrefixCollection' is empty, this method will
+//        take no action and exit.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//
+func (ePrefNanobot *errPrefNanobot) setLastCtx(
+	newErrContext string,
+	errPrefixCollection []ErrorPrefixInfo) {
+
+	if ePrefNanobot.lock == nil {
+		ePrefNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefNanobot.lock.Lock()
+
+	defer ePrefNanobot.lock.Unlock()
+
+	var (
+		lenCleanStr,
+		lenCollection int
+	)
+
+	newErrContext,
+		lenCleanStr =
+		errPrefElectron{}.ptr().cleanErrorContextStr(
+			newErrContext)
+
+	if lenCleanStr == 0 {
+		return
+	}
+
+	if errPrefixCollection == nil {
+		errPrefixCollection = make([]ErrorPrefixInfo, 0, 100)
+	}
+
+	lenCollection = len(errPrefixCollection)
+
+	if lenCollection == 0 {
+		return
+	}
+
+	lenCollection--
+
+	errPrefixCollection[lenCollection].
+		SetErrContextStr(newErrContext)
+
+	return
 }

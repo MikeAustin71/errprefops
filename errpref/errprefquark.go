@@ -232,6 +232,36 @@ func (ePrefQuark *errPrefQuark) getErrPrefDisplayLineLength() uint {
 	return maxErrPrefixStringLength
 }
 
+// getMasterErrPrefDisplayLineLength - Always returns the master
+// error prefix display line length. The default maximum length
+// for error prefix display lines is currently 40-characters.
+//
+func (ePrefQuark *errPrefQuark) getMasterErrPrefDisplayLineLength() uint {
+
+	if ePrefQuark.lock == nil {
+		ePrefQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefQuark.lock.Lock()
+
+	defer ePrefQuark.lock.Unlock()
+
+	if defaultErrPrefLineLenLock == nil {
+		defaultErrPrefLineLenLock = new(sync.Mutex)
+	}
+
+	defaultErrPrefLineLenLock.Lock()
+
+	defer defaultErrPrefLineLenLock.Unlock()
+
+	var maxErrPrefixStringLength uint
+
+	maxErrPrefixStringLength =
+		constDefaultErrPrefLineLength
+
+	return maxErrPrefixStringLength
+}
+
 // isEmptyOrWhiteSpace - Analyzes the incoming string and returns
 // 'true' if the strings is empty or consists of all white space.
 //
