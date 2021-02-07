@@ -289,27 +289,6 @@ func TestErrPref_EPref_000200(t *testing.T) {
 
 }
 
-func TestErrPref_SetCtxt_000300(t *testing.T) {
-
-	initialStr :=
-		""
-
-	actualStr := ErrPref{}.SetCtxt(
-		initialStr,
-		"A!=B")
-
-	expectedStr := ""
-
-	if expectedStr != actualStr {
-
-		t.Errorf("Error: Expected actualStr= '%v'\n"+
-			"Instead, actualStr='%v'\n",
-			expectedStr,
-			actualStr)
-	}
-
-}
-
 func TestErrPref_EPref_000300(t *testing.T) {
 
 	initialStr :=
@@ -333,6 +312,173 @@ func TestErrPref_EPref_000300(t *testing.T) {
 	actualStr = ErrPref{}.ConvertNonPrintableChars(
 		[]rune(actualStr),
 		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error: Expected actualStr= '%v'\n"+
+			"Instead, actualStr='%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_EPrefCtx_000100(t *testing.T) {
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999\\n" +
+		"Tx5.BrandNewMethod()[SPACE]:[SPACE]X->G"
+
+	actualStr := ErrPref{}.EPrefCtx(
+		initialStr,
+		"Tx5.BrandNewMethod()",
+		"X->G")
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_EPrefCtx_000200(t *testing.T) {
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999\\n" +
+		"Tx5.BrandNewMethod()"
+
+	actualStr := ErrPref{}.EPrefCtx(
+		initialStr,
+		"Tx5.BrandNewMethod()",
+		"")
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_EPrefCtx_000300(t *testing.T) {
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999"
+
+	actualStr := ErrPref{}.EPrefCtx(
+		initialStr,
+		"",
+		"G->X")
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_EPrefCtx_000400(t *testing.T) {
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999"
+
+	actualStr := ErrPref{}.EPrefCtx(
+		initialStr,
+		"",
+		"")
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_SetCtxt_000300(t *testing.T) {
+
+	initialStr :=
+		""
+
+	actualStr := ErrPref{}.SetCtxt(
+		initialStr,
+		"A!=B")
+
+	expectedStr := ""
 
 	if expectedStr != actualStr {
 
