@@ -8,5 +8,10 @@
 --- PASS: TestErrPref_FmtStr_000400 (0.00s)
 === RUN   TestErrPref_GetLastEPref_000100
 --- PASS: TestErrPref_GetLastEPref_000100 (0.00s)
-PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	0.583s
+=== RUN   TestErrPref_SetCtxt_000100
+    zzzt_errpref_0000010_test.go:183: Error: Expected actualStr= 'Tx1.AVeryVeryLongMethodNameCalledSomething()[SPACE]:[SPACE]A->B\nTx2.SomethingElse()[SPACE]:[SPACE]A==B\nTx3.DoSomething()[SPACE]:[SPACE]A==10\nTx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B'
+        Instead, actualStr='Tx1.AVeryVeryLongMethodNameCalledSomething()\n[SPACE]:[SPACE][SPACE]A->B\nTx2.SomethingElse()[SPACE]:[SPACE]A==B\nTx3.DoSomething()[SPACE]:[SPACE]A==10\n\nTx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B'
+--- FAIL: TestErrPref_SetCtxt_000100 (0.00s)
+FAIL
+exit status 1
+FAIL	github.com/MikeAustin71/errprefops/errpref	1.209s

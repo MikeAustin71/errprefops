@@ -306,9 +306,9 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 
 	if lineLenCalculator.GetCurrLineStrLength() > 0 {
 
-		if b1.Len() > 0 {
-			b1.WriteString(lineLenCalculator.GetDelimiterNewLineErrPrefix())
-		}
+		//if b1.Len() > 0 {
+		//	b1.WriteString(lineLenCalculator.GetDelimiterNewLineErrPrefix())
+		//}
 
 		errPrefNeutron{}.ptr().writeCurrentLineStr(
 			&b1,

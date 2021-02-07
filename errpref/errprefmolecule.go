@@ -258,6 +258,11 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 
 		if lineLenCalc.EPrefixWithContextExceedsRemainLineLen() {
 
+			if strBuilder.Len() > 0 {
+				strBuilder.WriteString(
+					lineLenCalc.GetDelimiterNewLineErrPrefix())
+			}
+
 			strBuilder.WriteString(
 				lineLenCalc.GetErrorPrefixStr())
 
@@ -267,10 +272,10 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithContext(
 			strBuilder.WriteString(
 				lineLenCalc.GetErrorContextStr())
 
-			if !lineLenCalc.IsErrPrefixLastIndex() {
-				strBuilder.WriteString(
-					lineLenCalc.GetDelimiterNewLineErrPrefix())
-			}
+			//if !lineLenCalc.IsErrPrefixLastIndex() {
+			//	strBuilder.WriteString(
+			//		lineLenCalc.GetDelimiterNewLineErrPrefix())
+			//}
 
 			return nil
 		}
@@ -393,13 +398,13 @@ func (ePrefMolecule *errPrefMolecule) writeNewEPrefWithOutContext(
 
 		if lineLenCalc.EPrefWithoutContextExceedsRemainLineLen() {
 
-			strBuilder.WriteString(
-				lineLenCalc.GetErrorPrefixStr())
-
-			if !lineLenCalc.IsErrPrefixLastIndex() {
+			if strBuilder.Len() > 0 {
 				strBuilder.WriteString(
 					lineLenCalc.GetDelimiterNewLineErrPrefix())
 			}
+
+			strBuilder.WriteString(
+				lineLenCalc.GetErrorPrefixStr())
 
 			return nil
 			// End of if lenEPrefWithoutContext > remainingLineLen

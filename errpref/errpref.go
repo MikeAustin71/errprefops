@@ -461,18 +461,9 @@ func (ePref ErrPref) SetCtxt(
 
 	defer ePref.lock.Unlock()
 
-	if ePref.lock == nil {
-		ePref.lock = new(sync.Mutex)
-	}
-
-	ePref.lock.Lock()
-
-	defer ePref.lock.Unlock()
-
-	ePrefQuark := errPrefQuark{}
-
 	ePref.maxErrPrefixTextLineLength =
-		ePrefQuark.getErrPrefDisplayLineLength()
+		errPrefQuark{}.ptr().
+			getErrPrefDisplayLineLength()
 
 	// Must have at least one error prefix
 	// before you can add an error context
@@ -485,9 +476,7 @@ func (ePref ErrPref) SetCtxt(
 		return oldErrPref
 	}
 
-	ePrefMech := errPrefMechanics{}
-
-	return ePrefMech.setErrorContext(
+	return errPrefMechanics{}.ptr().setErrorContext(
 		oldErrPref,
 		newErrContext,
 		ePref.maxErrPrefixTextLineLength)

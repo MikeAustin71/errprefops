@@ -194,13 +194,22 @@ func (ePrefNeutron *errPrefNeutron) writeCurrentLineStr(
 		return
 	}
 
-	strBuilder.WriteString(
-		ePrefLineLenCalc.GetCurrLineStr())
+	if ePrefLineLenCalc.GetCurrLineStrLength() == 0 {
+		return
+	}
 
-	if !ePrefLineLenCalc.IsErrPrefixLastIndex() {
+	if strBuilder.Len() > 0 {
 		strBuilder.WriteString(
 			ePrefLineLenCalc.GetDelimiterNewLineErrPrefix())
 	}
+
+	strBuilder.WriteString(
+		ePrefLineLenCalc.GetCurrLineStr())
+
+	//if !ePrefLineLenCalc.IsErrPrefixLastIndex() {
+	//	strBuilder.WriteString(
+	//		ePrefLineLenCalc.GetDelimiterNewLineErrPrefix())
+	//}
 
 	ePrefLineLenCalc.SetCurrentLineStr("")
 
