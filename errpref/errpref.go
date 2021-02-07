@@ -49,6 +49,7 @@ type ErrPref struct {
 // This method is useful for verifying error prefix strings which
 // are routinely populated with non-printable characters.
 //
+//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
@@ -135,7 +136,30 @@ func (ePref ErrPref) ConvertNonPrintableChars(
 // might include variable names, variable values and further
 // details on function execution.
 //
-func (ePref ErrPref) FmtStr(errPref string) string {
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPref             string
+//     - This string holds a series of error prefix and error
+//       context text elements. Each element must be separated by
+//       either a new line character '\n' or the string " - ". This
+//       will format these elements and return them in a properly
+//       configured error prefix string for text presentation.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - A string containing properly formatted error prefix and
+//       error context pairs configured for configuration in an
+//       error message.
+//
+func (ePref ErrPref) FmtStr(
+	errPref string) string {
 
 	if ePref.lock == nil {
 		ePref.lock = new(sync.Mutex)
