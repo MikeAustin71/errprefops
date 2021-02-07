@@ -7,6 +7,7 @@ import (
 type ErrorPrefixInfo struct {
 	isFirstIdx             bool // Signals the first index in the array
 	isLastIdx              bool // Signals the last index in the array
+	isPopulated            bool // Signals whether this object contains valid data
 	errorPrefixStr         string
 	lenErrorPrefixStr      uint
 	errPrefixHasContextStr bool
@@ -226,6 +227,25 @@ func (errorPrefixInfo *ErrorPrefixInfo) GetIsLastIndex() bool {
 	defer errorPrefixInfo.lock.Unlock()
 
 	return errorPrefixInfo.isLastIdx
+}
+
+// GetIsPopulated - Returns a boolean flag signaling whether the
+// current ErrorPrefixInfo instance is populated with valid data.
+//
+// If the returned boolean value is 'true', it signals that this
+// ErrorPrefixInfo object IS POPULATED with valid data.
+//
+func (errorPrefixInfo *ErrorPrefixInfo) GetIsPopulated() bool {
+
+	if errorPrefixInfo.lock == nil {
+		errorPrefixInfo.lock = new(sync.Mutex)
+	}
+
+	errorPrefixInfo.lock.Lock()
+
+	defer errorPrefixInfo.lock.Unlock()
+
+	return errorPrefixInfo.isPopulated
 }
 
 // IsValidInstance - Returns a boolean flag signaling whether the
@@ -473,6 +493,13 @@ func (errorPrefixInfo *ErrorPrefixInfo) SetErrPrefixStr(
 
 	errorPrefixInfo.lenErrorPrefixStr =
 		uint(len(errorPrefixInfo.errorPrefixStr))
+
+	if errorPrefixInfo.lenErrorPrefixStr > 0 {
+		errorPrefixInfo.isPopulated = true
+	} else {
+		errorPrefixInfo.isPopulated = false
+	}
+
 }
 
 // SetIsFirstIndex - Sets an internal flag designating whether the
@@ -514,4 +541,26 @@ func (errorPrefixInfo *ErrorPrefixInfo) SetIsLastIndex(isLastIdx bool) {
 	defer errorPrefixInfo.lock.Unlock()
 
 	errorPrefixInfo.isLastIdx = isLastIdx
+}
+
+// SetIsPopulated - Sets an internal flag indicating whether the
+// current ErrorPrefixInfo instance is, or is NOT, populated with
+// valid data.
+//
+// If input parameter 'isPopulated' is set to 'true' it signals
+// this instance of ErrorPrefixInfo is populated with valid data.
+//
+func (errorPrefixInfo *ErrorPrefixInfo) SetIsPopulated(
+	isPopulated bool) {
+
+	if errorPrefixInfo.lock == nil {
+		errorPrefixInfo.lock = new(sync.Mutex)
+	}
+
+	errorPrefixInfo.lock.Lock()
+
+	defer errorPrefixInfo.lock.Unlock()
+
+	errorPrefixInfo.isPopulated = isPopulated
+
 }

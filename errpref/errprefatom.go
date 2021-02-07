@@ -37,10 +37,7 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 
 	delimiters := ePrefElectron.getDelimiters()
 
-	var (
-		lenCleanPrefixStr,
-		lenCleanContextStr int
-	)
+	var lenCleanPrefixStr int
 
 	errPrefix,
 		lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
@@ -73,70 +70,63 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 
 	var contextIdx int
 	var idxLenInLineContextDelimiter = int(delimiters.GetLengthInLineContextDelimiter() - 1)
-	var errCtxStr string
+	var (
+		errPrefixStr,
+		errCtxStr string
+	)
 
-	lastIdx := lCollection - 1
+	ePrefNeutron := errPrefNeutron{}
 
 	for i := 0; i < lCollection; i++ {
 
 		s := errPrefixContextCollection[i]
 
-		s,
-			lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(s)
-
-		if lenCleanPrefixStr == 0 {
-			continue
-		}
-
 		contextIdx = strings.Index(s,
 			delimiters.GetInLineContextDelimiter())
 
-		element := ErrorPrefixInfo{}.New()
-
-		if i == 0 {
-			element.SetIsFirstIndex(true)
-		} else {
-			element.SetIsFirstIndex(false)
-		}
-
-		if i == lastIdx {
-			element.SetIsLastIndex(true)
-		} else {
-			element.SetIsLastIndex(false)
-		}
-
 		if contextIdx == -1 {
 
-			element.SetErrPrefixStr(s)
+			element,
+				err := ePrefNeutron.createNewEPrefInfo(
+				s,
+				"",
+				"")
 
-			element.SetErrPrefixHasContext(false)
+			if err != nil {
+				continue
+			}
 
 			prefixContextCol = append(prefixContextCol, element)
 
 		} else {
 
-			element.SetErrPrefixStr(s[0:contextIdx])
+			errPrefixStr =
+				s[0:contextIdx]
 
 			errCtxStr = s[contextIdx+
 				idxLenInLineContextDelimiter:]
 
-			errCtxStr,
-				lenCleanContextStr = ePrefElectron.cleanErrorContextStr(
-				errCtxStr)
+			element,
+				err := ePrefNeutron.createNewEPrefInfo(
+				errPrefixStr,
+				errCtxStr,
+				"")
 
-			if lenCleanContextStr == 0 {
-				element.SetErrPrefixHasContext(false)
-				prefixContextCol = append(prefixContextCol, element)
+			if err != nil {
 				continue
 			}
 
-			element.SetErrPrefixHasContext(true)
-
-			element.SetErrContextStr(errCtxStr)
-
 			prefixContextCol = append(prefixContextCol, element)
-		}
 
+		}
+	}
+
+	lCollection = len(prefixContextCol)
+
+	if lCollection > 0 {
+		prefixContextCol[0].SetIsFirstIndex(true)
+
+		prefixContextCol[lCollection-1].SetIsLastIndex(true)
 	}
 
 	return prefixContextCol
