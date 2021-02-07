@@ -172,7 +172,7 @@ func TestErrPref_SetCtxt_000100(t *testing.T) {
 		"[SPACE]:[SPACE][SPACE]A->B\\n" +
 		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
 		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
-		"\\nTx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B"
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B"
 
 	expectedStr = ErrPref{}.ConvertNonPrintableChars(
 		[]rune(expectedStr),
