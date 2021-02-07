@@ -129,6 +129,35 @@ func TestErrPref_FmtStr_000400(t *testing.T) {
 
 }
 
+func TestErrPref_GetLastEPref_000100(t *testing.T) {
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()"
+
+	expectedStr := "Tx5()"
+
+	actualStr := ErrPref{}.GetLastEPref(
+		initialStr)
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error: Expected actualStr= '%v'\n"+
+			"Instead, actualStr='%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
 /*
 func TestNewErrPref_0010(t *testing.T) {
 

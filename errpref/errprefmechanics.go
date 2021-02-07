@@ -169,6 +169,40 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 			prefixContextCol)
 }
 
+// extractLastErrPrefCtxPair - Extracts the last error prefix and
+// error context combination from a series of error prefix/error
+// context pairs contained in input parameter 'oldErrPref'.
+//
+func (ePrefMech *errPrefMechanics) extractLastErrPrefCtxPair(
+	maxErrStringLength uint,
+	oldErrPref string,
+) string {
+
+	if ePrefMech.lock == nil {
+		ePrefMech.lock = new(sync.Mutex)
+	}
+
+	ePrefMech.lock.Lock()
+
+	defer ePrefMech.lock.Unlock()
+
+	errPrefInfo := errPrefNanobot{}.ptr().
+		extractLastErrPrfInfo(oldErrPref)
+
+	if !errPrefInfo.GetIsPopulated() {
+		return ""
+	}
+
+	prefixContextCol := make([]ErrorPrefixInfo, 0, 5)
+
+	prefixContextCol = append(prefixContextCol, errPrefInfo)
+
+	return errPrefNanobot{}.ptr().
+		formatErrPrefixComponents(
+			maxErrStringLength,
+			prefixContextCol)
+}
+
 // ptr() - Returns a pointer to a new instance of
 // errPrefMechanics.
 //

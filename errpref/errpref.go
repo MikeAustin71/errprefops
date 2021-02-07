@@ -177,6 +177,30 @@ func (ePref ErrPref) FmtStr(
 		errPref)
 }
 
+// GetLastEPref - Returns the last error prefix, error context pair
+// from a string consisting of a series of error prefix, error
+// context pairs.
+//
+func (ePref ErrPref) GetLastEPref(
+	oldErrPrefix string) string {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	ePref.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
+
+	return errPrefMechanics{}.ptr().
+		extractLastErrPrefCtxPair(
+			ePref.maxErrPrefixTextLineLength,
+			oldErrPrefix)
+}
+
 // GetMaxErrPrefTextLineLength - Returns the current maximum number
 // of characters allowed in an error prefix text line output
 // display.

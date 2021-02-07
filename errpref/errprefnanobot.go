@@ -9,6 +9,35 @@ type errPrefNanobot struct {
 	lock *sync.Mutex
 }
 
+func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
+	errPref string) ErrorPrefixInfo {
+
+	if ePrefNanobot.lock == nil {
+		ePrefNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefNanobot.lock.Lock()
+
+	defer ePrefNanobot.lock.Unlock()
+
+	prefixContextCol := errPrefAtom{}.
+		ptr().getEPrefContextArray(
+		errPref)
+
+	lenCollection := len(prefixContextCol)
+
+	if lenCollection == 0 {
+		return ErrorPrefixInfo{}
+	}
+
+	lastEPref := prefixContextCol[lenCollection-1]
+
+	lastEPref.SetIsLastIndex(false)
+	lastEPref.SetIsFirstIndex(false)
+
+	return lastEPref
+}
+
 // extractLastErrPrefInStringSeries - Receives a string containing error
 // prefixes and proceeds to extract and return the last error
 // prefix in the series along with the last error context and the
@@ -276,7 +305,11 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 	}
 
 	if lineLenCalculator.GetCurrLineStrLength() > 0 {
-		b1.WriteString(lineLenCalculator.GetDelimiterNewLineErrPrefix())
+
+		if b1.Len() > 0 {
+			b1.WriteString(lineLenCalculator.GetDelimiterNewLineErrPrefix())
+		}
+
 		errPrefNeutron{}.ptr().writeCurrentLineStr(
 			&b1,
 			&lineLenCalculator)
