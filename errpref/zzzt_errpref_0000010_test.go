@@ -226,6 +226,27 @@ func TestErrPref_SetCtxt_000200(t *testing.T) {
 
 }
 
+func TestErrPref_SetCtxt_000300(t *testing.T) {
+
+	initialStr :=
+		""
+
+	actualStr := ErrPref{}.SetCtxt(
+		initialStr,
+		"A!=B")
+
+	expectedStr := ""
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error: Expected actualStr= '%v'\n"+
+			"Instead, actualStr='%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
 /*
 func TestNewErrPref_0010(t *testing.T) {
 
