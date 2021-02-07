@@ -6,8 +6,14 @@ import (
 	"sync"
 )
 
+// constDefaultErrPrefLineLength - Do NOT access
+// constDefaultErrPrefLineLength without first locking
+// 'defaultErrPrefLineLenLock'
 const constDefaultErrPrefLineLength = uint(40)
 
+// defaultErrorPrefixDisplayLineLength - Do NOT access
+// defaultErrorPrefixDisplayLineLength without first locking
+// 'defaultErrPrefLineLenLock'
 var defaultErrorPrefixDisplayLineLength uint
 
 var defaultErrPrefLineLenLock *sync.Mutex
@@ -265,6 +271,31 @@ func (ePrefQuark errPrefQuark) ptr() *errPrefQuark {
 	defer ePrefQuark.lock.Unlock()
 
 	return &errPrefQuark{}
+}
+
+// resetErrPrefDisplayLineLengthToDefault - Reset the maximum error
+// prefix string line length to the default value.
+func (ePrefQuark *errPrefQuark) resetErrPrefDisplayLineLengthToDefault() {
+
+	if ePrefQuark.lock == nil {
+		ePrefQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefQuark.lock.Lock()
+
+	defer ePrefQuark.lock.Unlock()
+
+	if defaultErrPrefLineLenLock == nil {
+		defaultErrPrefLineLenLock = new(sync.Mutex)
+	}
+
+	defaultErrPrefLineLenLock.Lock()
+
+	defer defaultErrPrefLineLenLock.Unlock()
+
+	defaultErrorPrefixDisplayLineLength =
+		constDefaultErrPrefLineLength
+
 }
 
 // setErrPrefDisplayLineLength - Sets the value of the maximum

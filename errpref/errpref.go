@@ -523,10 +523,29 @@ func (ePref ErrPref) SetMaxErrPrefTextLineLength(
 
 	defer ePref.lock.Unlock()
 
-	ePrefQuark := errPrefQuark{}
-
-	ePrefQuark.setErrPrefDisplayLineLength(
+	errPrefQuark{}.ptr().setErrPrefDisplayLineLength(
 		maxErrPrefixTextLineLength)
 
 	return
+}
+
+// SetMaxErrPrefTextLineLengthToDefault - Maximum Error Prefix Line
+// Length is the maximum limit on the number of characters allowed
+// in a single error prefix text line.
+//
+// This method resets that maximum limit to its default value of
+// 40-characters.
+//
+func (ePref ErrPref) SetMaxErrPrefTextLineLengthToDefault() {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	errPrefQuark{}.ptr().resetErrPrefDisplayLineLengthToDefault()
+
 }
