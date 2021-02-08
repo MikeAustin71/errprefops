@@ -146,6 +146,7 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 	if maxErrStringLength == 0 {
 		maxErrStringLength = errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 	}
+
 	localErrPrefix := "errPrefMechanics.formatErrPrefix() "
 
 	prefixContextCol :=

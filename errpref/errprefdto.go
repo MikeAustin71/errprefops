@@ -52,6 +52,81 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 	return newErrPrefixDto
 }
 
+// NewEPrefCollection - Returns a new and properly initialized
+// instance of ErrPrefixDto. This method receives a string
+// containing one or more error prefix and error context pairs.
+// This error prefix information is parsed and stored internally
+// as individual error prefix elements.
+//
+// Upon completion this method returns an integer value identifying
+// the number of error prefix elements successfully parsed and
+// stored for future use.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefixCollection         string
+//     - A string consisting of a series of error prefix strings.
+//       Error prefixes should be delimited by either a new line
+//       character ('\n') or the in-line delimiter string, " - ".
+//
+//       If the collection string contains error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  numberOfCollectionItemsParsed int
+//     - This returned integer value contains the number of error
+//       prefix elements parsed from input parameter
+//       'errorPrefixCollection' and stored internally for future
+//       use.
+//
+//
+//  newErrPrefixDto               ErrPrefixDto
+//     - This method will return a newly created instance of
+//       ErrPrefixDto configured with the error prefix information
+//       parsed from input parameter, 'errorPrefixCollection'.
+//
+//
+func (ePrefDto ErrPrefixDto) NewEPrefCollection(
+	errorPrefixCollection string) (
+	numberOfCollectionItemsParsed int,
+	newErrPrefixDto ErrPrefixDto) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	prefixContextCol :=
+		errPrefAtom{}.ptr().getEPrefContextArray(
+			errorPrefixCollection)
+
+	numberOfCollectionItemsParsed = len(prefixContextCol)
+
+	if numberOfCollectionItemsParsed > 0 {
+		ePrefDto.ePrefCol =
+			append(ePrefDto.ePrefCol, prefixContextCol...)
+	}
+
+	return numberOfCollectionItemsParsed, newErrPrefixDto
+}
+
 // GetIsTerminatedWithNewLine - Returns the current setting which
 // determines whether error prefix strings returned by this
 // ErrPrefixDto instance will be terminated with a new line
@@ -210,6 +285,11 @@ func (ePrefDto *ErrPrefixDto) SetCtx(
 // the thread of code execution by listing the calling sequence for
 // specific functions and methods.
 //
+// This method is designed to process a single error prefix string
+// passed in input parameter 'ErrPrefixDto'. If this string
+// contains multiple error prefixes, use method
+// 'ErrPrefixDto.SetEPrefCollection()'.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -255,6 +335,78 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 	return
 }
 
+// SetEPrefCollection - Receives a string containing one or more
+// error prefix and error context pairs. This error prefix
+// information is parsed and stored internally as individual error
+// prefix elements.
+//
+// Upon completion this method returns an integer value identifying
+// the number of error prefix elements successfully parsed and
+// stored for future use.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefixCollection         string
+//     - A string consisting of a series of error prefix strings.
+//       Error prefixes should be delimited by either a new line
+//       character ('\n') or the in-line delimiter string, " - ".
+//
+//       If the collection string contains error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  numberOfCollectionItemsParsed int
+//     - This returned integer value contains the number of error
+//       prefix elements parsed from input parameter
+//       'errorPrefixCollection' and stored internally for future
+//       use.
+//
+func (ePrefDto *ErrPrefixDto) SetEPrefCollection(
+	errorPrefixCollection string) (
+	numberOfCollectionItemsParsed int) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	}
+
+	if ePrefDto.maxErrPrefixTextLineLength < 10 {
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	}
+
+	prefixContextCol :=
+		errPrefAtom{}.ptr().getEPrefContextArray(
+			errorPrefixCollection)
+
+	numberOfCollectionItemsParsed = len(prefixContextCol)
+
+	if numberOfCollectionItemsParsed > 0 {
+		ePrefDto.ePrefCol =
+			append(ePrefDto.ePrefCol, prefixContextCol...)
+	}
+
+	return numberOfCollectionItemsParsed
+}
+
 // SetEPrefCtx - Adds an error prefix and an error context string
 // to the list of previous error prefix/context information.
 //
@@ -279,6 +431,10 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 //       the function or method which is currently executing. This
 //       information is used to document source code execution flow
 //       in error messages.
+//
+//       This method is designed to process a single new error prefix
+//       string. To process a collection of error prefix strings, see
+//       method 'ErrPrefixDto.SetEPrefCollection()'.
 //
 //
 //  newErrContext       string
