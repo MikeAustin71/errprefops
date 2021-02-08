@@ -327,12 +327,14 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 //
 //
 //  newErrPref          string
-//     - The new error prefix represents the error prefix string
-//       identifies with the function or method which is currently
-//       executing for purposes of documenting execution flow in
-//       error messages. This parameter is optional and will accept
-//       an empty string, but there isn't much point in calling
-//       this method without a substantive value for 'newErrPref'.
+//     - The new error prefix represents typically identifies
+//       the function or method which is currently executing. This
+//       information is used to document source code execution flow
+//       in error messages.
+//
+//       If 'newErrPref' equates to an empty string, this method will
+//       return the formatted version of 'oldErrPref' and no new error
+//       prefix information will be added.
 //
 //
 // -----------------------------------------------------------------
