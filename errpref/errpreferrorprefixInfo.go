@@ -245,6 +245,15 @@ func (errorPrefixInfo *ErrorPrefixInfo) GetIsPopulated() bool {
 
 	defer errorPrefixInfo.lock.Unlock()
 
+	errorPrefixInfo.lenErrorPrefixStr =
+		uint(len(errorPrefixInfo.errorPrefixStr))
+
+	if errorPrefixInfo.lenErrorPrefixStr > 0 {
+		errorPrefixInfo.isPopulated = true
+	} else {
+		errorPrefixInfo.isPopulated = false
+	}
+
 	return errorPrefixInfo.isPopulated
 }
 

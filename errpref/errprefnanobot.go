@@ -123,7 +123,7 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 	errPrefAtom{}.
 		ptr().getEPrefContextArray(
 		errPref,
-		prefixContextCol)
+		&prefixContextCol)
 
 	lenCollection := len(prefixContextCol)
 
@@ -456,6 +456,8 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 	if isLastLineTerminatedWithNewLine {
 		b1.WriteRune('\n')
 	}
+
+	lineLenCalculator.Empty()
 
 	return b1.String()
 }

@@ -300,12 +300,15 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 // specific functions and methods.
 //
 // - IMPORTANT -
-// None of the error prefix strings returned by the methods on this
-// type are terminated with a new line character ('\n'). That means
-// that none of the strings end with a new line character.
 //
-// If you prefer that error prefix strings be terminated with a new
-// line character, you have two options:
+// The last line of error prefix strings returned by the methods on
+// this type are NOT terminated with a new line character ('\n').
+// That means that the last line of error prefix strings will never
+// end with a new line character ('\n').
+//
+// If you prefer that the last line of error prefix strings be
+// terminated with a new line character ('\n'), you have two
+// options:
 //
 //   1. Add the terminating new line character in your code.
 //
@@ -320,10 +323,21 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 // Input Parameters
 //
 //  oldErrPref          string
-//     - This includes the previous error prefix string. This string
-//       will be formatted and concatenated with the new error prefix
-//       information provided by input parameter, 'newErrPref',
-//       below.
+//     - This includes the previous or preexisting error prefix
+//       string. This string will be parsed into error prefix
+//       and error context components before being converted into
+//       a single, formatted string containing error prefix and
+//       error context information.
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
 //
 //
 //  newErrPref          string
@@ -392,12 +406,15 @@ func (ePref ErrPref) EPref(
 // details on function execution.
 //
 // - IMPORTANT -
-// None of the error prefix strings returned by the methods on this
-// type are terminated with a new line character ('\n'). That means
-// that none of the strings end with a new line character.
 //
-// If you prefer that error prefix strings be terminated with a new
-// line character, you have two options:
+// The last line of error prefix strings returned by the methods on
+// this type are NOT terminated with a new line character ('\n').
+// That means that the last line of error prefix strings will never
+// end with a new line character ('\n').
+//
+// If you prefer that the last line of error prefix strings be
+// terminated with a new line character ('\n'), you have two
+// options:
 //
 //   1. Add the terminating new line character in your code.
 //
@@ -412,9 +429,21 @@ func (ePref ErrPref) EPref(
 // Input Parameters
 //
 //  oldErrPref          string
-//     - This includes the previous error prefix string. This string
-//       will be formatted and concatenated with the new error prefix
-//       and the associated error prefix.
+//     - This includes the previous or preexisting error prefix
+//       string. This string will be parsed into error prefix
+//       and error context components before being converted into
+//       a single, formatted string containing error prefix and
+//       error context information.
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
 //
 //
 //  newErrPref          string
@@ -450,7 +479,7 @@ func (ePref ErrPref) EPref(
 // Usage Examples
 //
 //  errorPrefix = ErrPref{}.EPrefCtx(
-//                           errorPrefix, // Assuming this is the old
+//                           oldErrPref, // Assuming this is the old
 //                                        // error prefix
 //                           newErrPref,
 //                           newContext)
@@ -483,25 +512,31 @@ func (ePref ErrPref) EPrefCtx(
 		ePref.maxErrPrefixTextLineLength)
 }
 
-// SetCtxt - Sets or resets the error context for the last error
-// prefix. This operation either adds, or replaces, the error
-// context string associated with the last error prefix in input
-// parameter, 'oldErrPref'.
+// EPrefOld - Receives an old or preexisting error prefix string
+// which is parsed into error prefix and error context components
+// and returned as a properly formatted error prefix string.
 //
-// If the last error prefix already has an error context string, it
-// will be replaced by input parameter, 'newErrContext'.
+// Error prefix text is designed to be configured at the beginning
+// of error messages and is most often used to document the thread
+// of code execution by listing the calling sequence for a specific
+// list of functions and methods.
 //
-// If the last error prefix does NOT have an associated error
-// context, this new error context string will be associated
-// with that error prefix.
+// The error context string is designed to provide additional
+// information about the function or method identified by the
+// associated error prefix string. Typical context information
+// might include variable names, variable values and additional
+// details on function execution.
 //
 // - IMPORTANT -
-// None of the error prefix strings returned by the methods on this
-// type are terminated with a new line character ('\n'). That means
-// that none of the strings end with a new line character.
 //
-// If you prefer that error prefix strings be terminated with a new
-// line character, you have two options:
+// The last line of error prefix strings returned by the methods on
+// this type are NOT terminated with a new line character ('\n').
+// That means that the last line of error prefix strings will never
+// end with a new line character ('\n').
+//
+// If you prefer that the last line of error prefix strings be
+// terminated with a new line character ('\n'), you have two
+// options:
 //
 //   1. Add the terminating new line character in your code.
 //
@@ -516,11 +551,123 @@ func (ePref ErrPref) EPrefCtx(
 // Input Parameters
 //
 //  oldErrPref          string
-//     - This includes the previous error prefix string. This error
-//       prefix string is comprised of a series of error prefix
-//       and error context pairs. The new error context string will
-//       be configured and associated with the last error prefix in
-//       this series of error prefixes.
+//     - This includes the previous or preexisting error prefix
+//       string. This string will be parsed into error prefix
+//       and error context components before being converted into
+//       a single, formatted string containing error prefix and
+//       error context information.
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method will return the consolidated error prefix text.
+//
+//       The error prefix text is designed to be configured at the
+//       beginning of error messages and is most often used to
+//       document the thread of code execution by listing the calling
+//       sequence for specific functions and methods.
+//
+//
+//
+// -----------------------------------------------------------------
+//
+// Usage Examples
+//
+//  errorPrefix = ErrPref{}.EPrefOld(
+//                           oldErrPref) // Assuming this is the old
+//                                       // or preexisting error
+//                                       // prefix
+//
+//
+func (ePref ErrPref) EPrefOld(
+	oldErrPref string) string {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	ePrefQuark := errPrefQuark{}
+
+	ePref.maxErrPrefixTextLineLength =
+		ePrefQuark.getErrPrefDisplayLineLength()
+
+	ePrefMech := errPrefMechanics{}
+
+	return ePrefMech.assembleErrPrefix(
+		oldErrPref,
+		"",
+		"",
+		ePref.maxErrPrefixTextLineLength)
+}
+
+// SetCtxt - Sets or resets the error context for the last error
+// prefix. This operation either adds, or replaces, the error
+// context string associated with the last error prefix in input
+// parameter, 'oldErrPref'.
+//
+// If the last error prefix already has an error context string, it
+// will be replaced by input parameter, 'newErrContext'.
+//
+// If the last error prefix does NOT have an associated error
+// context, this new error context string will be associated
+// with that error prefix.
+//
+// - IMPORTANT -
+//
+// The last line of error prefix strings returned by the methods on
+// this type are NOT terminated with a new line character ('\n').
+// That means that the last line of error prefix strings will never
+// end with a new line character ('\n').
+//
+// If you prefer that the last line of error prefix strings be
+// terminated with a new line character ('\n'), you have two
+// options:
+//
+//   1. Add the terminating new line character in your code.
+//
+//                   OR
+//
+//   2. Use the Error Prefix Data Transfer Object type
+//      'ErrPrefixDto'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  oldErrPref          string
+//     - This includes the previous or preexisting error prefix
+//       string. This string will be parsed into error prefix
+//       and error context components before being converted into
+//       a single, formatted string containing error prefix and
+//       error context information.
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
 //
 //  newErrContext       string
 //     - This string holds the new error context information. If

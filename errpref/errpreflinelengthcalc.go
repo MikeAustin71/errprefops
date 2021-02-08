@@ -169,6 +169,30 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) CopyOut(
 		ePrefix)
 }
 
+// Empty - Sets all internal variables to their zero or
+// uninitialized values.
+//
+// IMPORTANT
+// This method will DELETE ALL VALID DATA contained in this
+// instance of EPrefixLineLenCalc.
+//
+func (ePrefixLineLenCalc *EPrefixLineLenCalc) Empty() {
+
+	if ePrefixLineLenCalc.lock == nil {
+		ePrefixLineLenCalc.lock = new(sync.Mutex)
+	}
+
+	ePrefixLineLenCalc.lock.Lock()
+
+	defer ePrefixLineLenCalc.lock.Unlock()
+
+	ePrefixLineLenCalc.ePrefDelimiters = ErrPrefixDelimiters{}
+	ePrefixLineLenCalc.errorPrefixInfo = nil
+	ePrefixLineLenCalc.currentLineStr = ""
+	ePrefixLineLenCalc.maxErrStringLength = 0
+
+}
+
 // EPrefWithoutContextExceedsRemainLineLen - Returns 'true' if the
 // length of the in-line of in-line error prefix delimiter plus the
 // length of the error prefix string exceeds the remaining unused

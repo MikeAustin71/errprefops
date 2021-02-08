@@ -100,7 +100,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 		errPrefAtom{}.ptr().getEPrefContextArray(
 			oldErrPrefix,
-			prefixContextCol)
+			&prefixContextCol)
 
 		lenPrefixContextCol = len(prefixContextCol)
 
@@ -150,9 +150,11 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0, 256)
 
-	errPrefAtom{}.ptr().getEPrefContextArray(
+	ePrefAtom := errPrefAtom{}
+
+	ePrefAtom.getEPrefContextArray(
 		errPrefix,
-		prefixContextCol)
+		&prefixContextCol)
 
 	lenPrefixContextCol := len(prefixContextCol)
 
@@ -160,6 +162,9 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 		return localErrPrefix +
 			"len(prefixContextCol)==0\n"
 	}
+
+	ePrefAtom.setFlagsErrorPrefixInfoArray(
+		prefixContextCol)
 
 	return errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
@@ -265,7 +270,7 @@ func (ePrefMech *errPrefMechanics) setErrorContext(
 
 	errPrefAtom{}.ptr().getEPrefContextArray(
 		oldErrPref,
-		prefixContextCol)
+		&prefixContextCol)
 
 	lenPrefixContextCol = len(prefixContextCol)
 

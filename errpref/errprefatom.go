@@ -9,16 +9,54 @@ type errPrefAtom struct {
 	lock *sync.Mutex
 }
 
-// getEPrefContextArray - Receives an error prefix string
-// containing a series of error prefix strings and error context
-// strings. This method then proceeds to separate the error prefix
-// and error context elements returning the results in an array of
-// ErrorPrefixInfo objects passed as input parameter,
-// 'prefixContextCol' .
+// getEPrefContextArray - Receives a string containing a series of
+// error prefix strings and error context strings. This method then
+// proceeds to parse the error prefix and error context elements
+// returning the results in an array of ErrorPrefixInfo objects
+// passed as input parameter, 'prefixContextCol' .
+//
+// All error prefix elements parsed from the 'errPrefix' string
+// will be appended to 'prefixContextCol'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPrefix           string
+//     - This string contains a series of error prefix and error
+//       context strings. Input parameter 'errPrefix' will be
+//       parsed into error prefix and error context components
+//       before being appended to array of ErrorPrefixInfo objects
+//       passed in input parameter, 'prefixContextCol'
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+//  prefixContextCol    *[]ErrorPrefixInfo
+//     - A pointer to an array of ErrorPrefixInfo objects. The
+//       error prefix and error context data elements parsed from
+//       input parameter, 'errPrefix', will be appended to this
+//       array.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
 //
 func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 	errPrefix string,
-	prefixContextCol []ErrorPrefixInfo) {
+	prefixContextCol *[]ErrorPrefixInfo) {
 
 	if ePrefAtom.lock == nil {
 		ePrefAtom.lock = new(sync.Mutex)
@@ -28,9 +66,8 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 
 	defer ePrefAtom.lock.Unlock()
 
-	if prefixContextCol == nil {
-		prefixContextCol =
-			make([]ErrorPrefixInfo, 0, 150)
+	if *prefixContextCol == nil {
+		*prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
 	}
 
 	if len(errPrefix) == 0 {
@@ -100,7 +137,7 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 				continue
 			}
 
-			prefixContextCol = append(prefixContextCol, element)
+			*prefixContextCol = append(*prefixContextCol, element)
 
 		} else {
 
@@ -120,17 +157,57 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 				continue
 			}
 
-			prefixContextCol = append(prefixContextCol, element)
+			*prefixContextCol = append(*prefixContextCol, element)
 
 		}
 	}
 
-	lCollection = len(prefixContextCol)
+	lCollection = len(*prefixContextCol)
 
-	if lCollection > 0 {
-		prefixContextCol[0].SetIsFirstIndex(true)
+	return
+}
 
-		prefixContextCol[lCollection-1].SetIsLastIndex(true)
+// setFlagsErrorPrefixInfoArray - Sets internal flags in an array
+// of ErrorPrefixInfo objects
+//
+func (ePrefAtom *errPrefAtom) setFlagsErrorPrefixInfoArray(
+	prefixContextCol []ErrorPrefixInfo) {
+
+	if ePrefAtom.lock == nil {
+		ePrefAtom.lock = new(sync.Mutex)
+	}
+
+	ePrefAtom.lock.Lock()
+
+	defer ePrefAtom.lock.Unlock()
+
+	if prefixContextCol == nil {
+		prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
+	}
+
+	lenCollection := len(prefixContextCol)
+
+	if lenCollection == 0 {
+		return
+	}
+
+	lastIdx := lenCollection - 1
+
+	for i := 0; i < lenCollection; i++ {
+
+		_ = prefixContextCol[i].GetIsPopulated()
+
+		switch i {
+		case 0:
+			prefixContextCol[i].SetIsFirstIndex(true)
+			prefixContextCol[i].SetIsLastIndex(false)
+		case lastIdx:
+			prefixContextCol[i].SetIsFirstIndex(false)
+			prefixContextCol[i].SetIsLastIndex(true)
+		default:
+			prefixContextCol[i].SetIsFirstIndex(false)
+			prefixContextCol[i].SetIsLastIndex(false)
+		}
 	}
 
 	return

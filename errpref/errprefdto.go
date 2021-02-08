@@ -91,7 +91,7 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 
 	errPrefAtom{}.ptr().getEPrefContextArray(
 		errorPrefixCollectionStr,
-		ePrefDto.ePrefCol)
+		&ePrefDto.ePrefCol)
 
 	numberOfCollectionItemsParsed =
 		len(ePrefDto.ePrefCol) -
@@ -404,7 +404,7 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 
 	errPrefAtom{}.ptr().getEPrefContextArray(
 		errorPrefixCollection,
-		ePrefDto.ePrefCol)
+		&ePrefDto.ePrefCol)
 
 	numberOfCollectionItemsParsed =
 		len(ePrefDto.ePrefCol) -
@@ -597,6 +597,78 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
 		newErrContext,
+		ePrefDto.ePrefCol)
+
+	return
+}
+
+// SetEPrefOld - Deletes the current error prefix information and
+// initializes this ErrPrefixDto instance with an old or preexisting
+// error prefix string. This error prefix string input parameter
+// typically includes one or more error prefix elements and may
+// also include associated error context elements. This string will
+// be parsed and into individual error prefix and error context
+// components and stored internally in the current ErrPrefixDto
+// instance.
+//
+// Error prefix text is designed to be configured at the beginning
+// of error messages and is most often used to document the thread
+// of code execution by listing the calling sequence for a specific
+// list of functions and methods.
+//
+// The error context string is designed to provide additional
+// information about the function or method identified by the
+// associated error prefix string. Typical context information
+// might include variable names, variable values and additional
+// details on function execution.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  oldErrPrefix        string
+//     - This includes the previous or preexisting error prefix
+//       string. This string will be parsed into error prefix
+//       and error context components before being converted into
+//       a single, formatted string containing error prefix and
+//       error context information.
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePrefDto *ErrPrefixDto) SetEPrefOld(
+	oldErrPrefix string) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	}
+
+	errPrefNanobot{}.ptr().addEPrefInfo(
+		oldErrPrefix,
+		"",
 		ePrefDto.ePrefCol)
 
 	return
