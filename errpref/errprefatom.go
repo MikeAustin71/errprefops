@@ -12,11 +12,12 @@ type errPrefAtom struct {
 // getEPrefContextArray - Receives an error prefix string
 // containing a series of error prefix strings and error context
 // strings. This method then proceeds to separate the error prefix
-// and error context elements returning the results in an array as
-// a collection of ErrorPrefixInfo objects.
+// and error context elements returning the results in an array of
+// ErrorPrefixInfo objects passed as input parameter,
+// 'prefixContextCol' .
 //
 func (ePrefAtom *errPrefAtom) getEPrefContextArray(
-	errPrefix string) (
+	errPrefix string,
 	prefixContextCol []ErrorPrefixInfo) {
 
 	if ePrefAtom.lock == nil {
@@ -27,10 +28,13 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 
 	defer ePrefAtom.lock.Unlock()
 
-	prefixContextCol = make([]ErrorPrefixInfo, 0, 150)
+	if prefixContextCol == nil {
+		prefixContextCol =
+			make([]ErrorPrefixInfo, 0, 150)
+	}
 
 	if len(errPrefix) == 0 {
-		return prefixContextCol
+		return
 	}
 
 	ePrefElectron := errPrefElectron{}
@@ -43,7 +47,7 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 		lenCleanPrefixStr = ePrefElectron.cleanErrorPrefixStr(errPrefix)
 
 	if lenCleanPrefixStr == 0 {
-		return prefixContextCol
+		return
 	}
 
 	errPrefix = strings.ReplaceAll(
@@ -65,7 +69,7 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 	lCollection := len(errPrefixContextCollection)
 
 	if lCollection == 0 {
-		return prefixContextCol
+		return
 	}
 
 	var contextIdx int
@@ -129,7 +133,7 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 		prefixContextCol[lCollection-1].SetIsLastIndex(true)
 	}
 
-	return prefixContextCol
+	return
 }
 
 // ptr() - Returns a pointer to a new instance of

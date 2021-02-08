@@ -113,16 +113,15 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
-	prefixContextCol :=
-		errPrefAtom{}.ptr().getEPrefContextArray(
-			errorPrefixCollection)
+	previousCollectionLen := len(ePrefDto.ePrefCol)
 
-	numberOfCollectionItemsParsed = len(prefixContextCol)
+	errPrefAtom{}.ptr().getEPrefContextArray(
+		errorPrefixCollection,
+		ePrefDto.ePrefCol)
 
-	if numberOfCollectionItemsParsed > 0 {
-		ePrefDto.ePrefCol =
-			append(ePrefDto.ePrefCol, prefixContextCol...)
-	}
+	numberOfCollectionItemsParsed =
+		len(ePrefDto.ePrefCol) -
+			previousCollectionLen
 
 	return numberOfCollectionItemsParsed, newErrPrefixDto
 }
@@ -393,16 +392,15 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCollection(
 
 	}
 
-	prefixContextCol :=
-		errPrefAtom{}.ptr().getEPrefContextArray(
-			errorPrefixCollection)
+	previousCollectionLen := len(ePrefDto.ePrefCol)
 
-	numberOfCollectionItemsParsed = len(prefixContextCol)
+	errPrefAtom{}.ptr().getEPrefContextArray(
+		errorPrefixCollection,
+		ePrefDto.ePrefCol)
 
-	if numberOfCollectionItemsParsed > 0 {
-		ePrefDto.ePrefCol =
-			append(ePrefDto.ePrefCol, prefixContextCol...)
-	}
+	numberOfCollectionItemsParsed =
+		len(ePrefDto.ePrefCol) -
+			previousCollectionLen
 
 	return numberOfCollectionItemsParsed
 }

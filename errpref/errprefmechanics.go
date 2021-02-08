@@ -90,19 +90,17 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 		newErrContext,
 		eMsgPrefix)
 
-	var prefixContextCol []ErrorPrefixInfo
-
 	var lenPrefixContextCol int
 
-	prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
+	prefixContextCol := make([]ErrorPrefixInfo, 0, 256)
 
 	lenPrefixContextCol = 0
 
 	if lenOldErrPrefCleanStr > 0 {
 
-		prefixContextCol =
-			errPrefAtom{}.ptr().getEPrefContextArray(
-				oldErrPrefix)
+		errPrefAtom{}.ptr().getEPrefContextArray(
+			oldErrPrefix,
+			prefixContextCol)
 
 		lenPrefixContextCol = len(prefixContextCol)
 
@@ -149,9 +147,11 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 
 	localErrPrefix := "errPrefMechanics.formatErrPrefix() "
 
-	prefixContextCol :=
-		errPrefAtom{}.ptr().getEPrefContextArray(
-			errPrefix)
+	prefixContextCol := make([]ErrorPrefixInfo, 0, 256)
+
+	errPrefAtom{}.ptr().getEPrefContextArray(
+		errPrefix,
+		prefixContextCol)
 
 	lenPrefixContextCol := len(prefixContextCol)
 
@@ -258,11 +258,11 @@ func (ePrefMech *errPrefMechanics) setErrorContext(
 		return oldErrPref
 	}
 
-	var prefixContextCol []ErrorPrefixInfo
+	prefixContextCol := make([]ErrorPrefixInfo, 0, 256)
 
-	prefixContextCol =
-		errPrefAtom{}.ptr().getEPrefContextArray(
-			oldErrPref)
+	errPrefAtom{}.ptr().getEPrefContextArray(
+		oldErrPref,
+		prefixContextCol)
 
 	lenPrefixContextCol = len(prefixContextCol)
 

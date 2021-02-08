@@ -118,9 +118,12 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 
 	defer ePrefNanobot.lock.Unlock()
 
-	prefixContextCol := errPrefAtom{}.
+	prefixContextCol := make([]ErrorPrefixInfo, 0, 256)
+
+	errPrefAtom{}.
 		ptr().getEPrefContextArray(
-		errPref)
+		errPref,
+		prefixContextCol)
 
 	lenCollection := len(prefixContextCol)
 
