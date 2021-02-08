@@ -29,8 +29,293 @@ type ErrPrefixDto struct {
 	lock                       *sync.Mutex
 }
 
+// AddEPrefCollectionStr - Receives a string containing one or more
+// error prefix and error context pairs. This error prefix
+// information is parsed and added to the internal store of
+// error prefix elements.
+//
+// Upon completion this method returns an integer value identifying
+// the number of error prefix elements successfully parsed and
+// added to internal error prefix storage.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errorPrefixCollectionStr      string
+//     - A string consisting of a series of error prefix strings.
+//       Error prefixes should be delimited by either a new line
+//       character ('\n') or the in-line delimiter string, " - ".
+//
+//       If the collection string contains error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  numberOfCollectionItemsParsed int
+//     - This returned integer value contains the number of error
+//       prefix elements parsed from input parameter
+//       'errorPrefixCollection' and added to the internal store
+//       of error prefix elements.
+//
+func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
+	errorPrefixCollectionStr string) (
+	numberOfCollectionItemsParsed int) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	}
+
+	if ePrefDto.maxErrPrefixTextLineLength < 10 {
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	}
+
+	previousCollectionLen := len(ePrefDto.ePrefCol)
+
+	errPrefAtom{}.ptr().getEPrefContextArray(
+		errorPrefixCollectionStr,
+		ePrefDto.ePrefCol)
+
+	numberOfCollectionItemsParsed =
+		len(ePrefDto.ePrefCol) -
+			previousCollectionLen
+
+	return numberOfCollectionItemsParsed
+}
+
+// EmptyEPrefCollection - All instances of ErrPrefixDto store
+// error prefix information internally in an array of
+// ErrorPrefixInfo objects. This method will delete or empty the
+// current ErrorPrefixInfo array and initialize it to a zero length
+// array.
+//
+// Effectively, this will delete all existing error prefix
+// information stored in the current ErrPrefixDto instance.
+//
+//
+func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 256)
+}
+
+// GetIsTerminatedWithNewLine - Returns the current setting which
+// determines whether error prefix strings returned by this
+// ErrPrefixDto instance will be terminated with a new line
+// character ('\n').
+//
+// By default, error prefix strings returned by the method
+// ErrPrefixDto.String() do NOT have a new line character as the
+// last character in the error prefix string. In other words,
+// returned error prefix strings are NOT terminated with new
+// line characters ('\n') by default.
+//
+// If error prefix strings terminated with a new line character is
+// a preferred option, use the method 'SetIsTerminatedWithNewLine()'
+// to configure this feature.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - If this return parameter is set to 'true', all error
+//       prefix strings returned by this ErrPrefixDto instance WILL
+//       BE terminated with a new line character ('\n').
+//
+func (ePrefDto *ErrPrefixDto) GetIsTerminatedWithNewLine() bool {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return ePrefDto.isTerminatedWithNewLine
+}
+
+// GetErrorPrefixCollection - Returns a deep copy of the current
+// error prefix collection maintained by this ErrPrefixDto
+// instance.
+//
+func (ePrefDto *ErrPrefixDto) GetErrorPrefixCollection() []ErrorPrefixInfo {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	var newErrorPrefixCollection []ErrorPrefixInfo
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 256)
+		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0, 256)
+		return newErrorPrefixCollection
+	}
+
+	lenEPrefCol := len(ePrefDto.ePrefCol)
+
+	if lenEPrefCol == 0 {
+		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0, 256)
+		return newErrorPrefixCollection
+	}
+
+	newErrorPrefixCollection =
+		make([]ErrorPrefixInfo,
+			lenEPrefCol,
+			lenEPrefCol+256)
+
+	_ = copy(newErrorPrefixCollection, ePrefDto.ePrefCol)
+
+	return newErrorPrefixCollection
+}
+
+// GetMaxErrPrefTextLineLength - Returns the maximum limit on the
+// number of characters allowed in an error prefix text line output
+// for display purposes.
+//
+// This unsigned integer value controls the maximum character limit
+// for this specific ErrPrefixDto instance. This maximum limit will
+// remain in force for the life of this ErrPrefixDto instance or
+// until a call is made to the method 'SetMaxErrPrefTextLineLength()'
+// which is used to change the value.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  uint
+//     - This unsigned integer specifies the maximum limit on the
+//       number of characters allowed in an error prefix text line
+//       output for display purposes.
+//
+//
+func (ePrefDto *ErrPrefixDto) GetMaxErrPrefTextLineLength() uint {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.maxErrPrefixTextLineLength < 10 {
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	}
+
+	return ePrefDto.maxErrPrefixTextLineLength
+}
+
+// MergeErrPrefixDto - Receives a pointer to another ErrPrefixDto
+// object and proceeds to add the error prefix collection to that
+// of the current ErrPrefixDto instance.
+//
+// This means that the error prefix collection for
+// 'incomingErrPrefixDto' will be added to the end of the
+// ePrefDto collection.
+//
+func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
+	incomingErrPrefixDto *ErrPrefixDto) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol =
+			make([]ErrorPrefixInfo, 0, 256)
+	}
+
+	if incomingErrPrefixDto.ePrefCol == nil {
+		incomingErrPrefixDto.ePrefCol =
+			make([]ErrorPrefixInfo, 0, 256)
+		return
+	}
+
+	lenIncomingDto :=
+		len(incomingErrPrefixDto.ePrefCol)
+
+	if lenIncomingDto == 0 {
+		return
+	}
+
+	ePrefDto.ePrefCol =
+		append(ePrefDto.ePrefCol,
+			incomingErrPrefixDto.ePrefCol...)
+
+}
+
 // New - Returns a new and properly initialized instance of
 // ErrPrefixDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - This method will return a new, properly initialized
+//       instance of ErrPrefixDto.
+//
 //
 func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 
@@ -124,91 +409,6 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 			previousCollectionLen
 
 	return numberOfCollectionItemsParsed, newErrPrefixDto
-}
-
-// GetIsTerminatedWithNewLine - Returns the current setting which
-// determines whether error prefix strings returned by this
-// ErrPrefixDto instance will be terminated with a new line
-// character ('\n').
-//
-// By default, error prefix strings returned by the method
-// ErrPrefixDto.String() do NOT have a new line character as the
-// last character in the error prefix string. In other words,
-// returned error prefix strings are NOT terminated with new
-// line characters ('\n') by default.
-//
-// If error prefix strings terminated with a new line character is
-// a preferred option, use the method 'SetIsTerminatedWithNewLine()'
-// to configure this feature.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  --- NONE ---
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  bool
-//     - If this return parameter is set to 'true', all error
-//       prefix strings returned by this ErrPrefixDto instance WILL
-//       BE terminated with a new line character ('\n').
-//
-func (ePrefDto *ErrPrefixDto) GetIsTerminatedWithNewLine() bool {
-
-	if ePrefDto.lock == nil {
-		ePrefDto.lock = new(sync.Mutex)
-	}
-
-	ePrefDto.lock.Lock()
-
-	defer ePrefDto.lock.Unlock()
-
-	return ePrefDto.isTerminatedWithNewLine
-}
-
-// GetMaxErrPrefTextLineLength - Returns the maximum limit on the
-// number of characters allowed in an error prefix text line output
-// for display purposes.
-//
-// This unsigned integer value controls the maximum character limit
-// for this specific ErrPrefixDto instance. This maximum limit will
-// remain in force for the life of this ErrPrefixDto instance or
-// until a call is made to the method 'SetMaxErrPrefTextLineLength()'
-// which is used to change the value.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  --- NONE ---
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  uint
-//     - This unsigned integer specifies the maximum limit on the
-//       number of characters allowed in an error prefix text line
-//       output for display purposes.
-//
-//
-func (ePrefDto *ErrPrefixDto) GetMaxErrPrefTextLineLength() uint {
-
-	if ePrefDto.lock == nil {
-		ePrefDto.lock = new(sync.Mutex)
-	}
-
-	ePrefDto.lock.Lock()
-
-	defer ePrefDto.lock.Unlock()
-
-	return ePrefDto.maxErrPrefixTextLineLength
 }
 
 // SetCtx - Sets or resets the error context for the last error
@@ -332,77 +532,6 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 		ePrefDto.ePrefCol)
 
 	return
-}
-
-// SetEPrefCollection - Receives a string containing one or more
-// error prefix and error context pairs. This error prefix
-// information is parsed and stored internally as individual error
-// prefix elements.
-//
-// Upon completion this method returns an integer value identifying
-// the number of error prefix elements successfully parsed and
-// stored for future use.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  errorPrefixCollection         string
-//     - A string consisting of a series of error prefix strings.
-//       Error prefixes should be delimited by either a new line
-//       character ('\n') or the in-line delimiter string, " - ".
-//
-//       If the collection string contains error context strings
-//       as well, they should be delimited with either a new line
-//       delimiter string, "\n :  " or an in-line delimiter string,
-//       " : ".
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  numberOfCollectionItemsParsed int
-//     - This returned integer value contains the number of error
-//       prefix elements parsed from input parameter
-//       'errorPrefixCollection' and stored internally for future
-//       use.
-//
-func (ePrefDto *ErrPrefixDto) SetEPrefCollection(
-	errorPrefixCollection string) (
-	numberOfCollectionItemsParsed int) {
-
-	if ePrefDto.lock == nil {
-		ePrefDto.lock = new(sync.Mutex)
-	}
-
-	ePrefDto.lock.Lock()
-
-	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
-	}
-
-	if ePrefDto.maxErrPrefixTextLineLength < 10 {
-
-		ePrefDto.maxErrPrefixTextLineLength =
-			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	}
-
-	previousCollectionLen := len(ePrefDto.ePrefCol)
-
-	errPrefAtom{}.ptr().getEPrefContextArray(
-		errorPrefixCollection,
-		ePrefDto.ePrefCol)
-
-	numberOfCollectionItemsParsed =
-		len(ePrefDto.ePrefCol) -
-			previousCollectionLen
-
-	return numberOfCollectionItemsParsed
 }
 
 // SetEPrefCtx - Adds an error prefix and an error context string
@@ -608,7 +737,11 @@ func (ePrefDto *ErrPrefixDto) String() string {
 	}
 
 	if ePrefDto.maxErrPrefixTextLineLength == 0 {
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().
+				getMasterErrPrefDisplayLineLength()
 	}
+
 	return ""
 }
