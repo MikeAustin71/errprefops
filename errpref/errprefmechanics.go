@@ -125,6 +125,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
 		maxErrStringLength,
+		false,
 		prefixContextCol)
 }
 
@@ -163,6 +164,7 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 	return errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
 			maxErrStringLength,
+			false,
 			prefixContextCol)
 }
 
@@ -197,6 +199,7 @@ func (ePrefMech *errPrefMechanics) extractLastErrPrefCtxPair(
 	return errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
 			maxErrStringLength,
+			false,
 			prefixContextCol)
 }
 
@@ -280,5 +283,6 @@ func (ePrefMech *errPrefMechanics) setErrorContext(
 
 	return errPrefNanobot{}.ptr().formatErrPrefixComponents(
 		maxErrStringLength,
+		false,
 		prefixContextCol)
 }

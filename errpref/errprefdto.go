@@ -23,10 +23,10 @@ import "sync"
 // which may be exchanged between methods.
 //
 type ErrPrefixDto struct {
-	ePrefCol                   []ErrorPrefixInfo
-	isTerminatedWithNewLine    bool
-	maxErrPrefixTextLineLength uint
-	lock                       *sync.Mutex
+	ePrefCol                        []ErrorPrefixInfo
+	isLastLineTerminatedWithNewLine bool
+	maxErrPrefixTextLineLength      uint
+	lock                            *sync.Mutex
 }
 
 // AddEPrefCollectionStr - Receives a string containing one or more
@@ -123,20 +123,21 @@ func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
 	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 256)
 }
 
-// GetIsTerminatedWithNewLine - Returns the current setting which
-// determines whether error prefix strings returned by this
-// ErrPrefixDto instance will be terminated with a new line
-// character ('\n').
+// GetIsLastLineTerminatedWithNewLine - Returns the boolean flag
+// which determines whether the last line of error prefix strings
+// returned by this ErrPrefixDto instance will be terminated with
+// a new line character ('\n').
 //
-// By default, error prefix strings returned by the method
-// ErrPrefixDto.String() do NOT have a new line character as the
-// last character in the error prefix string. In other words,
-// returned error prefix strings are NOT terminated with new
-// line characters ('\n') by default.
+// By default, the last line of error prefix strings returned by
+// the method 'ErrPrefixDto.String()' DO NOT end with a new line
+// character ('\n'). In other words, the last line of returned
+// error prefix strings ARE NOT, by default, terminated with new
+// line characters ('\n').
 //
-// If error prefix strings terminated with a new line character is
-// a preferred option, use the method 'SetIsTerminatedWithNewLine()'
-// to configure this feature.
+// If terminating the last line of error prefix strings with a new
+// line character ('\n') is a preferred option, use the method
+// 'SetIsLastLineTerminatedWithNewLine()' to configure this
+// feature.
 //
 //
 // ----------------------------------------------------------------
@@ -150,11 +151,12 @@ func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
 // Return Values
 //
 //  bool
-//     - If this return parameter is set to 'true', all error
-//       prefix strings returned by this ErrPrefixDto instance WILL
-//       BE terminated with a new line character ('\n').
+//     - If this return parameter is set to 'true', it signals that
+//       the last line of all error prefix strings returned by this
+//       ErrPrefixDto instance WILL BE terminated with a new line
+//       character ('\n').
 //
-func (ePrefDto *ErrPrefixDto) GetIsTerminatedWithNewLine() bool {
+func (ePrefDto *ErrPrefixDto) GetIsLastLineTerminatedWithNewLine() bool {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -164,7 +166,7 @@ func (ePrefDto *ErrPrefixDto) GetIsTerminatedWithNewLine() bool {
 
 	defer ePrefDto.lock.Unlock()
 
-	return ePrefDto.isTerminatedWithNewLine
+	return ePrefDto.isLastLineTerminatedWithNewLine
 }
 
 // GetErrorPrefixCollection - Returns a deep copy of the current
@@ -600,26 +602,30 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 	return
 }
 
-// SetIsTerminatedWithNewLine - By default, error prefix strings
-// returned by the method ErrPrefixDto.String() do NOT have a new
-// line character ('\n') as the last character in the error prefix
-// string. In other words, returned error prefix strings are NOT
-// terminated with new line characters ('\n') by default.
+// SetIsLastLineTerminatedWithNewLine - By default, the last line
+// of error prefix strings returned by the method
+// ErrPrefixDto.String() ARE NOT terminated with a new line
+// character ('\n'). In other words, by default, the last line of
+// returned error prefix strings do not end with a new line
+// character ('\n').
 //
-// If the user prefers to terminate error prefix strings returned
-// by this instance of ErrPrefixDto with a new line character, the
-// input parameter, 'isTerminatedWithNewLine', should be set to
-// 'true'.
+// If the user prefers to terminate the last line of error prefix
+// strings returned by this instance of ErrPrefixDto with a new
+// line character ('\n'), the input parameter,
+// 'isLastLineTerminatedWithNewLine', should be set to 'true'.
 //
+// Error prefix strings are returned by calling method
+// 'ErrPrefixDto.String()'.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  isTerminatedWithNewLine    bool
-//     - If this parameter is set to 'true', all error prefix
-//       strings returned by this ErrPrefixDto instance WILL BE
-//       terminated with a new line character.
+//  isLastLineTerminatedWithNewLine    bool
+//     - If this parameter is set to 'true', the last line of all
+//       error prefix strings returned by this ErrPrefixDto
+//       instance WILL BE terminated with a new line character
+//       ('\n').
 //
 //
 // -----------------------------------------------------------------
@@ -628,8 +634,8 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 //
 //  --- NONE ---
 //
-func (ePrefDto *ErrPrefixDto) SetIsTerminatedWithNewLine(
-	isTerminatedWithNewLine bool) {
+func (ePrefDto *ErrPrefixDto) SetIsLastLineTerminatedWithNewLine(
+	isLastLineTerminatedWithNewLine bool) {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -639,8 +645,8 @@ func (ePrefDto *ErrPrefixDto) SetIsTerminatedWithNewLine(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.isTerminatedWithNewLine =
-		isTerminatedWithNewLine
+	ePrefDto.isLastLineTerminatedWithNewLine =
+		isLastLineTerminatedWithNewLine
 }
 
 // SetMaxErrPrefTextLineLength - Sets the maximum limit on the

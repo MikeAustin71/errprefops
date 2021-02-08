@@ -304,8 +304,49 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrefInStringSeries(
 // formatErrPrefixComponents - Returns a string of formatted error
 // prefix information based on an array of error prefix elements.
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  maxErrPrefixTextLineLength         uint
+//     - This unsigned integer value will be used to set the
+//       maximum number of characters allowed in a text display
+//       line for error prefix information.
+//
+//       If 'maxErrPrefixTextLineLength' is set to a value of zero
+//       (0), this method automatically set this value to the
+//       current default maximum line length.
+//
+//
+//  isLastLineTerminatedWithNewLine    bool
+//     - By default, the last line of error prefix strings ARE NOT
+//       terminated with a new line character ('\n'). In other
+//       words, by default, the last line of returned error prefix
+//       strings do not end with a new line character ('\n').
+//
+//       If this parameter is set to 'true', the last line of the
+//       error prefix strings returned by this method WILL BE
+//       terminated with a new line character ('\n').
+//
+//
+//  prefixContextCol                   []ErrorPrefixInfo
+//     - An array of ErrorPrefixInfo objects containing the error
+//       prefix and error context information which will be
+//       converted to a single string returned by this method.
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  string
+//     - This method will return a string containing formatted
+//       error prefix and error context information.
+//
 func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
-	maxErrStringLength uint,
+	maxErrPrefixTextLineLength uint,
+	isLastLineTerminatedWithNewLine bool,
 	prefixContextCol []ErrorPrefixInfo) string {
 
 	if ePrefNanobot.lock == nil {
@@ -325,8 +366,8 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 			"len(prefixContextCol)==0\n"
 	}
 
-	if maxErrStringLength == 0 {
-		maxErrStringLength =
+	if maxErrPrefixTextLineLength == 0 {
+		maxErrPrefixTextLineLength =
 			errPrefQuark{}.ptr().
 				getErrPrefDisplayLineLength()
 	}
@@ -346,7 +387,7 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 	}
 
 	lineLenCalculator.SetMaxErrStringLength(
-		maxErrStringLength)
+		maxErrPrefixTextLineLength)
 
 	var b1 strings.Builder
 
@@ -407,13 +448,13 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 
 	if lineLenCalculator.GetCurrLineStrLength() > 0 {
 
-		//if b1.Len() > 0 {
-		//	b1.WriteString(lineLenCalculator.GetDelimiterNewLineErrPrefix())
-		//}
-
 		errPrefNeutron{}.ptr().writeCurrentLineStr(
 			&b1,
 			&lineLenCalculator)
+	}
+
+	if isLastLineTerminatedWithNewLine {
+		b1.WriteRune('\n')
 	}
 
 	return b1.String()
