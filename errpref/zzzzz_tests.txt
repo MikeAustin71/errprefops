@@ -43,4 +43,4 @@
 === RUN   TestNewErrPref_Multiple_000300
 --- PASS: TestNewErrPref_Multiple_000300 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	0.513s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.494s

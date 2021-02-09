@@ -6,6 +6,8 @@ import (
 
 func TestErrPref_FmtStr_000100(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
@@ -32,6 +34,8 @@ func TestErrPref_FmtStr_000100(t *testing.T) {
 }
 
 func TestErrPref_FmtStr_000200(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.Something() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -65,6 +69,8 @@ func TestErrPref_FmtStr_000200(t *testing.T) {
 
 func TestErrPref_FmtStr_000300(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
 			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()\nTx6.DoSomethingElse()\n"
@@ -97,6 +103,9 @@ func TestErrPref_FmtStr_000300(t *testing.T) {
 }
 
 func TestErrPref_FmtStr_000400(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.Something() : A->B\nTx2.AVeryVeryLongMethodNameCalledSomething() : A==B\n" +
 			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()\nTx6.DoSomethingElse()\n"
@@ -130,6 +139,8 @@ func TestErrPref_FmtStr_000400(t *testing.T) {
 }
 
 func TestErrPref_EPref_000100(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -166,6 +177,8 @@ func TestErrPref_EPref_000100(t *testing.T) {
 
 func TestErrPref_EPref_000200(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr := ""
 
 	expectedStr := "Tx5.BrandNewMethod()"
@@ -193,6 +206,8 @@ func TestErrPref_EPref_000200(t *testing.T) {
 }
 
 func TestErrPref_EPref_000300(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -227,6 +242,8 @@ func TestErrPref_EPref_000300(t *testing.T) {
 }
 
 func TestErrPref_EPrefCtx_000100(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -265,6 +282,8 @@ func TestErrPref_EPrefCtx_000100(t *testing.T) {
 
 func TestErrPref_EPrefCtx_000200(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
 			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
@@ -302,6 +321,8 @@ func TestErrPref_EPrefCtx_000200(t *testing.T) {
 
 func TestErrPref_EPrefCtx_000300(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
 			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
@@ -337,6 +358,8 @@ func TestErrPref_EPrefCtx_000300(t *testing.T) {
 }
 
 func TestErrPref_EPrefCtx_000400(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -374,6 +397,8 @@ func TestErrPref_EPrefCtx_000400(t *testing.T) {
 
 func TestErrPref_EPrefOld_000100(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()"
 
@@ -401,6 +426,8 @@ func TestErrPref_EPrefOld_000100(t *testing.T) {
 }
 
 func TestErrPref_GetLastEPref_000100(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -534,6 +561,8 @@ func TestErrPref_SetMaxErrPrefTextLineLengthToDefault_000100(t *testing.T) {
 
 func TestErrPref_SetCtxt_000100(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
 			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()"
@@ -567,6 +596,8 @@ func TestErrPref_SetCtxt_000100(t *testing.T) {
 }
 
 func TestErrPref_SetCtxt_000200(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
@@ -602,6 +633,8 @@ func TestErrPref_SetCtxt_000200(t *testing.T) {
 
 func TestErrPref_SetCtxt_000300(t *testing.T) {
 
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
 	initialStr :=
 		""
 
@@ -622,6 +655,8 @@ func TestErrPref_SetCtxt_000300(t *testing.T) {
 }
 
 func TestNewErrPref_Multiple_000100(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
@@ -701,6 +736,8 @@ func TestNewErrPref_Multiple_000100(t *testing.T) {
 }
 
 func TestNewErrPref_Multiple_000200(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
@@ -789,6 +826,8 @@ func TestNewErrPref_Multiple_000200(t *testing.T) {
 }
 
 func TestNewErrPref_Multiple_000300(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
 	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
