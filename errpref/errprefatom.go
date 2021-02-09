@@ -130,6 +130,122 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 	return nil
 }
 
+// copyOutErrPrefDto - Creates a deep copy of the data fields contained in
+// input parameter 'ePrefixDto' and returns that data as a new
+// instance ErrPrefixDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefixDto          *ErrPrefixDto
+//     - A pointer to an instance of ErrPrefixDto. This method
+//       will NOT change the values of internal member variables
+//       contained in this object.
+//
+//       If this ErrPrefixDto instance proves to be invalid, an
+//       error will be returned.
+//
+//
+//  eMsg                string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'eMsg'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  newEPrefixDto       ErrPrefixDto
+//     - If this method completes successfully, a deep copy of
+//       input parameter 'ePrefixDto' will be returned in a new
+//       instance of ErrPrefixDto
+//
+//
+//  error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'eMsg'. The
+//       'eMsg' text will be prefixed to the beginning of the returned
+//       error message.
+//
+func (ePrefAtom *errPrefAtom) copyOutErrPrefDto(
+	ePrefixDto *ErrPrefixDto,
+	eMsg string) (
+	newEPrefixDto ErrPrefixDto,
+	err error) {
+
+	if ePrefAtom.lock == nil {
+		ePrefAtom.lock = new(sync.Mutex)
+	}
+
+	ePrefAtom.lock.Lock()
+
+	defer ePrefAtom.lock.Unlock()
+
+	eMsg += "errPrefAtom.copyOutErrPrefDto() "
+
+	newEPrefixDto = ErrPrefixDto{}
+
+	if ePrefixDto == nil {
+		err =
+			fmt.Errorf("%v\n"+
+				"\nInput parameter 'ePrefixDto' is INVALID!\n"+
+				"'ePrefixDto' is a nil pointer!\n",
+				eMsg)
+
+		return newEPrefixDto, err
+	}
+
+	if ePrefixDto.lock == nil {
+		ePrefixDto.lock = new(sync.Mutex)
+	}
+
+	newEPrefixDto.lock = new(sync.Mutex)
+
+	newEPrefixDto.isLastLineTerminatedWithNewLine =
+		ePrefixDto.isLastLineTerminatedWithNewLine
+
+	if ePrefixDto.maxErrPrefixTextLineLength < 10 {
+
+		ePrefixDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	}
+
+	newEPrefixDto.maxErrPrefixTextLineLength =
+		ePrefixDto.maxErrPrefixTextLineLength
+
+	if ePrefixDto.ePrefCol == nil {
+		ePrefixDto.ePrefCol =
+			make([]ErrorPrefixInfo, 0, 256)
+	}
+
+	lenIncomingEPrefCol :=
+		len(ePrefixDto.ePrefCol)
+
+	newEPrefixDto.ePrefCol =
+		make(
+			[]ErrorPrefixInfo,
+			lenIncomingEPrefCol,
+			lenIncomingEPrefCol+256)
+
+	if lenIncomingEPrefCol == 0 {
+		return newEPrefixDto, err
+	}
+
+	copy(
+		newEPrefixDto.ePrefCol,
+		ePrefixDto.ePrefCol)
+
+	return newEPrefixDto, err
+}
+
 // getEPrefContextArray - Receives a string containing a series of
 // error prefix strings and error context strings. This method then
 // proceeds to parse the error prefix and error context elements

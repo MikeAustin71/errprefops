@@ -160,6 +160,63 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 			eMsg)
 }
 
+// CopyOut - Creates a deep copy of the data fields contained in
+// the current ErrPrefixDto instance, and returns that data as a
+// new instance of ErrPrefixDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  eMsg                string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'eMsg'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - If this method completes successfully, a deep copy of the
+//       current ErrPrefixDto instance will be returned through
+//       this parameter as a completely new instance of
+//       ErrPrefixDto.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'eMsg'. The
+//       'eMsg' text will be prefixed to the beginning of the returned
+//       error message.
+//
+func (ePrefDto *ErrPrefixDto) CopyOut(
+	eMsg string) (
+	ErrPrefixDto,
+	error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	eMsg += "ErrPrefixDto.CopyOut() "
+
+	return errPrefAtom{}.ptr().
+		copyOutErrPrefDto(
+			ePrefDto,
+			eMsg)
+}
+
 // EmptyEPrefCollection - All instances of ErrPrefixDto store
 // error prefix information internally in an array of
 // ErrorPrefixInfo objects. This method will delete or empty the
