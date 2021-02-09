@@ -241,6 +241,36 @@ func TestErrPref_EPref_000300(t *testing.T) {
 
 }
 
+func TestErrPref_EPref_000400(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
+	initialStr := "Tx1.StartThis()"
+
+	expectedStr := "Tx1.StartThis()"
+
+	actualStr := ErrPref{}.EPref(
+		initialStr,
+		"")
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error: Expected actualStr= '%v'\n"+
+			"Instead, actualStr='%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
 func TestErrPref_EPrefCtx_000100(t *testing.T) {
 
 	ErrPref{}.SetMaxErrPrefTextLineLength(40)
@@ -405,6 +435,64 @@ func TestErrPref_EPrefOld_000100(t *testing.T) {
 	expectedStr := "Tx1.Something() - Tx2.SomethingElse()\nTx3.DoSomething() - Tx4() - Tx5()\nTx6.DoSomethingElse()"
 
 	actualStr := ErrPref{}.FmtStr(
+		initialStr)
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error: Expected actualStr= '%v'\n"+
+			"Instead, actualStr='%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_EPrefOld_000200(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
+	initialStr := "Tx1.StartThis()"
+
+	expectedStr := "Tx1.StartThis()"
+
+	actualStr := ErrPref{}.EPrefOld(
+		initialStr)
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error: Expected actualStr= '%v'\n"+
+			"Instead, actualStr='%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+
+func TestErrPref_EPrefOld_000300(t *testing.T) {
+
+	ErrPref{}.SetMaxErrPrefTextLineLength(40)
+
+	initialStr := "Tx1.StartThis()\n"
+
+	expectedStr := "Tx1.StartThis()"
+
+	actualStr := ErrPref{}.EPrefOld(
 		initialStr)
 
 	expectedStr = ErrPref{}.ConvertNonPrintableChars(
