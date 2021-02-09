@@ -169,11 +169,11 @@ func (ePrefDto *ErrPrefixDto) GetIsLastLineTerminatedWithNewLine() bool {
 	return ePrefDto.isLastLineTerminatedWithNewLine
 }
 
-// GetErrorPrefixCollection - Returns a deep copy of the current
+// GetEPrefCollection - Returns a deep copy of the current
 // error prefix collection maintained by this ErrPrefixDto
 // instance.
 //
-func (ePrefDto *ErrPrefixDto) GetErrorPrefixCollection() []ErrorPrefixInfo {
+func (ePrefDto *ErrPrefixDto) GetEPrefCollection() []ErrorPrefixInfo {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -335,6 +335,75 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	return newErrPrefixDto
+}
+
+// NewEPrefOld - Returns a new and properly initialized instance of
+// ErrPrefixDto. The returned ErrPrefixDto instance will be
+// configured with error prefix information extracted from input
+// parameter, 'oldErrPrefix'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  oldErrPrefix        string
+//     - This includes the previous or preexisting error prefix
+//       string which will encapsulate one or more error prefix
+//       elements. This string will be parsed into error prefix and
+//       error context components and stored in the returned
+//       ErrPrefixDto instance.
+//
+//       This string should consist of a series of error prefix
+//       strings. Error prefixes should be delimited by either a
+//       new line character ('\n') or the in-line delimiter string,
+//       " - ".
+//
+//       If this string contains associated error context strings
+//       as well, they should be delimited with either a new line
+//       delimiter string, "\n :  " or an in-line delimiter string,
+//       " : ".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - This method will return a new, properly initialized
+//       instance of ErrPrefixDto containing error prefix
+//       information extracted from input parameter,
+//       'oldErrPrefix'.
+//
+//
+func (ePrefDto ErrPrefixDto) NewEPrefOld(
+	oldErrPrefix string) ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto := ErrPrefixDto{}
+
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	ePrefAtom := errPrefAtom{}
+
+	ePrefAtom.getEPrefContextArray(
+		oldErrPrefix,
+		&newErrPrefixDto.ePrefCol)
+
+	ePrefAtom.setFlagsErrorPrefixInfoArray(
+		newErrPrefixDto.ePrefCol)
 
 	return newErrPrefixDto
 }
@@ -536,6 +605,59 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 	return
 }
 
+// SetEPrefCollection - Deletes the current error prefix collection
+// and replaces with a new collection passed as an input parameter
+// to this method.
+//
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newEPrefCollection  []ErrorPrefixInfo
+//     - A collection of ErrorPrefixInfo objects. This collection
+//       will replace the internal collection of error prefix
+//       information objects maintained by the current ErrorPrefixInfo
+//       instance.
+//
+//       If this array has zero elements, then the current ErrorPrefixInfo
+//       instance will be configured with an array of zero elements.
+//
+
+func (ePrefDto *ErrPrefixDto) SetEPrefCollection(
+	newEPrefCollection []ErrorPrefixInfo) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if newEPrefCollection == nil {
+		newEPrefCollection = make([]ErrorPrefixInfo, 0, 256)
+		return
+	}
+
+	lenNewEPrefCol := len(newEPrefCollection)
+
+	ePrefDto.ePrefCol = make(
+		[]ErrorPrefixInfo,
+		lenNewEPrefCol,
+		lenNewEPrefCol+256)
+
+	if lenNewEPrefCol == 0 {
+		return
+	}
+
+	copy(ePrefDto.ePrefCol, newEPrefCollection)
+}
+
 // SetEPrefCtx - Adds an error prefix and an error context string
 // to the list of previous error prefix/context information.
 //
@@ -622,6 +744,9 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 // might include variable names, variable values and additional
 // details on function execution.
 //
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
 //
 // ----------------------------------------------------------------
 //
@@ -630,9 +755,8 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 //  oldErrPrefix        string
 //     - This includes the previous or preexisting error prefix
 //       string. This string will be parsed into error prefix
-//       and error context components before being converted into
-//       a single, formatted string containing error prefix and
-//       error context information.
+//       and error context components and stored in the current
+//       ErrPrefixDto instance.
 //
 //       This string should consist of a series of error prefix
 //       strings. Error prefixes should be delimited by either a
@@ -662,13 +786,15 @@ func (ePrefDto *ErrPrefixDto) SetEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
-	}
+	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
 
-	errPrefNanobot{}.ptr().addEPrefInfo(
+	ePrefAtom := errPrefAtom{}
+
+	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
-		"",
+		&ePrefDto.ePrefCol)
+
+	ePrefAtom.setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return
@@ -814,12 +940,24 @@ func (ePrefDto *ErrPrefixDto) String() string {
 		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
 	}
 
-	if ePrefDto.maxErrPrefixTextLineLength == 0 {
+	if ePrefDto.maxErrPrefixTextLineLength < 10 {
 
 		ePrefDto.maxErrPrefixTextLineLength =
 			errPrefQuark{}.ptr().
 				getMasterErrPrefDisplayLineLength()
 	}
 
-	return ""
+	if len(ePrefDto.ePrefCol) == 0 {
+		return ""
+	}
+
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
+
+	return errPrefNanobot{}.ptr().
+		formatErrPrefixComponents(
+			ePrefDto.maxErrPrefixTextLineLength,
+			ePrefDto.isLastLineTerminatedWithNewLine,
+			ePrefDto.ePrefCol)
+
 }
