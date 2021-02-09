@@ -827,10 +827,12 @@ func TestNewErrPref_Multiple_000200(t *testing.T) {
 
 	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
-	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
-
-	// Setting Line Length to 40-Characters
-	ErrPref{}.SetMaxErrPrefTextLineLengthToDefault()
+	ePrefix :=
+		"Tx1.Something()\n" +
+			"Tx2.SomethingElse()\n" +
+			"Tx3.DoSomething()\n" +
+			"Tx4() - Tx5()\n" +
+			"Tx6.DoSomethingElse()\n"
 
 	ePrefix = ErrPref{}.EPrefCtx(
 		ePrefix,
@@ -917,10 +919,12 @@ func TestNewErrPref_Multiple_000300(t *testing.T) {
 
 	ErrPref{}.SetMaxErrPrefTextLineLength(40)
 
-	ePrefix := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
-
-	// Setting Line Length to 40-Characters
-	ErrPref{}.SetMaxErrPrefTextLineLengthToDefault()
+	ePrefix :=
+		"Tx1.Something()\n" +
+			"Tx2.SomethingElse()\n" +
+			"Tx3.DoSomething()\n" +
+			"Tx4() - Tx5()\n" +
+			"Tx6.DoSomethingElse()\n"
 
 	ePrefix = ErrPref{}.EPrefCtx(
 		ePrefix,
