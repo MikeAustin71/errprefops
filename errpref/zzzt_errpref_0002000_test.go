@@ -617,6 +617,84 @@ func TestErrPrefixDto_SetEPrefCollection000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_SetEPrefCollection000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxErrPrefTextLineLength(40)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9\n"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetIsLastLineTermWithNewLine(true)
+
+	ePDto2 := ErrPrefixDto{}.New()
+
+	ePDto2.SetMaxErrPrefTextLineLength(40)
+
+	ePDto2.SetIsLastLineTermWithNewLine(true)
+
+	initialStr2 :=
+		"ZzA1.AVeryVeryLongMethodNameCalledSomething() : A->B\nZzA2.SomethingElse() : A==B\n" +
+			"ZzA3.DoSomething() : A==10\nZzA4() : A/10==4 - ZzA5() : B==999"
+
+	ePDto2.SetEPrefOld(initialStr2)
+
+	dto1Collection := ePDto.GetEPrefCollection()
+
+	lenDto1Collection := len(dto1Collection)
+
+	if lenDto1Collection == 0 {
+		t.Error("Error: Length of 'dto1Collection' is zero!\n")
+		return
+	}
+
+	ePDto2.SetEPrefCollection(dto1Collection)
+
+	areEqual := ePDto.Equal(&ePDto2)
+
+	if !areEqual {
+		t.Error("Error: Expected ePDto and ePDto2 would be equal.\n" +
+			"THEY ARE NOT EQUAL!\n")
+		return
+	}
+
+	dto2Collection := ePDto2.GetEPrefCollection()
+
+	lenDto2Collection := len(dto2Collection)
+
+	if lenDto1Collection != lenDto2Collection {
+		t.Errorf("Error: Expected lengths of the two ErrPrefInfo\n"+
+			"Collections would be equal.\n"+
+			"THEY ARE NOT EQUAL!\n"+
+			"lenDto1Collection='%v'\n"+
+			"lenDto2Collection='%v'\n",
+			lenDto1Collection,
+			lenDto2Collection)
+	}
+
+	lenDto2Collection = ePDto2.GetEPrefCollectionLen()
+
+	if lenDto1Collection != lenDto2Collection {
+		t.Errorf("Error: Expected lengths of the two ErrPrefInfo\n"+
+			"Collections would be equal.\n"+
+			"ePDto2.GetEPrefCollectionLen() returned a different length.\n"+
+			"lenDto1Collection='%v'\n"+
+			"lenDto2Collection='%v'\n",
+			lenDto1Collection,
+			lenDto2Collection)
+	}
+
+}
+
 func TestErrPrefixDto_SetEPrefCtx_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()

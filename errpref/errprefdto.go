@@ -368,6 +368,45 @@ func (ePrefDto *ErrPrefixDto) GetEPrefCollection() []ErrorPrefixInfo {
 	return newErrorPrefixCollection
 }
 
+// GetEPrefCollectionLen - Returns the number of elements in the
+// error prefix array. Effectively this is a count of the number of
+// error prefix elements maintained by this ErrPrefixDto instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  int
+//     - This integer value represents the number of separate error
+//       prefix elements maintained by this ErrPrefixDto instance.
+//
+//
+func (ePrefDto *ErrPrefixDto) GetEPrefCollectionLen() int {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol =
+			make([]ErrorPrefixInfo, 0, 256)
+	}
+
+	return len(ePrefDto.ePrefCol)
+}
+
 // GetMaxErrPrefTextLineLength - Returns the maximum limit on the
 // number of characters allowed in an error prefix text line output
 // for display purposes.
