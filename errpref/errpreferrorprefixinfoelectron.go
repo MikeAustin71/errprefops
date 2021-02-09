@@ -110,8 +110,14 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyIn(
 		return err
 	}
 
+	targetErrPrefixInfo.isFirstIdx =
+		inComingErrPrefixInfo.isFirstIdx
+
 	targetErrPrefixInfo.isLastIdx =
 		inComingErrPrefixInfo.isLastIdx
+
+	targetErrPrefixInfo.isPopulated =
+		inComingErrPrefixInfo.isPopulated
 
 	targetErrPrefixInfo.errorPrefixStr =
 		inComingErrPrefixInfo.errorPrefixStr
@@ -119,14 +125,14 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyIn(
 	targetErrPrefixInfo.lenErrorPrefixStr =
 		inComingErrPrefixInfo.lenErrorPrefixStr
 
+	targetErrPrefixInfo.errPrefixHasContextStr =
+		inComingErrPrefixInfo.errPrefixHasContextStr
+
 	targetErrPrefixInfo.errorContextStr =
 		inComingErrPrefixInfo.errorContextStr
 
 	targetErrPrefixInfo.lenErrorContextStr =
 		inComingErrPrefixInfo.lenErrorContextStr
-
-	targetErrPrefixInfo.errPrefixHasContextStr =
-		inComingErrPrefixInfo.errPrefixHasContextStr
 
 	return nil
 }
@@ -214,8 +220,16 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyOut(
 		return newErrPrefixInfo, err
 	}
 
+	newErrPrefixInfo.lock = new(sync.Mutex)
+
+	newErrPrefixInfo.isFirstIdx =
+		errPrefixInfo.isFirstIdx
+
 	newErrPrefixInfo.isLastIdx =
 		errPrefixInfo.isLastIdx
+
+	newErrPrefixInfo.isPopulated =
+		errPrefixInfo.isPopulated
 
 	newErrPrefixInfo.errorPrefixStr =
 		errPrefixInfo.errorPrefixStr
@@ -223,18 +237,109 @@ func (ePrefInfoElectron *errorPrefixInfoElectron) copyOut(
 	newErrPrefixInfo.lenErrorPrefixStr =
 		errPrefixInfo.lenErrorPrefixStr
 
+	newErrPrefixInfo.errPrefixHasContextStr =
+		errPrefixInfo.errPrefixHasContextStr
+
 	newErrPrefixInfo.errorContextStr =
 		errPrefixInfo.errorContextStr
 
 	newErrPrefixInfo.lenErrorContextStr =
 		errPrefixInfo.lenErrorContextStr
 
-	newErrPrefixInfo.errPrefixHasContextStr =
-		errPrefixInfo.errPrefixHasContextStr
-
 	newErrPrefixInfo.lock = new(sync.Mutex)
 
 	return newErrPrefixInfo, nil
+}
+
+// equal - Returns a boolean flag signaling whether the
+// data values of two ErrorPrefixInfo objects are equal
+// in all respects.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefixInfo01       *ErrorPrefixInfo
+//     - A pointer to an instance of ErrorPrefixInfo. The data
+//       values contained in this instance will be compared to
+//       those contained in 'ePrefixInfo02' to determine equality.
+//
+//
+//  ePrefixInfo02       *ErrorPrefixInfo
+//     - A pointer to an instance of ErrorPrefixInfo. The data
+//       values contained in this instance will be compared to
+//       those contained in 'ePrefixInfo01' to determine equality.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - A boolean flag signaling whether the data values contained
+//       in 'ePrefixInfo01' and 'ePrefixInfo02' are equal in all
+//       respects. If the data values are equal, this returned
+//       boolean value will be set to 'true'.
+//
+func (ePrefInfoElectron *errorPrefixInfoElectron) equal(
+	ePrefixInfo01 *ErrorPrefixInfo,
+	ePrefixInfo02 *ErrorPrefixInfo) bool {
+
+	if ePrefInfoElectron.lock == nil {
+		ePrefInfoElectron.lock = new(sync.Mutex)
+	}
+
+	ePrefInfoElectron.lock.Lock()
+
+	defer ePrefInfoElectron.lock.Unlock()
+
+	if ePrefixInfo01 == nil ||
+		ePrefixInfo02 == nil {
+		return false
+	}
+
+	if ePrefixInfo01.isFirstIdx !=
+		ePrefixInfo02.isFirstIdx {
+		return false
+	}
+
+	if ePrefixInfo01.isLastIdx !=
+		ePrefixInfo02.isLastIdx {
+		return false
+	}
+
+	if ePrefixInfo01.isPopulated !=
+		ePrefixInfo02.isPopulated {
+		return false
+	}
+
+	if ePrefixInfo01.errorPrefixStr !=
+		ePrefixInfo02.errorPrefixStr {
+		return false
+	}
+
+	if ePrefixInfo01.lenErrorPrefixStr !=
+		ePrefixInfo02.lenErrorPrefixStr {
+		return false
+	}
+
+	if ePrefixInfo01.errorContextStr !=
+		ePrefixInfo02.errorContextStr {
+		return false
+	}
+
+	if ePrefixInfo01.lenErrorContextStr !=
+		ePrefixInfo02.lenErrorContextStr {
+		return false
+	}
+
+	if ePrefixInfo01.errPrefixHasContextStr !=
+		ePrefixInfo02.errPrefixHasContextStr {
+		return false
+	}
+
+	return true
 }
 
 // ptr() - Returns a pointer to a new instance of

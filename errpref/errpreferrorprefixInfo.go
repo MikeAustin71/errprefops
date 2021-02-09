@@ -142,6 +142,49 @@ func (errorPrefixInfo *ErrorPrefixInfo) CopyOut(
 		ePrefix)
 }
 
+// Equal - Returns a boolean flag signaling whether the data values
+// contained in the current ErrorPrefixInfo instance are equal to
+// to those contained in input parameter, 'ePrefixInfo02'
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefixInfo02       *ErrorPrefixInfo
+//     - A pointer to an instance of ErrorPrefixInfo. The data
+//       values contained in this instance will be compared to
+//       those contained in the current ErrorPrefixInfo instance
+//       (errorPrefixInfo) to determine equality.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - A boolean flag signaling whether the data values contained
+//       in the current ErrorPrefixInfo instance are equal to those
+//       contained in input parameter 'ePrefixInfo02'. If the data
+//       values are equal in all respects, this returned boolean
+//       value will be set to 'true'.
+//
+func (errorPrefixInfo *ErrorPrefixInfo) Equal(
+	ePrefixInfo02 *ErrorPrefixInfo) bool {
+
+	if errorPrefixInfo.lock == nil {
+		errorPrefixInfo.lock = new(sync.Mutex)
+	}
+
+	errorPrefixInfo.lock.Lock()
+
+	defer errorPrefixInfo.lock.Unlock()
+
+	return errorPrefixInfoElectron{}.ptr().equal(
+		errorPrefixInfo,
+		ePrefixInfo02)
+}
+
 // GetErrContextStr - Returns the Error Context String.
 func (errorPrefixInfo *ErrorPrefixInfo) GetErrContextStr() string {
 

@@ -240,6 +240,49 @@ func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
 	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 256)
 }
 
+// Equal - Returns a boolean flag signaling whether the data values
+// contained in the current ErrPrefixDto instance are equal to
+// those contained in input parameter, 'ePrefixDto2'
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefixDto2         *ErrPrefixDto
+//     - A pointer to an instance of ErrPrefixDto. The data values
+//       contained in this instance will be compared to those
+//       contained in the current ErrPrefixDto instance (ePrefDto)
+//       to determine equality.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - A boolean flag signaling whether the data values contained
+//       in the current ErrPrefixDto instance are equal to those
+//       contained in input parameter 'ePrefixDto2'. If the data
+//       values are equal in all respects, this returned boolean
+//       value will be set to 'true'.
+//
+func (ePrefDto *ErrPrefixDto) Equal(
+	ePrefixDto2 *ErrPrefixDto) bool {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return errPrefAtom{}.ptr().areEqualErrPrefDtos(
+		ePrefDto,
+		ePrefixDto2)
+}
+
 // GetIsLastLineTerminatedWithNewLine - Returns the boolean flag
 // which determines whether the last line of error prefix strings
 // returned by this ErrPrefixDto instance will be terminated with

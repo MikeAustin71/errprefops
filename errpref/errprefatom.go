@@ -10,6 +10,87 @@ type errPrefAtom struct {
 	lock *sync.Mutex
 }
 
+// areEqualErrPrefDtos - Receives pointers to two ErrPrefixDto
+// objects and proceeds to compare the internal data values.
+// If the ErrPrefixDto objects contain data values which ARE EQUAL
+// in all respects, this method returns 'true'.
+//
+// If the data values for the two ErrPrefixDto objects ARE NOT
+// EQUAL, this method will return 'false'.
+//
+func (ePrefAtom *errPrefAtom) areEqualErrPrefDtos(
+	errPrefixDto1 *ErrPrefixDto,
+	errPrefixDto2 *ErrPrefixDto) bool {
+
+	if ePrefAtom.lock == nil {
+		ePrefAtom.lock = new(sync.Mutex)
+	}
+
+	ePrefAtom.lock.Lock()
+
+	defer ePrefAtom.lock.Unlock()
+
+	if errPrefixDto1 == nil ||
+		errPrefixDto2 == nil {
+		return false
+	}
+
+	if errPrefixDto1.lock == nil {
+		errPrefixDto1.lock = new(sync.Mutex)
+	}
+
+	if errPrefixDto2.lock == nil {
+		errPrefixDto2.lock = new(sync.Mutex)
+	}
+
+	if errPrefixDto1.isLastLineTerminatedWithNewLine !=
+		errPrefixDto2.isLastLineTerminatedWithNewLine {
+		return false
+	}
+
+	if errPrefixDto1.isLastLineTerminatedWithNewLine !=
+		errPrefixDto2.isLastLineTerminatedWithNewLine {
+		return false
+	}
+
+	if errPrefixDto1.maxErrPrefixTextLineLength !=
+		errPrefixDto2.maxErrPrefixTextLineLength {
+		return false
+	}
+
+	if errPrefixDto1.ePrefCol == nil {
+		errPrefixDto1.ePrefCol =
+			make([]ErrorPrefixInfo, 0, 256)
+	}
+
+	if errPrefixDto2.ePrefCol == nil {
+		errPrefixDto2.ePrefCol =
+			make([]ErrorPrefixInfo, 0, 256)
+	}
+
+	lenIncomingEPrefCol01 :=
+		len(errPrefixDto1.ePrefCol)
+
+	lenIncomingEPrefCol02 :=
+		len(errPrefixDto2.ePrefCol)
+
+	if lenIncomingEPrefCol01 != lenIncomingEPrefCol02 {
+		return false
+	}
+
+	if lenIncomingEPrefCol01 == 0 {
+		return true
+	}
+
+	for i := 0; i < lenIncomingEPrefCol01; i++ {
+		if !errPrefixDto1.ePrefCol[i].Equal(&errPrefixDto2.ePrefCol[i]) {
+			return false
+		}
+	}
+
+	return true
+}
+
 // copyInErrPrefDto - Copies the data fields from an incoming
 // instance of ErrPrefixDto ('inComingErrPrefixDto') to the data
 // fields of the target ErrPrefixDto instance ('targetErrPrefixDto')
@@ -90,6 +171,14 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 			"\nInput parameter 'inComingErrPrefixDto' is INVALID!\n"+
 			"'inComingErrPrefixDto' is a nil pointer!\n",
 			eMsg)
+	}
+
+	if targetErrPrefixDto.lock == nil {
+		targetErrPrefixDto.lock = new(sync.Mutex)
+	}
+
+	if inComingErrPrefixDto.lock == nil {
+		inComingErrPrefixDto.lock = new(sync.Mutex)
 	}
 
 	targetErrPrefixDto.isLastLineTerminatedWithNewLine =
