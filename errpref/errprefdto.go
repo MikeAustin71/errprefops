@@ -100,6 +100,66 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 	return numberOfCollectionItemsParsed
 }
 
+// CopyIn - Copies the data fields from an incoming instance of
+// ErrPrefixDto ('inComingErrPrefixDto') to the data fields of
+// the current ErrPrefixDto instance ('ePrefDto').
+//
+// All of the data fields in current ErrPrefixDto instance
+// ('ePrefDto') will be modified and overwritten.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  inComingErrPrefixDto       *ErrPrefixDto
+//     - A pointer to an instance of ErrPrefixDto. This method
+//       will NOT change the values of internal member variables
+//       contained in this instance.
+//
+//       All data values in this ErrPrefixDto instance will be
+//       copied to current ErrPrefixDto instance
+//       ('ePrefDto').
+//
+//
+//  eMsg                       string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'eMsg'.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  err                        error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'eMsg'.
+//
+func (ePrefDto *ErrPrefixDto) CopyIn(
+	inComingErrPrefixDto *ErrPrefixDto,
+	eMsg string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+	eMsg += "ErrPrefixDto.CopyIn()\n"
+
+	return errPrefAtom{}.ptr().
+		copyInErrPrefDto(
+			ePrefDto,
+			inComingErrPrefixDto,
+			eMsg)
+}
+
 // EmptyEPrefCollection - All instances of ErrPrefixDto store
 // error prefix information internally in an array of
 // ErrorPrefixInfo objects. This method will delete or empty the
