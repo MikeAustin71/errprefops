@@ -162,8 +162,6 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 		}
 	}
 
-	lCollection = len(*prefixContextCol)
-
 	return
 }
 

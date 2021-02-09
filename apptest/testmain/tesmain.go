@@ -10,6 +10,57 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain *TestMain) TestMain012() {
+
+	ePDto := errpref.ErrPrefixDto{}.New()
+
+	ePDto.SetMaxErrPrefTextLineLength(40)
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999\\n" +
+		"Tx5.BrandNewMethod()"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetEPref("Tx5.BrandNewMethod()")
+
+	actualStr := ePDto.String()
+
+	expectedStr = errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	fmtActualStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	var msg string
+	if expectedStr != fmtActualStr {
+		msg =
+			fmt.Sprintf("Error:\n"+
+				"Expected actualStr= '%v'\n"+
+				"Instead, actualStr= '%v'\n",
+				expectedStr,
+				fmtActualStr)
+
+		fmt.Printf(msg + "\n")
+
+	} else {
+		msg = fmt.Sprintf("**** Success ****\n"+
+			"Expected String == Actual String!\n"+
+			"Actual String=\n"+
+			"'%v'\n", actualStr)
+	}
+
+}
+
 func (tMain *TestMain) TestMain011() {
 
 	funcName := "TestMain011()"

@@ -41,7 +41,7 @@ type errPrefNanobot struct {
 func (ePrefNanobot *errPrefNanobot) addEPrefInfo(
 	newErrPrefix string,
 	newErrContext string,
-	errPrefixCollection []ErrorPrefixInfo) {
+	errPrefixCollection *[]ErrorPrefixInfo) {
 
 	if ePrefNanobot.lock == nil {
 		ePrefNanobot.lock = new(sync.Mutex)
@@ -53,8 +53,7 @@ func (ePrefNanobot *errPrefNanobot) addEPrefInfo(
 
 	var (
 		lenPrefixCleanStr,
-		lenContextCleanStr,
-		lenCollection int
+		lenContextCleanStr int
 	)
 
 	ePrefElectron := errPrefElectron{}
@@ -85,23 +84,12 @@ func (ePrefNanobot *errPrefNanobot) addEPrefInfo(
 
 	}
 
-	if errPrefixCollection == nil {
-		errPrefixCollection = make([]ErrorPrefixInfo, 0, 100)
+	if *errPrefixCollection == nil {
+		*errPrefixCollection = make([]ErrorPrefixInfo, 0, 100)
 	}
 
-	lenCollection = len(errPrefixCollection)
-
-	if lenCollection > 0 {
-		errPrefixCollection[0].SetIsFirstIndex(true)
-		errPrefixCollection[lenCollection-1].SetIsLastIndex(false)
-		newErrorPrefixInfo.SetIsLastIndex(true)
-	} else {
-		newErrorPrefixInfo.SetIsFirstIndex(true)
-		newErrorPrefixInfo.SetIsLastIndex(true)
-	}
-
-	errPrefixCollection = append(
-		errPrefixCollection,
+	*errPrefixCollection = append(
+		*errPrefixCollection,
 		newErrorPrefixInfo)
 
 	return

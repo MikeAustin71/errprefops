@@ -600,6 +600,9 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
 		"",
+		&ePrefDto.ePrefCol)
+
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return
@@ -719,6 +722,9 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
 		newErrContext,
+		&ePrefDto.ePrefCol)
+
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return
