@@ -212,7 +212,7 @@ When this error is returned up the function chain and finally printed out, the t
 
 ## Source Code Documentation
 
-[Source Documentation](http://godoc.org/github.com/MikeAustin71/http://godoc.org/github.com/MikeAustin71/errprefops/errpref)
+[Source Documentation](https://pkg.go.dev/github.com/MikeAustin71/errprefops/errpref)
 
 ## Version
 
