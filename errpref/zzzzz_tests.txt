@@ -93,4 +93,4 @@
 === RUN   TestErrPrefixDto_String_000200
 --- PASS: TestErrPrefixDto_String_000200 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	0.765s
+ok  	github.com/MikeAustin71/errprefops/errpref	1.407s
