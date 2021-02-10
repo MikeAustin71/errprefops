@@ -37,7 +37,7 @@ Basically, when I see an error message, especially during the development phase,
 The ***ErrPref*** or error prefix project is intended to provide better function or method documentation in error messages returned by Go functions. Two types of objects have been defined for this purpose: ***ErrPref*** and ***ErrPrefixDto***. Both of these types are designed to receive function chain information, format it and return the formatted strings for inclusion in error messages.
 
 The idea is not to go overboard. I tried my hand at an error handler for Go Programs earlier and quickly realized that complexity was growing exponentially. At least at the outset of this project, the idea is to keep ***ErrPref*** simple, as a fast and efficient mechanism for adding error prefix text and function chain lists to error messages. That said, ***ErrPref*** is a work in progress.
-The current code is version 1.0. We shall see where this leads. For examples and documentation, refer to the source code file, ***errpref.go***.
+The current code is version 1.0.0. We shall see where this leads. For examples and documentation, refer to the source code file, ***errpref.go***.
 
 ## Definition of Terms
 
