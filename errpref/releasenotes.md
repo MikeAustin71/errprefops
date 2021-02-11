@@ -1,12 +1,21 @@
-# ErrPref Release Notes Version 1.0.0
+# ErrPref Release Notes Version 1.1.0
+
+## Version 1.1.0
 
 This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
 
-Not much to see here folks. This is the first release of the 'errpref'
-package. 
+### ErrPrefixDto
 
-All tests are passing, and beginning tomorrow, I will be using the types
-provided here in a real-world environment. 
+1. Converted method ErrPrefixDto.String() from a pointer receiver to a value receiver.
 
-Stay tuned ...
+2. Added 'X' Methods:
+   
+    a. XCtx() - Returns pointer to current instance.
+    b. XEPref() - Returns pointer to current instance.
+    c. XEPrefCtx() - Returns pointer to current instance.
+    d. XEPrefOld() - Returns pointer to current instance.
+   
 
+
+## Version 1.0.0 
+Initial release of ***ErrPref***.

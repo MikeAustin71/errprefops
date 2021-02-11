@@ -69,7 +69,7 @@ Error Context Sub-Elements likewise have two delimiters: new line (**\n[SPACE]:[
 
 Type, ***ErrPref*** is designed to format text strings for use in error messages. ***ErrPref*** is simple, lightweight, easy to use and seems to work in a variety of situations. The concept is straight forward, "put raw text strings in - get formatted error information out".
 
-The ***ErrPref*** type does not use method pointers. All the methods on this type are called directly syntax shown below.
+The ***ErrPref*** methods do not use pointer receivers. All receivers are value receivers. 
 
 ### Example Usage Summary
 
@@ -147,6 +147,8 @@ That's what I thought, at first. However, there is the problem of delimiting err
 
 The type, ***ErrPrefixDto***, offers the same services as type, ***ErrPref***, but is packaged in a different architecture. While ***ErrPref*** methods receive a string and instantly return a formatted string, ***ErrPrefixDto*** encapsulates error prefix information in an internal array of Error Prefix Information objects. Strings are only created when the type's ***String()*** method is called. Instances of ***ErrPrefixDto*** are designed to be passed as input parameters to subsidiary methods.
 
+With the sole exception of the ***String()*** method, All ***ErrPrefixDto*** methods have pointer receivers.
+
 Consider what the example function calling sequence would look like if ***ErrPrefixDto*** was employed:
 
 ``` go
@@ -216,9 +218,9 @@ When this error is returned up the function chain and finally printed out, the t
 
 ## Version
 
-The latest version is Version 1.0.0. This Version supports *Go* modules.
+The latest version is Version 1.1.0. This Version supports *Go* modules.
 
-[Version 1.0.0 Release Notes](./errpref/releasenotes.md)
+[Version 1.1.0 Release Notes](./errpref/releasenotes.md)
 
 ## License
 

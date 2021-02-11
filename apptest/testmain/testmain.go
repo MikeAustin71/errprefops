@@ -10,6 +10,99 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain *TestMain) TestMain016() {
+
+	tFuncB1 := TestFuncB1{}
+
+	err := tFuncB1.Tx1DoSomething()
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+	} else {
+		fmt.Printf("Error: Expected an error return from\n" +
+			"tFuncB1.Tx1DoSomething(). However, no error was returned!\n")
+		fmt.Println()
+		return
+	}
+
+	fmt.Println()
+	fmt.Println("Error String Showing Non-Printable Characters")
+	fmt.Println("---------------------------------------------")
+	fmt.Println()
+
+	expectedStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(err.Error()),
+		true)
+
+	fmt.Printf("%v\n",
+		expectedStr)
+
+	return
+}
+
+func (tMain *TestMain) TestMain015() {
+
+	tFunc1 := testFunc1{}
+
+	err := tFunc1.Tx1DoSomething()
+
+	if err != nil {
+		fmt.Printf("%v\n",
+			err.Error())
+	} else {
+		return
+	}
+
+	expectedStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(err.Error()),
+		true)
+
+	fmt.Printf("%v\n",
+		expectedStr)
+
+	return
+}
+
+func (tMain *TestMain) TestMain014() {
+
+	ePDto := new(errpref.ErrPrefixDto)
+
+	ePDto.SetEPref("Tx1.Something()")
+	ePDto.SetEPref("Tx2.SomethingElse()")
+	ePDto.SetEPrefCtx("Tx4()", "A/10==4")
+	ePDto.SetEPref("Tx5.BrandNewMethod()")
+
+	err := fmt.Errorf("%v\n"+
+		"Test Error Message!\n",
+		ePDto)
+
+	fmt.Println("TestMain014()")
+	fmt.Println("-------------------------------------------")
+	fmt.Println("Test Error Message #1 - Using v")
+	fmt.Println("-------------------------------------------")
+
+	fmt.Printf("%v",
+		err.Error())
+
+	fmt.Println()
+	fmt.Println("-------------------------------------------")
+	fmt.Println("Test Error Message #2 - Using s")
+	fmt.Println("-------------------------------------------")
+
+	fmt.Printf("%s",
+		err.Error())
+
+	fmt.Println()
+	fmt.Println("-------------------------------------------")
+	fmt.Println("Test Error Message #3 - Using String()")
+	fmt.Println("-------------------------------------------")
+
+	fmt.Printf("%s",
+		err.Error())
+
+}
+
 func (tMain *TestMain) TestMain012() {
 
 	ePDto := errpref.ErrPrefixDto{}.New()
