@@ -530,6 +530,8 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 
 	newErrPrefixDto := ErrPrefixDto{}
 
+	newErrPrefixDto.lock = new(sync.Mutex)
+
 	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
@@ -589,6 +591,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefOld(
 	defer ePrefDto.lock.Unlock()
 
 	newErrPrefixDto := ErrPrefixDto{}
+
+	newErrPrefixDto.lock = new(sync.Mutex)
 
 	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
 
@@ -663,6 +667,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 
 	defer ePrefDto.lock.Unlock()
 
+	newErrPrefixDto.lock = new(sync.Mutex)
+
 	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
@@ -679,6 +685,48 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 			previousCollectionLen
 
 	return numberOfCollectionItemsParsed, newErrPrefixDto
+}
+
+// Ptr - Returns a pointer to a new and properly initialized
+// instance of ErrPrefixDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  -- NONE --
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - This method will return a pointer to a new and properly
+//       initialized instance of ErrPrefixDto.
+//
+//
+func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto := new(ErrPrefixDto)
+
+	newErrPrefixDto.lock = new(sync.Mutex)
+
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	return newErrPrefixDto
 }
 
 // SetCtx - Sets or resets the error context for the last error
@@ -1134,7 +1182,7 @@ func (ePrefDto *ErrPrefixDto) SetMaxErrPrefTextLineLengthToDefault() {
 func (ePrefDto ErrPrefixDto) String() string {
 
 	if ePrefDto.lock == nil {
-		ePrefDto.lock = new(sync.Mutex)
+		return ""
 	}
 
 	ePrefDto.lock.Lock()
@@ -1142,14 +1190,7 @@ func (ePrefDto ErrPrefixDto) String() string {
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
-	}
-
-	if ePrefDto.maxErrPrefixTextLineLength < 10 {
-
-		ePrefDto.maxErrPrefixTextLineLength =
-			errPrefQuark{}.ptr().
-				getMasterErrPrefDisplayLineLength()
+		return ""
 	}
 
 	if len(ePrefDto.ePrefCol) == 0 {
@@ -1165,6 +1206,53 @@ func (ePrefDto ErrPrefixDto) String() string {
 			ePrefDto.isLastLineTerminatedWithNewLine,
 			ePrefDto.ePrefCol)
 
+}
+
+// StrMaxLineLen - Returns a formatted error prefix/context string
+// incorporating all error prefix and error context information
+// previously added to this ErrPrefixDto instance.
+//
+// Input parameter 'maxLineLen' is used to set the maximum line
+// length for text returned by this method. It does not alter the
+// maximum line length default value for this ErrPrefixDto instance.
+//
+// Error prefix information is stored internally in the 'ePrefCol'
+// array.
+//
+func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
+	maxLineLen int) string {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	maxErrPrefixTextLineLength := uint(maxLineLen)
+
+	if maxErrPrefixTextLineLength < 10 {
+		maxErrPrefixTextLineLength =
+			ePrefDto.maxErrPrefixTextLineLength
+	}
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	}
+
+	if len(ePrefDto.ePrefCol) == 0 {
+		return ""
+	}
+
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
+
+	return errPrefNanobot{}.ptr().
+		formatErrPrefixComponents(
+			maxErrPrefixTextLineLength,
+			ePrefDto.isLastLineTerminatedWithNewLine,
+			ePrefDto.ePrefCol)
 }
 
 // XCtx - Sets or resets the error context for the last error

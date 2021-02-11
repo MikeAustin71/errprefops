@@ -10,6 +10,29 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain TestMain) TestMain017() {
+
+	var actualStr string
+	//	ePDto := new(errpref.ErrPrefixDto)
+
+	ePDto := errpref.ErrPrefixDto{}.Ptr()
+	actualStr = ePDto.String()
+
+	ePDto.SetEPref("Tx1.Something()")
+	ePDto.SetEPref("Tx2.SomethingElse()")
+	ePDto.SetEPrefCtx("Tx3.DoEverything()", "A==b^c")
+	ePDto.SetEPrefCtx("Tx4()", "A/10==4")
+	ePDto.SetEPref("Tx5.BrandNewMethod()")
+
+	actualStr = ePDto.String()
+
+	fmt.Printf("Actual String= '%v'\n",
+		actualStr)
+
+	fmt.Println("----------------------")
+
+}
+
 func (tMain *TestMain) TestMain016() {
 
 	tFuncB1 := TestFuncB1{}
