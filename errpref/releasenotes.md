@@ -12,6 +12,12 @@ This version supports ***Go*** modules.
 
 3. Added tests for ErrPrefixDto methods CopyIn() and CopyOut()
 
+4. Added new method ErrPrefixDto.StrMaxLineLen().
+
+5. Changed method name and signature for ErrPrefixDto.SetMaxTextLineLen()
+
+6. Changed method name for ErrPrefixDto.SetMaxTextLineLenToDefault()
+
 
 ## Version 1.1.0
 

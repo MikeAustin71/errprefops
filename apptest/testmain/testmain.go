@@ -130,7 +130,7 @@ func (tMain *TestMain) TestMain012() {
 
 	ePDto := errpref.ErrPrefixDto{}.New()
 
-	ePDto.SetMaxErrPrefTextLineLength(40)
+	ePDto.SetMaxTextLineLen(40)
 
 	initialStr :=
 		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +

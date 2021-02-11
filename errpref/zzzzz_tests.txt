@@ -103,4 +103,4 @@
 === RUN   TestErrPrefixDto_YMethods_000200
 --- PASS: TestErrPrefixDto_YMethods_000200 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	1.275s
+ok  	github.com/MikeAustin71/errprefops/errpref	1.178s
