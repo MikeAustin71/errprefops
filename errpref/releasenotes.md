@@ -9,12 +9,16 @@ This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
 1. Converted method ErrPrefixDto.String() from a pointer receiver to a value receiver.
 
 2. Added 'X' Methods:
-   
-    a. XCtx() - Returns pointer to current instance.
-    b. XEPref() - Returns pointer to current instance.
-    c. XEPrefCtx() - Returns pointer to current instance.
-    d. XEPrefOld() - Returns pointer to current instance.
-   
+   - XCtx() - Returns pointer to current instance.
+
+   - XEPref() - Returns pointer to current instance.
+
+   - XEPrefCtx() - Returns pointer to current instance.
+
+   - XEPrefOld() - Returns pointer to current instance.
+
+     
+
 
 
 ## Version 1.0.0 
