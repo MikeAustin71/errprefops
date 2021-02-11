@@ -4,7 +4,7 @@ This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
 
 This version supports ***Go*** modules.
 
-## Version 1.1.1
+## Version 1.2.0
 
 1. Removed Maximum Line Length operation from ErrPrefixDto.String()
 
