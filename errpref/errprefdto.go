@@ -100,6 +100,47 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 	return numberOfCollectionItemsParsed
 }
 
+// Copy - Creates a deep copy of the data fields contained in
+// the current ErrPrefixDto instance, and returns that data as a
+// pointer to a new instance of ErrPrefixDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  *ErrPrefixDto
+//     - If this method completes successfully, a deep copy of the
+//       current ErrPrefixDto instance will be returned through
+//       this parameter as a pointer to a new instance of
+//       ErrPrefixDto.
+//
+func (ePrefDto *ErrPrefixDto) Copy() *ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto,
+		_ := errPrefAtom{}.ptr().
+		copyOutErrPrefDto(
+			ePrefDto,
+			"")
+
+	return &newErrPrefixDto
+}
+
 // CopyIn - Copies the data fields from an incoming instance of
 // ErrPrefixDto ('inComingErrPrefixDto') to the data fields of
 // the current ErrPrefixDto instance ('ePrefDto').

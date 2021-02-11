@@ -18,6 +18,7 @@ This version supports ***Go*** modules.
 
 6. Changed method name for ErrPrefixDto.SetMaxTextLineLenToDefault()
 
+7. Added new method ErrPrefixDto.Copy()
 
 ## Version 1.1.0
 

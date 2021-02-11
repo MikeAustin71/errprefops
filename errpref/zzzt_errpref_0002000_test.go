@@ -2,6 +2,54 @@ package errpref
 
 import "testing"
 
+func TestErrPrefixDto_Copy_000100(t *testing.T) {
+
+	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
+
+	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	// Setting Line Length to 60-Characters
+	ePDto.SetMaxTextLineLen(60)
+
+	ePDto.SetEPrefCtx(
+		"Tx7.TrySomethingNew()",
+		"")
+
+	ePDto.SetCtx("something->newSomething")
+
+	ePDto.SetEPrefCtx(
+		"Tx8.TryAnyCombination()",
+		"")
+
+	ePDto.SetEPref("Tx9.TryAHammer()")
+
+	ePDto.SetCtx("x->y")
+
+	ePDto.SetEPref("Tx10.X()")
+
+	ePDto.SetEPrefCtx(
+		"Tx11.TryAnything()",
+		"")
+
+	ePDto.SetEPrefCtx(
+		"Tx12.TryASalad()",
+		"")
+
+	ePDto.SetEPref("Tx13.SomeFabulousAndComplexStuff()")
+
+	ePDto.SetEPrefCtx(
+		"Tx14.MoreAwesomeGoodness",
+		"A=7 B=8 C=9")
+
+	ePDto2 := ePDto.Copy()
+
+	if !ePDto.Equal(ePDto2) {
+		t.Error("Expected ePDto to Equal ePDto2\n" +
+			"However, THEY ARE NOT EQUAL!\n")
+	}
+
+}
+
 func TestErrPrefixDto_CopyIn_000100(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
