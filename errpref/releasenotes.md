@@ -1,4 +1,4 @@
-# ErrPref Release Notes Version 1.2.0
+# ErrPref Release Notes Version 1.3.0
 
 This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
 
