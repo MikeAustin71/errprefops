@@ -453,6 +453,37 @@ func TestErrPrefixDto_NewEPrefOld_000200(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_NewFromIErrorPrefix_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto2 := ErrPrefixDto{}.NewFromIErrorPrefix(
+		&ePDto)
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	areEqual := ePDto.Equal(&ePDto2)
+
+	if !areEqual {
+		t.Error("Error: Expected ePDto and ePDto2 would be equal.\n" +
+			"THEY ARE NOT EQUAL!\n")
+	}
+
+}
+
 func TestErrPrefixDto_SetCtx_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()

@@ -13,8 +13,6 @@ type IErrorPrefix interface {
 
 	SetEPref(newErrPrefix string)
 
-	String() string
-
 	SetEPrefCollection(newEPrefCollection []ErrorPrefixInfo)
 
 	SetEPrefCtx(newErrPrefix string, newErrContext string)
@@ -24,4 +22,6 @@ type IErrorPrefix interface {
 	SetMaxTextLineLen(maxErrPrefixTextLineLength int)
 
 	SetIsLastLineTermWithNewLine(isLastLineTerminatedWithNewLine bool)
+
+	String() string
 }

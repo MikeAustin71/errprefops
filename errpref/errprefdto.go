@@ -728,6 +728,68 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 	return numberOfCollectionItemsParsed, newErrPrefixDto
 }
 
+// NewFromIErrorPrefix - Receives an object which implements the
+// IErrorPrefix interface and returns a new, populated instance of
+// ErrPrefixDto.
+//
+// If the IErrorPrefix ErrorPrefixInfo collection is empty, this
+// method will return an empty instance of ErrPrefixDto.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  iEPref              IErrorPrefix
+//     - An object which implements the IErrorPrefix interface.
+//       Information extracted from this object will be used to
+//       replicate error prefix information in a new instance of
+//       ErrPrefixDto.
+//
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - This method will return a instance of ErrPrefixDto
+//       containing a duplicate of error prefix information
+//       extracted from input parameter 'iEPref'.
+//
+func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
+	iEPref IErrorPrefix) ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto := ErrPrefixDto{}
+
+	newErrPrefixDto.lock = new(sync.Mutex)
+
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	var iEPrefCollection []ErrorPrefixInfo
+
+	iEPrefCollection = iEPref.GetEPrefCollection()
+
+	if iEPrefCollection == nil ||
+		len(iEPrefCollection) == 0 {
+		return newErrPrefixDto
+	}
+
+	newErrPrefixDto.SetEPrefCollection(iEPrefCollection)
+
+	return newErrPrefixDto
+}
+
 // Ptr - Returns a pointer to a new and properly initialized
 // instance of ErrPrefixDto.
 //
