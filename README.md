@@ -218,7 +218,7 @@ When this error is returned up the function chain and finally printed out, the t
 
 ## Version
 
-The latest version is Version 1.2.0.
+The latest version is Version 1.3.0.
 
 This Version supports *Go* modules.
 
