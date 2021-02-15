@@ -785,6 +785,11 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 // If the internal list of error prefixes is currently empty, this
 // method will take no action and exit.
 //
+// If the input parameter string 'newErrContext' is 'empty' (zero
+// length string), this method will delete the last error context
+// associated with the last error prefix in the error prefix
+// collection.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -799,8 +804,9 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 //       'newErrContext' string will be added and associated with
 //       that last error prefix.
 //
-//       If this string is 'empty', this method will take no action
-//       and exit.
+//       If this string is 'empty' (zero length string), this
+//       method will delete the last error context associated with
+//       the last error prefix in the error prefix collection.
 //
 //
 // -----------------------------------------------------------------
@@ -829,9 +835,62 @@ func (ePrefDto *ErrPrefixDto) SetCtx(
 		return
 	}
 
-	errPrefNanobot{}.ptr().setLastCtx(
+	ePrefNanobot := errPrefNanobot{}
+
+	if len(newErrContext) == 0 {
+
+		ePrefNanobot.deleteLastErrContext(ePrefDto)
+
+		return
+	}
+
+	ePrefNanobot.setLastCtx(
 		newErrContext,
 		ePrefDto.ePrefCol)
+}
+
+// SetCtxEmpty - Deletes the last error context for the last error
+// prefix in this instance of ErrPrefixDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePrefDto *ErrPrefixDto) SetCtxEmpty() {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 10)
+		return
+	}
+
+	collectionIdx := len(ePrefDto.ePrefCol)
+
+	if collectionIdx == 0 {
+		return
+	}
+
+	errPrefNanobot{}.ptr().deleteLastErrContext(
+		ePrefDto)
+
+	return
 }
 
 // SetEPref - Adds an error prefix string to the list of
@@ -1317,6 +1376,12 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 // If the internal list of error prefixes is currently empty, this
 // method will take no action and exit.
 //
+// If the input parameter string 'newErrContext' is 'empty' (zero
+// length string), this method will delete the last error context
+// associated with the last error prefix in the error prefix
+// collection.
+//
+//
 //
 // ----------------------------------------------------------------
 //
@@ -1331,8 +1396,9 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 //       'newErrContext' string will be added and associated with
 //       that last error prefix.
 //
-//       If this string is 'empty', this method will take no action
-//       and exit.
+//       If this string is 'empty' (zero length string), this
+//       method will delete the last error context associated with
+//       the last error prefix in the error prefix collection.
 //
 //
 // -----------------------------------------------------------------
@@ -1361,9 +1427,63 @@ func (ePrefDto *ErrPrefixDto) XCtx(
 		return ePrefDto
 	}
 
-	errPrefNanobot{}.ptr().setLastCtx(
+	ePrefNanobot := errPrefNanobot{}
+
+	if len(newErrContext) == 0 {
+
+		ePrefNanobot.deleteLastErrContext(ePrefDto)
+
+		return ePrefDto
+	}
+
+	ePrefNanobot.setLastCtx(
 		newErrContext,
 		ePrefDto.ePrefCol)
+
+	return ePrefDto
+}
+
+// XCtxEmpty - Deletes the last error context for the last error
+// prefix in this instance of ErrPrefixDto
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *ErrPrefixDto
+//     - Returns a pointer to the current ErrPrefixDto instance
+//
+func (ePrefDto *ErrPrefixDto) XCtxEmpty() *ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 10)
+		return ePrefDto
+	}
+
+	collectionIdx := len(ePrefDto.ePrefCol)
+
+	if collectionIdx == 0 {
+		return ePrefDto
+	}
+
+	errPrefNanobot{}.ptr().deleteLastErrContext(
+		ePrefDto)
 
 	return ePrefDto
 }

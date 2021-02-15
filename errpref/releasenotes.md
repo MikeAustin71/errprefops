@@ -4,6 +4,19 @@ This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
 
 This version supports ***Go*** modules.
 
+## Version 1.3.0
+
+1. Added IErrorPrefix interface. 
+
+2. Added new ErrPrefixDto method XCtxEmpty.
+
+3. Added new ErrPrefixDto method XSetEmpty.
+
+4. Changed behavior of ErrPrefixDto method SetCtx. Empty input strings will now delete last error context.
+
+5. Changed behavior of ErrPrefixDto method XCtx. Empty input strings will now delete last error context.
+
+
 ## Version 1.2.0
 
 1. Removed Maximum Line Length operation from ErrPrefixDto.String()

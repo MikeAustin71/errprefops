@@ -222,7 +222,7 @@ The latest version is Version 1.2.0.
 
 This Version supports *Go* modules.
 
-[Version 1.2.0 Release Notes](./errpref/releasenotes.md)
+[Version 1.3.0 Release Notes](./errpref/releasenotes.md)
 
 ## License
 
