@@ -8,14 +8,15 @@ This version supports ***Go*** modules.
 
 1. Added IErrorPrefix interface. 
 
-2. Added new ErrPrefixDto method XCtxEmpty.
+2. Added ErrPrefixDto method XCtxEmpty.
 
-3. Added new ErrPrefixDto method XSetEmpty.
+3. Added ErrPrefixDto method XSetEmpty.
 
 4. Changed behavior of ErrPrefixDto method SetCtx. Empty input strings will now delete last error context.
 
 5. Changed behavior of ErrPrefixDto method XCtx. Empty input strings will now delete last error context.
 
+6. Added ErrPrefixDto method NewFromIErrorPrefix.
 
 ## Version 1.2.0
 
