@@ -629,7 +629,6 @@ func TestErrPrefixDto_SetCtx_000400(t *testing.T) {
 			actualStr)
 		return
 	}
-
 }
 
 func TestErrPrefixDto_SetCtxEmpty_000100(t *testing.T) {
