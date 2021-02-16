@@ -106,6 +106,8 @@
 --- PASS: TestErrPrefixDto_String_000100 (0.00s)
 === RUN   TestErrPrefixDto_String_000200
 --- PASS: TestErrPrefixDto_String_000200 (0.00s)
+=== RUN   TestErrPrefixDto_String_000300
+--- PASS: TestErrPrefixDto_String_000300 (0.00s)
 === RUN   TestErrPrefixDto_StrMaxLineLen_000200
 --- PASS: TestErrPrefixDto_StrMaxLineLen_000200 (0.00s)
 === RUN   TestErrPrefixDto_XCtx_000100
@@ -129,4 +131,4 @@
 === RUN   TestErrPrefixDto_YMethods_000200
 --- PASS: TestErrPrefixDto_YMethods_000200 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	1.380s
+ok  	github.com/MikeAustin71/errprefops/errpref	1.455s
