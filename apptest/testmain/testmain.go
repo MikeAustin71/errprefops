@@ -588,7 +588,7 @@ func (tMain *TestMain) TestMain004() {
 
 	ePrefix = errpref.ErrPref{}.EPrefCtx(ePrefix,
 		"Tx4()",
-		"Copy (A+B) -> C")
+		"CopyPtr (A+B) -> C")
 
 	ePrefix = errpref.ErrPref{}.EPrefCtx(ePrefix,
 		"Tx5.MoreAwesomeGoodness()",

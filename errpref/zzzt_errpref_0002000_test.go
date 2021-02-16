@@ -41,7 +41,7 @@ func TestErrPrefixDto_Copy_000100(t *testing.T) {
 		"Tx14.MoreAwesomeGoodness",
 		"A=7 B=8 C=9")
 
-	ePDto2 := ePDto.Copy()
+	ePDto2 := ePDto.CopyPtr()
 
 	if !ePDto.Equal(ePDto2) {
 		t.Error("Expected ePDto to Equal ePDto2\n" +

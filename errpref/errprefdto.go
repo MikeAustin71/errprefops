@@ -102,6 +102,47 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 
 // Copy - Creates a deep copy of the data fields contained in
 // the current ErrPrefixDto instance, and returns that data as a
+// as a new instance of ErrPrefixDto.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - If this method completes successfully, a deep copy of the
+//       current ErrPrefixDto instance will be returned through
+//       this parameter as a pointer to a new instance of
+//       ErrPrefixDto.
+//
+func (ePrefDto *ErrPrefixDto) Copy() ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto,
+		_ := errPrefAtom{}.ptr().
+		copyOutErrPrefDto(
+			ePrefDto,
+			"")
+
+	return newErrPrefixDto
+}
+
+// CopyPtr - Creates a deep copy of the data fields contained in
+// the current ErrPrefixDto instance, and returns that data as a
 // pointer to a new instance of ErrPrefixDto.
 //
 //
@@ -122,7 +163,7 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 //       this parameter as a pointer to a new instance of
 //       ErrPrefixDto.
 //
-func (ePrefDto *ErrPrefixDto) Copy() *ErrPrefixDto {
+func (ePrefDto *ErrPrefixDto) CopyPtr() *ErrPrefixDto {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -1467,7 +1508,8 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 //
 // Return Values
 //
-//
+//  *ErrPrefixDto
+//     - Returns a pointer to the current ErrPrefixDto instance
 //
 func (ePrefDto *ErrPrefixDto) XCtx(
 	newErrContext string) *ErrPrefixDto {
@@ -1769,4 +1811,96 @@ func (ePrefDto *ErrPrefixDto) XEPrefOld(
 		ePrefDto.ePrefCol)
 
 	return ePrefDto
+}
+
+// ZCtx - Sets or resets the error context for the last error
+// prefix. This operation either adds, or replaces, the error
+// context string associated with the last error prefix the
+// current list of error prefixes maintained by this instance.
+//
+// This method is identical in function to ErrPrefixDto.SetCtx().
+// The only difference is that this method returns a deep copy of
+// the current ErrPrefixDto instance.
+//
+// If the last error prefix already has an error context string, it
+// will be replaced by input parameter, 'newErrContext'.
+//
+// If the last error prefix does NOT have an associated error
+// context, this new error context string will be associated
+// with that error prefix.
+//
+// If the internal list of error prefixes is currently empty, this
+// method will take no action and exit.
+//
+// If the input parameter string 'newErrContext' is 'empty' (zero
+// length string), this method will delete the last error context
+// associated with the last error prefix in the error prefix
+// collection.
+//
+// This method returns a deep copy of the current ErrPrefixDto
+// instance after it is updated with new error context information.
+// This copy is returned by value.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newErrContext       string
+//     - This string holds the new error context information. If
+//       the last error prefix in internal storage already has an
+//       associated error context, that context will be deleted and
+//       replaced by 'newErrContext'. If, however, the last error
+//       prefix does NOT have an associated error context, this
+//       'newErrContext' string will be added and associated with
+//       that last error prefix.
+//
+//       If this string is 'empty' (zero length string), this
+//       method will delete the last error context associated with
+//       the last error prefix in the error prefix collection.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  ErrPrefixDto
+//     - This method returns a deep copy of the current
+//       ErrPrefixDto instance after it is updated with new error
+//       context information. This copy is returned by value.
+//
+func (ePrefDto *ErrPrefixDto) ZCtx(
+	newErrContext string) ErrPrefixDto {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		return ePrefDto.Copy()
+	}
+
+	if len(ePrefDto.ePrefCol) == 0 {
+		return ePrefDto.Copy()
+	}
+
+	ePrefNanobot := errPrefNanobot{}
+
+	if len(newErrContext) == 0 {
+
+		ePrefNanobot.deleteLastErrContext(ePrefDto)
+
+		return ePrefDto.Copy()
+	}
+
+	ePrefNanobot.setLastCtx(
+		newErrContext,
+		ePrefDto.ePrefCol)
+
+	return ePrefDto.Copy()
 }
