@@ -162,6 +162,68 @@ func TestErrPrefixDto_CopyOut_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_Equal_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetCtx("A!=B")
+
+	actualStr := ePDto.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+	ePDto2 := ePDto.Copy()
+
+	if !ePDto.Equal(&ePDto2) {
+
+		t.Error("Error:\n" +
+			"Expected ePDto to Equal ePDto2.\n" +
+			"However, THEY ARE NOT EQUAL!\n")
+
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(60)
+
+	if ePDto.Equal(&ePDto2) {
+
+		t.Error("Error:\n" +
+			"Expected ePDto to be UNEqual to ePDto2.\n" +
+			"However, THEY ARE EQUAL!\n")
+
+		return
+	}
+}
+
 func TestErrPrefixDto_Multiple_000100(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
