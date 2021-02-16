@@ -434,3 +434,84 @@ func TestErrPrefixDto_XEPrefOld_000100(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDto_ZCtx_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5()"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto2 := ePDto.ZCtx("A!=B")
+
+	actualStr := ePDto2.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
+func TestErrPrefixDto_ZCtx_000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]A!=B"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto2 := ePDto.ZCtx("A!=B")
+
+	actualStr := ePDto2.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+	}
+
+}
