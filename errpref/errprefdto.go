@@ -817,16 +817,15 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
-	var iEPrefCollection []ErrorPrefixInfo
+	var oldErrPrefStr string
 
-	iEPrefCollection = iEPref.GetEPrefCollection()
+	oldErrPrefStr = iEPref.String()
 
-	if iEPrefCollection == nil ||
-		len(iEPrefCollection) == 0 {
+	if len(oldErrPrefStr) == 0 {
 		return newErrPrefixDto
 	}
 
-	newErrPrefixDto.SetEPrefCollection(iEPrefCollection)
+	newErrPrefixDto.SetEPrefOld(oldErrPrefStr)
 
 	return newErrPrefixDto
 }

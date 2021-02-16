@@ -3,8 +3,6 @@ package errpref
 type IErrorPrefix interface {
 	GetIsLastLineTerminatedWithNewLine() bool
 
-	GetEPrefCollection() []ErrorPrefixInfo
-
 	GetEPrefCollectionLen() int
 
 	SetCtx(newErrContext string)
@@ -12,8 +10,6 @@ type IErrorPrefix interface {
 	SetCtxEmpty()
 
 	SetEPref(newErrPrefix string)
-
-	SetEPrefCollection(newEPrefCollection []ErrorPrefixInfo)
 
 	SetEPrefCtx(newErrPrefix string, newErrContext string)
 
@@ -24,15 +20,4 @@ type IErrorPrefix interface {
 	SetIsLastLineTermWithNewLine(isLastLineTerminatedWithNewLine bool)
 
 	String() string
-
-	ZCtx(newErrContext string) ErrPrefixDto
-
-	ZCtxEmpty() ErrPrefixDto
-
-	ZEPref(newErrPrefix string) ErrPrefixDto
-
-	ZEPrefCtx(newErrPrefix string,
-		newErrContext string) ErrPrefixDto
-
-	ZEPrefOld(oldErrPrefix string) ErrPrefixDto
 }
