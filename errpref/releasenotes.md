@@ -15,6 +15,8 @@ This version supports ***Go*** modules.
    - ZEPrefCtx()
    - ZEPrefOld()
 
+3. Added tests
+
 
 ## Version 1.3.0
 
