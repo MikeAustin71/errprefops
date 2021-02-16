@@ -884,3 +884,104 @@ func TestErrPrefixDto_ZEPref_000200(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDto_ZEPrefCtx_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999\\n" +
+		"Tx5.BrandNewMethod()[SPACE]:[SPACE]X->G"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	zEPDto := ePDto.ZEPrefCtx(
+		"Tx5.BrandNewMethod()",
+		"X->G")
+
+	actualStr := zEPDto.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	if !ePDto.Equal(&zEPDto) {
+		t.Error("Error:\n" +
+			"Expected ePDto to Equal zEPDto.\n" +
+			"However, THEY ARE NOT EQUAL!!!\n")
+	}
+}
+
+func TestErrPrefixDto_ZEPrefCtx_000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.AVeryVeryLongMethodNameCalledSomething() : A->B\nTx2.SomethingElse() : A==B\n" +
+			"Tx3.DoSomething() : A==10\nTx4() : A/10==4 - Tx5() : B==999"
+
+	expectedStr := "Tx1.AVeryVeryLongMethodNameCalledSomething()\\n" +
+		"[SPACE]:[SPACE][SPACE]A->B\\n" +
+		"Tx2.SomethingElse()[SPACE]:[SPACE]A==B\\n" +
+		"Tx3.DoSomething()[SPACE]:[SPACE]A==10\\n" +
+		"Tx4()[SPACE]:[SPACE]A/10==4[SPACE]-[SPACE]Tx5()[SPACE]:[SPACE]B==999\\n" +
+		"Tx5.BrandNewMethod()"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	zEPDto := ePDto.ZEPrefCtx(
+		"Tx5.BrandNewMethod()",
+		"")
+
+	actualStr := zEPDto.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error:\n"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	if !ePDto.Equal(&zEPDto) {
+		t.Error("Error:\n" +
+			"Expected ePDto to Equal zEPDto.\n" +
+			"However, THEY ARE NOT EQUAL!!!\n")
+	}
+
+}

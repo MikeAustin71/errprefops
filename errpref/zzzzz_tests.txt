@@ -144,9 +144,13 @@
 --- PASS: TestErrPrefixDto_ZEPref_000100 (0.00s)
 === RUN   TestErrPrefixDto_ZEPref_000200
 --- PASS: TestErrPrefixDto_ZEPref_000200 (0.00s)
+=== RUN   TestErrPrefixDto_ZEPrefCtx_000100
+--- PASS: TestErrPrefixDto_ZEPrefCtx_000100 (0.00s)
+=== RUN   TestErrPrefixDto_ZEPrefCtx_000200
+--- PASS: TestErrPrefixDto_ZEPrefCtx_000200 (0.00s)
 === RUN   TestErrPrefixDto_XMethods_000100
 --- PASS: TestErrPrefixDto_XMethods_000100 (0.00s)
 === RUN   TestErrPrefixDto_YMethods_000200
 --- PASS: TestErrPrefixDto_YMethods_000200 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	0.697s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.755s
