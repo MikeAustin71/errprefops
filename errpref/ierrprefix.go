@@ -24,4 +24,15 @@ type IErrorPrefix interface {
 	SetIsLastLineTermWithNewLine(isLastLineTerminatedWithNewLine bool)
 
 	String() string
+
+	ZCtx(newErrContext string) ErrPrefixDto
+
+	ZCtxEmpty() ErrPrefixDto
+
+	ZEPref(newErrPrefix string) ErrPrefixDto
+
+	ZEPrefCtx(newErrPrefix string,
+		newErrContext string) ErrPrefixDto
+
+	ZEPrefOld(oldErrPrefix string) ErrPrefixDto
 }

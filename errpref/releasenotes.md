@@ -6,6 +6,16 @@ This version supports ***Go*** modules.
 
 ## Version 1.4.0
 
+1. Modified Interface IErrorPrefix
+
+2. Added 'Z' methods which return an ErrPrefixDto by value.
+   - ZCtx()
+   - ZCtxEmpty()
+   - ZEPref()
+   - ZEPrefCtx()
+   - ZEPrefOld()
+
+
 ## Version 1.3.0
 
 1. Added IErrorPrefix interface. 
