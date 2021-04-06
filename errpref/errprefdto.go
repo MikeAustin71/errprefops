@@ -1,6 +1,8 @@
 package errpref
 
-import "sync"
+import (
+	"sync"
+)
 
 // ErrPrefixDto - Error Prefix Data Transfer Object. This type
 // encapsulates and formats error prefix and error context strings.
@@ -77,7 +79,7 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	if ePrefDto.maxErrPrefixTextLineLength < 10 {
@@ -319,7 +321,7 @@ func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 256)
+	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 }
 
 // Equal - Returns a boolean flag signaling whether the data values
@@ -428,22 +430,21 @@ func (ePrefDto *ErrPrefixDto) GetEPrefCollection() []ErrorPrefixInfo {
 	var newErrorPrefixCollection []ErrorPrefixInfo
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 256)
-		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0, 256)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0)
 		return newErrorPrefixCollection
 	}
 
 	lenEPrefCol := len(ePrefDto.ePrefCol)
 
 	if lenEPrefCol == 0 {
-		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0, 256)
+		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0)
 		return newErrorPrefixCollection
 	}
 
 	newErrorPrefixCollection =
 		make([]ErrorPrefixInfo,
-			lenEPrefCol,
-			lenEPrefCol+256)
+			lenEPrefCol)
 
 	_ = copy(newErrorPrefixCollection, ePrefDto.ePrefCol)
 
@@ -483,10 +484,52 @@ func (ePrefDto *ErrPrefixDto) GetEPrefCollectionLen() int {
 
 	if ePrefDto.ePrefCol == nil {
 		ePrefDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 	}
 
 	return len(ePrefDto.ePrefCol)
+}
+
+// GetEPrefStrings - Returns a two dimensional slice of Error
+// Prefix and Context strings.
+//
+// The Error Prefix is always in the [x][0] position. The error
+// context string is always in the [x][1] position. The error
+// context string may be an empty string.
+//
+func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if ePrefDto.ePrefCol == nil {
+		ePrefDto.ePrefCol =
+			make([]ErrorPrefixInfo, 0)
+	}
+
+	colLen := len(ePrefDto.ePrefCol)
+
+	if colLen == 0 {
+		return nil
+	}
+
+	newTwoDSlice := make([][2]string, colLen)
+
+	for i := 0; i < colLen; i++ {
+
+		newTwoDSlice[i][0] =
+			ePrefDto.ePrefCol[i].errorPrefixStr
+
+		newTwoDSlice[i][1] =
+			ePrefDto.ePrefCol[i].errorContextStr
+	}
+
+	return newTwoDSlice
 }
 
 // GetMaxErrPrefTextLineLength - Returns the maximum limit on the
@@ -558,12 +601,12 @@ func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 
 	if ePrefDto.ePrefCol == nil {
 		ePrefDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 	}
 
 	if incomingErrPrefixDto.ePrefCol == nil {
 		incomingErrPrefixDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 		return
 	}
 
@@ -597,7 +640,9 @@ func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 //
 //  ErrPrefixDto
 //     - This method will return a new, properly initialized
-//       instance of ErrPrefixDto.
+//       instance of ErrPrefixDto. The ErrorPrefixInfo collection
+//       encapsulated by the new instance will be an empty
+//       collection containing zero elements.
 //
 //
 func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
@@ -614,7 +659,7 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -676,7 +721,7 @@ func (ePrefDto ErrPrefixDto) NewEPrefOld(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -751,7 +796,7 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -812,7 +857,7 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -828,6 +873,276 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 	newErrPrefixDto.SetEPrefOld(oldErrPrefStr)
 
 	return newErrPrefixDto
+}
+
+// NewIBasicErrorPrefix - Receives an object which implements
+// the IBasicErrorPrefix interface and returns a new, populated
+// instance of ErrPrefixDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  iEPref              IBasicErrorPrefix
+//     - An object which implements the IBasicErrorPrefix
+//       interface.
+//
+//       This interface contains one method, 'GetEPrefStrings()'.
+//       This single method returns a two dimensional array of
+//       strings. Each 2-Dimensional array element holds a separate
+//       string for error prefix and error context.
+//
+//       Information extracted from this object will be used to
+//       generate error prefix information in a new instance of
+//       ErrPrefixDto.
+//
+//       Be advised, if 'iEPref' is nil, this method will return
+//       an error
+//
+//
+//  newErrPrefix        string
+//     - A new error prefix represents typically identifies the
+//       function or method which is currently executing. This
+//       information is used to document source code execution flow
+//       in error messages.
+//
+//       This error prefix information will be added to the
+//       internal collection of error prefixes maintained by the
+//       new instance of ErrPrefixDto returned by this method.
+//
+//       If this parameter is set to an empty string, no additional
+//       error prefix information will be added to the returned
+//       instance of ErrPrefixDto.
+//
+//
+//  newErrContext       string
+//     - This is error context information associated with the new
+//       error prefix ('newErrPrefix') string described above.
+//
+//       This parameter is optional and will accept an empty
+//       string.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *ErrPrefixDto
+//     - If this method completes successfully, it will return a
+//       pointer to a new instance of ErrPrefixDto containing a
+//       duplicate of error prefix and error context information
+//       extracted from input parameter 'iEPref' plus new error
+//       prefix information supplied by parameters, 'newErrPrefix'
+//       and 'newErrContext'.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter
+//       'newErrPrefix' will be prefixed and attached to the
+//       beginning of the error message
+//
+func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
+	iEPref IBasicErrorPrefix,
+	newErrPrefix string,
+	newErrContext string) (
+	*ErrPrefixDto,
+	error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto := new(ErrPrefixDto)
+
+	newErrPrefixDto.lock = new(sync.Mutex)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	methodName := newErrPrefix +
+		"\nErrPrefixDto.NewIBasicErrorPrefix()"
+
+	err := errPrefixDtoNanobot{}.ptr().
+		setFromIBasicErrorPrefix(
+			newErrPrefixDto,
+			iEPref,
+			methodName)
+
+	if err != nil {
+		return newErrPrefixDto, err
+	}
+
+	if len(newErrPrefix) > 0 {
+
+		errPrefNanobot{}.ptr().addEPrefInfo(
+			newErrPrefix,
+			newErrContext,
+			&newErrPrefixDto.ePrefCol)
+
+		errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+			newErrPrefixDto.ePrefCol)
+
+	}
+
+	return newErrPrefixDto, err
+}
+
+// NewIEmpty - Receives an empty interface. If that empty interface
+// is convertible to one of the 7-valid types listed below, this
+// method then proceeds to create and return a pointer to a new
+// instance of ErrPrefixDto.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  iEPref              interface{}
+//     - An empty interface containing one of the 7-valid type
+//       listed above. Any one of these valid types will generate
+//       valid error prefix and error context information.
+//
+//       The error prefix and error context information for this
+//       new ErrPrefixDto object will be extracted from input
+//       parameter, 'iEPref'. 'iEPref' is an empty interface which
+//       must be convertible to one of the following valid types:
+//
+//       1. nil               - A nil value is valid and generates an empty
+//                              collection of error prefix and error context
+//                              information.
+//
+//       2. string            - A string containing error prefix information.
+//
+//       3. []string          - A one-dimensional slice of strings containing
+//                              error prefix information
+//
+//       4. [][2]string       - A two-dimensional slice of strings
+//                              containing error prefix and error context
+//                              information.
+//
+//       5. ErrPrefixDto      - An instance of ErrPrefixDto. The
+//                              ErrorPrefixInfo from this object will be
+//                              copied to 'errPrefDto'.
+//
+//       6. *ErrPrefixDto     - A pointer to an instance of ErrPrefixDto.
+//                              ErrorPrefixInfo from this object will be
+//                              copied to 'errPrefDto'.
+//
+//       7. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       Any types not listed above will be considered invalid and
+//       trigger the return of an error.
+//
+//
+//  newErrPrefix        string
+//     - A new error prefix represents typically identifies the
+//       function or method which is currently executing. This
+//       information is used to document source code execution flow
+//       in error messages.
+//
+//       This error prefix information will be added to the
+//       internal collection of error prefixes maintained by the
+//       new instance of ErrPrefixDto returned by this method.
+//
+//       If this parameter is set to an empty string, no additional
+//       error prefix information will be added to the returned
+//       instance of ErrPrefixDto.
+//
+//
+//  newErrContext       string
+//     - This is error context information associated with the new
+//       error prefix ('newErrPrefix') string described above.
+//
+//       This parameter is optional and will accept an empty
+//       string.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *ErrPrefixDto
+//     - If this method completes successfully, it will return a
+//       pointer to a new instance of ErrPrefixDto containing a
+//       duplicate of error prefix and error context information
+//       extracted from input parameter 'iEPref' plus new error
+//       prefix information supplied by parameters, 'newErrPrefix'
+//       and 'newErrContext'.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter
+//       'newErrPrefix' will be prefixed and attached to the
+//       beginning of the error message
+//
+func (ePrefDto ErrPrefixDto) NewIEmpty(
+	iEPref interface{},
+	newErrPrefix string,
+	newErrContext string) (
+	*ErrPrefixDto,
+	error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	newErrPrefixDto := new(ErrPrefixDto)
+
+	newErrPrefixDto.lock = new(sync.Mutex)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	methodName := newErrPrefix +
+		"\nErrPrefixDto.NewIEmpty()"
+
+	err := errPrefixDtoMechanics{}.ptr().
+		setFromEmptyInterface(
+			newErrPrefixDto,
+			iEPref,
+			methodName)
+
+	if err != nil {
+		return newErrPrefixDto, err
+	}
+
+	if len(newErrPrefix) > 0 {
+
+		errPrefNanobot{}.ptr().addEPrefInfo(
+			newErrPrefix,
+			newErrContext,
+			&newErrPrefixDto.ePrefCol)
+
+		errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+			newErrPrefixDto.ePrefCol)
+
+	}
+
+	return newErrPrefixDto, err
 }
 
 // Ptr - Returns a pointer to a new and properly initialized
@@ -864,7 +1179,7 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -929,7 +1244,7 @@ func (ePrefDto *ErrPrefixDto) SetCtx(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 		return
 	}
 
@@ -979,7 +1294,7 @@ func (ePrefDto *ErrPrefixDto) SetCtxEmpty() {
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 10)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 		return
 	}
 
@@ -1043,7 +1358,7 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -1092,7 +1407,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCollection(
 	defer ePrefDto.lock.Unlock()
 
 	if newEPrefCollection == nil {
-		newEPrefCollection = make([]ErrorPrefixInfo, 0, 256)
+		newEPrefCollection = make([]ErrorPrefixInfo, 0)
 		return
 	}
 
@@ -1100,8 +1415,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCollection(
 
 	ePrefDto.ePrefCol = make(
 		[]ErrorPrefixInfo,
-		lenNewEPrefCol,
-		lenNewEPrefCol+256)
+		lenNewEPrefCol)
 
 	if lenNewEPrefCol == 0 {
 		return
@@ -1165,7 +1479,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -1241,7 +1555,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	ePrefAtom := errPrefAtom{}
 
@@ -1442,7 +1756,7 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 	}
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	if len(ePrefDto.ePrefCol) == 0 {
@@ -1522,7 +1836,7 @@ func (ePrefDto *ErrPrefixDto) XCtx(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 		return ePrefDto
 	}
 
@@ -1575,7 +1889,7 @@ func (ePrefDto *ErrPrefixDto) XCtxEmpty() *ErrPrefixDto {
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 10)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 		return ePrefDto
 	}
 
@@ -1641,7 +1955,7 @@ func (ePrefDto *ErrPrefixDto) XEPref(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -1715,7 +2029,7 @@ func (ePrefDto *ErrPrefixDto) XEPrefCtx(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -1796,7 +2110,7 @@ func (ePrefDto *ErrPrefixDto) XEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	ePrefAtom := errPrefAtom{}
 
@@ -1880,7 +2194,7 @@ func (ePrefDto *ErrPrefixDto) ZCtx(
 	var newErrPrefixDto ErrPrefixDto
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	ePrefNanobot := errPrefNanobot{}
@@ -1944,7 +2258,7 @@ func (ePrefDto *ErrPrefixDto) ZCtxEmpty() ErrPrefixDto {
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 10)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	if len(ePrefDto.ePrefCol) > 0 {
@@ -2022,7 +2336,7 @@ func (ePrefDto *ErrPrefixDto) ZEPref(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -2110,7 +2424,7 @@ func (ePrefDto *ErrPrefixDto) ZEPrefCtx(
 	defer ePrefDto.lock.Unlock()
 
 	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -2204,7 +2518,7 @@ func (ePrefDto *ErrPrefixDto) ZEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0, 100)
+	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
 	ePrefAtom := errPrefAtom{}
 

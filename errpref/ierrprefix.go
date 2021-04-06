@@ -1,9 +1,15 @@
 package errpref
 
+type IBasicErrorPrefix interface {
+	GetEPrefStrings() [][2]string
+}
+
 type IErrorPrefix interface {
-	GetIsLastLineTerminatedWithNewLine() bool
+	GetEPrefStrings() [][2]string
 
 	GetEPrefCollectionLen() int
+
+	GetIsLastLineTerminatedWithNewLine() bool
 
 	SetCtx(newErrContext string)
 

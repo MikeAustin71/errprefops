@@ -60,12 +60,12 @@ func (ePrefAtom *errPrefAtom) areEqualErrPrefDtos(
 
 	if errPrefixDto1.ePrefCol == nil {
 		errPrefixDto1.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 	}
 
 	if errPrefixDto2.ePrefCol == nil {
 		errPrefixDto2.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 	}
 
 	lenIncomingEPrefCol01 :=
@@ -196,7 +196,7 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 
 	if inComingErrPrefixDto.ePrefCol == nil {
 		inComingErrPrefixDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 	}
 
 	lenIncomingEPrefCol :=
@@ -205,8 +205,7 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 	targetErrPrefixDto.ePrefCol =
 		make(
 			[]ErrorPrefixInfo,
-			lenIncomingEPrefCol,
-			lenIncomingEPrefCol+256)
+			lenIncomingEPrefCol)
 
 	if lenIncomingEPrefCol == 0 {
 		return nil
@@ -312,7 +311,7 @@ func (ePrefAtom *errPrefAtom) copyOutErrPrefDto(
 
 	if ePrefixDto.ePrefCol == nil {
 		ePrefixDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0, 256)
+			make([]ErrorPrefixInfo, 0)
 	}
 
 	lenIncomingEPrefCol :=
@@ -321,8 +320,7 @@ func (ePrefAtom *errPrefAtom) copyOutErrPrefDto(
 	newEPrefixDto.ePrefCol =
 		make(
 			[]ErrorPrefixInfo,
-			lenIncomingEPrefCol,
-			lenIncomingEPrefCol+256)
+			lenIncomingEPrefCol)
 
 	if lenIncomingEPrefCol == 0 {
 		return newEPrefixDto, err
@@ -393,7 +391,7 @@ func (ePrefAtom *errPrefAtom) getEPrefContextArray(
 	defer ePrefAtom.lock.Unlock()
 
 	if *prefixContextCol == nil {
-		*prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
+		*prefixContextCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	if len(errPrefix) == 0 {
@@ -506,7 +504,7 @@ func (ePrefAtom *errPrefAtom) setFlagsErrorPrefixInfoArray(
 	defer ePrefAtom.lock.Unlock()
 
 	if prefixContextCol == nil {
-		prefixContextCol = make([]ErrorPrefixInfo, 0, 256)
+		prefixContextCol = make([]ErrorPrefixInfo, 0)
 	}
 
 	lenCollection := len(prefixContextCol)
