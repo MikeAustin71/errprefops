@@ -2,7 +2,6 @@ package errpref
 
 import (
 	"fmt"
-	"strings"
 	"sync"
 )
 
@@ -126,33 +125,21 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 	lenTwoDSlice := len(twoDSlice)
 
 	if lenTwoDSlice == 0 {
-		errPrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+		errPrefDto.ePrefCol =
+			make([]ErrorPrefixInfo, 0)
 		return nil
 	}
 
-	errPrefDto.ePrefCol = make([]ErrorPrefixInfo, lenTwoDSlice)
+	errPrefDto.ePrefCol =
+		make([]ErrorPrefixInfo, lenTwoDSlice)
 
 	var ePrefInfo ErrorPrefixInfo
-	var lastIdx = lenTwoDSlice - 1
-	var isFirstIdx, isLastIdx bool
 
 	for i := 0; i < lenTwoDSlice; i++ {
 
-		if i == 0 {
-			isFirstIdx = true
-		} else {
-			isFirstIdx = false
-		}
-
-		if i == lastIdx {
-			isLastIdx = true
-		} else {
-			isLastIdx = false
-		}
-
 		ePrefInfo = ErrorPrefixInfo{
-			isFirstIdx:             isFirstIdx,
-			isLastIdx:              isLastIdx,
+			isFirstIdx:             false,
+			isLastIdx:              false,
 			isPopulated:            true,
 			errorPrefixStr:         twoDSlice[i][0],
 			lenErrorPrefixStr:      uint(len(twoDSlice[i][0])),
@@ -164,6 +151,10 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 
 		errPrefDto.ePrefCol[i] = ePrefInfo
 	}
+
+	errPrefAtom{}.ptr().
+		setFlagsErrorPrefixInfoArray(
+			errPrefDto.ePrefCol)
 
 	return nil
 }
@@ -251,42 +242,13 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromString(
 		return nil
 	}
 
-	ePrefStrs := strings.Split(iEPref, "\n")
+	ePrefAtom := errPrefAtom{}
+	ePrefAtom.getEPrefContextArray(
+		iEPref,
+		&errPrefDto.ePrefCol)
 
-	lenEPrefStrs := len(ePrefStrs)
-
-	errPrefDto.ePrefCol = make([]ErrorPrefixInfo, lenEPrefStrs)
-
-	var isFirstIdx, isLastIdx bool
-	var lastIdx = lenEPrefStrs - 1
-
-	for i := 0; i < lenEPrefStrs; i++ {
-
-		if i == 0 {
-			isFirstIdx = true
-		} else {
-			isFirstIdx = false
-		}
-
-		if i == lastIdx {
-			isLastIdx = true
-		} else {
-			isLastIdx = false
-		}
-
-		errPrefDto.ePrefCol[i] =
-			ErrorPrefixInfo{
-				isFirstIdx:             isFirstIdx,
-				isLastIdx:              isLastIdx,
-				isPopulated:            true,
-				errorPrefixStr:         ePrefStrs[i],
-				lenErrorPrefixStr:      uint(len(ePrefStrs[i])),
-				errPrefixHasContextStr: false,
-				errorContextStr:        "",
-				lenErrorContextStr:     0,
-				lock:                   nil,
-			}
-	}
+	ePrefAtom.setFlagsErrorPrefixInfoArray(
+		errPrefDto.ePrefCol)
 
 	return nil
 }
@@ -378,27 +340,12 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 
 	errPrefDto.ePrefCol = make([]ErrorPrefixInfo, lenEPrefStrs)
 
-	var isFirstIdx, isLastIdx bool
-	var lastIdx = lenEPrefStrs - 1
-
 	for i := 0; i < lenEPrefStrs; i++ {
-
-		if i == 0 {
-			isFirstIdx = true
-		} else {
-			isFirstIdx = false
-		}
-
-		if i == lastIdx {
-			isLastIdx = true
-		} else {
-			isLastIdx = false
-		}
 
 		errPrefDto.ePrefCol[i] =
 			ErrorPrefixInfo{
-				isFirstIdx:             isFirstIdx,
-				isLastIdx:              isLastIdx,
+				isFirstIdx:             false,
+				isLastIdx:              false,
 				isPopulated:            true,
 				errorPrefixStr:         iEPref[i],
 				lenErrorPrefixStr:      uint(len(iEPref[i])),
@@ -408,6 +355,10 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 				lock:                   nil,
 			}
 	}
+
+	errPrefAtom{}.ptr().
+		setFlagsErrorPrefixInfoArray(
+			errPrefDto.ePrefCol)
 
 	return nil
 }
@@ -507,26 +458,12 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
 	errPrefDto.ePrefCol = make([]ErrorPrefixInfo, lenTwoDSlice)
 
 	var ePrefInfo ErrorPrefixInfo
-	var lastIdx = lenTwoDSlice - 1
-	var isFirstIdx, isLastIdx bool
 
 	for i := 0; i < lenTwoDSlice; i++ {
 
-		if i == 0 {
-			isFirstIdx = true
-		} else {
-			isFirstIdx = false
-		}
-
-		if i == lastIdx {
-			isLastIdx = true
-		} else {
-			isLastIdx = false
-		}
-
 		ePrefInfo = ErrorPrefixInfo{
-			isFirstIdx:             isFirstIdx,
-			isLastIdx:              isLastIdx,
+			isFirstIdx:             false,
+			isLastIdx:              false,
 			isPopulated:            true,
 			errorPrefixStr:         iEPref[i][0],
 			lenErrorPrefixStr:      uint(len(iEPref[i][0])),
@@ -538,6 +475,10 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
 
 		errPrefDto.ePrefCol[i] = ePrefInfo
 	}
+
+	errPrefAtom{}.ptr().
+		setFlagsErrorPrefixInfoArray(
+			errPrefDto.ePrefCol)
 
 	return nil
 }
