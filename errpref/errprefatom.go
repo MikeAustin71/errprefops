@@ -10,6 +10,64 @@ type errPrefAtom struct {
 	lock *sync.Mutex
 }
 
+func (ePrefAtom *errPrefAtom) addTwoDimensionalStringArray(
+	errPrefixDto *ErrPrefixDto,
+	twoDStrArray [][2]string,
+	errPrefStr string) error {
+
+	if ePrefAtom.lock == nil {
+		ePrefAtom.lock = new(sync.Mutex)
+	}
+
+	ePrefAtom.lock.Lock()
+
+	defer ePrefAtom.lock.Unlock()
+
+	errPrefStr = errPrefStr +
+		"\nerrPrefAtom." +
+		"addTwoDimensionalStringArray()"
+
+	if errPrefixDto == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'errPrefixDto' is invalid!\n"+
+			"'' is a 'nil' pointer.\n",
+			errPrefStr)
+	}
+
+	if twoDStrArray == nil {
+		return nil
+	}
+
+	lenTwoDStrAry := len(twoDStrArray)
+
+	if lenTwoDStrAry == 0 {
+		return nil
+	}
+
+	var ePrefInfo ErrorPrefixInfo
+
+	for i := 0; i < lenTwoDStrAry; i++ {
+
+		ePrefInfo = ErrorPrefixInfo{
+			isFirstIdx:             false,
+			isLastIdx:              false,
+			isPopulated:            true,
+			errorPrefixStr:         twoDStrArray[i][0],
+			lenErrorPrefixStr:      uint(len(twoDStrArray[i][0])),
+			errPrefixHasContextStr: len(twoDStrArray[i][1]) > 0,
+			errorContextStr:        twoDStrArray[i][1],
+			lenErrorContextStr:     uint(len(twoDStrArray[i][1])),
+			lock:                   nil,
+		}
+
+		errPrefixDto.ePrefCol =
+			append(errPrefixDto.ePrefCol,
+				ePrefInfo)
+	}
+
+	return nil
+}
+
 // areEqualErrPrefDtos - Receives pointers to two ErrPrefixDto
 // objects and proceeds to compare the internal data values.
 // If the ErrPrefixDto objects contain data values which ARE EQUAL

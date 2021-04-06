@@ -31,6 +31,31 @@ type ErrPrefixDto struct {
 	lock                            *sync.Mutex
 }
 
+// AddTwoDStringArray - Adds error prefix information extracted
+// from a passed two-dimensional string array to the internal
+// ErrorPrefixInfo collection managed by this ErrPrefixDto
+// instance.
+//
+// If input parameter 'twoDStrArray' is 'nil' or empty, this method
+// will take no action an exit.
+//
+func (ePrefDto *ErrPrefixDto) AddTwoDStringArray(
+	twoDStrArray [][2]string) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	_ = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
+		ePrefDto,
+		twoDStrArray,
+		"")
+}
+
 // AddEPrefCollectionStr - Receives a string containing one or more
 // error prefix and error context pairs. This error prefix
 // information is parsed and added to the internal store of
