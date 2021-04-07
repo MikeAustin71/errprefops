@@ -2,6 +2,7 @@ package errpref
 
 import (
 	"fmt"
+	"reflect"
 	"sync"
 )
 
@@ -160,6 +161,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.([]string)
 
 	if ok {
+
 		return errNanobot.setFromStringArray(
 			errPrefDto,
 			strs,
@@ -172,6 +174,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.([][2]string)
 
 	if ok {
+
 		return errNanobot.setFromTwoDStrArray(
 			errPrefDto,
 			twoDStrArray,
@@ -199,6 +202,12 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.(*ErrPrefixDto)
 
 	if ok {
+
+		if reflect.ValueOf(dtoPtr).IsNil() {
+			errPrefDto.ePrefCol = nil
+			return nil
+		}
+
 		return ePrfAtom.
 			copyInErrPrefDto(
 				errPrefDto,
@@ -212,9 +221,28 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.(IBasicErrorPrefix)
 
 	if ok {
+
 		return errNanobot.setFromIBasicErrorPrefix(
 			errPrefDto,
 			iBasicEPref,
+			methodNames)
+	}
+
+	var iStr fmt.Stringer
+
+	iStr,
+		ok = iEPref.(fmt.Stringer)
+
+	if ok {
+
+		if reflect.ValueOf(iStr).IsNil() {
+			errPrefDto.ePrefCol = nil
+			return nil
+		}
+
+		return errNanobot.setFromString(
+			errPrefDto,
+			iStr.String(),
 			methodNames)
 	}
 
@@ -225,6 +253,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		"supported types listed as follows:\n"+
 		"    nil\n"+
 		"    string\n"+
+		"    fmt.Stringer\n"+
 		"    []string\n"+
 		"    [][2]string\n"+
 		"    ErrPrefixDto\n"+

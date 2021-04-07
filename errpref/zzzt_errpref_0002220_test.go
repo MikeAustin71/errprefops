@@ -2,6 +2,7 @@ package errpref
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -952,6 +953,163 @@ func TestErrPrefixDto_NewIEmpty_001000(t *testing.T) {
 			ePDto2Str)
 	}
 
+}
+
+func TestErrPrefixDto_NewIEmpty_001100(t *testing.T) {
+
+	/*
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+		"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+		"Tx7.TrySomethingNew() : something->newSomething\n" +
+		"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+		"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+		"Tx13.SomeFabulousAndComplexStuff()\n" +
+		"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	*/
+
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	iStringerEPref := testIStringerErrPref{}
+
+	var err error
+
+	iStringerEPref.Set(initialStr)
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmpty(
+		&iStringerEPref,
+		"",
+		"")
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmpty(iStringerEPref)\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmpty_001200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	sb := strings.Builder{}
+
+	sb.WriteString(initialStr)
+
+	var err error
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmpty(
+		&sb,
+		"",
+		"")
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmpty(strings.Builder{})\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+type testIStringerErrPref struct {
+	locString string
+}
+
+func (tIStr *testIStringerErrPref) Set(str string) {
+	tIStr.locString = str
+}
+
+func (tIStr *testIStringerErrPref) String() string {
+	return tIStr.locString
 }
 
 type testIBasicErrPref struct {
