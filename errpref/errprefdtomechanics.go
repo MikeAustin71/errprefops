@@ -29,7 +29,7 @@ func (ePrefDtoMech errPrefixDtoMechanics) ptr() *errPrefixDtoMechanics {
 
 // setFromIBasicErrorPrefix - Receives an ErrPrefixDto object and
 // an empty interface. If that empty interface is convertible to
-// one of the 7-valid types listed below, this method then proceeds
+// one of the 10-valid types listed below, this method then proceeds
 // to overwrite and reset the ErrPrefixDto object's ErrorPrefixInfo
 // collection containing error prefix and error context
 // information. New error information will be extracted from input
@@ -37,27 +37,43 @@ func (ePrefDtoMech errPrefixDtoMechanics) ptr() *errPrefixDtoMechanics {
 // be convertible to one of the following valid types:
 //
 //
-//   1. nil - A nil value is valid and generates an empty
-//            collection of error prefix and error context
-//            information.
+//   1. nil               - A nil value is valid and generates an empty
+//                          collection of error prefix and error context
+//                          information.
 //
-//   2. string - A string containing error prefix information.
+//   2. Stringer          - The Stringer interface from the 'fmt' package.
+//                          This interface has only one method:
+//                            type Stringer interface {
+//                               String() string
+//                            }
 //
-//   3. []string A one-dimensional slice of strings containing
-//               error prefix information
+//   3. string            - A string containing error prefix information.
 //
-//   4. [][2]string A two-dimensional slice of strings containing
-//                  error prefix and error context information.
+//   4. []string          - A one-dimensional slice of strings containing
+//                          error prefix information
 //
-//   5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                     ErrorPrefixInfo from this object will be
-//                     copied to 'errPrefDto'.
+//   5. [][2]string       - A two-dimensional slice of strings
+//                          containing error prefix and error context
+//                          information.
 //
-//   6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//                      ErrorPrefixInfo from this object will be
-//                     copied to 'errPrefDto'.
+//   6. strings.Builder   - An instance of strings.Builder. Error prefix
+//                          information will be imported into the new
+//                          returned instance of ErrPrefixDto.
 //
-//   7. IBasicErrorPrefix - An interface to a method generating
+//   7  *strings.Builder  - A pointer to an instance of strings.Builder.
+//                          Error prefix information will be imported into
+//                          the new returned instance of ErrPrefixDto.
+//
+//   8. ErrPrefixDto      - An instance of ErrPrefixDto. The
+//                          ErrorPrefixInfo from this object will be
+//                          copied to the new returned instance of
+//                          ErrPrefixDto.
+//
+//   9. *ErrPrefixDto     - A pointer to an instance of ErrPrefixDto.
+//                          ErrorPrefixInfo from this object will be
+//                          copied to 'errPrefDto'.
+//
+//  10. IBasicErrorPrefix - An interface to a method generating
 //                          a two-dimensional slice of strings
 //                          containing error prefix and error
 //                          context information.

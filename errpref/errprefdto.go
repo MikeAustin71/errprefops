@@ -1026,9 +1026,9 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 }
 
 // NewIEmpty - Receives an empty interface. If that empty interface
-// is convertible to one of the 8-valid types/interfaces listed
-// below, this method then proceeds to create and return a pointer
-// to a new instance of ErrPrefixDto.
+// is convertible to one of the 10-valid types listed below, this
+// method then proceeds to create and return a pointer to a new
+// instance of ErrPrefixDto.
 //
 //
 // ----------------------------------------------------------------
@@ -1036,8 +1036,8 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 // Input Parameters
 //
 //  iEPref              interface{}
-//     - An empty interface containing one of the 7-valid type
-//       listed above. Any one of these valid types will generate
+//     - An empty interface containing one of the 10-valid type
+//       listed below. Any one of these valid types will generate
 //       valid error prefix and error context information.
 //
 //       The error prefix and error context information for this
@@ -1064,15 +1064,24 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 //                              containing error prefix and error context
 //                              information.
 //
-//       6. ErrPrefixDto      - An instance of ErrPrefixDto. The
+//       6. strings.Builder   - An instance of strings.Builder. Error prefix
+//                              information will be imported into the new
+//                              returned instance of ErrPrefixDto.
+//
+//       7  *strings.Builder  - A pointer to an instance of strings.Builder.
+//                              Error prefix information will be imported into
+//                              the new returned instance of ErrPrefixDto.
+//
+//       8. ErrPrefixDto      - An instance of ErrPrefixDto. The
+//                              ErrorPrefixInfo from this object will be
+//                              copied to the new returned instance of
+//                              ErrPrefixDto.
+//
+//       9. *ErrPrefixDto     - A pointer to an instance of ErrPrefixDto.
 //                              ErrorPrefixInfo from this object will be
 //                              copied to 'errPrefDto'.
 //
-//       7. *ErrPrefixDto     - A pointer to an instance of ErrPrefixDto.
-//                              ErrorPrefixInfo from this object will be
-//                              copied to 'errPrefDto'.
-//
-//       8. IBasicErrorPrefix - An interface to a method generating
+//      10. IBasicErrorPrefix - An interface to a method generating
 //                              a two-dimensional slice of strings
 //                              containing error prefix and error
 //                              context information.
