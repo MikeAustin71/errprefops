@@ -31,7 +31,7 @@ type ErrPrefixDto struct {
 	lock                            *sync.Mutex
 }
 
-// AddTwoDStringArray - Adds error prefix information extracted
+// AddEPrefStrings - Adds error prefix information extracted
 // from a passed two-dimensional string array to the internal
 // ErrorPrefixInfo collection managed by this ErrPrefixDto
 // instance.
@@ -39,7 +39,7 @@ type ErrPrefixDto struct {
 // If input parameter 'twoDStrArray' is 'nil' or empty, this method
 // will take no action an exit.
 //
-func (ePrefDto *ErrPrefixDto) AddTwoDStringArray(
+func (ePrefDto *ErrPrefixDto) AddEPrefStrings(
 	twoDStrArray [][2]string) {
 
 	if ePrefDto.lock == nil {
@@ -520,9 +520,9 @@ func (ePrefDto *ErrPrefixDto) GetEPrefCollectionLen() int {
 // GetEPrefStrings - Returns a two dimensional slice of Error
 // Prefix and Context strings.
 //
-// The Error Prefix is always in the [x][0] position. The error
-// context string is always in the [x][1] position. The error
-// context string may be an empty string.
+// The Error Prefix is always in the [x][0] position. The Error
+// Context string is always in the [x][1] position. The Error
+// Context string may be an empty string.
 //
 func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 
@@ -1594,6 +1594,51 @@ func (ePrefDto *ErrPrefixDto) SetEPrefOld(
 		ePrefDto.ePrefCol)
 
 	return
+}
+
+// SetEPrefStrings - This method first deletes all pre-existing
+// error prefix and error context information and then replaces
+// that information with new data extracted from the
+// two-dimensional string array passed as an input parameter
+// ('twoDStrArray').
+//
+// This two-dimensional string array contains both error prefix and
+// error context information. The Error Prefix string is always in
+// the [x][0] position. The Error Context string is always in the
+// [x][1] position. The Error Context string is optional and may be
+// an empty string.
+//
+// If input parameter 'twoDStrArray' is 'nil' or a zero length
+// array, this method will take no action and exit.
+//
+// To 'append' or 'add' a two-dimensional string array to existing
+// error prefix information, see method:
+//    ErrPrefixDto.AddEPrefStrings()
+//
+func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
+	twoDStrArray [][2]string) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if twoDStrArray == nil ||
+		len(twoDStrArray) == 0 {
+		return
+	}
+
+	_ = errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+		ePrefDto,
+		"")
+
+	_ = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
+		ePrefDto,
+		twoDStrArray,
+		"")
 }
 
 // SetIsLastLineTermWithNewLine - By default, the last line of
