@@ -2,7 +2,7 @@ package errpref
 
 import (
 	"fmt"
-	"reflect"
+	"strings"
 	"sync"
 )
 
@@ -203,16 +203,39 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	if ok {
 
-		if reflect.ValueOf(dtoPtr).IsNil() {
-			errPrefDto.ePrefCol = nil
-			return nil
-		}
-
 		return ePrfAtom.
 			copyInErrPrefDto(
 				errPrefDto,
 				dtoPtr,
 				methodNames)
+	}
+
+	var strBuildr strings.Builder
+
+	strBuildr,
+		ok = iEPref.(strings.Builder)
+
+	if ok {
+
+		return errNanobot.setFromStringBuilder(
+			errPrefDto,
+			&strBuildr,
+			methodNames)
+
+	}
+
+	var strBuildrPtr *strings.Builder
+
+	strBuildrPtr,
+		ok = iEPref.(*strings.Builder)
+
+	if ok {
+
+		return errNanobot.setFromStringBuilder(
+			errPrefDto,
+			strBuildrPtr,
+			methodNames)
+
 	}
 
 	var iBasicEPref IBasicErrorPrefix
@@ -235,8 +258,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	if ok {
 
-		if reflect.ValueOf(iStr).IsNil() {
-			errPrefDto.ePrefCol = nil
+		if iStr == nil {
 			return nil
 		}
 

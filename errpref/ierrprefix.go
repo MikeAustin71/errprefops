@@ -6,7 +6,9 @@ type IBasicErrorPrefix interface {
 
 type IBuilderErrorPrefix interface {
 	GetEPrefStrings() [][2]string
+
 	SetEPrefStrings(twoDStrArray [][2]string)
+
 	String() string
 }
 

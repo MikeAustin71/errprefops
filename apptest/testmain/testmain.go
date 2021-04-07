@@ -10,6 +10,44 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain TestMain) TestMain019() {
+
+	var err error
+	var ePDto2 *errpref.ErrPrefixDto
+
+	_,
+		err = errpref.ErrPrefixDto{}.NewIEmpty(
+		ePDto2,
+		"",
+		"")
+
+	if err == nil {
+		fmt.Printf("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func (tMain TestMain) TestMain018() {
+
+	var sbPtr *strings.Builder
+
+	var err error
+	_,
+		err = errpref.ErrPrefixDto{}.NewIEmpty(
+		sbPtr,
+		"",
+		"")
+
+	if err == nil {
+		fmt.Printf("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
 func (tMain TestMain) TestMain017() {
 
 	var actualStr string

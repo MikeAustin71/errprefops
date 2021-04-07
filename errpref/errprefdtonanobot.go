@@ -2,6 +2,7 @@ package errpref
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 )
 
@@ -243,8 +244,123 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromString(
 	}
 
 	ePrefAtom := errPrefAtom{}
+
 	ePrefAtom.getEPrefContextArray(
 		iEPref,
+		&errPrefDto.ePrefCol)
+
+	ePrefAtom.setFlagsErrorPrefixInfoArray(
+		errPrefDto.ePrefCol)
+
+	return nil
+}
+
+// setFromStringBuilder - Receives an ErrPrefixDto object and then
+// proceeds to overwrite and reset the ErrorPrefixInfo collection
+// containing error prefix and error context information. New
+// error prefix information will be extracted from input parameter,
+// 'iEPref', a pointer to a string builder which contains error
+// prefix information.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  errPrefDto          *ErrPrefixDto
+//     - A pointer to an instance of ErrPrefixDto. Data values in
+//       this ErrPrefixDto object will be overwritten an set to new
+//       values extracted from input parameter, 'iEPref'.
+//
+//
+//  iEPref              *strings.Builder
+//     - A pointer to a string Builder object. The object's
+//       internal string value contains error prefix information
+//       which will be extracted and used to overwrite the existing
+//       error prefix information contained in input parameter,
+//       'errPrefDto'.
+//
+//       If this string is delimited by new line characters ("\n")
+//       an array of strings will be created and used to create
+//       multiple error prefix entries in the 'errPrefDto'
+//       ErrorPrefixInfo collection.
+//
+//
+//  errorPrefStr        string
+//     - This parameter contains an error prefix string which is
+//       included in all returned error messages. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       If no error prefix information is needed, set this
+//       parameter to an empty string: "".
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message. This
+//       returned error message will incorporate the method chain
+//       and text passed by input parameter, 'errorPrefStr'. The
+//       'errorPrefStr' text will be attached to the beginning of
+//       the error message.
+//
+func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
+	errPrefDto *ErrPrefixDto,
+	iEPref *strings.Builder,
+	errorPrefStr string) error {
+
+	if ePrefDtoNanobot.lock == nil {
+		ePrefDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefDtoNanobot.lock.Lock()
+
+	defer ePrefDtoNanobot.lock.Unlock()
+
+	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
+		"setFromIBasicErrorPrefix()"
+
+	if errPrefDto == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'errPrefDto' is invalid!\n"+
+			"'errPrefDto' is a 'nil' pointer.\n",
+			methodName)
+	}
+
+	if iEPref == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'iEPref' is invalid!\n"+
+			"'iEPref' is a 'nil' pointer.\n",
+			methodName)
+	}
+
+	if (*strings.Builder)(nil) == iEPref {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'iEPref' is invalid!\n"+
+			"Pointer 'iEPref' points to a nil value.\n",
+			methodName)
+	}
+
+	strVal := iEPref.String()
+
+	if len(strVal) == 0 {
+
+		errPrefDto.ePrefCol = nil
+
+		return nil
+
+	}
+
+	ePrefAtom := errPrefAtom{}
+
+	ePrefAtom.getEPrefContextArray(
+		strVal,
 		&errPrefDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(

@@ -1060,7 +1060,7 @@ func TestErrPrefixDto_NewIEmpty_001200(t *testing.T) {
 
 	ePDto2,
 		err = ErrPrefixDto{}.NewIEmpty(
-		&sb,
+		sb,
 		"",
 		"")
 
@@ -1096,6 +1096,134 @@ func TestErrPrefixDto_NewIEmpty_001200(t *testing.T) {
 			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
 			ePDtoStr,
 			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmpty_001300(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	sb := strings.Builder{}
+
+	sb.WriteString(initialStr)
+
+	var sbPtr *strings.Builder
+
+	sbPtr = &sb
+
+	var err error
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmpty(
+		sbPtr,
+		"",
+		"")
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmpty(strings.Builder{})\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmpty_001400(t *testing.T) {
+
+	var sbPtr *strings.Builder
+
+	var err error
+	_,
+		err = ErrPrefixDto{}.NewIEmpty(
+		sbPtr,
+		"",
+		"")
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmpty_001500(t *testing.T) {
+
+	var err error
+	var ePDto1 *ErrPrefixDto
+
+	_,
+		err = ErrPrefixDto{}.NewIEmpty(
+		ePDto1,
+		"",
+		"")
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmpty_001600(t *testing.T) {
+
+	var err error
+	var ePDto2 *ErrPrefixDto
+
+	_,
+		err = ErrPrefixDto{}.NewIEmpty(
+		ePDto2,
+		"",
+		"")
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
 	}
 
 }

@@ -224,10 +224,25 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 
 	}
 
+	if (*ErrPrefixDto)(nil) == targetErrPrefixDto {
+		return fmt.Errorf("%v\n"+
+			"\nInput parameter 'targetErrPrefixDto' is INVALID!\n"+
+			"The pointer 'targetErrPrefixDto' points to a 'nil' object.\n",
+			eMsg)
+
+	}
+
 	if inComingErrPrefixDto == nil {
 		return fmt.Errorf("%v\n"+
 			"\nInput parameter 'inComingErrPrefixDto' is INVALID!\n"+
-			"'inComingErrPrefixDto' is a nil pointer!\n",
+			"'inComingErrPrefixDto' is a nil pointer.\n",
+			eMsg)
+	}
+
+	if (*ErrPrefixDto)(nil) == inComingErrPrefixDto {
+		return fmt.Errorf("%v\n"+
+			"\nInput parameter 'inComingErrPrefixDto' is INVALID!\n"+
+			"The pointer 'inComingErrPrefixDto' points to a 'nil' object.\n",
 			eMsg)
 	}
 
