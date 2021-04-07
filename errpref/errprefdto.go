@@ -1058,7 +1058,7 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 //       3. string            - A string containing error prefix information.
 //
 //       4. []string          - A one-dimensional slice of strings containing
-//                              error prefix information
+//                              error prefix information.
 //
 //       5. [][2]string       - A two-dimensional slice of strings
 //                              containing error prefix and error context
