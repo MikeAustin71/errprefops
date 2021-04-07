@@ -511,10 +511,10 @@ func TestErrPrefixDto_CallSeries01_000100(t *testing.T) {
 
 	tFuncCharlie01 := testFuncCharlie01{}
 
-	err =
+	err2 :=
 		tFuncCharlie01.Tx1DoStuff(ePDto1)
 
-	if err == nil {
+	if err2 == nil {
 		t.Error("Expected error return from\n" +
 			"tFuncCharlie01.Tx1DoStuff(ePDto1)\n" +
 			"HOWEVER, NO ERROR WAS RETURNED!!\n")
@@ -536,7 +536,7 @@ func TestErrPrefixDto_CallSeries01_000100(t *testing.T) {
 
 	ePDtoFinal,
 		err = ErrPrefixDto{}.NewIEmpty(
-		err.Error(),
+		err2.Error(),
 		"",
 		"")
 
