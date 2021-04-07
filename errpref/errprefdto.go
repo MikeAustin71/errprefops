@@ -346,7 +346,9 @@ func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	_ = errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+		ePrefDto,
+		"")
 }
 
 // Equal - Returns a boolean flag signaling whether the data values
