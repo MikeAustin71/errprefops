@@ -378,15 +378,15 @@ When this error is returned up the function chain and finally printed out, the t
 
 ## Source Code Documentation
 
-[Source Documentation](https://pkg.go.dev/github.com/MikeAustin71/errprefops/errpref)
+[Source Documentation](https://pkg.go.dev/github.com/MikeAustin71/errprefops)
 
 ## Version
 
-The latest version is Version 1.5.0.
+The latest version is Version 1.5.1.
 
 This Version supports *Go* modules.
 
-[Version 1.5.0 Release Notes](./errpref/releasenotes.md)
+[Version 1.5.1 Release Notes](./errpref/releasenotes.md)
 
 ## License
 
