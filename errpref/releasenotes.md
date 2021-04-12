@@ -1,26 +1,61 @@
-# ErrPref Release Notes Version 1.5.2
+# ErrPref Release Notes Version 1.6.0
 
 This version of ***ErrPref*** was compiled and tested using Go 1.16.3.
 
 This version supports ***Go*** modules.
 
+#### Changes
+
+##### Directory Structure: Development Environment and Package Distribution
+
+This versions marks a paradigm change in organization of the ***errPref*** project. 
+
+Moving forward, all development and testing will be conducted in the development environment [errprefops](https://github.com/MikeAustin71/errprefops) located in software repository https://github.com/MikeAustin71/errprefops .  Distribution of the [errpref](https://github.com/MikeAustin71/errpref) package will be processed through software repository https://github.com/MikeAustin71/errpref
+
+
+
 ## Version 1.5.2
+
+Original Release Date: 2021-04-09 02:05:00 USA CST
+
+Compiled and Tested: Go 1.16.3
+
+This version supports ***Go*** modules.
+
+#### Changes
+
 1. Fixed link to source code documentation.
-
 2. Added documentation providing more usage examples.
-
 3. Added new method ErrPrefixDto.NewEPrefCtx()
 
 ## Version 1.5.1
+
+Original Release Date: 2021-04-07 21:39:00 USA CST
+
+Compiled and Tested: Go 1.16.3
+
+This version supports ***Go*** modules.
+
+#### Changes
+
 1. Fixed Go Mod File to assign correct version.
 
 ## Version 1.5.0
+
+Original Release Date: 2021-04-07 17:34:00 USA CST
+
+Compiled and Tested: Go 1.16.3
+
+This version supports ***Go*** modules.
+
+#### Changes
+
 1. Modified interface IErrorPrefix. Added Methods:
-   - GetEPrefStrings() \[\]\[2\]string
-   - SetEPrefStrings(twoDStrArray \[\]\[2\]string)
-   
+   - GetEPrefStrings() [][2]string
+   - SetEPrefStrings(twoDStrArray [][2]string)
+
 2. Added interface IBuilderErrorPrefix
-   
+
 3. Added interface IBasicErrorPrefix
 
 4. Added methods on Type ErrPrefixDto
@@ -30,15 +65,18 @@ This version supports ***Go*** modules.
    - NewIEmpty()
    - SetEPrefStrings()
 
-
 ## Version 1.4.0
 
-This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
+Original Release Date: 2021-02-16 16:59:00 USA CST
+
+Compiled and Tested: Go 1.15.8
 
 This version supports ***Go*** modules.
 
+#### Changes
+
 1. Modified the interface IErrorPrefix. Removed references to ErrorPrefixInfo.
-   
+
 2. Added 'Z' methods which return an ErrPrefixDto by value.
    - ZCtx()
    - ZCtxEmpty()
@@ -48,8 +86,15 @@ This version supports ***Go*** modules.
 
 3. Added tests
 
-
 ## Version 1.3.0
+
+Original Release Date: 2021-02-14 23:38:00 USA CST
+
+Compiled and Tested: Go 1.15.8
+
+This version supports ***Go*** modules.
+
+#### Changes
 
 1. Added IErrorPrefix interface. 
 
@@ -65,23 +110,27 @@ This version supports ***Go*** modules.
 
 ## Version 1.2.0
 
+Original Release Date: 2021-02-11 16:46:00 USA CST
+
+Compiled and Tested: Go 1.15.8
+
+This version supports ***Go*** modules.
+
+#### Changes
+
 1. Removed Maximum Line Length operation from ErrPrefixDto.String()
-
 2. Added Ptr() method to ErrPrefixDto.
-
 3. Added tests for ErrPrefixDto methods CopyIn() and CopyOut()
-
 4. Added new method ErrPrefixDto.StrMaxLineLen().
-
 5. Changed method name and signature for ErrPrefixDto.SetMaxTextLineLen()
-
 6. Changed method name for ErrPrefixDto.SetMaxTextLineLenToDefault()
-
 7. Added new method ErrPrefixDto.Copy()
 
 ## Version 1.1.0
 
-This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
+Original Release Date:  2021-02-11 02:11:00 USA CST
+
+Compiled and Tested: Go 1.15.8
 
 This version supports ***Go*** modules.
 
@@ -90,6 +139,7 @@ This version supports ***Go*** modules.
 1. Converted method ErrPrefixDto.String() from a pointer receiver to a value receiver.
 
 2. Added 'X' Methods:
+
    - XCtx() - Returns pointer to current instance.
 
    - XEPref() - Returns pointer to current instance.
@@ -104,7 +154,9 @@ This version supports ***Go*** modules.
 
 ## Version 1.0.0 
 
-This version of ***ErrPref*** was compiled and tested using Go 1.15.8.
+Original Release Date:  2021-02-10 01:17:00 USA CST
+
+Compiled and Tested: Go 1.15.8
 
 This version supports ***Go*** modules.
 
