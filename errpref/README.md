@@ -330,7 +330,7 @@ Test Code is located in the **errpref** directory of the source code repository.
 To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
 
 ##### Example Application
-Additional code examples can be found in the Error Prefix Examples Application located in the [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples) source code repository.
+Additional code examples can be found in the Error Prefix Examples Application located in the ***errorPrefixExamples*** source code repository, [https://github.com/MikeAustin71/errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).
 
 ### ErrPref - Quick And Simple Solution
 

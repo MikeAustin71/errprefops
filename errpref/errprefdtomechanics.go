@@ -150,9 +150,27 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	errNanobot := errPrefixDtoNanobot{}
 
-	if iEPref == nil {
+	ePrfAtom := errPrefAtom{}
 
-		errPrefDto.ePrefCol = nil
+	var backup ErrPrefixDto
+	var err2 error
+	originalDataIsGood := true
+
+	backup,
+		err2 = ePrfAtom.copyOutErrPrefDto(
+		errPrefDto,
+		"")
+
+	if err2 != nil {
+		originalDataIsGood = false
+	}
+
+	_ = errPrefQuark{}.ptr().
+		emptyErrPrefInfoCollection(
+			errPrefDto,
+			"")
+
+	if iEPref == nil {
 
 		return nil
 	}
@@ -161,12 +179,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var str string
 
+	// string
 	str,
 		ok = iEPref.(string)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromString(
 			errPrefDto,
@@ -176,12 +193,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var strs []string
 
+	// string array
 	strs,
 		ok = iEPref.([]string)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromStringArray(
 			errPrefDto,
@@ -191,12 +207,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var twoDStrArray [][2]string
 
+	// Two Dimensional String Array
 	twoDStrArray,
 		ok = iEPref.([][2]string)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromTwoDStrArray(
 			errPrefDto,
@@ -204,16 +219,13 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 			methodNames)
 	}
 
-	ePrfAtom := errPrefAtom{}
-
 	var dto ErrPrefixDto
 
+	// ErrPrefixDto
 	dto,
 		ok = iEPref.(ErrPrefixDto)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return ePrfAtom.
 			copyInErrPrefDto(
@@ -224,12 +236,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var dtoPtr *ErrPrefixDto
 
+	// *ErrPrefixDto
 	dtoPtr,
 		ok = iEPref.(*ErrPrefixDto)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return ePrfAtom.
 			copyInErrPrefDto(
@@ -240,12 +251,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var strBuildr strings.Builder
 
+	// strings.Builder
 	strBuildr,
 		ok = iEPref.(strings.Builder)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromStringBuilder(
 			errPrefDto,
@@ -256,12 +266,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var strBuildrPtr *strings.Builder
 
+	// *strings.Builder
 	strBuildrPtr,
 		ok = iEPref.(*strings.Builder)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromStringBuilder(
 			errPrefDto,
@@ -272,12 +281,11 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var iBasicEPref IBasicErrorPrefix
 
+	// IBasicErrorPrefix
 	iBasicEPref,
 		ok = iEPref.(IBasicErrorPrefix)
 
 	if ok {
-
-		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromIBasicErrorPrefix(
 			errPrefDto,
@@ -287,6 +295,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	var iStr fmt.Stringer
 
+	// fmt.Stringer
 	iStr,
 		ok = iEPref.(fmt.Stringer)
 
@@ -296,28 +305,59 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 			return nil
 		}
 
-		errPrefDto.ePrefCol = nil
-
 		return errNanobot.setFromString(
 			errPrefDto,
 			iStr.String(),
 			methodNames)
 	}
 
-	return fmt.Errorf("%v\n"+
-		"Error: Could NOT extract error prefix information\n"+
-		"from input parameter 'iEPref'.\n"+
-		"'iEPref' IS NOT convertible to one of the seven\n"+
-		"supported types listed as follows:\n"+
-		"    nil\n"+
-		"    fmt.Stringer\n"+
-		"    string\n"+
-		"    []string\n"+
-		"    [][2]string\n"+
-		"    strings.Builder"+
-		"    *strings.Builder"+
-		"    ErrPrefixDto\n"+
-		"    *ErrPrefixDto\n"+
-		"    IBasicErrorPrefix\n",
-		methodNames)
+	// An Error Occurred!
+	// An Error Condition NOW EXISTS!
+	// Attempt to recover original data
+	//
+	var errMsg string
+
+	errMsg =
+		fmt.Sprintf("%v\n"+
+			"Error: Could NOT extract error prefix information\n"+
+			"from input parameter 'iEPref'.\n"+
+			"'iEPref' IS NOT convertible to one of the seven\n"+
+			"supported types listed as follows:\n"+
+			"    nil\n"+
+			"    fmt.Stringer\n"+
+			"    string\n"+
+			"    []string\n"+
+			"    [][2]string\n"+
+			"    strings.Builder"+
+			"    *strings.Builder"+
+			"    ErrPrefixDto\n"+
+			"    *ErrPrefixDto\n"+
+			"    IBasicErrorPrefix\n",
+			methodNames)
+
+	if originalDataIsGood {
+		err2 = ePrfAtom.copyInErrPrefDto(
+			errPrefDto,
+			&backup,
+			"")
+
+		if err2 != nil {
+			errMsg +=
+				fmt.Sprintf("An additional error occurred while attempting to\n"+
+					"recover original data for the 'errPrefDto' parameter. Therefore,\n"+
+					"'errPrefDto' now contains corrupted data.\n"+
+					"2ndError=\n%v\n",
+					err2.Error())
+		}
+
+	} else {
+
+		errMsg +=
+			"An additional error occurred while attempting to\n" +
+				"recover original data for the 'errPrefDto' parameter. Therefore,\n" +
+				"'errPrefDto' now contains corrupted data.\n"
+	}
+
+	return fmt.Errorf("%v",
+		errMsg)
 }

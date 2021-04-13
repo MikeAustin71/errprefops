@@ -246,14 +246,6 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 			eMsg)
 	}
 
-	if targetErrPrefixDto.lock == nil {
-		targetErrPrefixDto.lock = new(sync.Mutex)
-	}
-
-	if inComingErrPrefixDto.lock == nil {
-		inComingErrPrefixDto.lock = new(sync.Mutex)
-	}
-
 	targetErrPrefixDto.isLastLineTerminatedWithNewLine =
 		inComingErrPrefixDto.isLastLineTerminatedWithNewLine
 
