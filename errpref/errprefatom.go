@@ -260,8 +260,8 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 		inComingErrPrefixDto.maxErrPrefixTextLineLength
 
 	if inComingErrPrefixDto.ePrefCol == nil {
-		inComingErrPrefixDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0)
+		targetErrPrefixDto.ePrefCol = nil
+		return nil
 	}
 
 	lenIncomingEPrefCol :=
@@ -375,8 +375,10 @@ func (ePrefAtom *errPrefAtom) copyOutErrPrefDto(
 		ePrefixDto.maxErrPrefixTextLineLength
 
 	if ePrefixDto.ePrefCol == nil {
-		ePrefixDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0)
+
+		newEPrefixDto.ePrefCol = nil
+
+		return newEPrefixDto, err
 	}
 
 	lenIncomingEPrefCol :=
