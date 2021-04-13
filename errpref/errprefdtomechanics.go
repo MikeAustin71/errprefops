@@ -165,6 +165,9 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.(string)
 
 	if ok {
+
+		errPrefDto.ePrefCol = nil
+
 		return errNanobot.setFromString(
 			errPrefDto,
 			str,
@@ -178,6 +181,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	if ok {
 
+		errPrefDto.ePrefCol = nil
+
 		return errNanobot.setFromStringArray(
 			errPrefDto,
 			strs,
@@ -190,6 +195,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.([][2]string)
 
 	if ok {
+
+		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromTwoDStrArray(
 			errPrefDto,
@@ -205,6 +212,9 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.(ErrPrefixDto)
 
 	if ok {
+
+		errPrefDto.ePrefCol = nil
+
 		return ePrfAtom.
 			copyInErrPrefDto(
 				errPrefDto,
@@ -218,6 +228,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.(*ErrPrefixDto)
 
 	if ok {
+
+		errPrefDto.ePrefCol = nil
 
 		return ePrfAtom.
 			copyInErrPrefDto(
@@ -233,6 +245,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	if ok {
 
+		errPrefDto.ePrefCol = nil
+
 		return errNanobot.setFromStringBuilder(
 			errPrefDto,
 			&strBuildr,
@@ -247,6 +261,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	if ok {
 
+		errPrefDto.ePrefCol = nil
+
 		return errNanobot.setFromStringBuilder(
 			errPrefDto,
 			strBuildrPtr,
@@ -260,6 +276,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		ok = iEPref.(IBasicErrorPrefix)
 
 	if ok {
+
+		errPrefDto.ePrefCol = nil
 
 		return errNanobot.setFromIBasicErrorPrefix(
 			errPrefDto,
@@ -278,6 +296,8 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 			return nil
 		}
 
+		errPrefDto.ePrefCol = nil
+
 		return errNanobot.setFromString(
 			errPrefDto,
 			iStr.String(),
@@ -290,12 +310,12 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		"'iEPref' IS NOT convertible to one of the seven\n"+
 		"supported types listed as follows:\n"+
 		"    nil\n"+
-		"    fmt.Stringer\n" +
+		"    fmt.Stringer\n"+
 		"    string\n"+
 		"    []string\n"+
-		"    [][2]string\n" +
-		"    strings.Builder" +
-		"    *strings.Builder" +
+		"    [][2]string\n"+
+		"    strings.Builder"+
+		"    *strings.Builder"+
 		"    ErrPrefixDto\n"+
 		"    *ErrPrefixDto\n"+
 		"    IBasicErrorPrefix\n",

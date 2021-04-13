@@ -848,6 +848,12 @@ func TestErrPrefixDto_NewIEmpty_000700(t *testing.T) {
 	ePDtoCopy,
 		err = ePDto.CopyOut(funcName)
 
+	if err != nil {
+		t.Errorf("Error from ePDto.CopyOut(funcName)\n"+
+			"%v\n", err.Error())
+		return
+	}
+
 	ePDto2,
 		err = ErrPrefixDto{}.NewIEmpty(
 		ePDtoCopy,
@@ -1068,6 +1074,12 @@ func TestErrPrefixDto_NewIEmpty_001000(t *testing.T) {
 
 	err = iBasicPref.SetEPrefStrings(
 		twoDSlice)
+
+	if err != nil {
+		t.Errorf("Error from iBasicPref.SetEPrefStrings()\n"+
+			"%v\n", err.Error())
+		return
+	}
 
 	var ePDto2 *ErrPrefixDto
 
@@ -1360,7 +1372,7 @@ func TestErrPrefixDto_NewIEmpty_001500(t *testing.T) {
 		"")
 
 	if err == nil {
-		t.Error("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+		t.Error("Expected an error return from ErrPrefixDto{}.NewIEmpty(ePDto1)\n" +
 			"HOWEVER, NO ERROR WAS RETURNED!!\n")
 		return
 	}

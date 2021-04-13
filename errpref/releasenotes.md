@@ -1,6 +1,6 @@
 # *errpref* (Error Prefix) Release Notes Version 1.6.0
 
-This version of ***errpref*** was compiled and tested using Go 1.16.3.
+This version of ***errpref*** was compiled and tested using ***Go*** 1.16.3.
 
 This version supports ***Go*** modules.
 
@@ -14,7 +14,19 @@ Moving forward, all development and testing will be conducted in the development
 
 Storage and distribution of the ***errpref*** software package will be processed through software repository https://github.com/MikeAustin71/errpref
 
+##### ErrPrefixDto
 
+1. Added new method ErrPrefixDto.SetIEmpty()
+
+   ```go
+   func (ePrefDto *ErrPrefixDto) SetIEmpty(
+   	iEPref interface{},
+   	callingMethodName string) error
+   ```
+
+2. 
+
+   
 
 ## Version 1.5.2
 
