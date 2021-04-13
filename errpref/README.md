@@ -1,12 +1,14 @@
 # Error Prefix (errpref) - Adding error prefix, function chains and error context to Error Messages 
 
-**The errpref package is a collection of lightweight GoLang types designed to attach error prefix text, function chain lists and error context strings to error messages.**
+**The *errpref* software package is a collection of lightweight GoLang types designed to attach error prefix text, function chain lists and error context strings to error messages.**
 
-This software package was written in the [Go](https://golang.org/) programming language, a.k.a. ***Golang***.
+The ***errpref*** software package was written in the [Go](https://golang.org/) programming language, a.k.a. ***Golang***.
 
-***errpref*** uses [Go Modules]([Go Modules Reference - The Go Programming Language (golang.org)](https://golang.org/ref/mod)).
+***errpref*** supports [Go Modules]([Go Modules Reference - The Go Programming Language (golang.org)](https://golang.org/ref/mod)).
 
 The current version of ***errpref*** is Version 1.6.0
+
+
 
 ## Table of Contents
 
@@ -30,19 +32,22 @@ The current version of ***errpref*** is Version 1.6.0
    - [ErrPref - Quick And Simple Solution](#errpref---quick-and-simple-solution)
      - [Example Usage Summary](#example-usage-summary)
  - [More Examples](#more-examples)
- - [Source Code Documentation](#source-code-documentation)
  - [ErrPref Package Configuration and Import](#errpref-package-configuration-and-import)
    - [Go Get Command](#go-get-command)
    - [Import Configuration](#import-configuration)
+ - [Source Code Documentation](#source-code-documentation)
  - [Version](#version)
  - [License](#license)
  - [Comments And Questions](#comments-and-questions)
 
+
+
 ## The Problem
 
-As my Go programs, types and methods have grown in sophistication and complexity, the need for improved error tracking, detailed error messages, and a record of code execution has become more important. The terms 'Function Chains' or 'Method Chains' as used here describes a list of the functions called prior to encountering a particular error. Adding function chain documentation to returned error messages makes error tracking and management a much easier proposition.
+As my **Go** programs, types and methods have grown in sophistication and complexity, the need for improved error tracking, detailed error messages, and a record of code execution has become more important. The terms 'Function Chains' or 'Method Chains' as used here describes a list of the functions called prior to encountering a particular error. Adding function chain documentation to returned error messages makes error tracking and management a much easier proposition.
 
 Basically, when I see an error message, especially during the development phase, the first question that comes to mind is, **How the Hell did I get here?** Answering that question quickly, and with certainty, usually requires a list of functions ordered by their execution sequence.  Adding that information to error messages is the focus of this project.
+
 
 
 ## The Solution
@@ -409,12 +414,6 @@ For additional examples, clone and review the example project located in source 
 
 
 
-## Source Code Documentation
-
-[Source Documentation](https://pkg.go.dev/github.com/MikeAustin71/errpref)
-
-
-
 ## ErrPref Package Configuration and Import
 
 
@@ -447,6 +446,12 @@ import (
 The import example above shows an alias of 'erPref' which is optional.
 
 
+
+
+
+## Source Code Documentation
+
+[*errpref* Source Code Documentation](https://pkg.go.dev/github.com/MikeAustin71/errpref)
 
 
 

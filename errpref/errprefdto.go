@@ -1133,7 +1133,7 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 // Input Parameters
 //
 //  iEPref              interface{}
-//     - An empty interface containing one of the 10-valid type
+//     - An empty interface containing one of the 10-valid types
 //       listed below. Any one of these valid types will generate
 //       valid error prefix and error context information.
 //
@@ -1512,8 +1512,8 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 }
 
 // SetEPrefCollection - Deletes the current error prefix collection
-// and replaces with a new collection passed as an input parameter
-// to this method.
+// and replaces it with a new collection passed as an input
+// parameter to this method.
 //
 // IMPORTANT
 // All existing error prefix and error context information in this
@@ -1751,6 +1751,124 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 		ePrefDto,
 		twoDStrArray,
 		"")
+}
+
+// SetIEmpty - Deletes the current error prefix information
+// and replaces with a new new error prefix data passed
+// to this method as an empty interface.
+//
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  iEPref              interface{}
+//     - An empty interface containing one of the 10-valid types
+//       listed below. Any one of these valid types will generate
+//       valid error prefix and error context information. This
+//       error prefix data will then overwrite and replace that
+//       encapsulated in the current ErrPrefixDto instance.
+//
+//       The error prefix and error context information for this
+//       new ErrPrefixDto object will be extracted from input
+//       parameter, 'iEPref'. 'iEPref' is an empty interface which
+//       must be convertible to one of the following valid types:
+//
+//       1. nil               - A nil value is valid and generates an empty
+//                              collection of error prefix and error context
+//                              information.
+//
+//       2. Stringer          - The Stringer interface from the 'fmt' package.
+//                              This interface has only one method:
+//                                   type Stringer interface {
+//                                      String() string
+//                                   }
+//
+//       3. string            - A string containing error prefix information.
+//
+//       4. []string          - A one-dimensional slice of strings containing
+//                              error prefix information.
+//
+//       5. [][2]string       - A two-dimensional slice of strings
+//                              containing error prefix and error context
+//                              information.
+//
+//       6. strings.Builder   - An instance of strings.Builder. Error prefix
+//                              information will be imported into the new
+//                              returned instance of ErrPrefixDto.
+//
+//       7  *strings.Builder  - A pointer to an instance of strings.Builder.
+//                              Error prefix information will be imported into
+//                              the new returned instance of ErrPrefixDto.
+//
+//       8. ErrPrefixDto      - An instance of ErrPrefixDto. The
+//                              ErrorPrefixInfo from this object will be
+//                              copied to the new returned instance of
+//                              ErrPrefixDto.
+//
+//       9. *ErrPrefixDto     - A pointer to an instance of ErrPrefixDto.
+//                              ErrorPrefixInfo from this object will be
+//                              copied to 'errPrefDto'.
+//
+//      10. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       Any types not listed above will be considered invalid and
+//       trigger the return of an error.
+//
+//
+// callingMethodName    string
+//     - A string containing the name of the function which called
+//       this method. If an error occurs this string will be
+//       prefixed to the beginning of the returned error message.
+//
+//       This parameter is optional. If an error prefix is not required,
+//       submit an empty string for this parameter ("").
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter
+//       'callingMethodName' will be prefixed and attached to the
+//       beginning of the error message
+//
+func (ePrefDto *ErrPrefixDto) SetIEmpty(
+	iEPref interface{},
+	callingMethodName string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	callingMethodName = callingMethodName +
+		"\nErrPrefixDto.SetIEmpty()"
+
+	err := errPrefixDtoMechanics{}.ptr().
+		setFromEmptyInterface(
+			ePrefDto,
+			iEPref,
+			callingMethodName)
+
+	return err
 }
 
 // SetIsLastLineTermWithNewLine - By default, the last line of

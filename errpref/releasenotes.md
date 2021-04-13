@@ -1,6 +1,6 @@
-# ErrPref Release Notes Version 1.6.0
+# *errpref* (Error Prefix) Release Notes Version 1.6.0
 
-This version of ***ErrPref*** was compiled and tested using Go 1.16.3.
+This version of ***errpref*** was compiled and tested using Go 1.16.3.
 
 This version supports ***Go*** modules.
 
@@ -8,9 +8,11 @@ This version supports ***Go*** modules.
 
 ##### Directory Structure: Development Environment and Package Distribution
 
-This versions marks a paradigm change in organization of the ***errPref*** project. 
+This versions marks a paradigm change in organization of the ***errpref*** project. 
 
-Moving forward, all development and testing will be conducted in the development environment [errprefops](https://github.com/MikeAustin71/errprefops) located in software repository https://github.com/MikeAustin71/errprefops .  Distribution of the [errpref](https://github.com/MikeAustin71/errpref) package will be processed through software repository https://github.com/MikeAustin71/errpref
+Moving forward, all development and testing will be conducted in the development environment ***errprefops*** located in software repository https://github.com/MikeAustin71/errprefops .  
+
+Storage and distribution of the ***errpref*** software package will be processed through software repository https://github.com/MikeAustin71/errpref
 
 
 

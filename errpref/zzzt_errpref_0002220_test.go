@@ -329,12 +329,29 @@ func TestErrPrefixDto_NewIEmpty_000100(t *testing.T) {
 
 	ePDto2.SetMaxTextLineLen(40)
 
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
 	if !ePDto.Equal(ePDto2) {
 		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
 			"However, THEY ARE NOT EQUAL!\n"+
 			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
 			ePDto.String(),
 			ePDto2.String())
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
 	}
 
 }
