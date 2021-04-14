@@ -162,6 +162,102 @@ func TestErrPrefixDto_CopyOut_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_Empty_000100(t *testing.T) {
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	ePDto.SetLeftMarginLength(3)
+	ePDto.SetLeftMarginChar('*')
+	ePDto.SetMaxTextLineLen(40)
+	ePDto.SetIsLastLineTermWithNewLine(true)
+
+	collectionLen := ePDto.GetEPrefCollectionLen()
+
+	if collectionLen == 0 {
+		t.Error("Error: After Initialization with data,\n" +
+			"Error Prefix Collection Length==0\n")
+		return
+	}
+
+	ePDto.Empty()
+
+	if ePDto.GetLeftMarginLength() != 0 {
+		t.Errorf("Error: After Empty() expected Left Margin\n"+
+			"Length == 0.\n"+
+			"Instead, ePDto.GetLeftMarginLength()=='%v'\n",
+			ePDto.GetLeftMarginLength())
+		return
+	}
+
+	if ePDto.GetEPrefCollectionLen() != 0 {
+		t.Errorf("Error: After Empty() expected Collection\n"+
+			"Length == 0.\n"+
+			"Instead, ePDto.GetEPrefCollectionLen()=='%v'\n",
+			ePDto.GetEPrefCollectionLen())
+		return
+	}
+
+	if ePDto.GetLeftMarginChar() != 0 {
+		t.Errorf("Error: After Empty() expected Left Margin\n"+
+			"Character == 0.\n"+
+			"Instead, ePDto.GetLeftMarginChar()=='%v'\n",
+			string(ePDto.GetLeftMarginChar()))
+		return
+	}
+
+	if ePDto.GetIsLastLineTerminatedWithNewLine() {
+		t.Error("Error: After Empty() expected isLastLineTerminatedWithNewLine==false\n" +
+			"Instead, isLastLineTerminatedWithNewLine==true")
+	}
+
+}
+
+func TestErrPrefixDto_EmptyEPrefCollection_000100(t *testing.T) {
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	collectionLen := ePDto.GetEPrefCollectionLen()
+
+	if collectionLen == 0 {
+		t.Error("Error: After Initialization with data,\n" +
+			"Error Prefix Collection Length==0\n")
+		return
+	}
+
+	ePDto.EmptyEPrefCollection()
+
+	collectionLen = ePDto.GetEPrefCollectionLen()
+
+	if collectionLen != 0 {
+		t.Errorf("Error: After EmptyEPrefCollection(),\n"+
+			"Error Prefix Collection Length!=0\n"+
+			"Error Prefix Collection Length=='%v'\n",
+			ePDto.GetEPrefCollectionLen())
+
+	}
+
+}
+
 func TestErrPrefixDto_Equal_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()

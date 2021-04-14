@@ -10,6 +10,76 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain TestMain) TestMain021() {
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto := errpref.ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	ePDto.SetLeftMarginLength(3)
+
+	ePDto.SetLeftMarginChar('*')
+
+	outputStr := ePDto.String()
+
+	fmt.Printf("Left Margin Actual String:\n\n"+
+		"%v\n\n\n",
+		outputStr)
+
+	expectedStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(outputStr),
+		true)
+
+	fmt.Printf("Left Margin Converted String:\n\n"+
+		"%v",
+		expectedStr)
+
+}
+
+func (tMain TestMain) TestMain020() {
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto := errpref.ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	ePDto.SetLeftMarginLength(3)
+
+	ePDto.SetLeftMarginChar(' ')
+
+	outputStr := ePDto.String()
+
+	fmt.Printf("Left Margin Actual String:\n\n"+
+		"%v\n\n\n",
+		outputStr)
+
+	expectedStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(outputStr),
+		true)
+
+	fmt.Printf("Left Margin Converted String:\n\n"+
+		"%v",
+		expectedStr)
+
+}
+
 func (tMain TestMain) TestMain019() {
 
 	var err error
