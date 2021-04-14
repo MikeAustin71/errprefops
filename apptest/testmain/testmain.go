@@ -10,6 +10,42 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain TestMain) TestMain022() {
+
+	ePDto := errpref.ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	ePDto2 := errpref.ErrPrefixDto{}.New()
+
+	_ = ePDto2.AddEPrefCollectionStr(
+		initialStr)
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	twoAreEqual :=
+		ePDto.Equal(&ePDto2)
+
+	if !twoAreEqual {
+		fmt.Println("FAILURE: ePDto and ePDto2 ARE NOT EQUAL!\n")
+	} else {
+		fmt.Println("SUCCESS: ePDto and ePDto2 ARE EQUAL!\n")
+
+	}
+
+}
+
 func (tMain TestMain) TestMain021() {
 
 	initialStr :=

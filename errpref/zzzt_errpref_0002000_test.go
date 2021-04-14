@@ -2,6 +2,78 @@ package errpref
 
 import "testing"
 
+func TestErrPrefixDto_AddEPrefCollectionStr_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	ePDto2 := ErrPrefixDto{}.New()
+
+	numOfItemsAdded := ePDto2.AddEPrefCollectionStr(
+		initialStr)
+
+	if numOfItemsAdded != ePDto.GetEPrefCollectionLen() {
+		t.Errorf("Error: Number of Items Added NOT equal to Collection Items!\n"+
+			"numOfItemsAdded=='%v'\n"+
+			"ePDto.GetEPrefCollectionLen()=='%v'\n",
+			numOfItemsAdded,
+			ePDto.GetEPrefCollectionLen())
+
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	if ePDto.GetEPrefCollectionLen() != ePDto2.GetEPrefCollectionLen() {
+		t.Errorf("Expected ePDto.GetEPrefCollectionLen() == ePDto2.GetEPrefCollectionLen()\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto.GetEPrefCollectionLen()=='%v'\n"+
+			"ePDto2.GetEPrefCollectionLen()=='%v'\n",
+			ePDto.GetEPrefCollectionLen(),
+			ePDto2.GetEPrefCollectionLen())
+		return
+	}
+
+	if !ePDto.Equal(&ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDto.String(),
+			ePDto2.String())
+		return
+	}
+
+	expectedConvertedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		true)
+
+	actualConvertedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		true)
+
+	if expectedConvertedStr != actualConvertedStr {
+		t.Errorf("Error: Expected expectedConvertedStr==actualConvertedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedConvertedStr=\n%v\n\n"+
+			"actualConvertedStr=\n%v\n\n",
+			expectedConvertedStr,
+			actualConvertedStr)
+	}
+
+}
+
 func TestErrPrefixDto_CopyPtr_000100(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"

@@ -65,6 +65,9 @@ func (ePrefAtom *errPrefAtom) addTwoDimensionalStringArray(
 				ePrefInfo)
 	}
 
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		errPrefixDto.ePrefCol)
+
 	return nil
 }
 

@@ -123,6 +123,9 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 		errorPrefixCollectionStr,
 		&ePrefDto.ePrefCol)
 
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
+
 	numberOfCollectionItemsParsed =
 		len(ePrefDto.ePrefCol) -
 			previousCollectionLen
