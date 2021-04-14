@@ -16,7 +16,7 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 ##### ErrPrefixDto
 
-1. Added new method ErrPrefixDto.SetIEmpty() - Sets the data values for the current ErrPrefixDto instance based on any one of 10-valid types passed through an empty interface. See source documentation.
+1. Added new method ErrPrefixDto.SetIEmpty() - Sets the data values for the current ErrPrefixDto instance based on any one of 10-valid types passed through an empty interface. See [source code documentation](https://pkg.go.dev/github.com/MikeAustin71/errpref#ErrPrefixDto).
 
    ```go
    func (ePrefDto *ErrPrefixDto) SetIEmpty(

@@ -6,7 +6,7 @@ The ***errpref*** software package was written in the [Go](https://golang.org/) 
 
 ***errpref*** supports [Go Modules]([Go Modules Reference - The Go Programming Language (golang.org)](https://golang.org/ref/mod)).
 
-The current version of ***errpref*** is Version 1.6.0
+The current version of ***errpref*** is Version 1.6.0. Most notably, this implements the "Left Margin" Feature in error prefix string formatting. For details, see the [Release Notes](./releasenotes.md).
 
 
 
@@ -461,7 +461,7 @@ The latest version is Version 1.6.0.
 
 As with all previous versions, this Version supports [Go Modules](https://golang.org/ref/mod).
 
-[Version 1.6.0 Release Notes](./releasenotes.md)
+For more details, see the [Release Notes](./releasenotes.md).
 
 
 
