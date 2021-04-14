@@ -52,12 +52,14 @@
 --- PASS: TestNewErrPref_Multiple_000300 (0.00s)
 === RUN   TestErrPrefixDto_SetEPrefStrings_000100
 --- PASS: TestErrPrefixDto_SetEPrefStrings_000100 (0.00s)
-=== RUN   TestErrPrefixDto_Copy_000100
---- PASS: TestErrPrefixDto_Copy_000100 (0.00s)
+=== RUN   TestErrPrefixDto_CopyPtr_000100
+--- PASS: TestErrPrefixDto_CopyPtr_000100 (0.00s)
 === RUN   TestErrPrefixDto_CopyIn_000100
 --- PASS: TestErrPrefixDto_CopyIn_000100 (0.00s)
 === RUN   TestErrPrefixDto_CopyOut_000100
 --- PASS: TestErrPrefixDto_CopyOut_000100 (0.00s)
+=== RUN   TestErrPrefixDto_CopyOut_000200
+--- PASS: TestErrPrefixDto_CopyOut_000200 (0.00s)
 === RUN   TestErrPrefixDto_Empty_000100
 --- PASS: TestErrPrefixDto_Empty_000100 (0.00s)
 === RUN   TestErrPrefixDto_EmptyEPrefCollection_000100
@@ -239,4 +241,4 @@
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	0.684s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.665s

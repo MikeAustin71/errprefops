@@ -73,6 +73,8 @@ func TestErrPrefixDto_SetLeftMarginLength_000200(t *testing.T) {
 
 	ePDto2.SetMaxTextLineLen(40)
 
+	ePDto2.SetLeftMarginChar('*')
+
 	if !ePDto.Equal(&ePDto2) {
 		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
 			"HOWEVER, THEY ARE NOT EQUAL!\n"+
@@ -172,6 +174,8 @@ func TestErrPrefixDto_SetLeftMarginChar_000200(t *testing.T) {
 	ePDto2 := ErrPrefixDto{}.NewEPrefOld(initialStr)
 
 	ePDto2.SetMaxTextLineLen(40)
+
+	ePDto2.SetLeftMarginChar('*')
 
 	if !ePDto.Equal(&ePDto2) {
 		t.Errorf("Error: Expected ePDto==ePDto2.\n"+

@@ -101,8 +101,13 @@ func (ePrefAtom *errPrefAtom) areEqualErrPrefDtos(
 		errPrefixDto2.lock = new(sync.Mutex)
 	}
 
-	if errPrefixDto1.isLastLineTerminatedWithNewLine !=
-		errPrefixDto2.isLastLineTerminatedWithNewLine {
+	if errPrefixDto1.leftMarginLength !=
+		errPrefixDto2.leftMarginLength {
+		return false
+	}
+
+	if errPrefixDto1.leftMarginChar !=
+		errPrefixDto2.leftMarginChar {
 		return false
 	}
 

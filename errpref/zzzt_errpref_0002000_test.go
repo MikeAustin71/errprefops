@@ -2,7 +2,7 @@ package errpref
 
 import "testing"
 
-func TestErrPrefixDto_Copy_000100(t *testing.T) {
+func TestErrPrefixDto_CopyPtr_000100(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
 
@@ -158,8 +158,106 @@ func TestErrPrefixDto_CopyOut_000100(t *testing.T) {
 	if !ePDto.Equal(&ePDto2) {
 		t.Error("Expected ePDto to Equal ePDto2\n" +
 			"However, THEY ARE NOT EQUAL!\n")
+		return
 	}
 
+	expectedConvertedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		true)
+
+	actualConvertedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		true)
+
+	if expectedConvertedStr != actualConvertedStr {
+		t.Errorf("Error: Expected expectedConvertedStr==actualConvertedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedConvertedStr=\n%v\n\n"+
+			"actualConvertedStr=\n%v\n\n",
+			expectedConvertedStr,
+			actualConvertedStr)
+	}
+
+}
+
+func TestErrPrefixDto_CopyOut_000200(t *testing.T) {
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	ePDto.SetLeftMarginLength(5)
+
+	ePDto.SetLeftMarginChar('*')
+
+	ePDto.SetIsLastLineTermWithNewLine(true)
+
+	ePDto2,
+		err := ePDto.CopyOut("TestErrPrefixDto_CopyOut_000200")
+
+	if err != nil {
+		t.Errorf("Error:\n"+
+			"%v", err.Error())
+		return
+	}
+
+	if ePDto2.GetLeftMarginLength() != 5 {
+		t.Errorf("Error: After Copy expected Left Margin Length==5.\n"+
+			"Instead, Left Margin Length = %v\n",
+			ePDto2.GetLeftMarginLength())
+		return
+	}
+
+	if ePDto2.GetLeftMarginChar() != '*' {
+		t.Errorf("Error: After Copy expected Left Margin Char=='*'.\n"+
+			"Instead, Left Margin Char == %v\n",
+			string(ePDto2.GetLeftMarginChar()))
+		return
+	}
+
+	if !ePDto2.GetIsLastLineTerminatedWithNewLine() {
+		t.Error("Error: After Copy expected GetIsLastLineTerminatedWithNewLine()=='true'.\n" +
+			"Instead, GetIsLastLineTerminatedWithNewLine()=='false'.\n")
+		return
+	}
+
+	if ePDto2.GetMaxErrPrefTextLineLength() != 40 {
+		t.Errorf("Error: After Copy expected GetMaxErrPrefTextLineLength=='40'.\n"+
+			"Instead, GetMaxErrPrefTextLineLength == %v\n",
+			ePDto2.GetMaxErrPrefTextLineLength())
+		return
+	}
+
+	if !ePDto.Equal(&ePDto2) {
+		t.Error("Expected ePDto to Equal ePDto2\n" +
+			"However, THEY ARE NOT EQUAL!\n")
+		return
+	}
+
+	expectedConvertedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		true)
+
+	actualConvertedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		true)
+
+	if expectedConvertedStr != actualConvertedStr {
+		t.Errorf("Error: Expected expectedConvertedStr==actualConvertedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedConvertedStr=\n%v\n\n"+
+			"actualConvertedStr=\n%v\n\n",
+			expectedConvertedStr,
+			actualConvertedStr)
+	}
 }
 
 func TestErrPrefixDto_Empty_000100(t *testing.T) {
