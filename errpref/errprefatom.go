@@ -259,8 +259,8 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 	targetErrPrefixDto.maxErrPrefixTextLineLength =
 		inComingErrPrefixDto.maxErrPrefixTextLineLength
 
-	targetErrPrefixDto.leftMargin =
-		inComingErrPrefixDto.leftMargin
+	targetErrPrefixDto.leftMarginLength =
+		inComingErrPrefixDto.leftMarginLength
 
 	targetErrPrefixDto.leftMarginChar =
 		inComingErrPrefixDto.leftMarginChar
@@ -380,8 +380,8 @@ func (ePrefAtom *errPrefAtom) copyOutErrPrefDto(
 	newEPrefixDto.maxErrPrefixTextLineLength =
 		ePrefixDto.maxErrPrefixTextLineLength
 
-	newEPrefixDto.leftMargin =
-		ePrefixDto.leftMargin
+	newEPrefixDto.leftMarginLength =
+		ePrefixDto.leftMarginLength
 
 	newEPrefixDto.leftMarginChar =
 		ePrefixDto.leftMarginChar

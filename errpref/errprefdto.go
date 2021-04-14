@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"strings"
 	"sync"
 )
 
@@ -26,7 +27,7 @@ import (
 //
 type ErrPrefixDto struct {
 	ePrefCol                        []ErrorPrefixInfo
-	leftMargin                      int
+	leftMarginLength                int
 	leftMarginChar                  rune
 	isLastLineTerminatedWithNewLine bool
 	maxErrPrefixTextLineLength      uint
@@ -345,7 +346,7 @@ func (ePrefDto *ErrPrefixDto) Empty() {
 
 	ePrefDto.lock.Lock()
 
-	ePrefDto.leftMargin = 0
+	ePrefDto.leftMarginLength = 0
 
 	ePrefDto.leftMarginChar = 0
 
@@ -1956,6 +1957,56 @@ func (ePrefDto *ErrPrefixDto) SetIsLastLineTermWithNewLine(
 		isLastLineTerminatedWithNewLine
 }
 
+// SetLeftMarginLength - Sets the length of the left margin applied
+// to all new lines generated in the error prefix string returned
+// by method: ErrPrefixDto.String()
+//
+// BE CAREFUL
+//
+// This method will accept any 'leftMarginLength' greater than
+// zero.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  leftMarginLength    int
+//     - This value will be used to determine the length of the
+//       left margin configured in error prefix strings returned
+//       by method ErrPrefixDto.String().
+//
+//       If this value is less than zero, this method will take no
+//       action and exit.
+//
+//       Be advised, any left margin length greater than zer will
+//       be accepted.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePrefDto *ErrPrefixDto) SetLeftMarginLength(
+	leftMarginLength int) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	if leftMarginLength < 0 {
+		return
+	}
+
+	ePrefDto.leftMarginLength = leftMarginLength
+}
+
 // SetMaxTextLineLen - Sets the maximum limit on the number of
 // characters allowed in an error prefix text line output for
 // display purposes.
@@ -2032,17 +2083,17 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLenToDefault() {
 
 // String - Returns a formatted error prefix/context string
 // incorporating all error prefixes previously added to this
-// instance.
+// ErrPrefixDto instance.
 //
-// Error prefix information is stored internally in the 'ePrefCol'
-// array.
+// Error prefix information is stored internally in the
+// 'ErrPrefixDto.ePrefCol' array.
 //
 // If the Left Margin has been set to a value greater than zero,
 // that number of Left Margin Characters will be formatted in
 // each new line of the returned error prefix string.
 //
 // The Left Margin value can be set through method:
-//     ErrPrefixDto.SetLeftMargin()
+//     ErrPrefixDto.SetLeftMarginLength()
 //
 // The Left Margin Character can be set through method:
 //     ErrPrefixDto.SetLeftMarginChar()
@@ -2071,12 +2122,33 @@ func (ePrefDto ErrPrefixDto) String() string {
 	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
-	return errPrefNanobot{}.ptr().
+	outPutStr := errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
 			ePrefDto.maxErrPrefixTextLineLength,
 			ePrefDto.isLastLineTerminatedWithNewLine,
 			ePrefDto.ePrefCol)
 
+	if ePrefDto.leftMarginLength > 0 {
+		leftMarChar := ' '
+
+		if ePrefDto.leftMarginChar > 0 {
+			leftMarChar = ePrefDto.leftMarginChar
+		}
+
+		leftMarStr := strings.Repeat(
+			string(leftMarChar),
+			ePrefDto.leftMarginLength)
+
+		outPutStr = leftMarStr + outPutStr
+
+		leftMarStr = "\n" + leftMarStr
+
+		outPutStr = strings.ReplaceAll(
+			outPutStr, "\n", leftMarStr)
+
+	}
+
+	return outPutStr
 }
 
 // StrMaxLineLen - Returns a formatted error prefix/context string

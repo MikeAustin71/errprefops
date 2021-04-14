@@ -24,7 +24,7 @@ Storage and distribution of the ***errpref*** software package will be processed
    	callingMethodName string) error
    ```
 
-2. 
+2. Added new method ErrPrefixDto.Empty()
 
    
 
