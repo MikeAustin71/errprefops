@@ -26,6 +26,8 @@ import (
 //
 type ErrPrefixDto struct {
 	ePrefCol                        []ErrorPrefixInfo
+	leftMargin                      int
+	leftMarginChar                  rune
 	isLastLineTerminatedWithNewLine bool
 	maxErrPrefixTextLineLength      uint
 	lock                            *sync.Mutex
@@ -326,12 +328,48 @@ func (ePrefDto *ErrPrefixDto) CopyOut(
 			eMsg)
 }
 
+// Empty - Reinitializes all internal member variables for the
+// current ErrPrefixDto instance to their zero values. This method
+// will effectively delete all error prefix information contained
+// in the current ErrPrefixDto instance.
+//
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
+//
+func (ePrefDto *ErrPrefixDto) Empty() {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	ePrefDto.leftMargin = 0
+
+	ePrefDto.leftMarginChar = 0
+
+	ePrefDto.isLastLineTerminatedWithNewLine = false
+
+	ePrefDto.maxErrPrefixTextLineLength = 0
+
+	_ = errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+		ePrefDto,
+		"")
+
+	ePrefDto.lock.Unlock()
+
+	ePrefDto.lock = nil
+}
+
 // EmptyEPrefCollection - All instances of ErrPrefixDto store
 // error prefix information internally in an array of
 // ErrorPrefixInfo objects. This method will delete or empty the
-// current ErrorPrefixInfo array and initialize it to a zero length
-// array.
+// ErrorPrefixInfo array for the current ErrPrefixDto instance and
+// initialize it to nil.
 //
+//
+// IMPORTANT
 // Effectively, this will delete all existing error prefix
 // information stored in the current ErrPrefixDto instance.
 //
@@ -1998,6 +2036,19 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLenToDefault() {
 //
 // Error prefix information is stored internally in the 'ePrefCol'
 // array.
+//
+// If the Left Margin has been set to a value greater than zero,
+// that number of Left Margin Characters will be formatted in
+// each new line of the returned error prefix string.
+//
+// The Left Margin value can be set through method:
+//     ErrPrefixDto.SetLeftMargin()
+//
+// The Left Margin Character can be set through method:
+//     ErrPrefixDto.SetLeftMarginChar()
+//
+// The default Left Margin value is zero. The default Left Margin
+// Character is the empty space character (' ').
 //
 func (ePrefDto ErrPrefixDto) String() string {
 
