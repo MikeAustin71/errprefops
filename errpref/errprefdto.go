@@ -479,6 +479,57 @@ func (ePrefDto *ErrPrefixDto) GetIsLastLineTerminatedWithNewLine() bool {
 	return ePrefDto.isLastLineTerminatedWithNewLine
 }
 
+// GetLeftMarginChar - Returns a rune or text character which will
+// be used to populate the left margin of formatted error prefix
+// strings returned by method ErrPrefixDto.String().
+//
+// The default for the Left Margin Character is the space character
+// (' '). This means that a value of zero for the Left Margin
+// character will cause a space character to be used in populating
+// the left margin for error prefix strings.
+//
+// To set the Left Margin Character see method:
+// ErrPrefixDto.SetLeftMarginChar().
+//
+// Finally, remember that the Left Margin will never be applied to
+// error prefix strings unless the the Left Margin Length parameter
+// is greater than zero. To set the Left Margin Length, see method:
+// ErrPrefixDto.SetLeftMarginLength().
+//
+func (ePrefDto *ErrPrefixDto) GetLeftMarginChar() rune {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return ePrefDto.leftMarginChar
+}
+
+// GetLeftMarginLength - Returns an integer value defining the
+// length of the left margin which will be applied to formatted
+// error prefix strings returned by method ErrPrefixDto.String().
+//
+// If the length of the Left Margin is set to zero, no left margin
+// will applied to error prefix strings  returned by method
+//ErrPrefixDto.String().
+//
+func (ePrefDto *ErrPrefixDto) GetLeftMarginLength() int {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return ePrefDto.leftMarginLength
+}
+
 // GetEPrefCollection - Returns a deep copy of the current
 // error prefix collection maintained by this ErrPrefixDto
 // instance.

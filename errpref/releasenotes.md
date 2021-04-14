@@ -16,7 +16,7 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 ##### ErrPrefixDto
 
-1. Added new method ErrPrefixDto.SetIEmpty()
+1. Added new method ErrPrefixDto.SetIEmpty() - Sets the data values for the current ErrPrefixDto instance based on any one of 10-valid types passed through an empty interface. See source documentation.
 
    ```go
    func (ePrefDto *ErrPrefixDto) SetIEmpty(
@@ -24,7 +24,20 @@ Storage and distribution of the ***errpref*** software package will be processed
    	callingMethodName string) error
    ```
 
-2. Added new method ErrPrefixDto.Empty()
+2. Added new method ErrPrefixDto.Empty() - Reinitializes all member variables for the current ErrPrefixDto instance to their native zero values.
+
+3. Added Left Margin Feature for error prefix strings. Users can now set both the left margin length and the left margin character used to generate the left margin in error prefix strings returned by method ErrPrefixDto.String().
+
+   - ErrPrefixDto.GetLeftMarginChar() rune
+   - ErrPrefixDto.GetLeftMarginLength() int
+   - ErrPrefixDto.SetLeftMarginChar(leftMarginCharacter rune)
+   - ErrPrefixDto.SetLeftMarginLength(leftMarginLength int)
+
+4. 
+
+5. 
+
+   
 
    
 
