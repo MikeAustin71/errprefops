@@ -750,7 +750,6 @@ func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 
 	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
-
 }
 
 // New - Returns a new and properly initialized instance of

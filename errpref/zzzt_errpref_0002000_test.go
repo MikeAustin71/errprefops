@@ -574,6 +574,81 @@ func TestErrPrefixDto_Equal_000100(t *testing.T) {
 	}
 }
 
+func TestErrPrefixDto_MergeErrPrefixDto_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	ePDto2 := ErrPrefixDto{}.New()
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	bogusStr :=
+		"Xt1.Something() - Xt2.SomethingElse() - Xt3.DoSomething()\n" +
+			"Xt4() - Xt5() - Xt6.DoSomethingElse()\n" +
+			"Xt7.TrySomethingNew() : something->newSomething\n" +
+			"Xt8.TryAnyCombination() - Xt9.TryAHammer() : x->y - Xt10.X()\n" +
+			"Xt11.TryAnything() - Xt12.TryASalad()\n" +
+			"Xt13.SomeFabulousAndComplexStuff()\n" +
+			"Xt14.MoreAwesomeGoodness\n" +
+			"Xt15.MustardSandwiches()\n" +
+			"Xt16.TomatoSandwiches()\n" +
+			"Xt17.Benitos() : Z=4 Y=3 X=9"
+
+	ePDto2.SetEPrefOld(bogusStr)
+
+	expectedCompositeStr := initialStr +
+		"\n" +
+		bogusStr
+
+	expectedEPDto := ErrPrefixDto{}.New()
+
+	expectedEPDto.SetMaxTextLineLen(40)
+
+	expectedEPDto.SetEPrefOld(expectedCompositeStr)
+
+	ePDto.MergeErrPrefixDto(
+		&ePDto2)
+
+	expectedStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedEPDto.String()),
+		false)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	if !expectedEPDto.Equal(&ePDto) {
+		t.Errorf("Error: Expected expectedEPDto==ePDto.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			expectedStr,
+			ePDtoStr)
+		return
+	}
+
+	if expectedStr != ePDtoStr {
+		t.Errorf("Error: Expected expectedStr==ePDtoStr.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"expectedStr=\n%v\n\nePDtoStr=\n%v\n\n",
+			expectedStr,
+			ePDtoStr)
+	}
+
+}
+
 func TestErrPrefixDto_Multiple_000100(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
