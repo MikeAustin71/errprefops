@@ -10,7 +10,7 @@ type errPrefixDtoMechanics struct {
 	lock *sync.Mutex
 }
 
-// Ptr - Returns a pointer to a new instance of errPrefixDtoMechanics.
+// ptr - Returns a pointer to a new instance of errPrefixDtoMechanics.
 //
 func (ePrefDtoMech errPrefixDtoMechanics) ptr() *errPrefixDtoMechanics {
 

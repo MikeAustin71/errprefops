@@ -139,6 +139,59 @@ func (ePrefDelims *ErrPrefixDelimiters) CopyOut(
 			"ePrefDelims\n")
 }
 
+// Equal - Receives a pointer to an instance of ErrPrefixDelimiters
+// and proceeds to determine whether the data values encapsulated in
+// that instance are equal to those in the current
+// ErrPrefixDelimiters instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//
+//  incomingDelimiters  *ErrPrefixDelimiters
+//     - A pointer to an instance of ErrPrefixDelimiters. The
+//       internal data values encapsulated by this object will be
+//       compared to those contained in the current
+//       ErrPrefixDelimiters instance. If the data values are
+//       equal, a boolean flag of 'true' will be returned.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  areEqual            bool
+//     - This method will compare the data values encapsulated by
+//       the input parameter, 'incomingDelimiters' and the current
+//       ErrPrefixDelimiters instance. If the data values are
+//       equivalent, this boolean flag will be set to 'true'.
+//
+//       If the data values are NOT equivalent, this parameter will
+//       be set to 'false'.
+//
+func (ePrefDelims *ErrPrefixDelimiters) Equal(
+	incomingDelimiters *ErrPrefixDelimiters) (
+	areEqual bool) {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	areEqual,
+		_ = errPrefixDelimitersElectron{}.ptr().equal(
+		ePrefDelims,
+		incomingDelimiters,
+		"")
+
+	return areEqual
+}
+
 // GetInLineContextDelimiter - Returns ePrefDelims.inLineContextDelimiter
 func (ePrefDelims *ErrPrefixDelimiters) GetInLineContextDelimiter() string {
 

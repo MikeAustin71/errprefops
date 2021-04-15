@@ -289,7 +289,7 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyOut(
 //  areEqual            bool
 //     - This method will compare the data values encapsulated by
 //       input parameters, 'delimitersOne' and 'delimitersTwo'. If
-//       the data values are equivalent, the boolean flag will be
+//       the data values are equivalent, this boolean flag will be
 //       set to 'true'.
 //
 //       If the data values are NOT equivalent, this parameter will
@@ -391,4 +391,21 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) equal(
 	areEqual = true
 
 	return areEqual, err
+}
+
+// ptr - Returns a pointer to a new instance of errPrefixDelimitersElectron.
+//
+func (ePrefDelimsElectron errPrefixDelimitersElectron) ptr() *errPrefixDelimitersElectron {
+
+	if ePrefDelimsElectron.lock == nil {
+		ePrefDelimsElectron.lock = new(sync.Mutex)
+	}
+
+	ePrefDelimsElectron.lock.Lock()
+
+	defer ePrefDelimsElectron.lock.Unlock()
+
+	return &errPrefixDelimitersElectron{
+		lock: new(sync.Mutex),
+	}
 }
