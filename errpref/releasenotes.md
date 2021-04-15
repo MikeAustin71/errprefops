@@ -33,13 +33,17 @@ Storage and distribution of the ***errpref*** software package will be processed
    - ErrPrefixDto.SetLeftMarginChar(leftMarginCharacter rune)
    - ErrPrefixDto.SetLeftMarginLength(leftMarginLength int)
 
-4. 
+4. Added new method ErrPrefixDto.GetDelimiters(). This method returns the string delimiters used to delimit error prefix and error context strings.
 
 5. 
 
    
 
-   
+##### ErrPref
+
+Added new method ErrPref.GetDelimiters(). This method returns the string delimiters used to delimit error prefix and error context strings.
+
+
 
 ## Version 1.5.2
 

@@ -219,6 +219,24 @@ func (ePref ErrPref) FmtStr(
 		errPref)
 }
 
+// GetDelimiters - Returns an ErrPrefixDelimiters object containing
+// the string delimiters used to delimit error prefix and error
+// context elements with strings.
+//
+func (ePref ErrPref) GetDelimiters() ErrPrefixDelimiters {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	return errPrefElectron{}.
+		ptr().getDelimiters()
+}
+
 // GetLastEPref - Returns the last error prefix, error context pair
 // from a string consisting of a series of error prefix, error
 // context pairs.
