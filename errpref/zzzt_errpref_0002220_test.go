@@ -6,6 +6,58 @@ import (
 	"testing"
 )
 
+func TestErrPrefixDto_NewEPrefCollection(t *testing.T) {
+
+	expectedStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDtoNoOfElements,
+		ePDto := ErrPrefixDto{}.NewEPrefCollection(
+		expectedStr)
+
+	ePDto.SetMaxTextLineLen(40)
+
+	ePDto2 := ErrPrefixDto{}.New()
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	ePDto2.SetEPrefOld(expectedStr)
+
+	ePDto2NoOfElements := ePDto2.GetEPrefCollectionLen()
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if ePDtoNoOfElements != ePDto2NoOfElements {
+		t.Errorf("Error: Expected ePDtoNoOfElements==ePDto2NoOfElements.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDtoNoOfElements=\n%v\n\nePDto2NoOfElements=\n%v\n\n",
+			ePDtoNoOfElements,
+			ePDto2NoOfElements)
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoNoePDtoStrOfElements==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDtoStr=\n%v\n\nePDto2Str=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+		return
+	}
+}
+
 func TestErrPrefixDto_NewEPrefCtx_000100(t *testing.T) {
 
 	newErrPrefix := "Tx5.BrandNewMethod()"

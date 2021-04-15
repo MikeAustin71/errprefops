@@ -1045,18 +1045,13 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
-	previousCollectionLen := len(ePrefDto.ePrefCol)
-
-	errPrefAtom{}.ptr().getEPrefContextArray(
+	_ = errPrefixDtoNanobot{}.ptr().setFromString(
+		&newErrPrefixDto,
 		errorPrefixCollection,
-		&ePrefDto.ePrefCol)
-
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
-		ePrefDto.ePrefCol)
+		"")
 
 	numberOfCollectionItemsParsed =
-		len(ePrefDto.ePrefCol) -
-			previousCollectionLen
+		len(newErrPrefixDto.ePrefCol)
 
 	return numberOfCollectionItemsParsed, newErrPrefixDto
 }
