@@ -443,6 +443,24 @@ func (ePrefDto *ErrPrefixDto) Equal(
 		ePrefixDto2)
 }
 
+// GetDelimiters - Returns an ErrPrefixDelimiters object containing
+// the string delimiters used to delimit error prefix and error
+// context elements with strings.
+//
+func (ePrefDto *ErrPrefixDto) GetDelimiters() ErrPrefixDelimiters {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return errPrefElectron{}.
+		ptr().getDelimiters()
+}
+
 // GetIsLastLineTerminatedWithNewLine - Returns the boolean flag
 // which determines whether the last line of error prefix strings
 // returned by this ErrPrefixDto instance will be terminated with
