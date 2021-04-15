@@ -39,6 +39,10 @@ type ErrPrefixDto struct {
 // ErrorPrefixInfo collection managed by this ErrPrefixDto
 // instance.
 //
+// The incoming collection of error prefix information is added to
+// the END of the collection maintained by the current ErrPrefixDto
+// instance.
+//
 // If input parameter 'twoDStrArray' is 'nil' or empty, this method
 // will take no action an exit.
 //
@@ -63,6 +67,10 @@ func (ePrefDto *ErrPrefixDto) AddEPrefStrings(
 // error prefix and error context pairs. This error prefix
 // information is parsed and added to the internal store of
 // error prefix elements.
+//
+// The incoming collection of error prefix information is added to
+// the END of the collection maintained by the current ErrPrefixDto
+// instance.
 //
 // Upon completion this method returns an integer value identifying
 // the number of error prefix elements successfully parsed and
