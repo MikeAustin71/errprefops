@@ -82,6 +82,8 @@
 --- PASS: TestErrPrefixDto_Multiple_000200 (0.00s)
 === RUN   TestErrPrefixDto_Multiple_000300
 --- PASS: TestErrPrefixDto_Multiple_000300 (0.00s)
+=== RUN   TestErrPrefixDto_NewIBasicErrorPrefix
+--- PASS: TestErrPrefixDto_NewIBasicErrorPrefix (0.00s)
 === RUN   TestErrPrefixDto_NewEPrefCollection
 --- PASS: TestErrPrefixDto_NewEPrefCollection (0.00s)
 === RUN   TestErrPrefixDto_NewEPrefCtx_000100
@@ -253,5 +255,5 @@
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
-coverage: 71.3% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.665s
+coverage: 71.9% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.723s
