@@ -32,9 +32,10 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this implem
    - [ErrPref - Quick And Simple Solution](#errpref---quick-and-simple-solution)
      - [Example Usage Summary](#example-usage-summary)
  - [More Examples](#more-examples)
- - [ErrPref Package Configuration and Import](#errpref-package-configuration-and-import)
+ - [Usage, Configuration and Import](#usage-configuration-and-import)
    - [Go Get Command](#go-get-command)
    - [Import Configuration](#import-configuration)
+ - [External Dependencies](#external-dependencies)
  - [Source Code Documentation](#source-code-documentation)
  - [Version](#version)
  - [License](#license)
@@ -410,11 +411,11 @@ When this error is returned up the function chain and finally printed out, the t
 
 ## More Examples
 
-For additional examples, clone and review the example project located in source code repository [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples)
+For additional examples, clone and review the example project located in source code repository [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples). This application contains a "Concurrency" example.
 
 
 
-## ErrPref Package Configuration and Import
+## Usage, Configuration and Import
 
 
 
@@ -446,6 +447,10 @@ import (
 The import example above shows an alias of 'erPref' which is optional.
 
 
+
+## External Dependencies
+
+None. This software package is not dependent on any external module or package.
 
 
 

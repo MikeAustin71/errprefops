@@ -705,7 +705,7 @@ func (ePrefDto *ErrPrefixDto) GetMaxErrPrefTextLineLength() uint {
 //
 // This means that the error prefix collection for
 // 'incomingErrPrefixDto' will be added to the end of the
-// ePrefDto collection.
+// collection for the current ErrPrefixDto instance.
 //
 func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 	incomingErrPrefixDto *ErrPrefixDto) {
@@ -739,6 +739,9 @@ func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 	ePrefDto.ePrefCol =
 		append(ePrefDto.ePrefCol,
 			incomingErrPrefixDto.ePrefCol...)
+
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
 
 }
 
@@ -1022,6 +1025,9 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 	errPrefAtom{}.ptr().getEPrefContextArray(
 		errorPrefixCollection,
 		&ePrefDto.ePrefCol)
+
+	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
 
 	numberOfCollectionItemsParsed =
 		len(ePrefDto.ePrefCol) -
