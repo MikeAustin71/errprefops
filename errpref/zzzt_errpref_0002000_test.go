@@ -574,6 +574,85 @@ func TestErrPrefixDto_Equal_000100(t *testing.T) {
 	}
 }
 
+func TestErrPrefixDto_GetDelimiters_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_GetDelimiters_000100"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	errPrefDelims := ePDto.GetDelimiters()
+
+	errPrefDelimsOne := ErrPrefixDelimiters{}
+
+	err := errPrefDelimsOne.CopyIn(
+		&errPrefDelims,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error Returned by errPrefDelimsOne.CopyIn()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	ep := ErrPref{}
+
+	epDelims := ep.GetDelimiters()
+
+	var errPrefDelimsTwo ErrPrefixDelimiters
+
+	errPrefDelimsTwo,
+		err = epDelims.CopyOut(
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error Returned by epDelims.CopyOut()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	errPrefDelimsOneStr := errPrefDelimsOne.String()
+
+	errPrefDelimsTwoStr := errPrefDelimsTwo.String()
+
+	if !errPrefDelimsOne.Equal(&errPrefDelimsTwo) {
+		t.Errorf("Error: Expected errPrefDelimsOne==errPrefDelimTwo\n"+
+			"HOWEVER, THE TWO ARE NOT EQUAL\n"+
+			"errPrefDelimsOne=\n%v\n"+
+			"errPrefDelimsTwo=\n%v\n",
+			errPrefDelimsOneStr,
+			errPrefDelimsTwoStr)
+
+		return
+	}
+
+	if errPrefDelimsOneStr != errPrefDelimsTwoStr {
+		t.Errorf("Error: Expected errPrefDelimsOneStr==errPrefDelimsTwoStr\n"+
+			"HOWEVER, THE TWO ARE NOT EQUAL\n"+
+			"errPrefDelimsOne=\n%v\n"+
+			"errPrefDelimsTwo=\n%v\n",
+			errPrefDelimsOneStr,
+			errPrefDelimsTwoStr)
+	}
+
+}
+
 func TestErrPrefixDto_MergeErrPrefixDto_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()

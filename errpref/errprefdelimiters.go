@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -586,4 +587,60 @@ func (ePrefDelims *ErrPrefixDelimiters) SetLineLengthValues() {
 		uint(len(ePrefDelims.newLineContextDelimiter))
 
 	return
+}
+
+// String - Returns a string listing the values of the member
+// variables for the current ErrPrefixDelimiters instance.
+//
+func (ePrefDelims ErrPrefixDelimiters) String() string {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	ep := ErrPref{}
+
+	inLinePrefixDelimiter :=
+		ep.ConvertNonPrintableChars(
+			[]rune(ePrefDelims.inLinePrefixDelimiter),
+			true)
+
+	newLinePrefixDelimiter :=
+		ep.ConvertNonPrintableChars(
+			[]rune(ePrefDelims.newLinePrefixDelimiter),
+			true)
+
+	inLineContextDelimiter :=
+		ep.ConvertNonPrintableChars(
+			[]rune(ePrefDelims.inLineContextDelimiter),
+			true)
+
+	newLineContextDelimiter :=
+		ep.ConvertNonPrintableChars(
+			[]rune(ePrefDelims.newLineContextDelimiter),
+			true)
+
+	str := fmt.Sprintf(
+		"inLinePrefixDelimiter: %v\n"+
+			"lenInLinePrefixDelimiter: %v\n"+
+			"newLinePrefixDelimiter: %v\n"+
+			"lenNewLinePrefixDelimiter: %v\n"+
+			"inLineContextDelimiter: %v\n"+
+			"lenInLineContextDelimiter: %v\n"+
+			"newLineContextDelimiter: %v\n"+
+			"lenNewLineContextDelimiter: %v\n",
+		inLinePrefixDelimiter,
+		ePrefDelims.lenInLinePrefixDelimiter,
+		newLinePrefixDelimiter,
+		ePrefDelims.lenNewLinePrefixDelimiter,
+		inLineContextDelimiter,
+		ePrefDelims.lenInLineContextDelimiter,
+		newLineContextDelimiter,
+		ePrefDelims.lenNewLineContextDelimiter)
+
+	return str
 }
