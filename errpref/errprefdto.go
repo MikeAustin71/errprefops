@@ -274,6 +274,7 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
+
 	eMsg += "ErrPrefixDto.CopyIn()\n"
 
 	return errPrefAtom{}.ptr().
@@ -281,6 +282,26 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 			ePrefDto,
 			inComingErrPrefixDto,
 			eMsg)
+}
+
+// CopyIntoIBuilder - Receives an object implementing the
+// IBuilderErrorPrefix Interface and populates that object
+// with the error prefix and error context information
+// contained in the current ErrPrefixDto instance.
+//
+func (ePrefDto *ErrPrefixDto) CopyIntoIBuilder(
+	inComingIBuilder IBuilderErrorPrefix) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	inComingIBuilder.SetEPrefStrings(
+		ePrefDto.GetEPrefStrings())
 }
 
 // CopyOut - Creates a deep copy of the data fields contained in
