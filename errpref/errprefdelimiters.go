@@ -144,6 +144,26 @@ func (ePrefDelims *ErrPrefixDelimiters) CopyOut(
 			"ePrefDelims\n")
 }
 
+// Empty - This method will overwrite and reset all internal
+// member variables to their zero values.
+//
+func (ePrefDelims *ErrPrefixDelimiters) Empty() {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	_ = errPrefixDelimitersQuark{}.ptr().empty(
+		ePrefDelims,
+		"")
+
+	ePrefDelims.lock.Unlock()
+
+	ePrefDelims.lock = nil
+}
+
 // Equal - Receives a pointer to an instance of ErrPrefixDelimiters
 // and proceeds to determine whether the data values encapsulated in
 // that instance are equal to those in the current
