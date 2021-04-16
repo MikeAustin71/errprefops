@@ -38,6 +38,13 @@ func (ePrefDelimitersMech errPrefixDelimitersMechanics) ptr() *errPrefixDelimite
 //
 // Input Parameters
 //
+//  ePrefDelimiters            *ErrPrefixDelimiters
+//     - A pointer to an instance of ErrPrefixDelimiters. All of
+//       the data value encapsulated by this instance will be
+//       deleted, overwritten and replaced with new data values
+//       generated from the following input parameters.
+//
+//
 //  newLinePrefixDelimiters    string
 //     - The contents of this string will be used to parse error
 //       prefix strings on separate lines of text.

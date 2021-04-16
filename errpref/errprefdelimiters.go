@@ -571,6 +571,107 @@ func (ePrefDelims ErrPrefixDelimiters) New(
 	return newEPrefDelimiters, err
 }
 
+// SetDelimiters - Overwrites and replaces the data values for all
+// internal member variables in the current ErrPrefixDelimiters
+// instance.
+//
+// The new data values are generated from string values submitted
+// as input parameters.
+//
+// IMPORTANT
+// All existing delimiter information in this ErrPrefixDelimiters
+// instance will be overwritten, deleted and replaced.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newLinePrefixDelimiters    string
+//     - The contents of this string will be used to parse error
+//       prefix strings on separate lines of text.
+//
+//       If an empty string (string length zero) is passed for this
+//       parameter, an error will be returned.
+//
+//
+//  inLinePrefixDelimiters     string
+//     - The contents of this string will be used to separate
+//       multiple error prefix elements within a single line of
+//       text.
+//
+//       If an empty string (string length zero) is passed for this
+//       parameter, an error will be returned.
+//
+//
+//  newLineContextDelimiters   string
+//     - The contents of this string will be used to parse error
+//       context elements on separate lines of text.
+//
+//       If an empty string (string length zero) is passed for this
+//       parameter, an error will be returned.
+//
+//
+//  inLineContextDelimiters    string
+//     - The contents of this string will be used to separate
+//       multiple error context elements within a single line of
+//       text.
+//
+//       If an empty string (string length zero) is passed for this
+//       parameter, an error will be returned.
+//
+//
+//  ePrefix                    string
+//     - A string containing the name of the function which called
+//       this method. If an error occurs this string will be
+//       prefixed to the beginning of the returned error message.
+//
+//       This parameter is optional. If an error prefix is not
+//       required, submit an empty string for this parameter ("").
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter
+//       'ePrefix' will be prefixed and attached to the beginning
+//       of the error message.
+//
+func (ePrefDelims *ErrPrefixDelimiters) SetDelimiters(
+	newLinePrefixDelimiters string,
+	inLinePrefixDelimiters string,
+	newLineContextDelimiters string,
+	inLineContextDelimiters string,
+	ePrefix string) error {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	ePrefix += " ErrPrefixDelimiters.SetDelimiters()"
+
+	return errPrefixDelimitersMechanics{}.ptr().
+		setErrPrefDelimiters(
+			ePrefDelims,
+			newLinePrefixDelimiters,
+			inLinePrefixDelimiters,
+			newLineContextDelimiters,
+			inLineContextDelimiters,
+			ePrefix)
+}
+
 // SetInLineContextDelimiter - Sets ePrefDelims.inLineContextDelimiter
 //
 // This method also sets the line length value for this parameter
