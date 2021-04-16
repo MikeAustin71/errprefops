@@ -1,0 +1,5 @@
+
+Bitly URL For errpref package distribution
+https://bit.ly/2RwdQhZ
+
+https://github.com/MikeAustin71/errpref
