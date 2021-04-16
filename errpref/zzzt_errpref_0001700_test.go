@@ -224,3 +224,143 @@ func TestErrPrefixDelimiters_CopyOut_000100(t *testing.T) {
 			"HOWEVER, THEY ARE NOT EQUAL!!!")
 	}
 }
+
+func TestErrPrefixDelimiters_Empty_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_CopyIn()"
+
+	newLinePrefixDelimiters := "\n"
+	inLinePrefixDelimiters := " - "
+	newLineContextDelimiters := "\n : "
+	inLineContextDelimiters := " : "
+
+	ePrefDelimsOne,
+		err := ErrPrefixDelimiters{}.New(
+		newLinePrefixDelimiters,
+		inLinePrefixDelimiters,
+		newLineContextDelimiters,
+		inLineContextDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("ERROR returned by ErrPrefixDelimiters{}.New()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	if !ePrefDelimsOne.IsValidInstance(funcName) {
+		t.Error("ERROR: " +
+			"Expected ePrefDelimsOne.IsValidInstance()=='true'\n" +
+			"Instead, ePrefDelimsOne.IsValidInstance()=='false'\n")
+
+		return
+	}
+
+	ePrefDelimsOne.Empty()
+
+	err = ePrefDelimsOne.IsValidInstanceError(funcName)
+
+	if err == nil {
+		t.Error("ERROR: " +
+			"Expected error return from ePrefDelimsOne.IsValidInstanceError()\n" +
+			"after call to ePrefDelimsOne.Empty()\n" +
+			"HOWEVER NO ERROR WAS RETURNED!\n")
+	}
+
+}
+
+func TestErrPrefixDelimiters_SetLineLengthValues_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_SetLineLengthValues()"
+
+	newLinePrefixDelimiters := "\n"
+	inLinePrefixDelimiters := " - "
+	newLineContextDelimiters := "\n : "
+	inLineContextDelimiters := " : "
+
+	ePrefDelimsOne := ErrPrefixDelimiters{}
+
+	err := ePrefDelimsOne.SetDelimiters(
+		newLinePrefixDelimiters,
+		inLinePrefixDelimiters,
+		newLineContextDelimiters,
+		inLineContextDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("ERROR returned by ePrefDelimsOne.SetDelimiters()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	err = ePrefDelimsOne.IsValidInstanceError(funcName)
+
+	if err != nil {
+		t.Errorf("ERROR returned by ePrefDelimsOne.IsValidInstanceError()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	ePrefDelimsOne.SetLineLengthValues()
+
+	if ePrefDelimsOne.GetLengthNewLinePrefixDelimiter() !=
+		uint(len(newLinePrefixDelimiters)) {
+		t.Errorf("ERROR: "+
+			"Expected ePrefDelimsOne.GetLengthNewLinePrefixDelimiter()=="+
+			"len(newLinePrefixDelimiters)\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"ePrefDelimsOne.GetLengthNewLinePrefixDelimiter()='%v'\n"+
+			"len(newLinePrefixDelimiters)='%v'\n",
+			ePrefDelimsOne.GetLengthNewLinePrefixDelimiter(),
+			uint(len(newLinePrefixDelimiters)))
+
+		return
+	}
+
+	if ePrefDelimsOne.GetLengthInLinePrefixDelimiter() !=
+		uint(len(inLinePrefixDelimiters)) {
+		t.Errorf("ERROR: "+
+			"Expected ePrefDelimsOne.GetLengthInLinePrefixDelimiter()=="+
+			"len(inLinePrefixDelimiters)\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"ePrefDelimsOne.GetLengthInLinePrefixDelimiter()='%v'\n"+
+			"len(inLinePrefixDelimiters)='%v'\n",
+			ePrefDelimsOne.GetLengthInLinePrefixDelimiter(),
+			uint(len(inLinePrefixDelimiters)))
+
+		return
+	}
+
+	if ePrefDelimsOne.GetLengthNewLineContextDelimiter() !=
+		uint(len(newLineContextDelimiters)) {
+		t.Errorf("ERROR: "+
+			"Expected ePrefDelimsOne.GetLengthNewLineContextDelimiter()=="+
+			"len(newLineContextDelimiters)\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"ePrefDelimsOne.GetLengthNewLineContextDelimiter()='%v'\n"+
+			"len(newLineContextDelimiters)='%v'\n",
+			ePrefDelimsOne.GetLengthNewLineContextDelimiter(),
+			uint(len(newLineContextDelimiters)))
+
+		return
+	}
+
+	if ePrefDelimsOne.GetLengthInLineContextDelimiter() !=
+		uint(len(inLineContextDelimiters)) {
+		t.Errorf("ERROR: "+
+			"Expected ePrefDelimsOne.GetLengthInLineContextDelimiter()=="+
+			"len(inLineContextDelimiters)\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"ePrefDelimsOne.GetLengthInLineContextDelimiter()='%v'\n"+
+			"len(inLineContextDelimiters)='%v'\n",
+			ePrefDelimsOne.GetLengthInLineContextDelimiter(),
+			uint(len(inLineContextDelimiters)))
+	}
+
+}
