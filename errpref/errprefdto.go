@@ -1941,13 +1941,13 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 //       trigger the return of an error.
 //
 //
-// callingMethodName    string
+//  callingMethodName   string
 //     - A string containing the name of the function which called
 //       this method. If an error occurs this string will be
 //       prefixed to the beginning of the returned error message.
 //
-//       This parameter is optional. If an error prefix is not required,
-//       submit an empty string for this parameter ("").
+//       This parameter is optional. If an error prefix is not
+//       required, submit an empty string for this parameter ("").
 //
 //
 // -----------------------------------------------------------------
@@ -1963,7 +1963,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 //
 //       In the event of an error, the value of parameter
 //       'callingMethodName' will be prefixed and attached to the
-//       beginning of the error message
+//       beginning of the error message.
 //
 func (ePrefDto *ErrPrefixDto) SetIEmpty(
 	iEPref interface{},

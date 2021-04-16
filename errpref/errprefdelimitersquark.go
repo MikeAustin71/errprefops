@@ -9,6 +9,23 @@ type errPrefixDelimitersQuark struct {
 	lock *sync.Mutex
 }
 
+// ptr - Returns a pointer to a new instance of errPrefixDelimitersQuark.
+//
+func (ePrefDelimsQuark errPrefixDelimitersQuark) ptr() *errPrefixDelimitersQuark {
+
+	if ePrefDelimsQuark.lock == nil {
+		ePrefDelimsQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefDelimsQuark.lock.Lock()
+
+	defer ePrefDelimsQuark.lock.Unlock()
+
+	return &errPrefixDelimitersQuark{
+		lock: new(sync.Mutex),
+	}
+}
+
 // testValidityOfErrorPrefixInfo - Performs a diagnostic review of
 // the input parameter 'delimiters', an instance of
 // ErrPrefixDelimiters. The purpose of this diagnostic review is to

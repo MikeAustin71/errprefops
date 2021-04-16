@@ -10,7 +10,7 @@ type errPrefixDtoNanobot struct {
 	lock *sync.Mutex
 }
 
-// Ptr - Returns a pointer to a new instance of errPrefixDtoNanobot.
+// ptr - Returns a pointer to a new instance of errPrefixDtoNanobot.
 //
 func (ePrefDtoNanobot errPrefixDtoNanobot) ptr() *errPrefixDtoNanobot {
 

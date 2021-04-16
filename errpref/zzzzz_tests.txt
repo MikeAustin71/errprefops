@@ -266,4 +266,4 @@
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
 coverage: 82.6% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.752s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.494s
