@@ -14,6 +14,7 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this implem
 
  - [The Problem](#the-problem)
  - [The Solution](#the-solution)
+ - [What errpref Does and Doesn't Do](#what-errpref-does-and-doesnt-do)
  - [Definition of Terms](#definition-of-terms)
    - [Error Prefix](#error-prefix)
    - [Error Context](#error-context)
@@ -26,6 +27,7 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this implem
      - [Public Facing Methods](#public-facing-methods)
      - [Internal or Private Methods](#internal-or-private-methods)
      - [Error Context Example](#error-context-example)
+     - [Maximum Text Line Length](#maximum-text-line-length)
      - [Code Examples](#code-examples)
        - [Test Code](#test-code)
        - [Example Application](#Example-application)
@@ -69,9 +71,56 @@ To summarize: If you are serious about error management and tracking, ***ErrPref
 
 
 
+## What *errpref* Does and Doesn't Do
+
+The ***errpref*** package generates text strings which can be populated with error prefix and error context information. It does NOT create error messages. Error messages are still created by the user with the standard tool provided by the **Go Programming Language**.  
+
+***errpref*** is used to generate the error prefix, function chain and error context information. After that, it is up to the user to add this information to the error message. 
+
+```go
+	if inComingFormatterCurrency == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'inComingFormatterCurrency' is"+
+			" a 'nil' pointer!\n",
+			errPrefixDto.String())
+		return err
+	}
+
+```
+
+In the example above, ***errPrefixDto*** is an instance of ***errpref*** type ***ErrPrefixDto*** previously configured with a series of method names documenting the execution path which led to this point in the code. As the example shows, the user is still responsible for configuring the error message in its entirety. 
+
+While ***errpref*** was specifically designed to document function or method chains of execution, the example above shows that, as a practical matter, the user is free to position this text anywhere in the error message. Also, this text is not reserved exclusively for error messages. It could be used in informational messages or any other type of text display.
+
+The typical error message decorated with error prefix and context information will typically look something like this:
+
+```tex
+main()-mainTest004()
+TestFuncsDto.TestAlphaDto001()
+ :  A->B
+TestFuncDtoAlpha01.Tx1DoSomething()
+testFuncDtoAlpha02.tx2DoSomethingElse()
+testFuncDtoAlpha03.tx3DoAnything()
+testFuncDtoAlpha04.tx4DoNothing()
+ :  A/B==4
+testFuncDtoAlpha05.tx5DoSomethingBig()
+ :  A->B
+testFuncDtoAlpha06.tx6TryGivingUp()
+ :  A/B = C B==0
+Example Error: An Error Ocurred! Something bad.
+Like Divide by Zero
+```
+
+This example error message was taken from the ***errpref*** example application, [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).
+
+
+
 ## Definition of Terms
 
-For our purposes, error prefix information consists of two elements: a function name, and an optional error context string.
+For our purposes, error prefix information consists of two elements: 
+
+1. One or more function or method name listed in sequence of code execution. 
+2. An optional error context string associated with a specific function or method name.
 
 ### Error Prefix
 
@@ -88,16 +137,21 @@ Error Context strings are optional and are always associated with an Error Prefi
 
 ## String Formatting Conventions
 
-When using the methods provided by types ***ErrPref*** and ***ErrPrefixDto*** it's best to use the following formatting
-conventions:
+When using the methods provided by ***errpref*** types ***ErrPref*** and ***ErrPrefixDto***, the error prefix strings are parsed for function names, method names and error context information based on specific string delimiters. As of the current ***errpref*** release, these string delimiters are standardized, fixed and not subject to customization by the user. 
 
 ### Error Prefix Delimiters
 
-Error Prefix Elements are delimited by one of two delimiters: new line character (**\n**) or in-line delimiter string (**[SPACE]-[SPACE]**).
+Error Prefix Elements are delimited by one of two delimiters: 
+
+- **New Line Delimiter** = "**\n**" Delimits function/method names on a single line.
+- **In-Line Delimiter** = " **-** " (**[SPACE]-[SPACE]**) Delimits function/method names on the same line.
 
 ### Error Context Delimiters
 
-Associated Error Context Sub-Elements likewise have two delimiters: new line (**\n[SPACE]:[SPACE]\[SPACE]**) or in-line delimiter **([SPACE]:[SPACE]**)
+Associated Error Context Sub-Elements likewise have two delimiters: 
+
+- **New Line Delimiter String** = "**\n[SPACE]:[SPACE]\[SPACE]**" Delimits error context information on a single line.
+- **In-Line Delimiter String** = "**[SPACE]:[SPACE]**" Delimits error context information displayed with function/method name on same line.
 
 
 
@@ -105,7 +159,7 @@ Associated Error Context Sub-Elements likewise have two delimiters: new line (**
 
 ### Two Types To Choose From
 
-Currently, there are two principal types providing error prefix formatting services: ***ErrPrefixDto*** and ***ErrPref***. Type ***ErrPref*** offers basic error prefix formatting while type ***ErrPrefixDto*** covers a much wider range of formatting and data transmission capabilities.
+Currently, there are two principal ***errpref*** types providing error prefix formatting services: ***ErrPrefixDto*** and ***ErrPref***. Type ***ErrPref*** offers basic error prefix formatting while type ***ErrPrefixDto*** covers a much wider range of formatting and data transmission capabilities.
 
 ### ErrPrefixDto - A Full Featured Solution
 
@@ -323,6 +377,50 @@ When this error is returned up the function chain and finally printed out, the t
  I divided by zero and got this error.
 
 ```
+
+
+#### Maximum Text Line Length
+
+Users have the option to set the Maximum Text Line Length for error prefix strings. The default Maximum Text Line Length is 40-characters. The following error prefix text display demonstrates the default 40-character maximum line length.
+
+```tex
+main()-mainTest004()
+TestFuncsDto.TestAlphaDto001()
+ :  A->B
+TestFuncDtoAlpha01.Tx1DoSomething()
+testFuncDtoAlpha02.tx2DoSomethingElse()
+testFuncDtoAlpha03.tx3DoAnything()
+testFuncDtoAlpha04.tx4DoNothing()
+ :  A/B==4
+testFuncDtoAlpha05.tx5DoSomethingBig()
+ :  A->B
+testFuncDtoAlpha06.tx6TryGivingUp()
+ :  A/B = C B==0
+Example Error: An Err
+```
+
+
+
+The next example shows the same error prefix information displayed with a custom Maximum Text Line Length of 70-characters.
+
+```tex
+main()-mainTest005() - TestFuncsDto.TestAlphaDto002()
+TestFuncDtoAlpha01.Tx1DoSomething()
+testFuncDtoAlpha02.tx2DoSomethingElse()
+testFuncDtoAlpha03.tx3DoAnything()
+testFuncDtoAlpha04.tx4DoNothing() : A/B==4
+testFuncDtoAlpha05.tx5DoSomethingBig() : A->B
+testFuncDtoAlpha06.tx6TryGivingUp() : A/B = C B==0
+Example Error: An Error Ocurred! Something bad.
+Like Divide by Zero!
+```
+
+The Maximum Text Line Length is controlled using method, ***ErrPrefixDto.SetMaxTextLineLen()***.
+
+This example error messages shown above were taken from the ***errpref*** example application, [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).
+
+
+
 #### Code Examples
 
 ##### Test Code
@@ -332,6 +430,8 @@ To run the test code, first review the command syntax in [zzzzHowToRunTests](htt
 
 ##### Example Application
 Additional code examples can be found in the Error Prefix Examples Application located in the ***errorPrefixExamples*** source code repository, [https://github.com/MikeAustin71/errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).
+
+
 
 ### ErrPref - Quick And Simple Solution
 
@@ -411,7 +511,7 @@ When this error is returned up the function chain and finally printed out, the t
 
 ## More Examples
 
-For additional examples, clone and review the example project located in source code repository [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples). This application contains a "Concurrency" example.
+For additional examples, clone and review the example project located in source code repository [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples). This application also contains a "Concurrency" example.
 
 
 
