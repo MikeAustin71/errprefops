@@ -10,23 +10,6 @@ type errPrefMolecule struct {
 	lock *sync.Mutex
 }
 
-// ptr() - Returns a pointer to a new instance of errPrefMolecule.
-//
-func (ePrefMolecule errPrefMolecule) ptr() *errPrefMolecule {
-
-	if ePrefMolecule.lock == nil {
-		ePrefMolecule.lock = new(sync.Mutex)
-	}
-
-	ePrefMolecule.lock.Lock()
-
-	defer ePrefMolecule.lock.Unlock()
-
-	newErrPrefMolecule := errPrefMolecule{}
-
-	return &newErrPrefMolecule
-}
-
 // writeNewEPrefWithContext - Writes Error Prefix strings to a
 // string builder. This algorithm is designed for Error Prefixes
 // that DO have an associated error context string.

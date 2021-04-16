@@ -711,12 +711,11 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstance() bool {
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
-
 	isValid,
-		_ := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
-		ePrefixLineLenCalc,
-		"")
+		_ := ePrefixLineLenCalcQuark{}.ptr().
+		testValidityOfEPrefixLineLenCalc(
+			ePrefixLineLenCalc,
+			"")
 
 	return isValid
 }
@@ -769,13 +768,12 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsValidInstanceError(
 
 	ePrefix += "EPrefixLineLenCalc.IsValidInstanceError() "
 
-	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
-
 	_,
-		err := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
-		ePrefixLineLenCalc,
-		ePrefix+
-			"ePrefixLineLenCalc\n")
+		err := ePrefixLineLenCalcQuark{}.ptr().
+		testValidityOfEPrefixLineLenCalc(
+			ePrefixLineLenCalc,
+			ePrefix+
+				"ePrefixLineLenCalc\n")
 
 	return err
 }

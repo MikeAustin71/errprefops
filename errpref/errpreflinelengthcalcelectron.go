@@ -97,13 +97,12 @@ func (ePrefLineLenCalcElectron *ePrefixLineLenCalcElectron) copyIn(
 			ePrefix)
 	}
 
-	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
-
 	_,
-		err := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
-		incomingLineLenCalc,
-		ePrefix+
-			"Testing validity of 'incomingLineLenCalc'\n")
+		err := ePrefixLineLenCalcQuark{}.ptr().
+		testValidityOfEPrefixLineLenCalc(
+			incomingLineLenCalc,
+			ePrefix+
+				"Testing validity of 'incomingLineLenCalc'\n")
 
 	if err != nil {
 		return err
@@ -211,13 +210,12 @@ func (ePrefLineLenCalcElectron *ePrefixLineLenCalcElectron) copyOut(
 
 	}
 
-	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
-
 	_,
-		err := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
-		lineLenCalc,
-		ePrefix+
-			"Testing validity of 'lineLenCalc'\n")
+		err := ePrefixLineLenCalcQuark{}.ptr().
+		testValidityOfEPrefixLineLenCalc(
+			lineLenCalc,
+			ePrefix+
+				"Testing validity of 'lineLenCalc'\n")
 
 	if err != nil {
 		return newLineLenCalc, err
