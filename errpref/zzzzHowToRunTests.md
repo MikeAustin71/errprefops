@@ -1,5 +1,11 @@
 # Running Tests
 
+## Test Files
+For this project, source files containing tests are named with a prefix of **zzzt_**.
+
+In addition, test file names always end in **_test.go**.
+
+
 ## Run Basic Tests
 Open a command prompt in this directory:
  *("./MikeAustin71/errprefops/errpref")*
