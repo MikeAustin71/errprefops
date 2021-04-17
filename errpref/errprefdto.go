@@ -297,6 +297,12 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 // All existing error prefix and error context information in this
 // ErrPrefixDto instance will be overwritten and deleted.
 //
+// This means that if IBuilderErrorPrefix parameter,
+// 'inComingIBuilder' generates an empty set of error prefix
+// error prefix information, the current ErrPrefixDto instance will
+// likewise be configured with an identical empty set of error
+// prefix information.
+//
 func (ePrefDto *ErrPrefixDto) CopyInFromIBuilder(
 	inComingIBuilder IBuilderErrorPrefix,
 	eMsg string) error {
@@ -309,20 +315,13 @@ func (ePrefDto *ErrPrefixDto) CopyInFromIBuilder(
 
 	defer ePrefDto.lock.Unlock()
 
-	eMsg += "ErrPrefixDto.CopyIn()\n"
+	eMsg += "ErrPrefixDto.CopyInFromIBuilder()\n"
 
-	err := errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
-		ePrefDto,
-		eMsg)
-
-	if err != nil {
-		return err
-	}
-
-	err = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
-		ePrefDto,
-		inComingIBuilder.GetEPrefStrings(),
-		eMsg)
+	err := errPrefixDtoNanobot{}.ptr().
+		setFromIBuilder(
+			ePrefDto,
+			inComingIBuilder,
+			eMsg)
 
 	return err
 }
