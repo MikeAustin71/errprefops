@@ -38,9 +38,9 @@ func (tMain TestMain) TestMain022() {
 		ePDto.Equal(&ePDto2)
 
 	if !twoAreEqual {
-		fmt.Println("FAILURE: ePDto and ePDto2 ARE NOT EQUAL!\n")
+		fmt.Printf("FAILURE: ePDto and ePDto2 ARE NOT EQUAL!\n\n")
 	} else {
-		fmt.Println("SUCCESS: ePDto and ePDto2 ARE EQUAL!\n")
+		fmt.Printf("SUCCESS: ePDto and ePDto2 ARE EQUAL!\n\n")
 
 	}
 
@@ -90,7 +90,7 @@ func (tMain TestMain) TestMain020() {
 			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
 			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
 			"Tx13.SomeFabulousAndComplexStuff()\n" +
-			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+			"Tx14.MoreAwesomeGoodness() : A=7 B=8 C=9"
 
 	ePDto := errpref.ErrPrefixDto{}.NewEPrefOld(initialStr)
 
@@ -98,10 +98,14 @@ func (tMain TestMain) TestMain020() {
 
 	ePDto.SetLeftMarginLength(3)
 
-	ePDto.SetLeftMarginChar(' ')
+	ePDto.SetLeftMarginChar('*')
 
 	outputStr := ePDto.String()
 
+	fmt.Printf("Left Margin Length: %v\n",
+		ePDto.GetLeftMarginLength())
+	fmt.Printf("Left Margin Character: %v\n",
+		string(ePDto.GetLeftMarginChar()))
 	fmt.Printf("Left Margin Actual String:\n\n"+
 		"%v\n\n\n",
 		outputStr)

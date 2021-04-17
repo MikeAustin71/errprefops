@@ -39,6 +39,8 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 6. Added new method ErrPrefixDto.CopyInFromIBuilder(). This method takes an object implementing the IBuilderErrorPrefix interface and copies its error prefix and context information into the current instance of ErrPrefixDto.  This method is used to facilitate the exchange of error prefix information with custom user developed types. This method is used to facilitate the exchange of error prefix information with custom user developed types.
 
+7. Added new method ErrPrefixDto.SetIBuilder(). Like ErrPrefixDto.CopyInFromIBuilder(), this method takes an object implementing the IBuilderErrorPrefix interface and copies its error prefix and context information into the current instance of ErrPrefixDto.  This method is used to facilitate the exchange of error prefix information with custom user developed types. This method is used to facilitate the exchange of error prefix information with custom user developed types.
+
    
 
 ##### ErrPref

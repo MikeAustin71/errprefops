@@ -1,12 +1,12 @@
-# Error Prefix (errpref) - Adding error prefix, function chains and error context to Error Messages 
+# *errpref* - Adding error prefix, function execution chains and error context to Error Messages In Go
 
-**The *errpref* software package is a collection of lightweight GoLang types designed to attach error prefix text, function chain lists and error context strings to error messages.**
+**The *errpref* software package is a collection of lightweight GoLang types designed to attach error prefix text, function execution chain lists and error context strings to error messages.**
 
 The ***errpref*** software package was written in the [Go](https://golang.org/) programming language, a.k.a. ***Golang***.
 
 ***errpref*** supports [Go Modules]([Go Modules Reference - The Go Programming Language (golang.org)](https://golang.org/ref/mod)).
 
-The current version of ***errpref*** is Version 1.6.0. Most notably, this implements the "Left Margin" Feature in error prefix string formatting. For details, see the [Release Notes](./releasenotes.md).
+The current version of ***errpref*** is Version 1.6.0. Most notably, this version implements the [Left Margin Feature](#left-margin-feature) in error prefix string formatting.
 
 
 
@@ -14,7 +14,7 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this implem
 
  - [The Problem](#the-problem)
  - [The Solution](#the-solution)
- - [What errpref Does and Doesn't Do](#what-errpref-does-and-doesnt-do)
+ - [What *errpref* Does and Doesn't Do](#what-errpref-does-and-doesnt-do)
  - [Definition of Terms](#definition-of-terms)
    - [Error Prefix](#error-prefix)
    - [Error Context](#error-context)
@@ -28,13 +28,13 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this implem
      - [Internal or Private Methods](#internal-or-private-methods)
      - [Error Context Example](#error-context-example)
      - [Maximum Text Line Length](#maximum-text-line-length)
-     - [Code Examples](#code-examples)
-       - [Test Code](#test-code)
-       - [Example Application](#Example-application)
+     - [Left Margin Feature](#left-margin-feature)
    - [ErrPref - Quick And Simple Solution](#errpref---quick-and-simple-solution)
-     - [Example Usage Summary](#example-usage-summary)
- - [More Examples](#more-examples)
- - [Usage, Configuration and Import](#usage-configuration-and-import)
+ - [Exchanging Error Prefix Information with User Defined Types](#exchanging-error-prefix-information-with-user-defined-types)
+ - [Usage Examples](#usage-examples)
+   - [Test Code](#test-code)
+   - [Example Application](#example-application)
+ - [Package Configuration and Import](#package-configuration-and-import)
    - [Go Get Command](#go-get-command)
    - [Import Configuration](#import-configuration)
  - [External Dependencies](#external-dependencies)
@@ -144,7 +144,7 @@ When using the methods provided by ***errpref*** types ***ErrPref*** and ***ErrP
 Error Prefix Elements are delimited by one of two delimiters: 
 
 - **New Line Delimiter** = "**\n**" Delimits function/method names on a single line.
-- **In-Line Delimiter** = " **-** " (**[SPACE]-[SPACE]**) Delimits function/method names on the same line.
+- **In-Line Delimiter** = " **-** " (**[SPACE]-[SPACE]**) Delimits multiple function/method names on the same line.
 
 ### Error Context Delimiters
 
@@ -163,12 +163,12 @@ Currently, there are two principal ***errpref*** types providing error prefix fo
 
 ### ErrPrefixDto - A Full Featured Solution
 
-The Error Prefix Data Transfer Object, ***ErrPrefixDto***, offers the same services as type, ***ErrPref***, but is packaged in a different architecture. While ***ErrPref*** methods receive a string and instantly return a formatted string, ***ErrPrefixDto*** encapsulates error prefix information in an internal array of Error Prefix Information objects (***ErrorPrefixInfo***). Strings are only created when the type's ***String()*** method is called. Instances of ***ErrPrefixDto*** are designed to be passed as input parameters to subsidiary methods.
+The Error Prefix Data Transfer Object, ***ErrPrefixDto***, offers the same services as type, ***ErrPref***, but is packaged in a different architecture. While ***ErrPref*** methods receive a string and instantly return a formatted string, ***ErrPrefixDto*** encapsulates error prefix information in an internal array of Error Prefix Information objects (***ErrorPrefixInfo***). Strings are only created when the type's ***String()*** method is called. Instances of ***ErrPrefixDto*** are designed to be passed as input parameters to subsidiary methods. The act of passing ***ErrPrefixDto*** objects to successive functions in the execution sequence effectively builds documentation of the execution function chain. 
 
 The ***String()*** method has a value receiver.  Virtually all other ***ErrPrefixDto*** methods have pointer receivers.
 
 #### Public Facing Methods
-A public method may receive error prefix information in a variety of formats from sources both internal and external to the package. To date, the best use scenario follows this pattern:
+A public method may receive error prefix information in a variety of formats from sources both internal and external to the package. To date, the best use scenario for a Public Facing Function or Method follows this pattern:
 
 ``` go
 func (numStrBasic *NumStrBasic) GetCountryFormatters(
@@ -200,7 +200,7 @@ func (numStrBasic *NumStrBasic) GetCountryFormatters(
 By calling ***ErrPrefixDto{}.NewIEmpty()*** with an empty interface, functions can pass error prefix information in any of 10-different formats:
 
   1. **nil** - A nil value is valid and generates an empty collection of error prefix and error context information.
-  2. **Stringer** - The Stringer interface from the 'fmt' package. This interface has only one method:
+  2. **Stringer** - The Stringer interface from the '**fmt**' package. This interface has only one method:
 
 ``` go
     	type Stringer interface {
@@ -208,13 +208,13 @@ By calling ***ErrPrefixDto{}.NewIEmpty()*** with an empty interface, functions c
     	}
 ```
 
-  3. **string** - A string containing error prefix information.
-  5. **\[\]string** - A one-dimensional slice of strings containing error prefix information.
-  1. **\[\]\[2\]string** - A two-dimensional slice of strings containing error prefix and error context information.
-  2. **strings.Builder** - An instance of strings.Builder. Error prefix information will be imported into the new returned instance of ErrPrefixDto.
-  3. **\*strings.Builder** - A pointer to an instance of strings.Builder.  Error prefix information will be imported into the new returned instance of ErrPrefixDto.
-  4. **ErrPrefixDto** - An instance of **ErrPrefixDto**. The **ErrorPrefixInfo** from this object will be copied to the new returned instance of **ErrPrefixDto*.
-  6.  **\*ErrPrefixDto** - A pointer to an instance of **ErrPrefixDto**. ErrorPrefixInfo from this object will be copied to the new returned instance of **ErrPrefixDto*.
+  3. **string** - A string containing error prefix information. For maximum effectiveness, this should be delimited with the standard [String Delimiters](#string-formatting-conventions).
+  5. **\[\]string** - A one-dimensional slice of strings containing error prefix information. Typically, the one-dimensional slice contains only function or method names.
+  1. **\[\]\[2\]string** - A two-dimensional slice of strings containing error prefix and error context information. slice\[x\]\[0\] holds function or method names. slice\[x\]\[1\] holds associated error context information.
+  2. ***strings.Builder*** - An instance of strings.Builder. Error prefix information extracted from ***strings.Builder*** will be imported into the new returned instance of ***\*ErrPrefixDto***.
+  3. ***\*strings.Builder*** - A pointer to an instance of strings.Builder.  Extracted error prefix information will be imported into the new returned instance of ***\*ErrPrefixDto***.
+  4. ***ErrPrefixDto*** - An instance of ***ErrPrefixDto***. The ***ErrorPrefixInfo*** collection extracted from this object will be copied to the new returned instance of ***\*ErrPrefixDto***.
+  6.  **\*ErrPrefixDto** - A pointer to an instance of **ErrPrefixDto**. The ***ErrorPrefixInfo*** collection extracted from this object will be copied to the new returned instance of  ***\*ErrPrefixDto***.
   7.   **IBasicErrorPrefix** - An interface to a method generating a two-dimensional slice of strings containing error prefix and error context information.
 
 ``` go
@@ -237,7 +237,7 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 
 This pattern allows for use of the 'nil' value. This means that parameter ***iEPref*** will accept a 'nil' value. If no error prefix information is present or required, just pass a 'nil' value for the ***iEPref*** parameter.
 
-Finally, notice how the currently executing method name (***NumStrBasic.GetCountryFormatters()***) is added to the error prefix chain:
+Finally, notice how the currently executing method name (***NumStrBasic.GetCountryFormatters()***) is added to the error prefix method chain:
 
 ``` go
 	ePrefix,
@@ -253,7 +253,7 @@ The final empty string parameter is optional and could be used to add error cont
 
 #### Internal or Private Methods
 
-In the **Public Facing Methods** example, above, method ***GetCountryFormatters()*** makes a call to the  internal or private method, ***getCountryFormatters()***. Calls like this one to a supporting or subsidiary method usually pass a pointer to an instance of ***ErrPrefixDto***.  To date, the best use scenario for subsidiary methods follows this pattern:
+In the **Public Facing Methods** example, above, method ***GetCountryFormatters()*** makes a call to the  internal or private method, ***getCountryFormatters()***. Calls like this one to a supporting or subsidiary method usually pass a pointer to an instance of ***ErrPrefixDto***.  To date, the best use scenario for calls to subsidiary methods follows this pattern:
 
 ``` go
 
@@ -295,7 +295,7 @@ ePrefix.SetEPref(
 
 
 
-Notice that this pattern also allows for use of the 'nil' value for parameter, ***ePrefix***. If no error prefix information is present or required, just pass a 'nil' parameter value.
+Notice that this pattern also allows for use of the **nil** value for parameter, ***ePrefix***. If no error prefix information is present or required, just pass a **nil** parameter value.
 
 This pattern provides a separate function chain string for each method. This architecture allows for multiple calls from parent methods without adding unnecessary and irrelevant text to the function chain. If an error occurs, only the relevant error prefix and error context information will be returned.
 
@@ -303,7 +303,10 @@ This pattern provides a separate function chain string for each method. This arc
 
 #### Error Context Example
 
-In this example, a function chain is built by calls to multiple levels of the code hierarchy.  The final call to method **Tx3.DoSomething()** triggers an error thereby returning the names of all methods in the call chains plus error context information.
+Recall that **Error Context** strings are designed to provide additional information about the function or method identified by the
+associated **Error Prefix** text. Typical context information might include variable names, variable values and additional details on function execution.
+
+In this example, a function chain is built by calls to multiple levels of the code hierarchy.  The final call to method **Tx3.DoSomething()** triggers an error thereby returning the names of all methods in the call chain plus error context information associated with those methods.
 
 ``` go
 func(tx1 *Tx1) Something() {
@@ -379,6 +382,7 @@ When this error is returned up the function chain and finally printed out, the t
 ```
 
 
+
 #### Maximum Text Line Length
 
 Users have the option to set the Maximum Text Line Length for error prefix strings. The default Maximum Text Line Length is 40-characters. The following error prefix text display demonstrates the default 40-character maximum line length.
@@ -421,25 +425,66 @@ This example error messages shown above were taken from the ***errpref*** exampl
 
 
 
-#### Exchanging Error Prefix Information with Custom User Types
+#### Left Margin Feature
 
-Custom user developed types supporting the ***IBuilderErrorPrefix*** interface will be able to receive data from and insert data into instances of ***ErrPrefixDto***. 
+The default left margin length for text returned by the ***ErrPrefixDto.String()*** is zero (0). In other words, by default, there is no left margin.
 
- 
+Example error prefix information text display with left margin length of zero:
 
-#### Code Examples
+```tex
+Tx1.Something() - Tx2.SomethingElse()
+Tx3.DoSomething() - Tx4() - Tx5()
+Tx6.DoSomethingElse()
+Tx7.TrySomethingNew()
+ :  something->newSomething
+Tx8.TryAnyCombination()
+Tx9.TryAHammer() : x->y - Tx10.X()
+Tx11.TryAnything() - Tx12.TryASalad()
+Tx13.SomeFabulousAndComplexStuff()
+Tx14.MoreAwesomeGoodness()
+ :  A=7 B=8 C=9
+```
 
-##### Test Code
-Test Code is located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
+The following ***ErrPrefixDto*** methods allow the user to control both the left margin length, and the character used to populate the left margin:
 
-Test Code provides many examples 
+1. ***ErrPrefixDto.SetLeftMarginLength()*** 
+2. ***ErrPrefixDto.SetLeftMarginChar()***
+3. ***ErrPrefixDto.GetLeftMarginLength()***
+4. ***ErrPrefixDto.GetLeftMarginChar()***
 
-Currently, unit tests show code coverage at 83%.
+In the next example, the left margin length is set to three (3), and the left margin character is set to the empty space character (' ') or ASCII 0x20:
 
-To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
+```tex
+   Tx1.Something() - Tx2.SomethingElse()
+   Tx3.DoSomething() - Tx4() - Tx5()
+   Tx6.DoSomethingElse()
+   Tx7.TrySomethingNew()
+    :  something->newSomething
+   Tx8.TryAnyCombination()
+   Tx9.TryAHammer() : x->y - Tx10.X()
+   Tx11.TryAnything() - Tx12.TryASalad()
+   Tx13.SomeFabulousAndComplexStuff()
+   Tx14.MoreAwesomeGoodness()
+    :  A=7 B=8 C=9
+```
 
-##### Example Application
-Additional code examples can be found in the Error Prefix Examples Application located in the ***errorPrefixExamples*** source code repository, [https://github.com/MikeAustin71/errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).
+
+
+In the final example, the left margin length is set to three (3), and the left margin character is set to the asterisk character ('*'): 
+
+```tex
+***Tx1.Something() - Tx2.SomethingElse()
+***Tx3.DoSomething() - Tx4() - Tx5()
+***Tx6.DoSomethingElse()
+***Tx7.TrySomethingNew()
+*** :  something->newSomething
+***Tx8.TryAnyCombination()
+***Tx9.TryAHammer() : x->y - Tx10.X()
+***Tx11.TryAnything() - Tx12.TryASalad()
+***Tx13.SomeFabulousAndComplexStuff()
+***Tx14.MoreAwesomeGoodness()
+*** :  A=7 B=8 C=9
+```
 
 
 
@@ -519,13 +564,38 @@ When this error is returned up the function chain and finally printed out, the t
 
 
 
-## More Examples
+## Exchanging Error Prefix Information with User Defined Types
 
-For additional examples, clone and review the example project located in source code repository [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples). This application also contains a "Concurrency" example.
+Custom user defined types supporting the ***IBuilderErrorPrefix*** interface will be able to receive data from and insert data into instances of ***ErrPrefixDto***. The following ***ErrPrefixDto*** methods interoperate with the ***IBuilderErrorPrefix*** interface:
+
+1. ***ErrPrefixDto.CopyInFromIBuilder()***
+2. ***ErrPrefixDto.CopyOutToIBuilder()***
+3. ***ErrPrefixDto.NewIEmpty()***
+4. ***ErrPrefixDto.SetIBuilder()***
+
+Taken together, these methods facilitate the import and export of error prefix and context information between ***ErrPrefixDto*** and user defined types implementing the ***IBuilderErrorPrefix*** interface.
 
 
 
-## Usage, Configuration and Import
+## Usage Examples
+
+### Test Code
+
+Test Code is located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
+
+Test Code provides many examples 
+
+Currently, unit tests show code coverage at 83%.
+
+To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
+
+### Example Application
+
+Additional code examples can be found in the Error Prefix Examples Application located at [https://github.com/MikeAustin71/errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).  This application also contains a "Concurrency" example.
+
+
+
+## Package Configuration and Import
 
 
 
