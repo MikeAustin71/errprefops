@@ -28,7 +28,7 @@ This project, the ***errprefops*** development environment, is stored in softwar
 
 Source Code Documentation for the ***errpref*** software package is located here: 
 
-[Source Documentation](https://pkg.go.dev/github.com/MikeAustin71/errprefops/errpref)
+[Source Documentation](https://pkg.go.dev/github.com/MikeAustin71/errpref)
 
 
 
