@@ -35,7 +35,7 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 4. Added new method ErrPrefixDto.GetDelimiters(). This method returns the string delimiters used to delimit error prefix and error context strings.
 
-5. 
+5. Added new method ErrPrefixDto.CopyOutToIBuilder(). This methods takes an object implementing the IBuilderErrorPrefix interface an populates than object with error prefix and context information contained in the current instance of ErrPrefixDto. This method is used to facilitate the exchange of error prefix information with custom user developed types.
 
    
 

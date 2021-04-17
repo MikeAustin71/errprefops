@@ -230,6 +230,10 @@ func (ePrefDto *ErrPrefixDto) CopyPtr() *ErrPrefixDto {
 // All of the data fields in current ErrPrefixDto instance
 // ('ePrefDto') will be modified and overwritten.
 //
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -284,12 +288,54 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 			eMsg)
 }
 
-// CopyIntoIBuilder - Receives an object implementing the
-// IBuilderErrorPrefix Interface and populates that object
-// with the error prefix and error context information
-// contained in the current ErrPrefixDto instance.
+// CopyInFromIBuilder - Receives an object implementing the
+// IBuilderErrorPrefix interface and proceeds copy its error prefix
+// and error context information into the current instance of
+// ErrPrefixDto.
 //
-func (ePrefDto *ErrPrefixDto) CopyIntoIBuilder(
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
+//
+func (ePrefDto *ErrPrefixDto) CopyInFromIBuilder(
+	inComingIBuilder IBuilderErrorPrefix,
+	eMsg string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	eMsg += "ErrPrefixDto.CopyIn()\n"
+
+	err := errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+		ePrefDto,
+		eMsg)
+
+	if err != nil {
+		return err
+	}
+
+	err = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
+		ePrefDto,
+		inComingIBuilder.GetEPrefStrings(),
+		eMsg)
+
+	return err
+}
+
+// CopyOutToIBuilder - Receives an object implementing the
+// IBuilderErrorPrefix Interface and populates that object with the
+// error prefix and error context information contained in the
+// current ErrPrefixDto instance.
+//
+// This method will transfer error prefix and context information
+// OUT to object implementing the IBuilderErrorPrefix interface.
+//
+func (ePrefDto *ErrPrefixDto) CopyOutToIBuilder(
 	inComingIBuilder IBuilderErrorPrefix) {
 
 	if ePrefDto.lock == nil {
@@ -1865,6 +1911,10 @@ func (ePrefDto *ErrPrefixDto) SetEPrefOld(
 // To 'append' or 'add' a two-dimensional string array to existing
 // error prefix information, see method:
 //    ErrPrefixDto.AddEPrefStrings()
+//
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
 //
 func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 	twoDStrArray [][2]string) {

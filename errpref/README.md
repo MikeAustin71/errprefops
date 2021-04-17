@@ -421,10 +421,20 @@ This example error messages shown above were taken from the ***errpref*** exampl
 
 
 
+#### Exchanging Error Prefix Information with Custom User Types
+
+Custom user developed types supporting the ***IBuilderErrorPrefix*** interface will be able to receive data from and insert data into instances of ***ErrPrefixDto***. 
+
+ 
+
 #### Code Examples
 
 ##### Test Code
-Test Code is located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
+Test Code is located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
+
+Test Code provides many examples 
+
+Currently, unit tests show code coverage at 83%.
 
 To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
 
