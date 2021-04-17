@@ -575,6 +575,18 @@ Custom user defined types supporting the ***IBuilderErrorPrefix*** interface wil
 
 Taken together, these methods facilitate the import and export of error prefix and context information between ***ErrPrefixDto*** and user defined types implementing the ***IBuilderErrorPrefix*** interface.
 
+The ***IBuilderErrorPrefix*** interface is defined as follows:
+
+```go
+type IBuilderErrorPrefix interface {
+	GetEPrefStrings() [][2]string
+
+	SetEPrefStrings(twoDStrArray [][2]string)
+
+	String() string
+}
+```
+
 
 
 ## Usage Examples
