@@ -38,7 +38,6 @@ func (ePrefDtoMech errPrefixDtoMechanics) ptr() *errPrefixDtoMechanics {
 // [x][1] position. The Error Context string is optional and may be
 // an empty string.
 //
-//
 func (ePrefDtoMech *errPrefixDtoMechanics) getEPrefStrings(
 	errPrefDto *ErrPrefixDto,
 	errorPrefStr string) (

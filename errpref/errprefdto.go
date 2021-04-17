@@ -1931,9 +1931,76 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 		"")
 }
 
+// SetIBuilder - Deletes the current error prefix information and
+// replaces it with new error prefix data passed to this method by
+// an input parameter object implementing the IBuilderErrorPrefix.
+//
+// IMPORTANT
+// All existing error prefix and error context information in this
+// ErrPrefixDto instance will be overwritten and deleted.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  inComingIBuilder    IBuilderErrorPrefix
+//     - An object implementing the IBuilderErrorPrefix interface.
+//       Error prefix and context information will be generated
+//       from this object and used to overwrite and replace the
+//       existing error prefix and context information contained in
+//       the current ErrPrefixDto instance.
+//
+//
+//  callingMethodName   string
+//     - A string containing the name of the function which called
+//       this method. If an error occurs this string will be
+//       prefixed to the beginning of the returned error message.
+//
+//       This parameter is optional. If an error prefix is not
+//       required, submit an empty string for this parameter ("").
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter
+//       'callingMethodName' will be prefixed and attached to the
+//       beginning of the error message.
+//
+func (ePrefDto *ErrPrefixDto) SetIBuilder(
+	inComingIBuilder IBuilderErrorPrefix,
+	callingMethodName string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	callingMethodName = callingMethodName +
+		"\nErrPrefixDto.SetIBuilder()"
+
+	return errPrefixDtoNanobot{}.ptr().
+		setFromIBuilder(
+			ePrefDto,
+			inComingIBuilder,
+			callingMethodName)
+}
+
 // SetIEmpty - Deletes the current error prefix information
-// and replaces with a new new error prefix data passed
-// to this method as an empty interface.
+// and replaces it with new error prefix data passed to this method
+// through an empty interface.
 //
 // IMPORTANT
 // All existing error prefix and error context information in this
