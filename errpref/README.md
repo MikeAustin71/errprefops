@@ -427,7 +427,7 @@ This example error messages shown above were taken from the ***errpref*** exampl
 
 #### Left Margin Feature
 
-The default left margin length for text returned by the ***ErrPrefixDto.String()*** is zero (0). In other words, by default, there is no left margin.
+The default left margin length for text returned by the method ***ErrPrefixDto.String()*** is zero (0). In other words, by default, there is no left margin.
 
 Example error prefix information text display with left margin length of zero:
 
