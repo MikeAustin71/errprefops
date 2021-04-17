@@ -27,6 +27,66 @@ func (ePrefDtoMech errPrefixDtoMechanics) ptr() *errPrefixDtoMechanics {
 	}
 }
 
+// getEPrefStrings - Receives a pointer to an instance of
+// ErrPrefixDto and proceeds to convert the internal collection of
+// ErrorPrefixInfo objects to a two dimensional string array
+// which is returned to the caller.
+//
+// The two-dimensional string array contains both error prefix and
+// error context information. The Error Prefix string is always in
+// the [x][0] position. The Error Context string is always in the
+// [x][1] position. The Error Context string is optional and may be
+// an empty string.
+//
+//
+func (ePrefDtoMech *errPrefixDtoMechanics) getEPrefStrings(
+	errPrefDto *ErrPrefixDto,
+	errorPrefStr string) (
+	twoDStrArray [][2]string,
+	err error) {
+
+	if ePrefDtoMech.lock == nil {
+		ePrefDtoMech.lock = new(sync.Mutex)
+	}
+
+	ePrefDtoMech.lock.Lock()
+
+	defer ePrefDtoMech.lock.Unlock()
+
+	methodNames := errorPrefStr + "\n" +
+		"errPrefixDtoMechanics.getEPrefStrings()"
+
+	twoDStrArray = nil
+
+	if errPrefDto == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'errPrefDto' is invalid!\n"+
+			"'errPrefDto' is a 'nil' pointer.\n",
+			methodNames)
+
+		return twoDStrArray, err
+	}
+
+	colLen := len(errPrefDto.ePrefCol)
+
+	if colLen == 0 {
+		return twoDStrArray, err
+	}
+
+	twoDStrArray = make([][2]string, colLen)
+
+	for i := 0; i < colLen; i++ {
+
+		twoDStrArray[i][0] =
+			errPrefDto.ePrefCol[i].errorPrefixStr
+
+		twoDStrArray[i][1] =
+			errPrefDto.ePrefCol[i].errorContextStr
+	}
+
+	return twoDStrArray, err
+}
+
 // setFromIBasicErrorPrefix - Receives an ErrPrefixDto object and
 // an empty interface. If that empty interface is convertible to
 // one of the 10-valid types listed below, this method then proceeds

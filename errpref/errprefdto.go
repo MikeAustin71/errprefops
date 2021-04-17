@@ -345,8 +345,14 @@ func (ePrefDto *ErrPrefixDto) CopyOutToIBuilder(
 
 	defer ePrefDto.lock.Unlock()
 
+	newTwoDSlice,
+		_ := errPrefixDtoMechanics{}.ptr().
+		getEPrefStrings(
+			ePrefDto,
+			"")
+
 	inComingIBuilder.SetEPrefStrings(
-		ePrefDto.GetEPrefStrings())
+		newTwoDSlice)
 }
 
 // CopyOut - Creates a deep copy of the data fields contained in
@@ -718,27 +724,11 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 
 	defer ePrefDto.lock.Unlock()
 
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol =
-			make([]ErrorPrefixInfo, 0)
-	}
-
-	colLen := len(ePrefDto.ePrefCol)
-
-	if colLen == 0 {
-		return nil
-	}
-
-	newTwoDSlice := make([][2]string, colLen)
-
-	for i := 0; i < colLen; i++ {
-
-		newTwoDSlice[i][0] =
-			ePrefDto.ePrefCol[i].errorPrefixStr
-
-		newTwoDSlice[i][1] =
-			ePrefDto.ePrefCol[i].errorContextStr
-	}
+	newTwoDSlice,
+		_ := errPrefixDtoMechanics{}.ptr().
+		getEPrefStrings(
+			ePrefDto,
+			"")
 
 	return newTwoDSlice
 }
