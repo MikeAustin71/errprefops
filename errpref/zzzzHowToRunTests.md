@@ -8,7 +8,7 @@ In addition, test file names always end in: **_test.go**
 
 ## Run Basic Tests
 Open a command prompt in this directory:
- *("MikeAustin71/errpref")*
+ ***MikeAustin71/errpref***
 
 and run the following command:
 
