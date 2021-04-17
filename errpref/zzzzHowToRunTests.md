@@ -50,5 +50,5 @@ browser. Run this on the command line:
   ***go tool cover -html=zzzzz_coverage.out***
 
 ## Output File Naming Convention
-The use of *zzzzz_* as a file name prefix for output files ensures
+The use of **zzzzz_** as a file name prefix for output files ensures
 that the output file will be listed last in the directory.
