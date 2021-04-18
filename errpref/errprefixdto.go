@@ -836,6 +836,62 @@ func (ePrefDto *ErrPrefixDto) IsValidInstance() bool {
 	return isValid
 }
 
+// IsValidInstanceError - Returns an error type signalling whether
+// the current ErrPrefixDto instance is valid, or not.
+//
+// If this method returns an error value NOT equal to 'nil', it
+// signals that the current ErrPrefixDto instance is invalid.
+//
+// If this method returns an error value which IS equal to 'nil',
+// it signals that the current ErrPrefixDto instance is valid in
+// all respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this returned error type is set equal to 'nil', it
+//       signals that the current ErrPrefixDto is valid in all
+//       respects.
+//
+//       If this returned error type is NOT equal to 'nil', it
+//       signals that the current ErrPrefixDto is invalid.
+//
+func (ePrefDto *ErrPrefixDto) IsValidInstanceError(
+	ePrefix string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefix += "ErrPrefixDto.IsValidInstanceError()\n"
+
+	_,
+		err := errPrefixDtoQuark{}.ptr().
+		testValidityOfErrPrefixDto(
+			ePrefDto,
+			"")
+
+	return err
+}
+
 // MergeErrPrefixDto - Receives a pointer to another ErrPrefixDto
 // object and proceeds to add the error prefix collection to that
 // of the current ErrPrefixDto instance.
