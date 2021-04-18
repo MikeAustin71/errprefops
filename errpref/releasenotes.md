@@ -41,6 +41,10 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 7. Added new method ErrPrefixDto.SetIBuilder(). Like ErrPrefixDto.CopyInFromIBuilder(), this method takes an object implementing the IBuilderErrorPrefix interface and copies its error prefix and context information into the current instance of ErrPrefixDto.  This method is used to facilitate the exchange of error prefix information with custom user developed types. This method is used to facilitate the exchange of error prefix information with custom user developed types.
 
+8. Added new method ErrPrefixDto.IsValidInstanceError(). Returns an error if the current ErrPrefixDto instance is invalid.
+
+9. Added new method ErrPrefixDto.IsValidInstance(). Returns a boolean flag indicating whether the current ErrPrefixDto instance is valid.
+
    
 
 ##### ErrPref
