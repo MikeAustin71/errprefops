@@ -530,6 +530,47 @@ func (ePrefDto *ErrPrefixDto) GetDelimiters() ErrPrefixDelimiters {
 		ptr().getDelimiters()
 }
 
+// GetInputStringDelimiters - Returns the input string delimiters
+// configured for the current instance of ErrPrefixDto.
+//
+// Input string delimiters are applied the current ErrPrefixDto
+// instance receives and parses raw strings containing error prefix
+// information. Such strings are parsed before extracting error
+// prefix information for internal storage in the error prefix
+// collection maintained by the current ErrPrefixDto instance.
+//
+// If input string delimiters were not directly configured by the
+// user, the default input string delimiters will be applied.
+//
+// The default input string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+// To set and control input string delimiters use method:
+//    ErrPrefixDto.SetInputStringDelimiters()
+//
+func (ePrefDto *ErrPrefixDto) GetInputStringDelimiters() ErrPrefixDelimiters {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	inputDelims,
+		_ :=
+		ePrefDto.inputStrDelimiters.CopyOut("")
+
+	return inputDelims
+}
+
 // GetIsLastLineTerminatedWithNewLine - Returns the boolean flag
 // which determines whether the last line of error prefix strings
 // returned by this ErrPrefixDto instance will be terminated with
@@ -776,6 +817,50 @@ func (ePrefDto *ErrPrefixDto) GetMaxTextLineLen() uint {
 	}
 
 	return ePrefDto.maxErrPrefixTextLineLength
+}
+
+// GetOutputStringDelimiters - Returns the output string delimiters
+// configured for the current instance of ErrPrefixDto.
+//
+// The output string delimiters are used to format error prefix and
+// context information returned as strings by methods:
+//   ErrPrefixDto.String()
+//   ErrPrefixDto.StrMaxLineLen()
+//
+// Error prefix and context elements in these formatted, returned
+// strings are separated by these output string delimiters.
+//
+// If output string delimiters were not directly configured by the
+// user, the default output string delimiters will be applied.
+//
+// The default output string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+//
+// To set and control output string delimiters use method:
+//    ErrPrefixDto.SetOutputStringDelimiters()
+//
+func (ePrefDto *ErrPrefixDto) GetOutputStringDelimiters() ErrPrefixDelimiters {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	outputDelims,
+		_ :=
+		ePrefDto.outputStrDelimiters.CopyOut("")
+
+	return outputDelims
 }
 
 // GetTurnOffTextDisplay - Returns the current value of the
@@ -2305,6 +2390,60 @@ func (ePrefDto *ErrPrefixDto) SetIEmpty(
 	return err
 }
 
+// SetInputStringDelimiters - Sets the string delimiters used by
+// the current ErrPrefixDto when receiving and parsing raw strings
+// containing error prefix information. Such strings are parsed
+// before extracting error prefix information to be stored in the
+// error prefix collection maintained by the current ErrPrefixDto
+// instance.
+//
+// If input string delimiters were not directly configured by the
+// user, the default input string delimiters will be applied.
+//
+// The default input string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+//
+// To monitor input string delimiters, use method:
+//    ErrPrefixDto.GetInputStringDelimiters()
+//
+// To set and control output string delimiters, use method:
+//    ErrPrefixDto.SetOutputStringDelimiters()
+//
+func (ePrefDto *ErrPrefixDto) SetInputStringDelimiters(
+	inputStrDelimiters ErrPrefixDelimiters,
+	ePrefix string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefix += " ErrPrefixDto.SetInputStringDelimiters() "
+
+	err := inputStrDelimiters.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	err =
+		ePrefDto.inputStrDelimiters.
+			CopyIn(
+				&inputStrDelimiters,
+				ePrefix)
+
+	return err
+}
+
 // SetIsLastLineTermWithNewLine - By default, the last line of
 // error prefix strings returned by the method
 // ErrPrefixDto.String() ARE NOT terminated with a new line
@@ -2583,6 +2722,61 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLenToDefault() {
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 }
 
+// SetOutputStringDelimiters - Sets the string delimiters used by
+// the current ErrPrefixDto instance to format error prefix strings
+// returned by methods:
+//    ErrPrefixDto.String()
+//    ErrPrefixDto.StrMaxLineLen()
+//
+// If the input parameter, 'outputStrDelimiters', is invalid, this
+// method will return an error.
+//
+// If output string delimiters were not directly configured by the
+// user, the default output string delimiters will be applied.
+//
+// The default output string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+// To monitor output string delimiters, use method:
+//    ErrPrefixDto.GetOutputStringDelimiters()
+//
+// To set and control input string delimiters, use method:
+//    ErrPrefixDto.SetInputStringDelimiters()
+//
+func (ePrefDto *ErrPrefixDto) SetOutputStringDelimiters(
+	outputStrDelimiters ErrPrefixDelimiters,
+	ePrefix string) error {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefix += " ErrPrefixDto.SetOutputStringDelimiters() "
+
+	err := outputStrDelimiters.IsValidInstanceError(
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	err =
+		ePrefDto.outputStrDelimiters.
+			CopyIn(
+				&outputStrDelimiters,
+				ePrefix)
+
+	return err
+}
+
 // SetTurnOffTextDisplay - Controls the "Turn Off Text Display"
 // flag represented by internal member variable:
 //    ErrPrefixDto.turnOffTextDisplay
@@ -2641,6 +2835,23 @@ func (ePrefDto *ErrPrefixDto) SetTurnOffTextDisplay(
 // maximum line length is set to 40 with a left margin length of 3,
 // the effective maximum line length is 43.
 //
+// The error prefix and context information returned by this method
+// will be separated and formatted using previously configured
+// output string delimiters. If these output string delimiters were
+// not directly configured by the user, the default output string
+// delimiters will be used.
+//
+// The default output string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+// To set and control output string delimiters, use method:
+//    ErrPrefixDto.SetOutputStringDelimiters()
+//
+//
 func (ePrefDto ErrPrefixDto) String() string {
 
 	if ePrefDto.lock == nil {
@@ -2659,10 +2870,13 @@ func (ePrefDto ErrPrefixDto) String() string {
 	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	outPutStr := errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
 			ePrefDto.maxErrPrefixTextLineLength,
 			ePrefDto.isLastLineTerminatedWithNewLine,
+			ePrefDto.outputStrDelimiters,
 			ePrefDto.ePrefCol)
 
 	if ePrefDto.leftMarginLength > 0 {
@@ -2692,12 +2906,40 @@ func (ePrefDto ErrPrefixDto) String() string {
 // incorporating all error prefix and error context information
 // previously added to this ErrPrefixDto instance.
 //
-// Input parameter 'maxLineLen' is used to set the maximum line
-// length for text returned by this method. It does not alter the
-// maximum line length default value for this ErrPrefixDto instance.
-//
 // Error prefix information is stored internally in the 'ePrefCol'
 // array.
+//
+// Input parameter 'maxLineLen' is used to set the maximum line
+// length for text returned by this method. It does not alter the
+// maximum line length default value for this ErrPrefixDto
+// instance. It temporarily sets the maximum line length for this
+// single string formatting operation. To set the permanent
+// Maximum Text Line Length use method:
+//    ErrPrefixDto.SetMaxTextLineLen()
+//
+// If the "Turn Off Text Display Flag" is current set to 'true',
+// this method will return an empty string. The default value for
+// the "Turn Off Text Display Flag" is 'false'. To control the
+// "Turn Off Text Display Flag" use method:
+//    ErrPrefixDto.SetTurnOffTextDisplay()
+//
+// The error prefix string returned by this method will be
+// formatted using output string delimiters previously configured
+// for this instance of ErrPrefixDto.
+//
+// If output string delimiters were not directly configured by the
+// user and are currently invalid, the default output string
+// delimiters will be applied.
+//
+// The default output string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+// To set and control output string delimiters use method:
+//    ErrPrefixDto.SetOutputStringDelimiters()
 //
 func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 	maxLineLen int) string {
@@ -2717,21 +2959,21 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 			ePrefDto.maxErrPrefixTextLineLength
 	}
 
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
-
-	if len(ePrefDto.ePrefCol) == 0 {
+	if ePrefDto.turnOffTextDisplay ||
+		len(ePrefDto.ePrefCol) == 0 {
 		return ""
 	}
 
 	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	return errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
 			maxErrPrefixTextLineLength,
 			ePrefDto.isLastLineTerminatedWithNewLine,
+			ePrefDto.outputStrDelimiters,
 			ePrefDto.ePrefCol)
 }
 

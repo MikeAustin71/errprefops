@@ -419,7 +419,12 @@ Example Error: An Error Ocurred! Something bad.
 Like Divide by Zero!
 ```
 
-The Maximum Text Line Length is controlled using method, ***ErrPrefixDto.SetMaxTextLineLen()***.
+The Maximum Text Line Length is monitored and controlled using methods:
+
+-  ***ErrPrefixDto.SetMaxTextLineLen()***
+-  ***ErrPrefixDto.GetMaxTextLineLen()***
+
+Be advised that the minimum text line Length is 10-characters. Any attempt to set the Maximum Text Line Length to a value less than 10-characters will result in reinstatement of the default Maximum Text Line Length.
 
 This example error messages shown above were taken from the ***errpref*** example application, [errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).
 

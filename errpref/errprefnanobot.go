@@ -236,6 +236,7 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 	maxErrPrefixTextLineLength uint,
 	isLastLineTerminatedWithNewLine bool,
+	delimiters ErrPrefixDelimiters,
 	prefixContextCol []ErrorPrefixInfo) string {
 
 	if ePrefNanobot.lock == nil {
@@ -255,18 +256,22 @@ func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
 			"len(prefixContextCol)==0\n"
 	}
 
+	err := delimiters.IsValidInstanceError(
+		localErrPrefix)
+
+	if err != nil {
+		return err.Error()
+	}
+
 	if maxErrPrefixTextLineLength == 0 {
 		maxErrPrefixTextLineLength =
 			errPrefQuark{}.ptr().
 				getErrPrefDisplayLineLength()
 	}
 
-	delimiters := errPrefElectron{}.
-		ptr().getDelimiters()
-
 	lineLenCalculator := EPrefixLineLenCalc{}
 
-	err :=
+	err =
 		lineLenCalculator.SetEPrefDelimiters(
 			delimiters,
 			localErrPrefix)

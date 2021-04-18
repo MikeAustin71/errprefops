@@ -878,6 +878,13 @@ func (ePrefDelims ErrPrefixDelimiters) String() string {
 // SetToDefault - Sets the values of the current
 // ErrPrefixDelimiters instance to those of the system defaults.
 //
+// The default output string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
 func (ePrefDelims *ErrPrefixDelimiters) SetToDefault() {
 
 	if ePrefDelims.lock == nil {
@@ -897,6 +904,13 @@ func (ePrefDelims *ErrPrefixDelimiters) SetToDefault() {
 // SetToDefaultIfEmpty - Sets the values of the current
 // ErrPrefixDelimiters instance to those of the system defaults if
 // the current instance is empty or invalid.
+//
+// The default output string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
 //
 func (ePrefDelims *ErrPrefixDelimiters) SetToDefaultIfEmpty() {
 
