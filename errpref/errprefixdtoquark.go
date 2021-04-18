@@ -146,9 +146,12 @@ func (ePrefDtoQuark *errPrefixDtoQuark) testValidityOfErrPrefixDto(
 	// Minimum length is 10-characters
 	if ePrefixDto.maxErrPrefixTextLineLength < 10 {
 
-		ePrefixDto.maxErrPrefixTextLineLength =
-			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+		err = fmt.Errorf("%v\n"+
+			"Error: Maximum Text Line Length is less than 10-Characters!\n"+
+			"Maximum Text Line Length='%v'\n",
+			ePrefixDto.maxErrPrefixTextLineLength)
 
+		return isValid, err
 	}
 
 	isValid = true
