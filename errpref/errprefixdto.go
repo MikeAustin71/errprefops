@@ -2438,6 +2438,7 @@ func (ePrefDto *ErrPrefixDto) SetLeftMarginLength(
 // When this instance of ErrPrefixDto was initially created, a
 // default value of 40-characters was applied.
 //
+//
 // ----------------------------------------------------------------
 //
 // Input Parameters
@@ -2449,7 +2450,8 @@ func (ePrefDto *ErrPrefixDto) SetLeftMarginLength(
 //
 //       If 'maxErrPrefixTextLineLength' is set to a value less
 //       than ten (10) or to a value greater than one-million
-//       (1,000,000), this method will take no action and exit.
+//       (1,000,000), the default value of 40-characters will be
+//       applied.
 //
 //
 // -----------------------------------------------------------------
@@ -2470,8 +2472,11 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLen(
 
 	defer ePrefDto.lock.Unlock()
 
-	if maxErrPrefixTextLineLength < 10 ||
-		maxErrPrefixTextLineLength > 1000000 {
+	if maxErrPrefixTextLineLength < 10 {
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
 		return
 	}
 
@@ -2498,6 +2503,21 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLenToDefault() {
 
 	ePrefDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+}
+
+func (ePrefDto *ErrPrefixDto) SetTurnOffTextDisplay(
+	turnOffTextDisplay bool) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.turnOffTextDisplay =
+		turnOffTextDisplay
 }
 
 // String - Returns a formatted error prefix/context string
