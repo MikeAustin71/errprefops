@@ -430,19 +430,10 @@ func (ePrefDto *ErrPrefixDto) Empty() {
 
 	ePrefDto.lock.Lock()
 
-	ePrefDto.leftMarginLength = 0
-
-	ePrefDto.leftMarginChar = 0
-
-	ePrefDto.isLastLineTerminatedWithNewLine = false
-
-	ePrefDto.turnOffTextDisplay = false
-
-	ePrefDto.maxErrPrefixTextLineLength = 0
-
-	_ = errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
-		ePrefDto,
-		"")
+	_ = errPrefixDtoElectron{}.ptr().
+		emptyErrorPrefixDto(
+			ePrefDto,
+			"")
 
 	ePrefDto.lock.Unlock()
 
