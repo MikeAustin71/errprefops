@@ -2505,6 +2505,23 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLenToDefault() {
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 }
 
+// SetTurnOffTextDisplay - Controls the "Turn Off Text Display"
+// flag represented by internal member variable:
+//    ErrPrefixDto.turnOffTextDisplay
+//
+// If this flag (input parameter 'turnOffTextDisplay') is set to
+// 'true', this instance of ErrPrefixDto WILL NOT format and return
+// error prefix and context information through method,
+// ErrPrefixDto.String(). In this case, the method
+// ErrPrefixDto.String() will instead return an empty string.
+//
+// Conversely, if this flag ('turnOffTextDisplay') is set to
+// 'false' formatted error prefix and context WILL BE formatted and
+// returned through method ErrPrefixDto.String().
+//
+// To monitor the status of the "Turn Off Text Display" flag, see
+// method ErrPrefixDto.GetTurnOffTextDisplay().
+//
 func (ePrefDto *ErrPrefixDto) SetTurnOffTextDisplay(
 	turnOffTextDisplay bool) {
 
