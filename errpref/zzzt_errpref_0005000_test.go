@@ -2,6 +2,7 @@ package errpref
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -437,7 +438,7 @@ func (tFuncCharlie06 *testFuncCharlie06) Tx6DoSpaceStuff(
 		ePrefix.String())
 }
 
-func TestErrPrefixDto_CallSeries01_000100(t *testing.T) {
+func TestErrPrefixDto_CallSeries_000100(t *testing.T) {
 
 	funcName := "StartingMethod()"
 	twoDAry := make([][2]string, 7)
@@ -568,45 +569,9 @@ func TestErrPrefixDto_CallSeries01_000100(t *testing.T) {
 
 }
 
-func TestErrPrefixDto_CallSeries01_000200(t *testing.T) {
+func TestErrPrefixDto_CallSeries_000200(t *testing.T) {
 
 	funcName := "StartingMethod()"
-	twoDAry := make([][2]string, 7)
-
-	twoDAry[0][0] = funcName
-	twoDAry[0][1] = ""
-
-	twoDAry[1][0] = "testFuncCharlie01.Tx1DoStuff()"
-	twoDAry[1][1] = "X->Y"
-
-	twoDAry[2][0] = "testFuncCharlie02.Tx2DoMoreStuff()"
-	twoDAry[2][1] = "B->C"
-
-	twoDAry[3][0] = "testFuncCharlie03.Tx3DoLessStuff()"
-	twoDAry[3][1] = ""
-
-	twoDAry[4][0] = "testFuncCharlie04.Tx4DoFunStuff()"
-	twoDAry[4][1] = ""
-
-	twoDAry[5][0] = "testFuncCharlie05.Tx5DoExcitingStuff()"
-	twoDAry[5][1] = "X*Y"
-
-	twoDAry[6][0] = "testFuncCharlie06.Tx6DoSpaceStuff()"
-	twoDAry[6][1] = "Asteroid Collision!"
-
-	ePDtoBaseLine,
-		err := ErrPrefixDto{}.NewIEmpty(
-		twoDAry,
-		"",
-		"")
-
-	if err != nil {
-		t.Errorf("Error from  ErrPrefixDto{}.NewIEmpty()\n"+
-			"%v\n", err.Error())
-		return
-	}
-
-	ePDtoBaseLine.SetMaxTextLineLen(40)
 
 	ePDto1 := new(ErrPrefixDto)
 
@@ -614,9 +579,21 @@ func TestErrPrefixDto_CallSeries01_000200(t *testing.T) {
 
 	ePDto1.SetMaxTextLineLen(40)
 
+	turnOffTextDisplay := ePDto1.GetTurnOffTextDisplay()
+
+	if turnOffTextDisplay == true {
+
+		t.Error("ERROR:\n" +
+			"Expected turnOffTextDisplay == false\n" +
+			"Instead, turnOffTextDisplay == true\n")
+
+		return
+
+	}
+
 	tFuncAlpha01 := testFuncAlpha01{}
 
-	err =
+	err :=
 		tFuncAlpha01.Tx1DoSomething(ePDto1)
 
 	if err != nil {
@@ -653,48 +630,120 @@ func TestErrPrefixDto_CallSeries01_000200(t *testing.T) {
 		return
 	}
 
-	if ePDto1.String() != funcName {
-		t.Errorf("Error: Expected ePDto1.String() != funcName\n"+
-			"Instead:\n"+
-			"ePDto1.String()='%v'\n"+
-			"funcName='%v'\n\n",
-			ePDto1.String(),
-			funcName)
+	turnOffTextDisplay = ePDto1.GetTurnOffTextDisplay()
+
+	if turnOffTextDisplay == true {
+
+		t.Error("ERROR:\n" +
+			"Expected turnOffTextDisplay == false\n" +
+			"Instead, turnOffTextDisplay == true\n")
+
 		return
+
 	}
 
-	var ePDtoFinal *ErrPrefixDto
+	ePDtoErrStr := err2.Error()
 
-	ePDtoFinal,
-		err = ErrPrefixDto{}.NewIEmpty(
-		err2.Error(),
-		"",
-		"")
+	if !strings.Contains(ePDtoErrStr, funcName) {
+		t.Error("ERROR: turnOffTextDisplay == false\n" +
+			"HOWEVER, NO ERROR PREFIX INFO WAS RETURNED!\n")
+	}
+
+}
+
+func TestErrPrefixDto_CallSeries_000300(t *testing.T) {
+
+	funcName := "StartingMethod()"
+
+	ePDto1 := new(ErrPrefixDto)
+
+	ePDto1.SetEPref(funcName)
+
+	ePDto1.SetMaxTextLineLen(40)
+
+	turnOffTextDisplay := ePDto1.GetTurnOffTextDisplay()
+
+	if turnOffTextDisplay == true {
+
+		t.Error("ERROR:\n" +
+			"Expected turnOffTextDisplay == false\n" +
+			"Instead, turnOffTextDisplay == true\n")
+
+		return
+
+	}
+
+	tFuncAlpha01 := testFuncAlpha01{}
+
+	err :=
+		tFuncAlpha01.Tx1DoSomething(ePDto1)
 
 	if err != nil {
 		t.Errorf("Unexpected error return from\n"+
-			"ErrPrefixDto{}.NewIEmpty(err.Error())\n"+
+			"tFuncAlpha01.Tx1DoSomething(ePDto1)\n"+
 			"%v\n", err.Error())
 
 		return
 	}
 
-	ePDtoFinal.SetMaxTextLineLen(40)
+	tFuncBravo01 := testFuncBravo01{}
 
-	ePDtoBaseLineStr := ErrPref{}.ConvertNonPrintableChars(
-		[]rune(ePDtoBaseLine.String()),
-		false)
+	err =
+		tFuncBravo01.Tx1DoSomethingSpecial(ePDto1)
 
-	ePDtoFinalStr := ErrPref{}.ConvertNonPrintableChars(
-		[]rune(ePDtoFinal.String()),
-		false)
+	if err != nil {
+		t.Errorf("Unexpected error return from\n"+
+			"tFuncBravo01.Tx1DoSomethingSpecial(ePDto1)\n"+
+			"%v\n", err.Error())
 
-	if ePDtoBaseLineStr != ePDtoFinalStr {
-		t.Errorf("Error: ePDtoBaseLineStr != ePDtoFinalStr\n"+
-			"ePDtoBaseLineStr=\n%v\n\n"+
-			"ePDtoFinalStr=\n%v\n\n",
-			ePDtoBaseLineStr,
-			ePDtoFinalStr)
+		return
+	}
+
+	ePDto1.SetTurnOffTextDisplay(true)
+
+	turnOffTextDisplay = ePDto1.GetTurnOffTextDisplay()
+
+	if turnOffTextDisplay == false {
+
+		t.Error("ERROR:\n" +
+			"Attempted to turn off text display. Attempt FAILED!\n" +
+			"Expected turnOffTextDisplay == true\n" +
+			"Instead, turnOffTextDisplay == false\n")
+
+		return
+
+	}
+
+	tFuncCharlie01 := testFuncCharlie01{}
+
+	err2 :=
+		tFuncCharlie01.Tx1DoStuff(ePDto1)
+
+	if err2 == nil {
+		t.Error("Expected error return from\n" +
+			"tFuncCharlie01.Tx1DoStuff(ePDto1)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+
+		return
+	}
+
+	turnOffTextDisplay = ePDto1.GetTurnOffTextDisplay()
+
+	if turnOffTextDisplay == false {
+
+		t.Error("ERROR: turnOffTextDisplay verification.\n" +
+			"Expected turnOffTextDisplay == true\n" +
+			"Instead, turnOffTextDisplay == false\n")
+
+		return
+
+	}
+
+	ePDtoErrStr := err2.Error()
+
+	if strings.Contains(ePDtoErrStr, funcName) {
+		t.Error("ERROR: turnOffTextDisplay == true\n" +
+			"HOWEVER, ERROR PREFIX INFO WAS RETURNED!\n")
 	}
 
 }
