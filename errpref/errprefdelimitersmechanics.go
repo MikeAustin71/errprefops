@@ -103,7 +103,7 @@ func (ePrefDelimitersMech errPrefixDelimitersMechanics) ptr() *errPrefixDelimite
 //       'ePrefix' will be prefixed and attached to the beginning
 //       of the error message.
 //
-func (ePrefDelimitersMech errPrefixDelimitersMechanics) setErrPrefDelimiters(
+func (ePrefDelimitersMech *errPrefixDelimitersMechanics) setErrPrefDelimiters(
 	ePrefDelimiters *ErrPrefixDelimiters,
 	newLinePrefixDelimiters string,
 	inLinePrefixDelimiters string,
@@ -187,6 +187,64 @@ func (ePrefDelimitersMech errPrefixDelimitersMechanics) setErrPrefDelimiters(
 
 	ePrefDelimiters.newLineContextDelimiter =
 		newLineContextDelimiters
+
+	ePrefDelimiters.lenNewLineContextDelimiter =
+		uint(len(ePrefDelimiters.newLineContextDelimiter))
+
+	return err
+}
+
+// setToDefault - Receives a pointer to an instance of
+// ErrPrefixDelimiters and proceeds to set the data values for this
+// instance to those of the system default.
+//
+func (ePrefDelimitersMech *errPrefixDelimitersMechanics) setToDefault(
+	ePrefDelimiters *ErrPrefixDelimiters,
+	ePrefix string) (
+	err error) {
+
+	if ePrefDelimitersMech.lock == nil {
+		ePrefDelimitersMech.lock = new(sync.Mutex)
+	}
+
+	ePrefDelimitersMech.lock.Lock()
+
+	defer ePrefDelimitersMech.lock.Unlock()
+
+	ePrefix += "\nerrPrefixDelimitersMechanics.setToDefault() "
+
+	if ePrefDelimiters == nil {
+		err = fmt.Errorf("%v\n"+
+			"Input parameter 'ePrefDelimiters' is INVALID!\n"+
+			"'ePrefDelimiters' is a nil pointer!\n",
+			ePrefix)
+
+		return err
+	}
+
+	delimiters :=
+		errPrefElectron{}.ptr().getDelimiters()
+
+	ePrefDelimiters.inLinePrefixDelimiter =
+		delimiters.inLinePrefixDelimiter
+
+	ePrefDelimiters.lenInLinePrefixDelimiter =
+		uint(len(ePrefDelimiters.inLinePrefixDelimiter))
+
+	ePrefDelimiters.newLinePrefixDelimiter =
+		delimiters.newLinePrefixDelimiter
+
+	ePrefDelimiters.lenNewLinePrefixDelimiter =
+		uint(len(ePrefDelimiters.newLinePrefixDelimiter))
+
+	ePrefDelimiters.inLineContextDelimiter =
+		delimiters.inLineContextDelimiter
+
+	ePrefDelimiters.lenInLineContextDelimiter =
+		uint(len(ePrefDelimiters.inLineContextDelimiter))
+
+	ePrefDelimiters.newLineContextDelimiter =
+		delimiters.newLineContextDelimiter
 
 	ePrefDelimiters.lenNewLineContextDelimiter =
 		uint(len(ePrefDelimiters.newLineContextDelimiter))

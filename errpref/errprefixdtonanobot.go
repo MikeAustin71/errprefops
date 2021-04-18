@@ -367,8 +367,13 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromString(
 
 	ePrefAtom := errPrefixDtoAtom{}
 
+	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	ePrefAtom.getEPrefContextArray(
 		iEPref,
+		errPrefDto.inputStrDelimiters,
 		&errPrefDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(
@@ -481,8 +486,13 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
 
 	ePrefAtom := errPrefixDtoAtom{}
 
+	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	ePrefAtom.getEPrefContextArray(
 		strVal,
+		errPrefDto.inputStrDelimiters,
 		&errPrefDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(

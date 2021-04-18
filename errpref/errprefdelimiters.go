@@ -874,3 +874,53 @@ func (ePrefDelims ErrPrefixDelimiters) String() string {
 
 	return str
 }
+
+// SetToDefault - Sets the values of the current
+// ErrPrefixDelimiters instance to those of the system defaults.
+//
+func (ePrefDelims *ErrPrefixDelimiters) SetToDefault() {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	_ = errPrefixDelimitersMechanics{}.ptr().
+		setToDefault(
+			ePrefDelims,
+			"")
+}
+
+// SetToDefaultIfEmpty - Sets the values of the current
+// ErrPrefixDelimiters instance to those of the system defaults if
+// the current instance is empty or invalid.
+//
+func (ePrefDelims *ErrPrefixDelimiters) SetToDefaultIfEmpty() {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	isValid,
+		_ := errPrefixDelimitersQuark{}.ptr().
+		testValidityOfErrPrefixDelimiters(
+			ePrefDelims,
+			"")
+
+	if isValid {
+		return
+	}
+
+	_ = errPrefixDelimitersMechanics{}.ptr().
+		setToDefault(
+			ePrefDelims,
+			"")
+
+}

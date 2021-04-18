@@ -148,6 +148,12 @@ func (ePrefNanobot *errPrefNanobot) deleteLastErrContext(
 	return
 }
 
+// extractLastErrPrfInfo - Extracts the last error prefix element
+// from a string comprised of a series of error prefix elements.
+//
+// This method applies system default string delimiters when
+// parsing error prefix strings.
+//
 func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 	errPref string) ErrorPrefixInfo {
 
@@ -161,9 +167,13 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0)
 
+	delimiters :=
+		errPrefElectron{}.ptr().getDelimiters()
+
 	errPrefixDtoAtom{}.
 		ptr().getEPrefContextArray(
 		errPref,
+		delimiters,
 		&prefixContextCol)
 
 	lenCollection := len(prefixContextCol)

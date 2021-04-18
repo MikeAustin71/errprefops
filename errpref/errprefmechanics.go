@@ -12,6 +12,8 @@ type errPrefMechanics struct {
 // prefix string from a previous error prefix, a new error prefix
 // and the new error context.
 //
+// This method applies default string delimiters when parsing error
+// prefix strings.
 //
 // ----------------------------------------------------------------
 //
@@ -98,8 +100,12 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 	if lenOldErrPrefCleanStr > 0 {
 
+		delimiters :=
+			errPrefElectron{}.ptr().getDelimiters()
+
 		errPrefixDtoAtom{}.ptr().getEPrefContextArray(
 			oldErrPrefix,
+			delimiters,
 			&prefixContextCol)
 
 		lenPrefixContextCol = len(prefixContextCol)
@@ -129,7 +135,11 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 		prefixContextCol)
 }
 
-// formatErrPrefix - Returns a string of formatted error prefix information
+// formatErrPrefix - Returns a string of formatted error prefix information.
+//
+// This method applies system default string delimiters when formatting
+// error prefix strings.
+//
 func (ePrefMech *errPrefMechanics) formatErrPrefix(
 	maxErrStringLength uint,
 	errPrefix string) string {
@@ -152,8 +162,12 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 
 	ePrefAtom := errPrefixDtoAtom{}
 
+	delimiters :=
+		errPrefElectron{}.ptr().getDelimiters()
+
 	ePrefAtom.getEPrefContextArray(
 		errPrefix,
+		delimiters,
 		&prefixContextCol)
 
 	lenPrefixContextCol := len(prefixContextCol)
@@ -224,6 +238,11 @@ func (ePrefMech errPrefMechanics) ptr() *errPrefMechanics {
 	return &errPrefMechanics{}
 }
 
+// setErrorContext - Parses strings to generated formatted
+// error prefix and context information.
+//
+// This method applies system default string delimiters
+// when parsing error prefix and context strings.
 func (ePrefMech *errPrefMechanics) setErrorContext(
 	oldErrPref string,
 	newErrContext string,
@@ -268,8 +287,12 @@ func (ePrefMech *errPrefMechanics) setErrorContext(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0)
 
+	delimiters :=
+		errPrefElectron{}.ptr().getDelimiters()
+
 	errPrefixDtoAtom{}.ptr().getEPrefContextArray(
 		oldErrPref,
+		delimiters,
 		&prefixContextCol)
 
 	lenPrefixContextCol = len(prefixContextCol)

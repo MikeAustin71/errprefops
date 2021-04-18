@@ -31,6 +31,8 @@ type ErrPrefixDto struct {
 	leftMarginChar                  rune
 	isLastLineTerminatedWithNewLine bool
 	turnOffTextDisplay              bool
+	inputStrDelimiters              ErrPrefixDelimiters
+	outputStrDelimiters             ErrPrefixDelimiters
 	maxErrPrefixTextLineLength      uint
 	lock                            *sync.Mutex
 }
@@ -130,6 +132,7 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 
 	errPrefixDtoAtom{}.ptr().getEPrefContextArray(
 		errorPrefixCollectionStr,
+		ePrefDto.inputStrDelimiters,
 		&ePrefDto.ePrefCol)
 
 	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
@@ -960,7 +963,7 @@ func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 }
 
 // New - Returns a new and properly initialized instance of
-// ErrPrefixDto.
+// ErrPrefixDto. String delimiters are set to the system defaults.
 //
 //
 // ----------------------------------------------------------------
@@ -995,10 +998,14 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	newErrPrefixDto.ePrefCol = nil
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	return newErrPrefixDto
 }
@@ -1019,6 +1026,8 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 // associated error prefix string. Typical context information
 // might include variable names, variable values and additional
 // details on function execution.
+//
+// String delimiters are set to the system defaults.
 //
 //
 // ----------------------------------------------------------------
@@ -1068,10 +1077,14 @@ func (ePrefDto ErrPrefixDto) NewEPrefCtx(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	newErrPrefixDto.ePrefCol = nil
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
@@ -1104,6 +1117,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefCtx(
 // strings passed through input parameter, 'oldErrPrefix'. If
 // only one error prefix string is available, consider using
 // method 'ErrPrefixDto.NewEPrefCtx()'.
+//
+// String delimiters are set to the system defaults.
 //
 //
 // ----------------------------------------------------------------
@@ -1154,15 +1169,20 @@ func (ePrefDto ErrPrefixDto) NewEPrefOld(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	newErrPrefixDto.ePrefCol = nil
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
+		newErrPrefixDto.inputStrDelimiters,
 		&newErrPrefixDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(
@@ -1180,6 +1200,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefOld(
 // Upon completion this method returns an integer value identifying
 // the number of error prefix elements successfully parsed and
 // stored for future use.
+//
+// String delimiters are set to the system defaults.
 //
 //
 // ----------------------------------------------------------------
@@ -1229,10 +1251,14 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	newErrPrefixDto.ePrefCol = nil
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	_ = errPrefixDtoNanobot{}.ptr().setFromString(
 		&newErrPrefixDto,
@@ -1252,6 +1278,9 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 // If the IErrorPrefix ErrorPrefixInfo collection is empty, this
 // method will return an empty instance of ErrPrefixDto.
 //
+// String delimiters are set to the system defaults.
+//
+//
 // ----------------------------------------------------------------
 //
 // Input Parameters
@@ -1261,7 +1290,6 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 //       Information extracted from this object will be used to
 //       replicate error prefix information in a new instance of
 //       ErrPrefixDto.
-//
 //
 //
 // -----------------------------------------------------------------
@@ -1288,10 +1316,14 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 
 	newErrPrefixDto.lock = new(sync.Mutex)
 
-	newErrPrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	newErrPrefixDto.ePrefCol = nil
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	var oldErrPrefStr string
 
@@ -1309,6 +1341,8 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 // NewIBasicErrorPrefix - Receives an object which implements
 // the IBasicErrorPrefix interface and returns a new, populated
 // instance of ErrPrefixDto.
+//
+// String delimiters are set to the system defaults.
 //
 //
 // ----------------------------------------------------------------
@@ -1401,6 +1435,12 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
+	newErrPrefixDto.ePrefCol = nil
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
+
 	methodName := newErrPrefix +
 		"\nErrPrefixDto.NewIBasicErrorPrefix()"
 
@@ -1433,6 +1473,8 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 // is convertible to one of the 10-valid types listed below, this
 // method then proceeds to create and return a pointer to a new
 // instance of ErrPrefixDto.
+//
+// String delimiters are set to the system defaults.
 //
 //
 // ----------------------------------------------------------------
@@ -1562,6 +1604,12 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.ePrefCol = nil
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	methodName := newErrPrefix +
 		"\nErrPrefixDto.NewIEmpty()"
@@ -2001,12 +2049,20 @@ func (ePrefDto *ErrPrefixDto) SetEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	_ = errPrefixDtoQuark{}.ptr().
+		emptyErrPrefInfoCollection(
+			ePrefDto,
+			"")
+
+	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
+		ePrefDto.inputStrDelimiters,
 		&ePrefDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(
@@ -3018,10 +3074,15 @@ func (ePrefDto *ErrPrefixDto) XEPrefOld(
 
 	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
+	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
+		ePrefDto.inputStrDelimiters,
 		&ePrefDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(
@@ -3424,12 +3485,19 @@ func (ePrefDto *ErrPrefixDto) ZEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
+	_ = errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
+		ePrefDto,
+		"")
 
 	ePrefAtom := errPrefixDtoAtom{}
 
+	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
+		ePrefDto.inputStrDelimiters,
 		&ePrefDto.ePrefCol)
 
 	ePrefAtom.setFlagsErrorPrefixInfoArray(

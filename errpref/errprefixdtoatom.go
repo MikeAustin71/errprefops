@@ -10,18 +10,18 @@ type errPrefixDtoAtom struct {
 	lock *sync.Mutex
 }
 
-func (ePrefAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
+func (ePrefixDtoAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
 	errPrefixDto *ErrPrefixDto,
 	twoDStrArray [][2]string,
 	errPrefStr string) error {
 
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
 	}
 
-	ePrefAtom.lock.Lock()
+	ePrefixDtoAtom.lock.Lock()
 
-	defer ePrefAtom.lock.Unlock()
+	defer ePrefixDtoAtom.lock.Unlock()
 
 	errPrefStr = errPrefStr +
 		"\nerrPrefixDtoAtom." +
@@ -79,17 +79,17 @@ func (ePrefAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
 // If the data values for the two ErrPrefixDto objects ARE NOT
 // EQUAL, this method will return 'false'.
 //
-func (ePrefAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
+func (ePrefixDtoAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
 	errPrefixDto1 *ErrPrefixDto,
 	errPrefixDto2 *ErrPrefixDto) bool {
 
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
 	}
 
-	ePrefAtom.lock.Lock()
+	ePrefixDtoAtom.lock.Lock()
 
-	defer ePrefAtom.lock.Unlock()
+	defer ePrefixDtoAtom.lock.Unlock()
 
 	if errPrefixDto1 == nil ||
 		errPrefixDto2 == nil {
@@ -214,18 +214,18 @@ func (ePrefAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
 //       Note that this error message will incorporate the method
 //       chain and text passed by input parameter, 'eMsg'.
 //
-func (ePrefAtom *errPrefixDtoAtom) copyInErrPrefDto(
+func (ePrefixDtoAtom *errPrefixDtoAtom) copyInErrPrefDto(
 	targetErrPrefixDto *ErrPrefixDto,
 	inComingErrPrefixDto *ErrPrefixDto,
 	eMsg string) error {
 
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
 	}
 
-	ePrefAtom.lock.Lock()
+	ePrefixDtoAtom.lock.Lock()
 
-	defer ePrefAtom.lock.Unlock()
+	defer ePrefixDtoAtom.lock.Unlock()
 
 	eMsg += "errPrefixDtoAtom.copyInErrPrefDto() "
 
@@ -349,19 +349,19 @@ func (ePrefAtom *errPrefixDtoAtom) copyInErrPrefDto(
 //       'eMsg' text will be prefixed to the beginning of the returned
 //       error message.
 //
-func (ePrefAtom *errPrefixDtoAtom) copyOutErrPrefDto(
+func (ePrefixDtoAtom *errPrefixDtoAtom) copyOutErrPrefDto(
 	ePrefixDto *ErrPrefixDto,
 	eMsg string) (
 	newEPrefixDto ErrPrefixDto,
 	err error) {
 
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
 	}
 
-	ePrefAtom.lock.Lock()
+	ePrefixDtoAtom.lock.Lock()
 
-	defer ePrefAtom.lock.Unlock()
+	defer ePrefixDtoAtom.lock.Unlock()
 
 	eMsg += "errPrefixDtoAtom.copyOutErrPrefDto() "
 
@@ -476,17 +476,18 @@ func (ePrefAtom *errPrefixDtoAtom) copyOutErrPrefDto(
 //
 //  --- NONE ---
 //
-func (ePrefAtom *errPrefixDtoAtom) getEPrefContextArray(
+func (ePrefixDtoAtom *errPrefixDtoAtom) getEPrefContextArray(
 	errPrefix string,
+	delimiters ErrPrefixDelimiters,
 	prefixContextCol *[]ErrorPrefixInfo) {
 
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
 	}
 
-	ePrefAtom.lock.Lock()
+	ePrefixDtoAtom.lock.Lock()
 
-	defer ePrefAtom.lock.Unlock()
+	defer ePrefixDtoAtom.lock.Unlock()
 
 	if *prefixContextCol == nil {
 		*prefixContextCol = make([]ErrorPrefixInfo, 0)
@@ -497,8 +498,6 @@ func (ePrefAtom *errPrefixDtoAtom) getEPrefContextArray(
 	}
 
 	ePrefElectron := errPrefElectron{}
-
-	delimiters := ePrefElectron.getDelimiters()
 
 	var lenCleanPrefixStr int
 
@@ -587,19 +586,35 @@ func (ePrefAtom *errPrefixDtoAtom) getEPrefContextArray(
 	return
 }
 
+// ptr() - Returns a pointer to a new instance of
+// errPrefixDtoAtom.
+//
+func (ePrefixDtoAtom errPrefixDtoAtom) ptr() *errPrefixDtoAtom {
+
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
+	}
+
+	ePrefixDtoAtom.lock.Lock()
+
+	defer ePrefixDtoAtom.lock.Unlock()
+
+	return &errPrefixDtoAtom{}
+}
+
 // setFlagsErrorPrefixInfoArray - Sets internal flags in an array
 // of ErrorPrefixInfo objects
 //
-func (ePrefAtom *errPrefixDtoAtom) setFlagsErrorPrefixInfoArray(
+func (ePrefixDtoAtom *errPrefixDtoAtom) setFlagsErrorPrefixInfoArray(
 	prefixContextCol []ErrorPrefixInfo) {
 
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
+	if ePrefixDtoAtom.lock == nil {
+		ePrefixDtoAtom.lock = new(sync.Mutex)
 	}
 
-	ePrefAtom.lock.Lock()
+	ePrefixDtoAtom.lock.Lock()
 
-	defer ePrefAtom.lock.Unlock()
+	defer ePrefixDtoAtom.lock.Unlock()
 
 	if prefixContextCol == nil {
 		prefixContextCol = make([]ErrorPrefixInfo, 0)
@@ -631,20 +646,4 @@ func (ePrefAtom *errPrefixDtoAtom) setFlagsErrorPrefixInfoArray(
 	}
 
 	return
-}
-
-// ptr() - Returns a pointer to a new instance of
-// errPrefixDtoAtom.
-//
-func (ePrefAtom errPrefixDtoAtom) ptr() *errPrefixDtoAtom {
-
-	if ePrefAtom.lock == nil {
-		ePrefAtom.lock = new(sync.Mutex)
-	}
-
-	ePrefAtom.lock.Lock()
-
-	defer ePrefAtom.lock.Unlock()
-
-	return &errPrefixDtoAtom{}
 }

@@ -149,8 +149,23 @@ func (ePrefDtoQuark *errPrefixDtoQuark) testValidityOfErrPrefixDto(
 		err = fmt.Errorf("%v\n"+
 			"Error: Maximum Text Line Length is less than 10-Characters!\n"+
 			"Maximum Text Line Length='%v'\n",
+			errPrefStr,
 			ePrefixDto.maxErrPrefixTextLineLength)
 
+		return isValid, err
+	}
+
+	err = ePrefixDto.inputStrDelimiters.
+		IsValidInstanceError(errPrefStr + " inputStrDelimiters ")
+
+	if err != nil {
+		return isValid, err
+	}
+
+	err = ePrefixDto.outputStrDelimiters.
+		IsValidInstanceError(errPrefStr + " outputStrDelimiters ")
+
+	if err != nil {
 		return isValid, err
 	}
 
