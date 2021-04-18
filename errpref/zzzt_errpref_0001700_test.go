@@ -41,7 +41,7 @@ func TestErrPrefixDelimiters_CopyIn_000100(t *testing.T) {
 		return
 	}
 
-	if !ePrefDelimsTwo.IsValidInstance(funcName) {
+	if !ePrefDelimsTwo.IsValidInstance() {
 		t.Error("ERROR: " +
 			"Expected ePrefDelimsTwo.IsValidInstance()=='true'\n" +
 			"Instead, ePrefDelimsTwo.IsValidInstance()=='false'\n")
@@ -250,7 +250,7 @@ func TestErrPrefixDelimiters_Empty_000100(t *testing.T) {
 		return
 	}
 
-	if !ePrefDelimsOne.IsValidInstance(funcName) {
+	if !ePrefDelimsOne.IsValidInstance() {
 		t.Error("ERROR: " +
 			"Expected ePrefDelimsOne.IsValidInstance()=='true'\n" +
 			"Instead, ePrefDelimsOne.IsValidInstance()=='false'\n")

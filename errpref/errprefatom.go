@@ -119,6 +119,11 @@ func (ePrefAtom *errPrefAtom) areEqualErrPrefDtos(
 		return false
 	}
 
+	if errPrefixDto1.turnOffTextDisplay !=
+		errPrefixDto2.turnOffTextDisplay {
+		return false
+	}
+
 	if errPrefixDto1.maxErrPrefixTextLineLength !=
 		errPrefixDto2.maxErrPrefixTextLineLength {
 		return false
@@ -257,6 +262,9 @@ func (ePrefAtom *errPrefAtom) copyInErrPrefDto(
 	targetErrPrefixDto.isLastLineTerminatedWithNewLine =
 		inComingErrPrefixDto.isLastLineTerminatedWithNewLine
 
+	targetErrPrefixDto.turnOffTextDisplay =
+		inComingErrPrefixDto.turnOffTextDisplay
+
 	if inComingErrPrefixDto.maxErrPrefixTextLineLength < 10 {
 
 		inComingErrPrefixDto.maxErrPrefixTextLineLength =
@@ -377,6 +385,9 @@ func (ePrefAtom *errPrefAtom) copyOutErrPrefDto(
 
 	newEPrefixDto.isLastLineTerminatedWithNewLine =
 		ePrefixDto.isLastLineTerminatedWithNewLine
+
+	newEPrefixDto.turnOffTextDisplay =
+		ePrefixDto.turnOffTextDisplay
 
 	if ePrefixDto.maxErrPrefixTextLineLength < 10 {
 

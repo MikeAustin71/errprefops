@@ -50,7 +50,7 @@ func (ePrefDtoNanobot errPrefixDtoNanobot) ptr() *errPrefixDtoNanobot {
 //
 //
 //  iEPref              IBuilderErrorPrefix
-//     - An object which implements the IBasicErrorPrefix
+//     - An object which implements the IBuilderErrorPrefix
 //       interface.
 //
 //       This interface contains a method named,
@@ -118,7 +118,14 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
 			methodName)
 	}
 
-	err := errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+	if iEPref == (IBuilderErrorPrefix)(nil) {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'iEPref' is invalid!\n"+
+			"'iEPref' has a nil value.\n",
+			methodName)
+	}
+
+	err := errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
 		errPrefDto,
 		methodName)
 
@@ -226,6 +233,13 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'iEPref' is invalid!\n"+
 			"'iEPref' is a 'nil' pointer.\n",
+			methodName)
+	}
+
+	if iEPref == (IBasicErrorPrefix)(nil) {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'iEPref' is invalid!\n"+
+			"'iEPref' has a nil value.\n",
 			methodName)
 	}
 

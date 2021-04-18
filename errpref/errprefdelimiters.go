@@ -402,8 +402,7 @@ func (ePrefDelims *ErrPrefixDelimiters) GetNewLinePrefixDelimiter() string {
 //       the current ErrPrefixDelimiters instance is valid in all
 //       respects.
 //
-func (ePrefDelims *ErrPrefixDelimiters) IsValidInstance(
-	ePrefix string) bool {
+func (ePrefDelims *ErrPrefixDelimiters) IsValidInstance() bool {
 
 	if ePrefDelims.lock == nil {
 		ePrefDelims.lock = new(sync.Mutex)
@@ -413,13 +412,11 @@ func (ePrefDelims *ErrPrefixDelimiters) IsValidInstance(
 
 	defer ePrefDelims.lock.Unlock()
 
-	ePrefix += "ErrPrefixDelimiters.IsValidInstance() "
-
 	isValid,
 		_ := errPrefixDelimitersQuark{}.ptr().
 		testValidityOfErrPrefixDelimiters(
 			ePrefDelims,
-			ePrefix)
+			"")
 
 	return isValid
 }

@@ -224,7 +224,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		originalDataIsGood = false
 	}
 
-	_ = errPrefQuark{}.ptr().
+	_ = errPrefixDtoQuark{}.ptr().
 		emptyErrPrefInfoCollection(
 			errPrefDto,
 			"")

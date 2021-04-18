@@ -231,10 +231,10 @@ func TestErrPrefixDto_CopyIn_000200(t *testing.T) {
 		return
 	}
 
-	if ePDto2.GetMaxErrPrefTextLineLength() != 40 {
-		t.Errorf("Error: After Copy expected GetMaxErrPrefTextLineLength=='40'.\n"+
-			"Instead, GetMaxErrPrefTextLineLength == %v\n",
-			ePDto2.GetMaxErrPrefTextLineLength())
+	if ePDto2.GetMaxTextLineLen() != 40 {
+		t.Errorf("Error: After Copy expected GetMaxTextLineLen=='40'.\n"+
+			"Instead, GetMaxTextLineLen == %v\n",
+			ePDto2.GetMaxTextLineLen())
 		return
 	}
 
@@ -385,10 +385,10 @@ func TestErrPrefixDto_CopyOut_000200(t *testing.T) {
 		return
 	}
 
-	if ePDto2.GetMaxErrPrefTextLineLength() != 40 {
-		t.Errorf("Error: After Copy expected GetMaxErrPrefTextLineLength=='40'.\n"+
-			"Instead, GetMaxErrPrefTextLineLength == %v\n",
-			ePDto2.GetMaxErrPrefTextLineLength())
+	if ePDto2.GetMaxTextLineLen() != 40 {
+		t.Errorf("Error: After Copy expected GetMaxTextLineLen=='40'.\n"+
+			"Instead, GetMaxTextLineLen == %v\n",
+			ePDto2.GetMaxTextLineLen())
 		return
 	}
 

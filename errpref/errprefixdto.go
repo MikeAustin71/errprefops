@@ -436,9 +436,11 @@ func (ePrefDto *ErrPrefixDto) Empty() {
 
 	ePrefDto.isLastLineTerminatedWithNewLine = false
 
+	ePrefDto.turnOffTextDisplay = false
+
 	ePrefDto.maxErrPrefixTextLineLength = 0
 
-	_ = errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+	_ = errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
 		ePrefDto,
 		"")
 
@@ -468,7 +470,7 @@ func (ePrefDto *ErrPrefixDto) EmptyEPrefCollection() {
 
 	defer ePrefDto.lock.Unlock()
 
-	_ = errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+	_ = errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
 		ePrefDto,
 		"")
 }
@@ -734,7 +736,7 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 	return newTwoDSlice
 }
 
-// GetMaxErrPrefTextLineLength - Returns the maximum limit on the
+// GetMaxTextLineLen - Returns the maximum limit on the
 // number of characters allowed in an error prefix text line output
 // for display purposes.
 //
@@ -762,7 +764,7 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 //       output for display purposes.
 //
 //
-func (ePrefDto *ErrPrefixDto) GetMaxErrPrefTextLineLength() uint {
+func (ePrefDto *ErrPrefixDto) GetMaxTextLineLen() uint {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -780,6 +782,58 @@ func (ePrefDto *ErrPrefixDto) GetMaxErrPrefTextLineLength() uint {
 	}
 
 	return ePrefDto.maxErrPrefixTextLineLength
+}
+
+// IsValidInstance - Returns a boolean flag signalling whether the
+// current ErrPrefixDto instance is valid, or not.
+//
+// If this method returns a boolean value of 'false', it signals
+// that the current ErrPrefixDto instance is invalid.
+//
+// If this method returns a boolean value of 'true', it signals
+// that the current ErrPrefixDto instance is valid in all
+// respects.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  bool
+//     - This boolean flag signals whether the current
+//       ErrPrefixDto instance is valid.
+//
+//       If this method returns a value of 'false', it signals that
+//       the current ErrPrefixDto instance is invalid.
+//
+//       If this method returns a value of 'true', it signals that
+//       the current ErrPrefixDto instance is valid in all
+//       respects.
+//
+func (ePrefDto *ErrPrefixDto) IsValidInstance() bool {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	isValid,
+		_ := errPrefixDtoQuark{}.ptr().
+		testValidityOfErrPrefixDto(
+			ePrefDto,
+			"")
+
+	return isValid
 }
 
 // MergeErrPrefixDto - Receives a pointer to another ErrPrefixDto
@@ -1922,7 +1976,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 		return
 	}
 
-	_ = errPrefQuark{}.ptr().emptyErrPrefInfoCollection(
+	_ = errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
 		ePrefDto,
 		"")
 

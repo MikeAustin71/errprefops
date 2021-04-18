@@ -279,5 +279,5 @@
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
-coverage: 83.7% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.553s
+coverage: 83.6% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.845s

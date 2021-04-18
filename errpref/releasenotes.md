@@ -8,7 +8,7 @@ This version supports ***Go*** modules.
 
 ##### Directory Structure: Development Environment and Package Distribution
 
-This versions marks a paradigm change in organization of the ***errpref*** project. 
+This version marks a paradigm change in organization of the ***errpref*** project. 
 
 Moving forward, all development and testing will be conducted in the development environment ***errprefops*** located in software repository https://github.com/MikeAustin71/errprefops .  
 
@@ -26,7 +26,7 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 2. Added new method ErrPrefixDto.Empty() - Reinitializes all member variables for the current ErrPrefixDto instance to their native zero values.
 
-3. Added Left Margin Feature for error prefix strings. Users can now set both the left margin length and the left margin character used to generate the left margin in error prefix strings returned by method ErrPrefixDto.String().
+3. Added Left Margin Feature for error prefix strings. Users can now set both the left margin length, and the left margin character used to generate the left margin in error prefix strings returned by method ErrPrefixDto.String().
 
    - ErrPrefixDto.GetLeftMarginChar() rune
    - ErrPrefixDto.GetLeftMarginLength() int
@@ -35,7 +35,7 @@ Storage and distribution of the ***errpref*** software package will be processed
 
 4. Added new method ErrPrefixDto.GetDelimiters(). This method returns the string delimiters used to delimit error prefix and error context strings.
 
-5. Added new method ErrPrefixDto.CopyOutToIBuilder(). This methods takes an object implementing the IBuilderErrorPrefix interface an populates than object with error prefix and context information contained in the current instance of ErrPrefixDto. This method is used to facilitate the exchange of error prefix information with custom user developed types.
+5. Added new method ErrPrefixDto.CopyOutToIBuilder(). This method takes an object implementing the IBuilderErrorPrefix interface and populates than object with error prefix and context information contained in the current instance of ErrPrefixDto. This method is used to facilitate the exchange of error prefix information with custom user developed types.
 
 6. Added new method ErrPrefixDto.CopyInFromIBuilder(). This method takes an object implementing the IBuilderErrorPrefix interface and copies its error prefix and context information into the current instance of ErrPrefixDto.  This method is used to facilitate the exchange of error prefix information with custom user developed types. This method is used to facilitate the exchange of error prefix information with custom user developed types.
 
