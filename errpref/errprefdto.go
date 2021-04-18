@@ -30,6 +30,7 @@ type ErrPrefixDto struct {
 	leftMarginLength                int
 	leftMarginChar                  rune
 	isLastLineTerminatedWithNewLine bool
+	turnOffTextDisplay              bool
 	maxErrPrefixTextLineLength      uint
 	lock                            *sync.Mutex
 }
@@ -2424,7 +2425,7 @@ func (ePrefDto ErrPrefixDto) String() string {
 
 	defer ePrefDto.lock.Unlock()
 
-	if ePrefDto.ePrefCol == nil {
+	if ePrefDto.turnOffTextDisplay {
 		return ""
 	}
 
