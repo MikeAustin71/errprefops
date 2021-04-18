@@ -12,15 +12,15 @@ type errPrefixDtoNanobot struct {
 
 // ptr - Returns a pointer to a new instance of errPrefixDtoNanobot.
 //
-func (ePrefDtoNanobot errPrefixDtoNanobot) ptr() *errPrefixDtoNanobot {
+func (ePrefixDtoNanobot errPrefixDtoNanobot) ptr() *errPrefixDtoNanobot {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	return &errPrefixDtoNanobot{
 		lock: new(sync.Mutex),
@@ -88,18 +88,18 @@ func (ePrefDtoNanobot errPrefixDtoNanobot) ptr() *errPrefixDtoNanobot {
 //       'errorPrefStr' text will be attached to the beginning of
 //       the error message.
 //
-func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
 	errPrefDto *ErrPrefixDto,
 	iEPref IBuilderErrorPrefix,
 	errorPrefStr string) error {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
 		"setFromIBuilder()"
@@ -206,18 +206,18 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
 //       'errorPrefStr' text will be attached to the beginning of
 //       the error message.
 //
-func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 	errPrefDto *ErrPrefixDto,
 	iEPref IBasicErrorPrefix,
 	errorPrefStr string) error {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
 		"setFromIBasicErrorPrefix()"
@@ -335,18 +335,18 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 //       'errorPrefStr' text will be attached to the beginning of
 //       the error message.
 //
-func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromString(
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromString(
 	errPrefDto *ErrPrefixDto,
 	iEPref string,
 	errorPrefStr string) error {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
 		"setFromIBasicErrorPrefix()"
@@ -432,18 +432,18 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromString(
 //       'errorPrefStr' text will be attached to the beginning of
 //       the error message.
 //
-func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
 	errPrefDto *ErrPrefixDto,
 	iEPref *strings.Builder,
 	errorPrefStr string) error {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
 		"setFromIBasicErrorPrefix()"
@@ -544,18 +544,18 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
 //       'errorPrefStr' text will be attached to the beginning of
 //       the error message.
 //
-func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 	errPrefDto *ErrPrefixDto,
 	iEPref []string,
 	errorPrefStr string) error {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
 		"setFromIBasicErrorPrefix()"
@@ -658,18 +658,18 @@ func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 //       'errorPrefStr' text will be attached to the beginning of
 //       the error message.
 //
-func (ePrefDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
 	errPrefDto *ErrPrefixDto,
 	iEPref [][2]string,
 	errorPrefStr string) error {
 
-	if ePrefDtoNanobot.lock == nil {
-		ePrefDtoNanobot.lock = new(sync.Mutex)
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
 	}
 
-	ePrefDtoNanobot.lock.Lock()
+	ePrefixDtoNanobot.lock.Lock()
 
-	defer ePrefDtoNanobot.lock.Unlock()
+	defer ePrefixDtoNanobot.lock.Unlock()
 
 	methodName := errorPrefStr + "\nerrPrefixDtoNanobot." +
 		"setFromTwoDStrArray()"
