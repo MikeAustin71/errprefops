@@ -98,7 +98,7 @@ func (ePrefMech *errPrefMechanics) assembleErrPrefix(
 
 	if lenOldErrPrefCleanStr > 0 {
 
-		errPrefAtom{}.ptr().getEPrefContextArray(
+		errPrefixDtoAtom{}.ptr().getEPrefContextArray(
 			oldErrPrefix,
 			&prefixContextCol)
 
@@ -150,7 +150,7 @@ func (ePrefMech *errPrefMechanics) formatErrPrefix(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0)
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		errPrefix,
@@ -268,7 +268,7 @@ func (ePrefMech *errPrefMechanics) setErrorContext(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0)
 
-	errPrefAtom{}.ptr().getEPrefContextArray(
+	errPrefixDtoAtom{}.ptr().getEPrefContextArray(
 		oldErrPref,
 		&prefixContextCol)
 

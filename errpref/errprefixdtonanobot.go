@@ -133,7 +133,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
 		return err
 	}
 
-	err = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
+	err = errPrefixDtoAtom{}.ptr().addTwoDimensionalStringArray(
 		errPrefDto,
 		iEPref.GetEPrefStrings(),
 		methodName)
@@ -275,7 +275,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 		errPrefDto.ePrefCol[i] = ePrefInfo
 	}
 
-	errPrefAtom{}.ptr().
+	errPrefixDtoAtom{}.ptr().
 		setFlagsErrorPrefixInfoArray(
 			errPrefDto.ePrefCol)
 
@@ -365,7 +365,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromString(
 		return nil
 	}
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		iEPref,
@@ -479,7 +479,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
 
 	}
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		strVal,
@@ -594,7 +594,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 			}
 	}
 
-	errPrefAtom{}.ptr().
+	errPrefixDtoAtom{}.ptr().
 		setFlagsErrorPrefixInfoArray(
 			errPrefDto.ePrefCol)
 
@@ -714,7 +714,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
 		errPrefDto.ePrefCol[i] = ePrefInfo
 	}
 
-	errPrefAtom{}.ptr().
+	errPrefixDtoAtom{}.ptr().
 		setFlagsErrorPrefixInfoArray(
 			errPrefDto.ePrefCol)
 

@@ -58,7 +58,7 @@ func (ePrefDto *ErrPrefixDto) AddEPrefStrings(
 
 	defer ePrefDto.lock.Unlock()
 
-	_ = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
+	_ = errPrefixDtoAtom{}.ptr().addTwoDimensionalStringArray(
 		ePrefDto,
 		twoDStrArray,
 		"")
@@ -128,11 +128,11 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 
 	previousCollectionLen := len(ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().getEPrefContextArray(
+	errPrefixDtoAtom{}.ptr().getEPrefContextArray(
 		errorPrefixCollectionStr,
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	numberOfCollectionItemsParsed =
@@ -175,7 +175,7 @@ func (ePrefDto *ErrPrefixDto) Copy() ErrPrefixDto {
 	defer ePrefDto.lock.Unlock()
 
 	newErrPrefixDto,
-		_ := errPrefAtom{}.ptr().
+		_ := errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")
@@ -216,7 +216,7 @@ func (ePrefDto *ErrPrefixDto) CopyPtr() *ErrPrefixDto {
 	defer ePrefDto.lock.Unlock()
 
 	newErrPrefixDto,
-		_ := errPrefAtom{}.ptr().
+		_ := errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")
@@ -282,7 +282,7 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 
 	eMsg += "ErrPrefixDto.CopyIn()\n"
 
-	return errPrefAtom{}.ptr().
+	return errPrefixDtoAtom{}.ptr().
 		copyInErrPrefDto(
 			ePrefDto,
 			inComingErrPrefixDto,
@@ -407,7 +407,7 @@ func (ePrefDto *ErrPrefixDto) CopyOut(
 
 	eMsg += "ErrPrefixDto.CopyOut() "
 
-	return errPrefAtom{}.ptr().
+	return errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			eMsg)
@@ -504,7 +504,7 @@ func (ePrefDto *ErrPrefixDto) Equal(
 
 	defer ePrefDto.lock.Unlock()
 
-	return errPrefAtom{}.ptr().areEqualErrPrefDtos(
+	return errPrefixDtoAtom{}.ptr().areEqualErrPrefDtos(
 		ePrefDto,
 		ePrefixDto2)
 }
@@ -955,7 +955,7 @@ func (ePrefDto *ErrPrefixDto) MergeErrPrefixDto(
 		append(ePrefDto.ePrefCol,
 			incomingErrPrefixDto.ePrefCol...)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 }
 
@@ -1078,7 +1078,7 @@ func (ePrefDto ErrPrefixDto) NewEPrefCtx(
 		newErrContext,
 		&newErrPrefixDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		newErrPrefixDto.ePrefCol)
 
 	return newErrPrefixDto
@@ -1159,7 +1159,7 @@ func (ePrefDto ErrPrefixDto) NewEPrefOld(
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
@@ -1421,7 +1421,7 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 			newErrContext,
 			&newErrPrefixDto.ePrefCol)
 
-		errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 			newErrPrefixDto.ePrefCol)
 
 	}
@@ -1583,7 +1583,7 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 			newErrContext,
 			&newErrPrefixDto.ePrefCol)
 
-		errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 			newErrPrefixDto.ePrefCol)
 
 	}
@@ -1812,7 +1812,7 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 		"",
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return
@@ -1933,7 +1933,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefCtx(
 		newErrContext,
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return
@@ -2003,7 +2003,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefOld(
 
 	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
@@ -2058,7 +2058,7 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 		ePrefDto,
 		"")
 
-	_ = errPrefAtom{}.ptr().addTwoDimensionalStringArray(
+	_ = errPrefixDtoAtom{}.ptr().addTwoDimensionalStringArray(
 		ePrefDto,
 		twoDStrArray,
 		"")
@@ -2600,7 +2600,7 @@ func (ePrefDto ErrPrefixDto) String() string {
 		return ""
 	}
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	outPutStr := errPrefNanobot{}.ptr().
@@ -2669,7 +2669,7 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 		return ""
 	}
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return errPrefNanobot{}.ptr().
@@ -2869,7 +2869,7 @@ func (ePrefDto *ErrPrefixDto) XEPref(
 		"",
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return ePrefDto
@@ -2943,7 +2943,7 @@ func (ePrefDto *ErrPrefixDto) XEPrefCtx(
 		newErrContext,
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	return ePrefDto
@@ -3018,7 +3018,7 @@ func (ePrefDto *ErrPrefixDto) XEPrefOld(
 
 	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
@@ -3120,7 +3120,7 @@ func (ePrefDto *ErrPrefixDto) ZCtx(
 	}
 
 	newErrPrefixDto,
-		_ = errPrefAtom{}.ptr().
+		_ = errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")
@@ -3175,7 +3175,7 @@ func (ePrefDto *ErrPrefixDto) ZCtxEmpty() ErrPrefixDto {
 	}
 
 	newErrPrefixDto,
-		_ := errPrefAtom{}.ptr().
+		_ := errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")
@@ -3250,11 +3250,11 @@ func (ePrefDto *ErrPrefixDto) ZEPref(
 		"",
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	newErrPrefixDto,
-		_ := errPrefAtom{}.ptr().
+		_ := errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")
@@ -3338,11 +3338,11 @@ func (ePrefDto *ErrPrefixDto) ZEPrefCtx(
 		newErrContext,
 		&ePrefDto.ePrefCol)
 
-	errPrefAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	newErrPrefixDto,
-		_ := errPrefAtom{}.ptr().
+		_ := errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")
@@ -3426,7 +3426,7 @@ func (ePrefDto *ErrPrefixDto) ZEPrefOld(
 
 	ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
 
-	ePrefAtom := errPrefAtom{}
+	ePrefAtom := errPrefixDtoAtom{}
 
 	ePrefAtom.getEPrefContextArray(
 		oldErrPrefix,
@@ -3436,7 +3436,7 @@ func (ePrefDto *ErrPrefixDto) ZEPrefOld(
 		ePrefDto.ePrefCol)
 
 	newErrPrefixDto,
-		_ := errPrefAtom{}.ptr().
+		_ := errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
 			"")

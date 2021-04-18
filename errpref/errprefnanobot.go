@@ -161,7 +161,7 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0)
 
-	errPrefAtom{}.
+	errPrefixDtoAtom{}.
 		ptr().getEPrefContextArray(
 		errPref,
 		&prefixContextCol)

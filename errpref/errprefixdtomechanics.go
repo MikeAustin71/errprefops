@@ -209,7 +209,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 
 	errNanobot := errPrefixDtoNanobot{}
 
-	ePrfAtom := errPrefAtom{}
+	ePrfAtom := errPrefixDtoAtom{}
 
 	var backup ErrPrefixDto
 	var err2 error
