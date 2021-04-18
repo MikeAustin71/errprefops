@@ -1,0 +1,6 @@
+
+1. Add docs for end of text string terminator.
+
+2. Add variable string delimiters for input and output.
+
+3. Add On/Off switch for text strings.
