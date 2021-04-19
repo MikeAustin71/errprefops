@@ -236,6 +236,16 @@ func (ePref ErrPref) FmtStr(
 // the string delimiters used to delimit error prefix and error
 // context elements with strings.
 //
+// The ErrPref type uses the system default string delimiters for
+// parsing both input and output error prefix and context strings.
+//
+// The system default string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
 func (ePref ErrPref) GetDelimiters() ErrPrefixDelimiters {
 
 	if ePref.lock == nil {
@@ -246,8 +256,9 @@ func (ePref ErrPref) GetDelimiters() ErrPrefixDelimiters {
 
 	defer ePref.lock.Unlock()
 
-	return errPrefElectron{}.
-		ptr().getDelimiters()
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
+	return delimiters
 }
 
 // GetLastEPref - Returns the last error prefix, error context pair
