@@ -167,8 +167,7 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 
 	prefixContextCol := make([]ErrorPrefixInfo, 0)
 
-	delimiters :=
-		errPrefElectron{}.ptr().getDelimiters()
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
 
 	errPrefixDtoAtom{}.
 		ptr().getEPrefContextArray(

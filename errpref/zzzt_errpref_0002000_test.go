@@ -593,7 +593,7 @@ func TestErrPrefixDto_GetDelimiters_000100(t *testing.T) {
 
 	ePDto.SetEPrefOld(initialStr)
 
-	errPrefDelims := ePDto.GetDelimiters()
+	errPrefDelims := ePDto.GetInputStringDelimiters()
 
 	errPrefDelimsOne := ErrPrefixDelimiters{}
 

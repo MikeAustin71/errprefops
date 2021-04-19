@@ -512,11 +512,37 @@ func (ePrefDto *ErrPrefixDto) Equal(
 		ePrefixDto2)
 }
 
-// GetDelimiters - Returns an ErrPrefixDelimiters object containing
-// the string delimiters used to delimit error prefix and error
-// context elements with strings.
+// GetStrDelimiters - Returns two ErrPrefixDelimiters objects which
+// containing the input string delimiters and the output string
+// delimiters configured for the current instance of ErrPrefixDto.
 //
-func (ePrefDto *ErrPrefixDto) GetDelimiters() ErrPrefixDelimiters {
+// Input string delimiters are employed by the current ErrPrefixDto
+// instance when receiving and parsing raw strings containing error
+// prefix information. Such strings are parsed before extracting
+// error prefix information to be stored in the error prefix
+// collection maintained by the current ErrPrefixDto instance.
+//
+// Output string delimiters on the other hand are used by the
+// current ErrPrefixDto instance to format error prefix strings
+// for output. Formatted strings returned for output are generated
+// by the following two methods:
+//    ErrPrefixDto.String()
+//    ErrPrefixDto.StrMaxLineLen()
+//
+//
+// If the input and output string delimiters were not directly
+// configured by the user, the system default string delimiters
+// will be applied. The system default string delimiters are
+// listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+func (ePrefDto *ErrPrefixDto) GetStrDelimiters() (
+	inputStrDelimiters ErrPrefixDelimiters,
+	outputStrDelimiters ErrPrefixDelimiters) {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -526,8 +552,19 @@ func (ePrefDto *ErrPrefixDto) GetDelimiters() ErrPrefixDelimiters {
 
 	defer ePrefDto.lock.Unlock()
 
-	return errPrefElectron{}.
-		ptr().getDelimiters()
+	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	inputStrDelimiters,
+		_ = ePrefDto.inputStrDelimiters.
+		CopyOut("")
+
+	outputStrDelimiters,
+		_ = ePrefDto.outputStrDelimiters.
+		CopyOut("")
+
+	return inputStrDelimiters, outputStrDelimiters
 }
 
 // GetInputStringDelimiters - Returns the input string delimiters

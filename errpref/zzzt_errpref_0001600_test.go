@@ -41,7 +41,7 @@ func TestEPrefixLineLenCalc_CopyIn_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
 
-	ePDelimiters := ePDto.GetDelimiters()
+	ePDelimiters := ePDto.GetInputStringDelimiters()
 
 	err =
 		ePrefLineLenOne.SetEPrefDelimiters(
@@ -173,7 +173,7 @@ func TestEPrefixLineLenCalc_CopyOut_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
 
-	ePDelimiters := ePDto.GetDelimiters()
+	ePDelimiters := ePDto.GetInputStringDelimiters()
 
 	err =
 		ePrefLineLenOne.SetEPrefDelimiters(
