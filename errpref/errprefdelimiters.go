@@ -588,6 +588,43 @@ func (ePrefDelims ErrPrefixDelimiters) New(
 	return newEPrefDelimiters, err
 }
 
+// NewDefaults - Returns a new instance of ErrPrefixDelimiters
+// populated with system default values for string delimiters.
+//
+// The system default string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+// String delimiters are used to parse raw input strings and
+// separate error prefix and error context elements. In addition,
+// string delimiters are used to join error prefix and error
+// context elements for output or presentation text.
+//
+func (ePrefDelims ErrPrefixDelimiters) NewDefaults() ErrPrefixDelimiters {
+
+	if ePrefDelims.lock == nil {
+		ePrefDelims.lock = new(sync.Mutex)
+	}
+
+	ePrefDelims.lock.Lock()
+
+	defer ePrefDelims.lock.Unlock()
+
+	newEPrefDelimiters := ErrPrefixDelimiters{
+		lock: new(sync.Mutex),
+	}
+
+	_ = errPrefixDelimitersMechanics{}.ptr().
+		setToDefault(
+			&newEPrefDelimiters,
+			"")
+
+	return newEPrefDelimiters
+}
+
 // SetDelimiters - Overwrites and replaces the data values for all
 // internal member variables in the current ErrPrefixDelimiters
 // instance.
@@ -878,7 +915,7 @@ func (ePrefDelims ErrPrefixDelimiters) String() string {
 // SetToDefault - Sets the values of the current
 // ErrPrefixDelimiters instance to those of the system defaults.
 //
-// The default output string delimiters are listed as follows:
+// The system default string delimiters are listed as follows:
 //
 //    New Line Error Prefix Delimiter = "\n"
 //    In-Line Error Prefix Delimiter  = " - "
@@ -905,7 +942,7 @@ func (ePrefDelims *ErrPrefixDelimiters) SetToDefault() {
 // ErrPrefixDelimiters instance to those of the system defaults if
 // the current instance is empty or invalid.
 //
-// The default output string delimiters are listed as follows:
+// The system default string delimiters are listed as follows:
 //
 //    New Line Error Prefix Delimiter = "\n"
 //    In-Line Error Prefix Delimiter  = " - "

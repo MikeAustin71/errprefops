@@ -178,6 +178,16 @@ func (ePref ErrPref) ConvertNonPrintableChars(
 // might include variable names, variable values and further
 // details on function execution.
 //
+// The returned formatted text is generated using system default
+// string delimiters.
+//
+// The system default string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
 //
 // ------------------------------------------------------------------------
 //
@@ -214,8 +224,11 @@ func (ePref ErrPref) FmtStr(
 	ePref.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
 	return errPrefMechanics{}.ptr().formatErrPrefix(
 		ePref.maxErrPrefixTextLineLength,
+		delimiters,
 		errPref)
 }
 
@@ -241,6 +254,17 @@ func (ePref ErrPref) GetDelimiters() ErrPrefixDelimiters {
 // from a string consisting of a series of error prefix, error
 // context pairs.
 //
+// The input parameter 'oldErrPrefix' will be parsed and the last
+// error prefix and error context pair will be identified using
+// system default string delimiters.
+//
+// The system default string delimiters are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
 func (ePref ErrPref) GetLastEPref(
 	oldErrPrefix string) string {
 
@@ -255,10 +279,13 @@ func (ePref ErrPref) GetLastEPref(
 	ePref.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getErrPrefDisplayLineLength()
 
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
 	return errPrefMechanics{}.ptr().
 		extractLastErrPrefCtxPair(
 			ePref.maxErrPrefixTextLineLength,
-			oldErrPrefix)
+			oldErrPrefix,
+			delimiters)
 }
 
 // GetMaxErrPrefTextLineLength - Returns the current maximum number
@@ -348,14 +375,19 @@ func (ePref ErrPref) GetMaxErrPrefTextLineLength() (
 //       error context information.
 //
 //       This string should consist of a series of error prefix
-//       strings. Error prefixes should be delimited by either a
-//       new line character ('\n') or the in-line delimiter string,
-//       " - ".
+//       strings. Error prefixes should be delimited using system
+//       default string delimiters.
+//
+//       The system default string delimiters for error prefix
+//       elements are listed as follows:
+//          New Line Error Prefix Delimiter = "\n"
+//          In-Line Error Prefix Delimiter  = " - "
 //
 //       If this string contains associated error context strings
-//       as well, they should be delimited with either a new line
-//       delimiter string, "\n :  " or an in-line delimiter string,
-//       " : ".
+//       as well, they should be delimited using the same system
+//       default string delimiters for error context elements:
+//          New Line Error Context Delimiter = "\n :  "
+//          In-Line Error Context Delimiter = " : "
 //
 //
 //  newErrPref          string
@@ -399,13 +431,16 @@ func (ePref ErrPref) EPref(
 	ePref.maxErrPrefixTextLineLength =
 		ePrefQuark.getErrPrefDisplayLineLength()
 
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
 	ePrefMech := errPrefMechanics{}
 
 	return ePrefMech.assembleErrPrefix(
 		oldErrPref,
 		newErrPref,
 		"",
-		ePref.maxErrPrefixTextLineLength)
+		ePref.maxErrPrefixTextLineLength,
+		delimiters)
 }
 
 // EPrefCtx - Receives an old error prefix, new error prefix and
@@ -453,15 +488,21 @@ func (ePref ErrPref) EPref(
 //       a single, formatted string containing error prefix and
 //       error context information.
 //
+//
 //       This string should consist of a series of error prefix
-//       strings. Error prefixes should be delimited by either a
-//       new line character ('\n') or the in-line delimiter string,
-//       " - ".
+//       strings. Error prefixes should be delimited using system
+//       default string delimiters.
+//
+//       The system default string delimiters for error prefix
+//       elements are listed as follows:
+//          New Line Error Prefix Delimiter = "\n"
+//          In-Line Error Prefix Delimiter  = " - "
 //
 //       If this string contains associated error context strings
-//       as well, they should be delimited with either a new line
-//       delimiter string, "\n :  " or an in-line delimiter string,
-//       " : ".
+//       as well, they should be delimited using the same system
+//       default string delimiters for error context elements:
+//          New Line Error Context Delimiter = "\n :  "
+//          In-Line Error Context Delimiter = " : "
 //
 //
 //  newErrPref          string
@@ -523,11 +564,14 @@ func (ePref ErrPref) EPrefCtx(
 
 	ePrefMech := errPrefMechanics{}
 
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
 	return ePrefMech.assembleErrPrefix(
 		oldErrPref,
 		newErrPref,
 		newContext,
-		ePref.maxErrPrefixTextLineLength)
+		ePref.maxErrPrefixTextLineLength,
+		delimiters)
 }
 
 // EPrefOld - Receives an old or preexisting error prefix string
@@ -576,14 +620,19 @@ func (ePref ErrPref) EPrefCtx(
 //       error context information.
 //
 //       This string should consist of a series of error prefix
-//       strings. Error prefixes should be delimited by either a
-//       new line character ('\n') or the in-line delimiter string,
-//       " - ".
+//       strings. Error prefixes should be delimited using system
+//       default string delimiters.
+//
+//       The system default string delimiters for error prefix
+//       elements are listed as follows:
+//          New Line Error Prefix Delimiter = "\n"
+//          In-Line Error Prefix Delimiter  = " - "
 //
 //       If this string contains associated error context strings
-//       as well, they should be delimited with either a new line
-//       delimiter string, "\n :  " or an in-line delimiter string,
-//       " : ".
+//       as well, they should be delimited using the same system
+//       default string delimiters for error context elements:
+//          New Line Error Context Delimiter = "\n :  "
+//          In-Line Error Context Delimiter = " : "
 //
 //
 // -----------------------------------------------------------------
@@ -628,11 +677,14 @@ func (ePref ErrPref) EPrefOld(
 
 	ePrefMech := errPrefMechanics{}
 
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
 	return ePrefMech.assembleErrPrefix(
 		oldErrPref,
 		"",
 		"",
-		ePref.maxErrPrefixTextLineLength)
+		ePref.maxErrPrefixTextLineLength,
+		delimiters)
 }
 
 // SetCtxt - Sets or resets the error context for the last error
@@ -678,14 +730,20 @@ func (ePref ErrPref) EPrefOld(
 //       error context information.
 //
 //       This string should consist of a series of error prefix
-//       strings. Error prefixes should be delimited by either a
-//       new line character ('\n') or the in-line delimiter string,
-//       " - ".
+//       strings. Error prefixes should be delimited using system
+//       default string delimiters.
+//
+//       The system default string delimiters for error prefix
+//       elements are listed as follows:
+//          New Line Error Prefix Delimiter = "\n"
+//          In-Line Error Prefix Delimiter  = " - "
 //
 //       If this string contains associated error context strings
-//       as well, they should be delimited with either a new line
-//       delimiter string, "\n :  " or an in-line delimiter string,
-//       " : ".
+//       as well, they should be delimited using the same system
+//       default string delimiters for error context elements:
+//          New Line Error Context Delimiter = "\n :  "
+//          In-Line Error Context Delimiter = " : "
+//
 //
 //  newErrContext       string
 //     - This string holds the new error context information. If
@@ -736,10 +794,13 @@ func (ePref ErrPref) SetCtxt(
 		return oldErrPref
 	}
 
+	delimiters := ErrPrefixDelimiters{}.NewDefaults()
+
 	return errPrefMechanics{}.ptr().setErrorContext(
 		oldErrPref,
 		newErrContext,
-		ePref.maxErrPrefixTextLineLength)
+		ePref.maxErrPrefixTextLineLength,
+		delimiters)
 }
 
 // SetMaxErrPrefTextLineLength - Sets the maximum limit on the

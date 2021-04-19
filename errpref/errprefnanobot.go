@@ -220,6 +220,19 @@ func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
 //       terminated with a new line character ('\n').
 //
 //
+//  delimiters                    ErrPrefixDelimiters
+//     - An instance of ErrPrefixDelimiters containing string
+//       delimiters used to join error prefix and error context
+//       elements.
+//
+//       The key components of an ErrPrefixDelimiters object are
+//       listed as follows:
+//         New Line Error Prefix Delimiter
+//         In-Line Error Prefix Delimiter
+//         New Line Error Context Delimiter
+//         In-Line Error Context Delimiter
+//
+//
 //  prefixContextCol                   []ErrorPrefixInfo
 //     - An array of ErrorPrefixInfo objects containing the error
 //       prefix and error context information which will be
