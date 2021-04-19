@@ -124,6 +124,16 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
 		return false
 	}
 
+	if !errPrefixDto1.inputStrDelimiters.Equal(
+		&errPrefixDto2.inputStrDelimiters) {
+		return false
+	}
+
+	if !errPrefixDto1.outputStrDelimiters.Equal(
+		&errPrefixDto2.outputStrDelimiters) {
+		return false
+	}
+
 	if errPrefixDto1.maxErrPrefixTextLineLength !=
 		errPrefixDto2.maxErrPrefixTextLineLength {
 		return false
@@ -259,17 +269,40 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyInErrPrefDto(
 			eMsg)
 	}
 
+	_,
+		err := errPrefixDtoQuark{}.ptr().
+		testValidityOfErrPrefixDto(
+			inComingErrPrefixDto,
+			eMsg+"Testing validity of inComingErrPrefixDto ")
+
+	if err != nil {
+		return err
+	}
+
 	targetErrPrefixDto.isLastLineTerminatedWithNewLine =
 		inComingErrPrefixDto.isLastLineTerminatedWithNewLine
 
 	targetErrPrefixDto.turnOffTextDisplay =
 		inComingErrPrefixDto.turnOffTextDisplay
 
-	if inComingErrPrefixDto.maxErrPrefixTextLineLength < 10 {
+	err = targetErrPrefixDto.inputStrDelimiters.CopyIn(
+		&inComingErrPrefixDto.inputStrDelimiters,
+		eMsg+
+			"inComingErrPrefixDto.inputStrDelimiters->"+
+			"targetErrPrefixDto.inputStrDelimiters ")
 
-		inComingErrPrefixDto.maxErrPrefixTextLineLength =
-			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+	if err != nil {
+		return err
+	}
 
+	err = targetErrPrefixDto.outputStrDelimiters.CopyIn(
+		&inComingErrPrefixDto.outputStrDelimiters,
+		eMsg+
+			"inComingErrPrefixDto.outputStrDelimiters->"+
+			"targetErrPrefixDto.outputStrDelimiters ")
+
+	if err != nil {
+		return err
 	}
 
 	targetErrPrefixDto.maxErrPrefixTextLineLength =
@@ -394,6 +427,26 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyOutErrPrefDto(
 		ePrefixDto.maxErrPrefixTextLineLength =
 			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
+	}
+
+	err =
+		newEPrefixDto.inputStrDelimiters.CopyIn(
+			&ePrefixDto.inputStrDelimiters,
+			eMsg+"ePrefixDto.inputStrDelimiters->"+
+				"newEPrefixDto.inputStrDelimiters ")
+
+	if err != nil {
+		return newEPrefixDto, err
+	}
+
+	err =
+		newEPrefixDto.outputStrDelimiters.CopyIn(
+			&ePrefixDto.outputStrDelimiters,
+			eMsg+"ePrefixDto.outputStrDelimiters->"+
+				"newEPrefixDto.outputStrDelimiters ")
+
+	if err != nil {
+		return newEPrefixDto, err
 	}
 
 	newEPrefixDto.maxErrPrefixTextLineLength =

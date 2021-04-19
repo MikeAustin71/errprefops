@@ -62,6 +62,10 @@ func (ePrefDtoElectron errPrefixDtoElectron) emptyErrorPrefixDto(
 
 	ePrefixDto.maxErrPrefixTextLineLength = 0
 
+	ePrefixDto.inputStrDelimiters.Empty()
+
+	ePrefixDto.outputStrDelimiters.Empty()
+
 	return errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
 		ePrefixDto,
 		errPrefStr)

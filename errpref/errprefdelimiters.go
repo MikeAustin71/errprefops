@@ -5,9 +5,9 @@ import (
 	"sync"
 )
 
-// ErrPrefixDelimiters - This type is used to store the string
-// delimiters used in parsing error prefix and error context
-// strings.
+// ErrPrefixDelimiters - This type is used to store and transport
+// the string delimiters used in parsing error prefix and error
+// context strings.
 //
 type ErrPrefixDelimiters struct {
 	inLinePrefixDelimiter      string // Error Prefix in-line string delimiters
