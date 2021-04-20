@@ -34,6 +34,10 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
 			errPrefStr)
 	}
 
+	errPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	if twoDStrArray == nil {
 		return nil
 	}
@@ -96,13 +100,13 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
 		return false
 	}
 
-	if errPrefixDto1.lock == nil {
-		errPrefixDto1.lock = new(sync.Mutex)
-	}
+	errPrefixDto1.inputStrDelimiters.SetToDefaultIfEmpty()
 
-	if errPrefixDto2.lock == nil {
-		errPrefixDto2.lock = new(sync.Mutex)
-	}
+	errPrefixDto1.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefixDto2.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefixDto2.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	if errPrefixDto1.leftMarginLength !=
 		errPrefixDto2.leftMarginLength {
@@ -269,6 +273,10 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyInErrPrefDto(
 			eMsg)
 	}
 
+	inComingErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	inComingErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	_,
 		err := errPrefixDtoQuark{}.ptr().
 		testValidityOfErrPrefixDto(
@@ -410,9 +418,9 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyOutErrPrefDto(
 		return newEPrefixDto, err
 	}
 
-	if ePrefixDto.lock == nil {
-		ePrefixDto.lock = new(sync.Mutex)
-	}
+	ePrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	newEPrefixDto.lock = new(sync.Mutex)
 

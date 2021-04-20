@@ -130,9 +130,9 @@ func (ePrefNanobot *errPrefNanobot) deleteLastErrContext(
 		return
 	}
 
-	if ePrefixDto.ePrefCol == nil {
-		ePrefixDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
+	ePrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	collectionIdx := len(ePrefixDto.ePrefCol)
 
