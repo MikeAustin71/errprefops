@@ -174,6 +174,65 @@ func TestErrPrefixDto_AddEPrefStrings_000100(t *testing.T) {
 	}
 
 }
+func TestErrPref_ConvertNonPrintableChars_000100(t *testing.T) {
+
+	tRunes := []rune{
+		0,    // [NULL]
+		1,    // [SOH]
+		2,    // [STX]
+		3,    // [ETX]
+		4,    // "[EOT]"
+		5,    // [ENQ]
+		6,    // [ACK]
+		7,    // "\\a"
+		8,    // "\\b"
+		9,    // "\\t"
+		0x0a, // "\\n"
+		0x0b, // "\\v"
+		0x0c, // "\\f"
+		0x0d, // "\\r"
+		0x0e, // "[SO]"
+		0x0f, // "[SI]"
+		0x5c, // "\\"
+		0x20, // "[SPACE]"
+	}
+
+	expectedStr :=
+		"[NULL]" +
+			"[SOH]" +
+			"[STX]" +
+			"[ETX]" +
+			"[EOT]" +
+			"[ENQ]" +
+			"[ACK]" +
+			"\\a" +
+			"\\b" +
+			"\\t" +
+			"\\n" +
+			"\\v" +
+			"\\f" +
+			"\\r" +
+			"[SO]" +
+			"[SI]" +
+			"\\" +
+			"[SPACE]"
+
+	printableChars :=
+		ErrPref{}.ConvertNonPrintableChars(
+			tRunes,
+			true)
+
+	if printableChars != expectedStr {
+		t.Errorf("ERROR:\n"+
+			"Expected printableChars == expectedStr\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"printableChars='%v'\n"+
+			"expectedStr='%v'\n",
+			printableChars,
+			expectedStr)
+	}
+
+}
 
 func TestErrPref_FmtStr_000100(t *testing.T) {
 
