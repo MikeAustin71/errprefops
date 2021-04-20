@@ -10,6 +10,59 @@ type errPrefixDtoNanobot struct {
 	lock *sync.Mutex
 }
 
+// deleteLastErrContext - Deletes the Last Context for the
+// last error prefix in the sequence.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  ePrefixDto          *ErrPrefixDto
+//     - A pointer to an instance of ErrPrefixDto. The last error
+//       context for the last error prefix contained in this
+//       ErrPrefixDto object will be deleted.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
+//
+func (ePrefixDtoNanobot *errPrefixDtoNanobot) deleteLastErrContext(
+	ePrefixDto *ErrPrefixDto) {
+
+	if ePrefixDtoNanobot.lock == nil {
+		ePrefixDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	ePrefixDtoNanobot.lock.Lock()
+
+	defer ePrefixDtoNanobot.lock.Unlock()
+
+	if ePrefixDto == nil {
+		return
+	}
+
+	ePrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	collectionIdx := len(ePrefixDto.ePrefCol)
+
+	if collectionIdx == 0 {
+		return
+	}
+
+	collectionIdx--
+
+	ePrefixDto.ePrefCol[collectionIdx].
+		SetErrContextStr("")
+
+	return
+}
+
 // ptr - Returns a pointer to a new instance of errPrefixDtoNanobot.
 //
 func (ePrefixDtoNanobot errPrefixDtoNanobot) ptr() *errPrefixDtoNanobot {

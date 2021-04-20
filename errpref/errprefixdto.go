@@ -1860,18 +1860,18 @@ func (ePrefDto *ErrPrefixDto) SetCtx(
 		return
 	}
 
-	ePrefNanobot := errPrefNanobot{}
-
 	if len(newErrContext) == 0 {
 
-		ePrefNanobot.deleteLastErrContext(ePrefDto)
+		errPrefixDtoNanobot{}.ptr().
+			deleteLastErrContext(ePrefDto)
 
 		return
 	}
 
-	ePrefNanobot.setLastCtx(
-		newErrContext,
-		ePrefDto.ePrefCol)
+	errPrefNanobot{}.ptr().
+		setLastCtx(
+			newErrContext,
+			ePrefDto.ePrefCol)
 }
 
 // SetCtxEmpty - Deletes the last error context for the last error
@@ -1907,8 +1907,9 @@ func (ePrefDto *ErrPrefixDto) SetCtxEmpty() {
 		return
 	}
 
-	errPrefNanobot{}.ptr().deleteLastErrContext(
-		ePrefDto)
+	errPrefixDtoNanobot{}.ptr().
+		deleteLastErrContext(
+			ePrefDto)
 
 	return
 }
@@ -3054,16 +3055,15 @@ func (ePrefDto *ErrPrefixDto) XCtx(
 		return ePrefDto
 	}
 
-	ePrefNanobot := errPrefNanobot{}
-
 	if len(newErrContext) == 0 {
 
-		ePrefNanobot.deleteLastErrContext(ePrefDto)
+		errPrefixDtoNanobot{}.ptr().
+			deleteLastErrContext(ePrefDto)
 
 		return ePrefDto
 	}
 
-	ePrefNanobot.setLastCtx(
+	errPrefNanobot{}.ptr().setLastCtx(
 		newErrContext,
 		ePrefDto.ePrefCol)
 
@@ -3102,8 +3102,9 @@ func (ePrefDto *ErrPrefixDto) XCtxEmpty() *ErrPrefixDto {
 		return ePrefDto
 	}
 
-	errPrefNanobot{}.ptr().deleteLastErrContext(
-		ePrefDto)
+	errPrefixDtoNanobot{}.ptr().
+		deleteLastErrContext(
+			ePrefDto)
 
 	return ePrefDto
 }
@@ -3395,19 +3396,19 @@ func (ePrefDto *ErrPrefixDto) ZCtx(
 
 	var newErrPrefixDto ErrPrefixDto
 
-	ePrefNanobot := errPrefNanobot{}
-
 	if len(ePrefDto.ePrefCol) == 0 {
 
 	} else if len(newErrContext) == 0 {
 
-		ePrefNanobot.deleteLastErrContext(ePrefDto)
+		errPrefixDtoNanobot{}.ptr().
+			deleteLastErrContext(ePrefDto)
 
 	} else {
 
-		ePrefNanobot.setLastCtx(
-			newErrContext,
-			ePrefDto.ePrefCol)
+		errPrefNanobot{}.ptr().
+			setLastCtx(
+				newErrContext,
+				ePrefDto.ePrefCol)
 
 	}
 
@@ -3457,8 +3458,9 @@ func (ePrefDto *ErrPrefixDto) ZCtxEmpty() ErrPrefixDto {
 
 	if len(ePrefDto.ePrefCol) > 0 {
 
-		errPrefNanobot{}.ptr().deleteLastErrContext(
-			ePrefDto)
+		errPrefixDtoNanobot{}.ptr().
+			deleteLastErrContext(
+				ePrefDto)
 
 	}
 

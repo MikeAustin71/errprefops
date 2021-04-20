@@ -283,4 +283,4 @@
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
-ok  	github.com/MikeAustin71/errprefops/errpref	0.723s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.597s

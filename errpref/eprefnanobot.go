@@ -95,59 +95,6 @@ func (ePrefNanobot *errPrefNanobot) addEPrefInfo(
 	return
 }
 
-// XCtxEmpty - Deletes the Last Context for the
-// last error prefix in the sequence.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  ePrefixDto          *ErrPrefixDto
-//     - A pointer to an instance of ErrPrefixDto. The last error
-//       context for the last error prefix contained in this
-//       ErrPrefixDto object will be deleted.
-//
-//
-// -----------------------------------------------------------------
-//
-// Return Values
-//
-//  --- NONE ---
-//
-func (ePrefNanobot *errPrefNanobot) deleteLastErrContext(
-	ePrefixDto *ErrPrefixDto) {
-
-	if ePrefNanobot.lock == nil {
-		ePrefNanobot.lock = new(sync.Mutex)
-	}
-
-	ePrefNanobot.lock.Lock()
-
-	defer ePrefNanobot.lock.Unlock()
-
-	if ePrefixDto == nil {
-		return
-	}
-
-	ePrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
-
-	collectionIdx := len(ePrefixDto.ePrefCol)
-
-	if collectionIdx == 0 {
-		return
-	}
-
-	collectionIdx--
-
-	ePrefixDto.ePrefCol[collectionIdx].
-		SetErrContextStr("")
-
-	return
-}
-
 // extractLastErrPrfInfo - Extracts the last error prefix element
 // from a string comprised of a series of error prefix elements.
 //
