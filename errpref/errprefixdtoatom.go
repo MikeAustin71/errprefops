@@ -10,6 +10,8 @@ type errPrefixDtoAtom struct {
 	lock *sync.Mutex
 }
 
+// addTwoDimensionalStringArray - Adds error prefix info contained
+// in a 2-Dimensional string array.
 func (ePrefixDtoAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
 	errPrefixDto *ErrPrefixDto,
 	twoDStrArray [][2]string,

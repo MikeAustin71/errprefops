@@ -1901,10 +1901,6 @@ func (ePrefDto *ErrPrefixDto) SetCtxEmpty() {
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
-
 	collectionIdx := len(ePrefDto.ePrefCol)
 
 	if collectionIdx == 0 {
@@ -1963,10 +1959,6 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
@@ -2444,7 +2436,8 @@ func (ePrefDto *ErrPrefixDto) SetInputStringDelimiters(
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefix += " ErrPrefixDto.SetInputStringDelimiters() "
+	ePrefix += " ErrPrefixDto.SetInputStringDelimiters() \n" +
+		"inputStrDelimiters "
 
 	err := inputStrDelimiters.IsValidInstanceError(
 		ePrefix)
@@ -3057,11 +3050,6 @@ func (ePrefDto *ErrPrefixDto) XCtx(
 
 	defer ePrefDto.lock.Unlock()
 
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-		return ePrefDto
-	}
-
 	if len(ePrefDto.ePrefCol) == 0 {
 		return ePrefDto
 	}
@@ -3109,11 +3097,6 @@ func (ePrefDto *ErrPrefixDto) XCtxEmpty() *ErrPrefixDto {
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-		return ePrefDto
-	}
 
 	if len(ePrefDto.ePrefCol) == 0 {
 		return ePrefDto
@@ -3175,10 +3158,6 @@ func (ePrefDto *ErrPrefixDto) XEPref(
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
@@ -3249,10 +3228,6 @@ func (ePrefDto *ErrPrefixDto) XEPrefCtx(
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
@@ -3420,10 +3395,6 @@ func (ePrefDto *ErrPrefixDto) ZCtx(
 
 	var newErrPrefixDto ErrPrefixDto
 
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
-
 	ePrefNanobot := errPrefNanobot{}
 
 	if len(ePrefDto.ePrefCol) == 0 {
@@ -3483,10 +3454,6 @@ func (ePrefDto *ErrPrefixDto) ZCtxEmpty() ErrPrefixDto {
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
 
 	if len(ePrefDto.ePrefCol) > 0 {
 
@@ -3561,10 +3528,6 @@ func (ePrefDto *ErrPrefixDto) ZEPref(
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
@@ -3649,10 +3612,6 @@ func (ePrefDto *ErrPrefixDto) ZEPrefCtx(
 	ePrefDto.lock.Lock()
 
 	defer ePrefDto.lock.Unlock()
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,

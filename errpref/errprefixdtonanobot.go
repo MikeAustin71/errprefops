@@ -243,6 +243,10 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 			methodName)
 	}
 
+	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	twoDSlice := iEPref.GetEPrefStrings()
 
 	lenTwoDSlice := len(twoDSlice)
@@ -577,6 +581,10 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 			methodName)
 	}
 
+	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
 	lenEPrefStrs := len(iEPref)
 
 	if lenEPrefStrs == 0 {
@@ -690,6 +698,10 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
 			"'errPrefDto' is a 'nil' pointer.\n",
 			methodName)
 	}
+
+	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	if iEPref == nil {
 		errPrefDto.ePrefCol = nil
