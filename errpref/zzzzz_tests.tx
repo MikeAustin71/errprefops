@@ -161,11 +161,37 @@
 === RUN   TestErrPrefixDto_GetOutputStringDelimiters_000100
 --- PASS: TestErrPrefixDto_GetOutputStringDelimiters_000100 (0.00s)
 === RUN   TestErrPrefixDto_GetStrDelimiters_0100
---- PASS: TestErrPrefixDto_GetStrDelimiters_0100 (0.00s)
+    zzzt_errpref_0002260_test.go:183: ERROR:
+        Expected expectedDelimiters==outputStrDelimiters
+        HOWEVER, THEY ARE NOT EQUAL!
+        expectedDelimiters='inLinePrefixDelimiter: [SPACE]-*-[SPACE]
+        lenInLinePrefixDelimiter: 5
+        newLinePrefixDelimiter: \n[SPACE][SPACE]*
+        lenNewLinePrefixDelimiter: 4
+        inLineContextDelimiter: [SPACE]&&&[SPACE]
+        lenInLineContextDelimiter: 5
+        newLineContextDelimiter: \n[SPACE][SPACE][SPACE][SPACE][SPACE][SPACE]%
+        lenNewLineContextDelimiter: 8
+        '
+        outputStrDelimiters='inLinePrefixDelimiter: [SPACE]-[SPACE]
+        lenInLinePrefixDelimiter: 3
+        newLinePrefixDelimiter: \n
+        lenNewLinePrefixDelimiter: 1
+        inLineContextDelimiter: [SPACE]:[SPACE]
+        lenInLineContextDelimiter: 3
+        newLineContextDelimiter: \n[SPACE]:[SPACE][SPACE]
+        lenNewLineContextDelimiter: 5
+        '
+--- FAIL: TestErrPrefixDto_GetStrDelimiters_0100 (0.00s)
 === RUN   TestErrPrefixDto_SetOutputStringDelimiters_000100
 --- PASS: TestErrPrefixDto_SetOutputStringDelimiters_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetOutputStringDelimiters_000200
---- PASS: TestErrPrefixDto_SetOutputStringDelimiters_000200 (0.00s)
+    zzzt_errpref_0002260_test.go:381: ERROR:
+        Expected expectedOutputStr == ePDto2Str
+        HOWEVER, THEY ARE NOT EQUAL!
+        expectedOutputStr = 'Tx1.Something()[SPACE]-*-[SPACE]Tx2.SomethingElse()\n[SPACE][SPACE]*Tx3.DoSomething()[SPACE]-*-[SPACE]Tx4()[SPACE]-*-[SPACE]Tx5()\n[SPACE][SPACE]*Tx6.DoSomethingElse()\n[SPACE][SPACE]*Tx7.TrySomethingNew()[SPACE]&&&[SPACE]something->newSomething\n[SPACE][SPACE]*Tx8.TryAnyCombination()[SPACE]-*-[SPACE]Tx9.TryAHammer()[SPACE]&&&[SPACE]x->y\n[SPACE][SPACE]*Tx10.X()[SPACE]-*-[SPACE]Tx11.TryAnything()[SPACE]-*-[SPACE]Tx12.TryASalad()\n[SPACE][SPACE]*Tx13.SomeFabulousAndComplexStuff()\n[SPACE][SPACE]*Tx14.MoreAwesomeGoodness[SPACE]&&&[SPACE]A=7[SPACE]B=8[SPACE]C=9'
+                ePDto2Str = 'Tx1.Something()[SPACE]-[SPACE]Tx2.SomethingElse()[SPACE]-[SPACE]Tx3.DoSomething()\nTx4()[SPACE]-[SPACE]Tx5()[SPACE]-[SPACE]Tx6.DoSomethingElse()\nTx7.TrySomethingNew()[SPACE]:[SPACE]something->newSomething\nTx8.TryAnyCombination()[SPACE]-[SPACE]Tx9.TryAHammer()[SPACE]:[SPACE]x->y[SPACE]-[SPACE]Tx10.X()\nTx11.TryAnything()[SPACE]-[SPACE]Tx12.TryASalad()\nTx13.SomeFabulousAndComplexStuff()\nTx14.MoreAwesomeGoodness[SPACE]:[SPACE]A=7[SPACE]B=8[SPACE]C=9'
+--- FAIL: TestErrPrefixDto_SetOutputStringDelimiters_000200 (0.00s)
 === RUN   TestErrPrefixDto_SetInputStringDelimiters_000100
 --- PASS: TestErrPrefixDto_SetInputStringDelimiters_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetCtx_000100
@@ -296,6 +322,7 @@
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
-PASS
-coverage: 84.6% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.585s
+FAIL
+coverage: 84.3% of statements
+exit status 1
+FAIL	github.com/MikeAustin71/errprefops/errpref	0.645s

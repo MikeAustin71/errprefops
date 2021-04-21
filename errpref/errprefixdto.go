@@ -117,25 +117,16 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 
 	defer ePrefDto.lock.Unlock()
 
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-	}
-
-	if ePrefDto.maxErrPrefixTextLineLength < 10 {
-
-		ePrefDto.maxErrPrefixTextLineLength =
-			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	}
-
 	previousCollectionLen := len(ePrefDto.ePrefCol)
 
-	errPrefixDtoAtom{}.ptr().getEPrefContextArray(
+	ePrefixAtom := errPrefixDtoAtom{}
+
+	ePrefixAtom.getEPrefContextArray(
 		errorPrefixCollectionStr,
 		ePrefDto.inputStrDelimiters,
 		&ePrefDto.ePrefCol)
 
-	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	ePrefixAtom.setFlagsErrorPrefixInfoArray(
 		ePrefDto.ePrefCol)
 
 	numberOfCollectionItemsParsed =
@@ -720,12 +711,6 @@ func (ePrefDto *ErrPrefixDto) GetEPrefCollection() []ErrorPrefixInfo {
 	defer ePrefDto.lock.Unlock()
 
 	var newErrorPrefixCollection []ErrorPrefixInfo
-
-	if ePrefDto.ePrefCol == nil {
-		ePrefDto.ePrefCol = make([]ErrorPrefixInfo, 0)
-		newErrorPrefixCollection = make([]ErrorPrefixInfo, 0)
-		return newErrorPrefixCollection
-	}
 
 	lenEPrefCol := len(ePrefDto.ePrefCol)
 
