@@ -653,6 +653,23 @@ func TestErrPrefixDto_GetDelimiters_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_GetEPrefCollection(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}
+
+	ePrefCol := ePDto.GetEPrefCollection()
+
+	if len(ePrefCol) != 0 {
+		t.Errorf("ERROR:\n"+
+			"Expected collection length == 0, because the\n"+
+			"ePDto instance was created with ErrPrefixDto{}\n"+
+			"HOWEVER, THE COLLECTION LENGTH IS NOT EQUAL TO ZERO!!\n"+
+			"len(ePrefCol)=='%v'\n",
+			len(ePrefCol))
+	}
+
+}
+
 func TestErrPrefixDto_GetEPrefStrings_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()
@@ -747,6 +764,89 @@ func TestErrPrefixDto_GetEPrefStrings_000100(t *testing.T) {
 			return
 		}
 
+	}
+
+}
+
+func TestErrPrefixDto_GetMaxTextLineLen_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}
+
+	maxTextLineLen := ePDto.GetMaxTextLineLen()
+
+	defaultMaxLineLen := ErrPref{}.GetMaxErrPrefTextLineLength()
+
+	if maxTextLineLen != defaultMaxLineLen {
+		t.Errorf("ERROR:"+
+			"Expected call to ePDto.GetMaxTextLineLen() to yield\n"+
+			"a value of '%v' because 'ePDto' is invalid.\n"+
+			"%v is the default Maximum Text Line Length.\n"+
+			"HOWEVER, THE RETURNED VALUE WAS NOT THE DEFAULT\n"+
+			"Maximum Text Line Length!\n"+
+			"The return value was '%v'\n",
+			defaultMaxLineLen,
+			defaultMaxLineLen,
+			maxTextLineLen)
+	}
+
+}
+
+func TestErrPrefixDto_IsValidInstance_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}
+
+	if ePDto.IsValidInstance() {
+		t.Error("ERROR:\n" +
+			"Expected ePDto.IsValidInstance() to return 'false'\n" +
+			"because the ErrPrefixDto string delimiters are empty\n" +
+			"and therefore invalid.\n" +
+			"HOWEVER, THE RETURN VALUE WAS 'true'!!!\n")
+	}
+
+}
+
+func TestErrPrefixDto_IsValidInstance_000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	if !ePDto.IsValidInstance() {
+		t.Error("ERROR:\n" +
+			"Expected ePDto.IsValidInstance() to return a value of 'true'\n" +
+			"because the ErrPrefixDto was created with New() and the\n" +
+			"instance is therefore valid.\n" +
+			"HOWEVER, THE RETURN VALUE WAS 'false'!!!\n")
+	}
+
+}
+
+func TestErrPrefixDto_IsValidInstanceError_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}
+
+	err := ePDto.IsValidInstanceError("")
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected ePDto.IsValidInstanceError(\"\") to return an error\n" +
+			"because the string delimiters are empty and invalid.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!!")
+	}
+
+}
+
+func TestErrPrefixDto_IsValidInstanceError_000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	err := ePDto.IsValidInstanceError("")
+
+	if err != nil {
+		t.Errorf("ERROR:\n"+
+			"Expected ePDto.IsValidInstanceError(\"\") to return an\n"+
+			"error value 'nil' because the 'ePDto' instance is valid.\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!!!\n"+
+			"Error='%v'\n",
+			err.Error())
 	}
 
 }
