@@ -926,6 +926,27 @@ func TestErrPrefixDto_MergeErrPrefixDto_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_MergeErrPrefixDto_000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto2 := ErrPrefixDto{}
+
+	ePDto.MergeErrPrefixDto(&ePDto2)
+
+	collectionLen := ePDto.GetEPrefCollectionLen()
+
+	if collectionLen != 0 {
+		t.Errorf("Error:\n"+
+			"Expected collectionLen == 0 after processing\n"+
+			"an empty ErrPrefixDto instance.\n"+
+			"HOWEVER, collectionLen > 0\n"+
+			"collectionLen='%v'\n",
+			collectionLen)
+	}
+
+}
+
 func TestErrPrefixDto_Multiple_000100(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
