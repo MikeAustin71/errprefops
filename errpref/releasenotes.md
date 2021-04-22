@@ -57,7 +57,29 @@ Storage and distribution of the ***errpref*** software package will be processed
        ePrefix string) (ErrPrefixDto, error)
     ```
 
-11. 
+11. **Variable String Delimiter Feature** - Added methods to control input and output string delimiters. These methods effectively implement the Variable String Delimiter Feature. Users are now able to control the string delimiters used to parse input strings containing error prefix information as will as the string delimiters used to format output error prefix text for presentations and display. 
+
+    ```
+    func (ePrefDto *ErrPrefixDto) SetInputStringDelimiters(
+    	inputStrDelimiters ErrPrefixDelimiters,
+    	ePrefix string) error
+    	
+    func (ePrefDto *ErrPrefixDto) SetOutputStringDelimiters(
+    	outputStrDelimiters ErrPrefixDelimiters,
+    	ePrefix string) error
+    
+    func (ePrefDto *ErrPrefixDto) GetStrDelimiters() (
+    	inputStrDelimiters ErrPrefixDelimiters,
+    	outputStrDelimiters ErrPrefixDelimiters)
+    	
+    func (ePrefDto *ErrPrefixDto) GetInputStringDelimiters() ErrPrefixDelimiters
+    
+    func (ePrefDto *ErrPrefixDto) GetOutputStringDelimiters() ErrPrefixDelimiters
+    ```
+    
+    
+    
+12. 
 
     
 

@@ -4,7 +4,7 @@ import "testing"
 
 func TestErrPrefixDelimiters_CopyIn_000100(t *testing.T) {
 
-	funcName := "TestErrPrefixDelimiters_CopyIn()"
+	funcName := "TestErrPrefixDelimiters_CopyIn_000100()"
 
 	newLinePrefixDelimiters := "\n"
 	inLinePrefixDelimiters := " - "
@@ -169,6 +169,67 @@ func TestErrPrefixDelimiters_CopyIn_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDelimiters_CopyIn_000200(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_CopyIn_000200()"
+
+	ePrefDelimsTwo := ErrPrefixDelimiters{}
+
+	err := ePrefDelimsTwo.CopyIn(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Errorf("ERROR:\n" +
+			"Expected an error return from ePrefDelimsTwo.CopyIn()\n" +
+			"because incomingDelimiters is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+}
+
+func TestErrPrefixDelimiters_CopyIn_000300(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_CopyIn_000300()"
+
+	newLinePrefixDelimiters := "\n"
+	inLinePrefixDelimiters := " - "
+	newLineContextDelimiters := "\n : "
+	inLineContextDelimiters := " : "
+
+	ePrefDelimsOne,
+		err := ErrPrefixDelimiters{}.New(
+		newLinePrefixDelimiters,
+		inLinePrefixDelimiters,
+		newLineContextDelimiters,
+		inLineContextDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("ERROR returned by ErrPrefixDelimiters{}.New()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	ePrefDelimsTwo := ErrPrefixDelimiters{}
+
+	ePrefDelimsOne.Empty()
+
+	err = ePrefDelimsTwo.CopyIn(
+		&ePrefDelimsOne,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsTwo.CopyIn(&ePrefDelimsOne)\n" +
+			"because 'ePrefDelimsOne' is empty an invalid.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+	}
+}
+
 func TestErrPrefixDelimiters_CopyOut_000100(t *testing.T) {
 
 	funcName := "TestErrPrefixDelimiters_CopyOut()"
@@ -223,6 +284,58 @@ func TestErrPrefixDelimiters_CopyOut_000100(t *testing.T) {
 			"Expected ePrefDelimsOne==ePrefDelimsTwo\n" +
 			"HOWEVER, THEY ARE NOT EQUAL!!!")
 	}
+}
+
+func TestErrPrefixDelimiters_CopyOut_000200(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_CopyOut_000200()"
+
+	newLinePrefixDelimiters := "\n"
+	inLinePrefixDelimiters := " - "
+	newLineContextDelimiters := "\n : "
+	inLineContextDelimiters := " : "
+
+	ePrefDelimsOne := ErrPrefixDelimiters{}
+
+	err := ePrefDelimsOne.SetDelimiters(
+		newLinePrefixDelimiters,
+		inLinePrefixDelimiters,
+		newLineContextDelimiters,
+		inLineContextDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("ERROR returned by ePrefDelimsOne.SetDelimiters()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	err = ePrefDelimsOne.IsValidInstanceError(funcName)
+
+	if err != nil {
+		t.Errorf("ERROR returned by ePrefDelimsOne.IsValidInstanceError()\n"+
+			"%v\n",
+			err.Error())
+
+		return
+	}
+
+	ePrefDelimsOne.Empty()
+
+	_,
+		err = ePrefDelimsOne.CopyOut(funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			" Expected error return from ePrefDelimsOne.CopyOut()\n" +
+			"because ePrefDelimsOne is empty.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
 }
 
 func TestErrPrefixDelimiters_Empty_000100(t *testing.T) {
