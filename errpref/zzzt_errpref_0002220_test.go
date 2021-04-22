@@ -514,7 +514,7 @@ func TestErrPrefixDto_NewFromStrings_000100(t *testing.T) {
 
 	initialStr := ePDto.String()
 
-	newErrPrefix := "Tx15.TheFinalSolution()"
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
 
 	newErrCtx := "7/X=Z  X=0"
 
@@ -753,124 +753,6 @@ func TestErrPrefixDto_NewFromStrings000200(t *testing.T) {
 	}
 }
 
-func TestErrPrefixDto_NewFromStrings000400(t *testing.T) {
-
-	funcName := "TestErrPrefixDto_NewFromStrings000400"
-
-	ePDto := ErrPrefixDto{}.New()
-
-	ePDto.SetMaxTextLineLen(40)
-
-	var twoDSlice [][2]string
-
-	twoDSlice = make([][2]string, 14)
-
-	twoDSlice[0][0] = "Tx1.Something()"
-	twoDSlice[0][1] = ""
-
-	twoDSlice[1][0] = "Tx2.SomethingElse()"
-	twoDSlice[1][1] = ""
-
-	twoDSlice[2][0] = "Tx3.DoSomething()"
-	twoDSlice[2][1] = ""
-
-	twoDSlice[3][0] = "Tx4()"
-	twoDSlice[3][1] = ""
-
-	twoDSlice[4][0] = "Tx5()"
-	twoDSlice[4][1] = ""
-
-	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
-	twoDSlice[5][1] = ""
-
-	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
-	twoDSlice[6][1] = "something->newSomething"
-
-	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
-	twoDSlice[7][1] = ""
-
-	twoDSlice[8][0] = "Tx9.TryAHammer()"
-	twoDSlice[8][1] = "x->y"
-
-	twoDSlice[9][0] = "Tx10.X()"
-	twoDSlice[9][1] = ""
-
-	twoDSlice[10][0] = "Tx11.TryAnything()"
-	twoDSlice[10][1] = ""
-
-	twoDSlice[11][0] = "Tx12.TryASalad()"
-	twoDSlice[11][1] = ""
-
-	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
-	twoDSlice[12][1] = ""
-
-	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
-	twoDSlice[13][1] = "A=7 B=8 C=9"
-
-	ePDto.SetEPrefStrings(twoDSlice)
-
-	inputDelimiters,
-		err := ErrPrefixDelimiters{}.New(
-		"\n  #",
-		" ### ",
-		"\n      -",
-		" --- ",
-		funcName)
-
-	if err != nil {
-		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
-			"%v\n", err.Error())
-		return
-	}
-
-	err =
-		ePDto.SetInputStringDelimiters(
-			inputDelimiters,
-			funcName)
-
-	if err != nil {
-		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
-			"%v\n", err.Error())
-		return
-	}
-
-	err =
-		ePDto.SetOutputStringDelimiters(
-			inputDelimiters,
-			funcName)
-
-	if err != nil {
-		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
-			"%v\n", err.Error())
-		return
-	}
-
-	outputDelimiters := ErrPrefixDelimiters{}
-
-	newErrPrefix := "Tx15.TheFinalSolution()"
-
-	newErrCtx := "7/X=Z  X=0"
-
-	initialStr := ePDto.String()
-
-	_,
-		err = ErrPrefixDto{}.NewFromStrings(
-		initialStr,
-		newErrPrefix,
-		newErrCtx,
-		inputDelimiters,
-		outputDelimiters,
-		funcName)
-
-	if err == nil {
-		t.Error("Error:\n" +
-			"Expected an error return fromErrPrefixDto{}.NewFromStrings()\n" +
-			"because 'outputDelimiters' is empty and invalid!\n" +
-			"HOWEVER, NO ERROR WAS RETURNED!!")
-	}
-
-}
-
 func TestErrPrefixDto_NewFromStrings000300(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_NewFromStrings000300"
@@ -965,7 +847,7 @@ func TestErrPrefixDto_NewFromStrings000300(t *testing.T) {
 
 	inputDelimiters := ErrPrefixDelimiters{}
 
-	newErrPrefix := "Tx15.TheFinalSolution()"
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
 
 	newErrCtx := "7/X=Z  X=0"
 
@@ -985,6 +867,203 @@ func TestErrPrefixDto_NewFromStrings000300(t *testing.T) {
 			"Expected an error return fromErrPrefixDto{}.NewFromStrings()\n" +
 			"because 'inputDelimiters' is empty and invalid!\n" +
 			"HOWEVER, NO ERROR WAS RETURNED!!")
+	}
+}
+
+func TestErrPrefixDto_NewFromStrings000400(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewFromStrings000400"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	outputDelimiters := ErrPrefixDelimiters{}
+
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
+
+	newErrCtx := "7/X=Z  X=0"
+
+	initialStr := ePDto.String()
+
+	_,
+		err = ErrPrefixDto{}.NewFromStrings(
+		initialStr,
+		newErrPrefix,
+		newErrCtx,
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("Error:\n" +
+			"Expected an error return fromErrPrefixDto{}.NewFromStrings()\n" +
+			"because 'outputDelimiters' is empty and invalid!\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!")
+	}
+
+}
+
+func TestErrPrefixDto_NewFromStrings000500(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewFromStrings000400"
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto ErrPrefixDto
+
+	ePDto,
+		err = ErrPrefixDto{}.NewFromStrings(
+		"",
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error:\n"+
+			"Should NOT HAVE received an error return fromErrPrefixDto{}.NewFromStrings()\n"+
+			"because both 'inputDelimiters' and 'outputDelimiters' are valid!\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!!\n"+
+			"Error='%v'\n", err.Error())
+
+		return
+	}
+
+	actualInputDelims,
+		actualOutputDelims := ePDto.GetStrDelimiters()
+
+	if !actualInputDelims.Equal(&inputDelimiters) {
+		t.Errorf("Error:\n"+
+			"Original input delimiters not equal to "+
+			"final input delimiters!\n"+
+			"Original input delimiters='%v'\n"+
+			"   Final input delimiters='%v'\n",
+			inputDelimiters.String(),
+			actualInputDelims.String())
+	}
+
+	if !actualOutputDelims.Equal(&outputDelimiters) {
+		t.Errorf("Error:\n"+
+			"Original output delimiters not equal to "+
+			"final actual output delimiters!\n"+
+			"Original output delimiters='%v'\n"+
+			"   Final output delimiters='%v'\n",
+			outputDelimiters.String(),
+			actualOutputDelims.String())
 	}
 }
 
