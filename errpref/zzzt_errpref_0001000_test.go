@@ -174,6 +174,7 @@ func TestErrPrefixDto_AddEPrefStrings_000100(t *testing.T) {
 	}
 
 }
+
 func TestErrPref_ConvertNonPrintableChars_000100(t *testing.T) {
 
 	tRunes := []rune{
@@ -230,6 +231,95 @@ func TestErrPref_ConvertNonPrintableChars_000100(t *testing.T) {
 			"expectedStr='%v'\n",
 			printableChars,
 			expectedStr)
+	}
+
+}
+
+func TestErrPref_ConvertPrintableChars_000100(t *testing.T) {
+
+	funcName := "TestErrPref_ConvertPrintableChars_000100"
+
+	nonPrintableRuneArray := []rune{
+		0,    // [NULL]
+		1,    // [SOH]
+		2,    // [STX]
+		3,    // [ETX]
+		4,    // "[EOT]"
+		5,    // [ENQ]
+		6,    // [ACK]
+		7,    // "\\a"
+		8,    // "\\b"
+		9,    // "\\t"
+		0x0a, // "\\n"
+		0x0b, // "\\v"
+		0x0c, // "\\f"
+		0x0d, // "\\r"
+		0x0e, // "[SO]"
+		0x0f, // "[SI]"
+		0x5c, // "\\"
+		0x20, // "[SPACE]"
+	}
+
+	printableCharsStr :=
+		"[NULL]" +
+			"[SOH]" +
+			"[STX]" +
+			"[ETX]" +
+			"[EOT]" +
+			"[ENQ]" +
+			"[ACK]" +
+			"\\a" +
+			"\\b" +
+			"\\t" +
+			"\\n" +
+			"\\v" +
+			"\\f" +
+			"\\r" +
+			"[SO]" +
+			"[SI]" +
+			"\\" +
+			"[SPACE]"
+
+	runeArray,
+		err :=
+		ErrPref{}.ConvertPrintableChars(
+			printableCharsStr,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error:\n"+
+			"Error returned from ErrPref{}.ConvertPrintableChars()\n"+
+			"Error = '%v'\n",
+			err.Error())
+		return
+	}
+
+	lenExpectedRuneArray := len(nonPrintableRuneArray)
+
+	if lenExpectedRuneArray != len(runeArray) {
+		t.Errorf("Error:\n"+
+			"Expected lenExpectedRuneArray == len(runeArray).\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"lenExpectedRuneArray='%v'\n"+
+			"      len(runeArray)='%v'\n",
+			lenExpectedRuneArray,
+			len(runeArray))
+		return
+	}
+
+	for i := 0; i < len(nonPrintableRuneArray); i++ {
+		if nonPrintableRuneArray[i] != runeArray[i] {
+			t.Errorf("ERROR:\n"+
+				"nonPrintableRuneArray[%v] != runeArray[%v]\n"+
+				"nonPrintableRuneArray[%v]='%v'\n"+
+				"runeArray[%v]='%v'\n",
+				i,
+				i,
+				i,
+				nonPrintableRuneArray[i],
+				i,
+				runeArray[i])
+		}
 	}
 
 }

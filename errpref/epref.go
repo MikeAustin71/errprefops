@@ -163,6 +163,105 @@ func (ePref ErrPref) ConvertNonPrintableChars(
 	return printableChars
 }
 
+// ConvertPrintableChars - Converts printable characters to their
+// non-printable or native equivalent. For example, instances of
+// '\\n' in a string will be converted to '\n'.
+//
+// Additional examples of converted printable string characters
+// are: "\\n", "\\t" and "[ACK]". These printable characters be
+// converted into their native, non-printable state: '\n', '\t' or
+// 0x06 (Acknowledge).
+//
+//
+// Reference:
+//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
+//
+//
+// ------------------------------------------------------------------------
+//
+// Input Parameters
+//
+//  printableChars      string
+//     - A string which may contain non-printable characters converted
+//       to their printable equivalents. These printable characters will
+//       be converted back to their native, non-printable values.
+//
+//
+//  ePrefix             string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'. This parameter is optional.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  nonPrintableChars   []rune
+//     - An array of runes containing non-printable characters.
+//       The non-printable characters were be converted from the
+//       printable characters contained in input parameter
+//       'printableChars'.
+//
+//
+//  err                 error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'. If errors are encountered during
+//       processing, the returned error Type will encapsulate an error
+//       message. Note that this error message will incorporate the
+//       method chain and text passed by input parameter, 'ePrefix'.
+//       The 'ePrefix' text will be prefixed to the beginning of the
+//       error message.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//  testStr := "Hello[SPACE]world!\\n"
+//  ePrefix := "theCallingFunction()"
+//
+//  ePrefQuark := errPrefQuark{}
+//
+//  actualRuneArray :=
+//    ePrefQuark.
+//      convertPrintableChars(
+//           testStr,
+//           ePrefix)
+//
+//  ----------------------------------------------------
+//  'actualRuneArray' is now equal to:
+//     "Hello world!\n"
+//
+func (ePref ErrPref) ConvertPrintableChars(
+	printableChars string,
+	ePrefix string) (
+	nonPrintableChars []rune,
+	err error) {
+
+	if ePref.lock == nil {
+		ePref.lock = new(sync.Mutex)
+	}
+
+	ePref.lock.Lock()
+
+	defer ePref.lock.Unlock()
+
+	if len(ePrefix) > 0 {
+		ePrefix += "\n"
+	}
+
+	ePrefix += "ErrPref.ConvertPrintableChars() "
+
+	nonPrintableChars,
+		err = errPrefQuark{}.ptr().convertPrintableChars(
+		printableChars,
+		ePrefix)
+
+	return nonPrintableChars, err
+}
+
 // FmtStr - Returns a formatted text representation of all error
 // prefix and error context information contained in the input
 // parameter string, 'errPref'.

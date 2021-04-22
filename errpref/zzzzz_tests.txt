@@ -2,6 +2,8 @@
 --- PASS: TestErrPrefixDto_AddEPrefStrings_000100 (0.00s)
 === RUN   TestErrPref_ConvertNonPrintableChars_000100
 --- PASS: TestErrPref_ConvertNonPrintableChars_000100 (0.00s)
+=== RUN   TestErrPref_ConvertPrintableChars_000100
+--- PASS: TestErrPref_ConvertPrintableChars_000100 (0.00s)
 === RUN   TestErrPref_FmtStr_000100
 --- PASS: TestErrPref_FmtStr_000100 (0.00s)
 === RUN   TestErrPref_FmtStr_000200
@@ -323,5 +325,5 @@
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
-coverage: 85.5% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	1.457s
+coverage: 85.7% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	1.418s
