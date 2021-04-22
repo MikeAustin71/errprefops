@@ -266,7 +266,7 @@ func TestErrPrefixDto_SetOutputStringDelimiters_000100(t *testing.T) {
 			funcName)
 
 	if err != nil {
-		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+		t.Errorf("Error from ePDto1.SetOutputStringDelimiters()\n"+
 			"%v\n", err.Error())
 		return
 	}
