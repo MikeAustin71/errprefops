@@ -384,6 +384,20 @@ func TestErrPrefixDelimiters_Empty_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDelimiters_Empty_000200(t *testing.T) {
+
+	ePrefDelimsOne := ErrPrefixDelimiters{}
+
+	ePrefDelimsOne.Empty()
+
+	if ePrefDelimsOne.IsValidInstance() {
+		t.Error("ERROR:\n" +
+			"ePrefDelimsOne.IsValidInstance()==true after\n" +
+			"Empty() was called on it!\n")
+	}
+
+}
+
 func TestErrPrefixDelimiters_SetLineLengthValues_000100(t *testing.T) {
 
 	funcName := "TestErrPrefixDelimiters_SetLineLengthValues()"
@@ -552,6 +566,33 @@ func TestErrPrefixDelimiters_SetDelimiters_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n")
 
 		return
+	}
+
+}
+
+func TestErrPrefixDelimiters_SetToDefault_000100(t *testing.T) {
+	ePrefDelims := ErrPrefixDelimiters{}
+
+	ePrefDelims.SetToDefault()
+
+	newLineErrPrefix := ePrefDelims.GetNewLinePrefixDelimiter()
+
+	actNewLinePrefixDelimiters := "\n"
+	//actInLinePrefixDelimiters := " - "
+	//actNewLineContextDelimiters := "\n :  "
+	//actInLineContextDelimiters := " : "
+
+	if newLineErrPrefix != actNewLinePrefixDelimiters {
+
+		newLineErrPrefix =
+			ErrPref{}.ConvertNonPrintableChars(
+				[]rune(newLineErrPrefix),
+				true)
+
+		t.Errorf("ERROR:\n"+
+			"Default New Line Prefix Delimiter is incorrect!\n"+
+			"New Line Error Prefix Delimiters = '%v'\n",
+			newLineErrPrefix)
 	}
 
 }
