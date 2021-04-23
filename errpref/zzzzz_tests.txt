@@ -160,14 +160,14 @@
 --- PASS: TestErrPrefixDto_NewFromIErrorPrefix_000200 (0.00s)
 === RUN   TestErrPrefixDto_NewFromStrings_000100
 --- PASS: TestErrPrefixDto_NewFromStrings_000100 (0.00s)
-=== RUN   TestErrPrefixDto_NewFromStrings000200
---- PASS: TestErrPrefixDto_NewFromStrings000200 (0.00s)
-=== RUN   TestErrPrefixDto_NewFromStrings000300
---- PASS: TestErrPrefixDto_NewFromStrings000300 (0.00s)
-=== RUN   TestErrPrefixDto_NewFromStrings000400
---- PASS: TestErrPrefixDto_NewFromStrings000400 (0.00s)
-=== RUN   TestErrPrefixDto_NewFromStrings000500
---- PASS: TestErrPrefixDto_NewFromStrings000500 (0.00s)
+=== RUN   TestErrPrefixDto_NewFromStrings_000200
+--- PASS: TestErrPrefixDto_NewFromStrings_000200 (0.00s)
+=== RUN   TestErrPrefixDto_NewFromStrings_000300
+--- PASS: TestErrPrefixDto_NewFromStrings_000300 (0.00s)
+=== RUN   TestErrPrefixDto_NewFromStrings_000400
+--- PASS: TestErrPrefixDto_NewFromStrings_000400 (0.00s)
+=== RUN   TestErrPrefixDto_NewFromStrings_000500
+--- PASS: TestErrPrefixDto_NewFromStrings_000500 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmpty_000100
 --- PASS: TestErrPrefixDto_NewIEmpty_000100 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmpty_000200
@@ -200,6 +200,36 @@
 --- PASS: TestErrPrefixDto_NewIEmpty_001500 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmpty_001600
 --- PASS: TestErrPrefixDto_NewIEmpty_001600 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000100
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000100 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000200
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000200 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000300
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000300 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000400
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000400 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000500
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000500 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000600
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000600 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000700
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000700 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000800
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000800 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000900
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000900 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001000
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001000 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001100
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001100 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001200
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001200 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001300
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001300 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001400
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001400 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001500
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001500 (0.00s)
 === RUN   TestErrPrefixDto_CopyInFromIBuilder_000100
 --- PASS: TestErrPrefixDto_CopyInFromIBuilder_000100 (0.00s)
 === RUN   TestErrPrefixDto_CopyOutToIBuilder_000100
@@ -367,5 +397,5 @@
 === RUN   TestErrPrefixDto_SetMaxTextLineLen_000100
 --- PASS: TestErrPrefixDto_SetMaxTextLineLen_000100 (0.00s)
 PASS
-coverage: 86.8% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.895s
+coverage: 86.9% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.805s

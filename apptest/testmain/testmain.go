@@ -10,6 +10,161 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain TestMain) TestMain023() {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000900()"
+
+	ePDto := errpref.ErrPrefixDto{}.New()
+
+	maxLineLen := 60
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	var err error
+
+	var inputDelimiters errpref.ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = errpref.ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		fmt.Printf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		fmt.Printf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		fmt.Printf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	initialStr = ePDto.String()
+
+	var outputDelimiters errpref.ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = errpref.ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		fmt.Printf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	iStringerEPref := testIStringerErrPref{}
+
+	iStringerEPref.Set(initialStr)
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		fmt.Printf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto2 *errpref.ErrPrefixDto
+
+	ePDto2,
+		err = errpref.ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		&iStringerEPref,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		fmt.Printf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxLineLen)
+
+	ePDtoColLen := ePDto.GetEPrefCollectionLen()
+
+	ePDto2ColLen := ePDto2.GetEPrefCollectionLen()
+
+	if ePDtoColLen != ePDto2ColLen {
+		fmt.Printf("ERROR:\n"+
+			"Expected ePDtoColLen == ePDto2ColLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!!!\n"+
+			"ePDtoColLen='%v'\n"+
+			"ePDto2ColLen='%v'\n",
+			ePDtoColLen,
+			ePDto2ColLen)
+
+		return
+	}
+
+	ePDtoStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if ePDtoStr != ePDto2Str {
+		fmt.Printf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+		return
+	}
+
+	if !ePDto.Equal(ePDto2) {
+		fmt.Printf("ERROR:\n" +
+			"Expected that ePDto and ePDto2 would be equal\n" +
+			"in all respects.\n" +
+			"HOWEVER, THEY ARE NOT EQUAL\n")
+	}
+
+}
+
 func (tMain TestMain) TestMain022() {
 
 	ePDto := errpref.ErrPrefixDto{}.New()
@@ -1055,4 +1210,16 @@ func (tMain *TestMain) ConvertNonPrintableChars(
 	}
 
 	return b.String()
+}
+
+type testIStringerErrPref struct {
+	locString string
+}
+
+func (tIStr *testIStringerErrPref) Set(str string) {
+	tIStr.locString = str
+}
+
+func (tIStr *testIStringerErrPref) String() string {
+	return tIStr.locString
 }

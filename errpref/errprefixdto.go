@@ -1580,8 +1580,11 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 //         New Line Error Context Delimiter = "\n :  "
 //         In-Line Error Context Delimiter = " : "
 //
-//         To monitor input string delimiters, use method:
+//       To monitor input string delimiters, use method:
 //             ErrPrefixDto.GetInputStringDelimiters()
+//
+//       If this input parameter is judged to be invalid, an
+//       error will be returned.
 //
 //
 //  outputStrDelimiters        ErrPrefixDelimiters
@@ -1608,6 +1611,8 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 //
 //       To monitor output string delimiters, use method:
 //         ErrPrefixDto.GetOutputStringDelimiters()
+//
+//       If this input parameter is judged to be invalid, an
 //
 //
 //  ePrefix             string
@@ -1661,6 +1666,8 @@ func (ePrefDto ErrPrefixDto) NewFromStrings(
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.ePrefCol = nil
 
 	err :=
 		newErrPrefixDto.inputStrDelimiters.
@@ -1839,7 +1846,9 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 // method then proceeds to create and return a pointer to a new
 // instance of ErrPrefixDto.
 //
-// String delimiters are set to the system defaults.
+// String delimiters are set to the system defaults. To configure
+// String delimiters use method:
+//        ErrPrefixDto.NewIEmptyWithDelimiters()
 //
 //
 // ----------------------------------------------------------------
@@ -1946,7 +1955,7 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 //
 //       In the event of an error, the value of parameter
 //       'newErrPrefix' will be prefixed and attached to the
-//       beginning of the error message
+//       beginning of the error message.
 //
 func (ePrefDto ErrPrefixDto) NewIEmpty(
 	iEPref interface{},
@@ -1984,6 +1993,257 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 			newErrPrefixDto,
 			iEPref,
 			methodName)
+
+	if err != nil {
+		return newErrPrefixDto, err
+	}
+
+	if len(newErrPrefix) > 0 {
+
+		errPrefNanobot{}.ptr().addEPrefInfo(
+			newErrPrefix,
+			newErrContext,
+			&newErrPrefixDto.ePrefCol)
+
+		errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+			newErrPrefixDto.ePrefCol)
+
+	}
+
+	return newErrPrefixDto, err
+}
+
+// NewIEmptyWithDelimiters - Receives an empty interface. If that
+// empty interface is convertible to one of the 10-valid types
+// listed below, this method then proceeds to create and return
+// a pointer to a new, fully populated, instance of ErrPrefixDto.
+//
+// This method allows the user to set String Delimiters used to
+// parse string values for incoming error prefix information.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  iEPref              interface{}
+//     - An empty interface containing one of the 10-valid types
+//       listed below. Any one of these valid types will generate
+//       valid error prefix and error context information.
+//
+//       The error prefix and error context information for this
+//       new ErrPrefixDto object will be extracted from input
+//       parameter, 'iEPref'. 'iEPref' is an empty interface which
+//       must be convertible to one of the following valid types:
+//
+//       1. nil               - A nil value is valid and generates an empty
+//                              collection of error prefix and error context
+//                              information.
+//
+//       2. Stringer          - The Stringer interface from the 'fmt' package.
+//                              This interface has only one method:
+//                                   type Stringer interface {
+//                                      String() string
+//                                   }
+//
+//       3. string            - A string containing error prefix information.
+//
+//       4. []string          - A one-dimensional slice of strings containing
+//                              error prefix information.
+//
+//       5. [][2]string       - A two-dimensional slice of strings
+//                              containing error prefix and error context
+//                              information.
+//
+//       6. strings.Builder   - An instance of strings.Builder. Error prefix
+//                              information will be imported into the new
+//                              returned instance of ErrPrefixDto.
+//
+//       7  *strings.Builder  - A pointer to an instance of strings.Builder.
+//                              Error prefix information will be imported into
+//                              the new returned instance of ErrPrefixDto.
+//
+//       8. ErrPrefixDto      - An instance of ErrPrefixDto. The
+//                              ErrorPrefixInfo from this object will be
+//                              copied to the new returned instance of
+//                              ErrPrefixDto.
+//
+//       9. *ErrPrefixDto     - A pointer to an instance of ErrPrefixDto.
+//                              ErrorPrefixInfo from this object will be
+//                              copied to 'errPrefDto'.
+//
+//      10. IBasicErrorPrefix - An interface to a method generating
+//                              a two-dimensional slice of strings
+//                              containing error prefix and error
+//                              context information.
+//
+//       Any types not listed above will be considered invalid and
+//       trigger the return of an error.
+//
+//
+//  newErrPrefix        string
+//     - A new error prefix represents typically identifies the
+//       function or method which is currently executing. This
+//       information is used to document source code execution flow
+//       in error messages.
+//
+//       This error prefix information will be added to the
+//       internal collection of error prefixes maintained by the
+//       new instance of ErrPrefixDto returned by this method.
+//
+//       If this parameter is set to an empty string, no additional
+//       error prefix information will be added to the returned
+//       instance of ErrPrefixDto.
+//
+//
+//  newErrContext       string
+//     - This is error context information associated with the new
+//       error prefix ('newErrPrefix') string described above.
+//
+//       This parameter is optional and will accept an empty
+//       string.
+//
+//
+//  inputStrDelimiters         ErrPrefixDelimiters
+//     - Sets the string delimiters used by the current
+//       ErrPrefixDto instance when receiving and parsing raw
+//       strings containing error prefix information. Such strings
+//       are parsed in order to extract error prefix information
+//       for storage in the error prefix collection maintained by
+//       the current ErrPrefixDto instance.
+//
+//       If input string delimiters were not directly configured
+//       by the user, the system default input string delimiters
+//       will be applied.
+//
+//       The system default input string delimiters are listed as
+//       follows:
+//
+//         New Line Error Prefix Delimiter = "\n"
+//         In-Line Error Prefix Delimiter  = " - "
+//         New Line Error Context Delimiter = "\n :  "
+//         In-Line Error Context Delimiter = " : "
+//
+//         To monitor input string delimiters, use method:
+//             ErrPrefixDto.GetInputStringDelimiters()
+//
+//       If this input parameter is judged to be invalid, an
+//
+//
+//  outputStrDelimiters        ErrPrefixDelimiters
+//     - Sets the string delimiters used by the current
+//       ErrPrefixDto instance to format error prefix strings
+//       returned by methods:
+//              ErrPrefixDto.String()
+//              ErrPrefixDto.StrMaxLineLen()
+//
+//       If the input parameter, 'outputStrDelimiters', is invalid,
+//       this/ method will return an error.
+//
+//       If output string delimiters are not directly configured by
+//       the user, the default output string delimiters will be
+//       applied.
+//
+//       The default output string delimiters are listed as
+//       follows:
+//
+//         New Line Error Prefix Delimiter = "\n"
+//         In-Line Error Prefix Delimiter  = " - "
+//         New Line Error Context Delimiter = "\n :  "
+//         In-Line Error Context Delimiter = " : "
+//
+//       To monitor output string delimiters, use method:
+//         ErrPrefixDto.GetOutputStringDelimiters()
+//
+//       If this input parameter is judged to be invalid, an
+//
+//
+//  ePrefix                    string
+//     - This is an error prefix which is included in all returned
+//       error messages. Usually, it contains the names of the calling
+//       method or methods. Note: Be sure to leave a space at the end
+//       of 'ePrefix'. This parameter is optional.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *ErrPrefixDto
+//     - If this method completes successfully, it will return a
+//       pointer to a new instance of ErrPrefixDto containing a
+//       duplicate of error prefix and error context information
+//       extracted from input parameter 'iEPref' plus new error
+//       prefix information supplied by parameters, 'newErrPrefix'
+//       and 'newErrContext'.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter 'ePrefix'
+//       will be prefixed and attached to the beginning of the
+//       error message.
+//
+func (ePrefDto ErrPrefixDto) NewIEmptyWithDelimiters(
+	iEPref interface{},
+	newErrPrefix string,
+	newErrContext string,
+	inputStrDelimiters ErrPrefixDelimiters,
+	outputStrDelimiters ErrPrefixDelimiters,
+	ePrefix string) (
+	*ErrPrefixDto,
+	error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefix += newErrPrefix +
+		"\nErrPrefixDto.NewIEmptyWithDelimiters()"
+
+	newErrPrefixDto := new(ErrPrefixDto)
+
+	newErrPrefixDto.lock = new(sync.Mutex)
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.ePrefCol = nil
+
+	err :=
+		newErrPrefixDto.inputStrDelimiters.
+			CopyIn(
+				&inputStrDelimiters,
+				ePrefix+"newErrPrefixDto.inputStrDelimiters ")
+
+	if err != nil {
+		return newErrPrefixDto, err
+	}
+
+	err =
+		newErrPrefixDto.outputStrDelimiters.
+			CopyIn(
+				&outputStrDelimiters,
+				ePrefix+"newErrPrefixDto.outputStrDelimiters ")
+
+	if err != nil {
+		return newErrPrefixDto, err
+	}
+
+	err = errPrefixDtoMechanics{}.ptr().
+		setFromEmptyInterface(
+			newErrPrefixDto,
+			iEPref,
+			ePrefix)
 
 	if err != nil {
 		return newErrPrefixDto, err

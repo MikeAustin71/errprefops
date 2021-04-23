@@ -948,7 +948,7 @@ func TestErrPrefixDto_NewFromStrings_000100(t *testing.T) {
 	}
 }
 
-func TestErrPrefixDto_NewFromStrings000200(t *testing.T) {
+func TestErrPrefixDto_NewFromStrings_000200(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_NewFromStrings_000100"
 
@@ -1120,7 +1120,7 @@ func TestErrPrefixDto_NewFromStrings000200(t *testing.T) {
 	}
 }
 
-func TestErrPrefixDto_NewFromStrings000300(t *testing.T) {
+func TestErrPrefixDto_NewFromStrings_000300(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_NewFromStrings000300"
 
@@ -1237,7 +1237,7 @@ func TestErrPrefixDto_NewFromStrings000300(t *testing.T) {
 	}
 }
 
-func TestErrPrefixDto_NewFromStrings000400(t *testing.T) {
+func TestErrPrefixDto_NewFromStrings_000400(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_NewFromStrings000400"
 
@@ -1355,7 +1355,7 @@ func TestErrPrefixDto_NewFromStrings000400(t *testing.T) {
 
 }
 
-func TestErrPrefixDto_NewFromStrings000500(t *testing.T) {
+func TestErrPrefixDto_NewFromStrings_000500(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_NewFromStrings000400"
 
@@ -2585,6 +2585,1924 @@ func TestErrPrefixDto_NewIEmpty_001600(t *testing.T) {
 
 	if err == nil {
 		t.Error("Expected an error return from ErrPrefixDto{}.NewIEmpty(sbPtr)\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000100(t *testing.T) {
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000100"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters() #1\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
+
+	newErrCtx := "7/X=Z  X=0"
+
+	ePDto.SetEPrefCtx(newErrPrefix, newErrCtx)
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		twoDSlice,
+		newErrPrefix,
+		newErrCtx,
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	expectedOutputStr :=
+		ErrPref{}.ConvertNonPrintableChars(
+			[]rune(ePDto.String()),
+			false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			expectedOutputStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if expectedOutputStr != ePDto2Str {
+		t.Errorf("ERROR:\n"+
+			"Expected expectedOutputStr == ePDto1St\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedOutputStr = '%v'\n"+
+			"        ePDto2Str = '%v'\n",
+			expectedOutputStr,
+			ePDto2Str)
+		return
+	}
+
+	actualInputDelims,
+		actualOutputDelims := ePDto2.GetStrDelimiters()
+
+	if !actualInputDelims.Equal(&inputDelimiters) {
+		t.Errorf("Error:\n"+
+			"Original input delimiters not equal to "+
+			"final input delimiters!\n"+
+			"Original input delimiters='%v'\n"+
+			"   Final input delimiters='%v'\n",
+			inputDelimiters.String(),
+			actualInputDelims.String())
+	}
+
+	if !actualOutputDelims.Equal(&outputDelimiters) {
+		t.Errorf("Error:\n"+
+			"Original output delimiters not equal to "+
+			"final actual output delimiters!\n"+
+			"Original output delimiters='%v'\n"+
+			"   Final output delimiters='%v'\n",
+			outputDelimiters.String(),
+			actualOutputDelims.String())
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000200(t *testing.T) {
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000100"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters() #1\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
+
+	ePDto.SetEPrefCtx(newErrPrefix, "")
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		twoDSlice,
+		newErrPrefix,
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	expectedOutputStr :=
+		ErrPref{}.ConvertNonPrintableChars(
+			[]rune(ePDto.String()),
+			false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			expectedOutputStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if expectedOutputStr != ePDto2Str {
+		t.Errorf("ERROR:\n"+
+			"Expected expectedOutputStr == ePDto1St\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedOutputStr = '%v'\n"+
+			"        ePDto2Str = '%v'\n",
+			expectedOutputStr,
+			ePDto2Str)
+		return
+	}
+
+	actualInputDelims,
+		actualOutputDelims := ePDto2.GetStrDelimiters()
+
+	if !actualInputDelims.Equal(&inputDelimiters) {
+		t.Errorf("Error:\n"+
+			"Original input delimiters not equal to "+
+			"final input delimiters!\n"+
+			"Original input delimiters='%v'\n"+
+			"   Final input delimiters='%v'\n",
+			inputDelimiters.String(),
+			actualInputDelims.String())
+	}
+
+	if !actualOutputDelims.Equal(&outputDelimiters) {
+		t.Errorf("Error:\n"+
+			"Original output delimiters not equal to "+
+			"final actual output delimiters!\n"+
+			"Original output delimiters='%v'\n"+
+			"   Final output delimiters='%v'\n",
+			outputDelimiters.String(),
+			actualOutputDelims.String())
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000300(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000300"
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew()\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness()"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto.SetMaxTextLineLen(40)
+
+	var oneDSlice []string
+
+	oneDSlice = make([]string, 14)
+
+	oneDSlice[0] = "Tx1.Something()"
+
+	oneDSlice[1] = "Tx2.SomethingElse()"
+
+	oneDSlice[2] = "Tx3.DoSomething()"
+
+	oneDSlice[3] = "Tx4()"
+
+	oneDSlice[4] = "Tx5()"
+
+	oneDSlice[5] = "Tx6.DoSomethingElse()"
+
+	oneDSlice[6] = "Tx7.TrySomethingNew()"
+
+	oneDSlice[7] = "Tx8.TryAnyCombination()"
+
+	oneDSlice[8] = "Tx9.TryAHammer()"
+
+	oneDSlice[9] = "Tx10.X()"
+
+	oneDSlice[10] = "Tx11.TryAnything()"
+
+	oneDSlice[11] = "Tx12.TryASalad()"
+
+	oneDSlice[12] = "Tx13.SomeFabulousAndComplexStuff()"
+
+	oneDSlice[13] = "Tx14.MoreAwesomeGoodness()"
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		oneDSlice,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(40)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000400(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000400"
+	maxLineLen := 60
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters() #1\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDtoCopy := ePDto.Copy()
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	initialStr = ePDtoCopy.String()
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		initialStr,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxLineLen)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000500(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000500"
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto.SetMaxTextLineLen(60)
+
+	initialStr = ePDto.String()
+
+	var ePDtoCopy ErrPrefixDto
+
+	ePDtoCopy,
+		err = ePDto.CopyOut(funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.CopyOut(funcName)\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		ePDtoCopy,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(60)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDtoStr=\n%v\n\nePDto2Str=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000600(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000600"
+	ePDto := ErrPrefixDto{}.New()
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto.SetMaxTextLineLen(60)
+
+	var ePDtoCopy *ErrPrefixDto
+
+	ePDtoCopy = ePDto.CopyPtr()
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		ePDtoCopy,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(60)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDtoStr=\n%v\n\nePDto2Str=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000700(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000700"
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		nil,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	if ePDto2.GetEPrefCollectionLen() != 0 {
+		t.Errorf("Error: Expected Collection Length==0\n"+
+			"Instead Collection Length=='%v'\n",
+			ePDto2.GetEPrefCollectionLen())
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000800(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000800()"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	maxLineLen := 60
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	var err error
+	var inputDelimiters ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	iBasicPref := testIBasicErrPref{}
+
+	err = iBasicPref.SetEPrefStrings(
+		twoDSlice)
+
+	if err != nil {
+		t.Errorf("Error from iBasicPref.SetEPrefStrings()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		&iBasicPref,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxLineLen)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_000900(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000900()"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	maxLineLen := 60
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	var err error
+
+	var inputDelimiters ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters() #1\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDtoCopy := ePDto.Copy()
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	initialStr = ePDtoCopy.String()
+
+	iStringerEPref := testIStringerErrPref{}
+
+	iStringerEPref.Set(initialStr)
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		&iStringerEPref,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxLineLen)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_001000(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_001000()"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	maxLineLen := 60
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	var err error
+
+	var inputDelimiters ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters() #1\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDtoCopy := ePDto.Copy()
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	initialStr = ePDtoCopy.String()
+
+	sb := strings.Builder{}
+
+	sb.WriteString(initialStr)
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		sb,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxLineLen)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_001100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_001100()"
+
+	ePDto := ErrPrefixDto{}.New()
+
+	maxLineLen := 60
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	var err error
+
+	var inputDelimiters ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters() #1\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDtoCopy := ePDto.Copy()
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDto.SetOutputStringDelimiters(
+			outputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto.SetOutputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	initialStr = ePDtoCopy.String()
+
+	sb := strings.Builder{}
+
+	sb.WriteString(initialStr)
+
+	var sbPtr *strings.Builder
+
+	sbPtr = &sb
+
+	var ePDto2 *ErrPrefixDto
+
+	ePDto2,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		sbPtr,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmptyWithDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxLineLen)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_001200(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_001200()"
+
+	var err error
+	var inputDelimiters ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			" - inputDelimiters\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"- outputDelimiters\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var sbPtr *strings.Builder
+
+	_,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		sbPtr,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}." +
+			"NewIEmptyWithDelimiters(sbPtr) because\n" +
+			"sbPtr is nil!\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_001300(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_001200()"
+
+	var err error
+	var inputDelimiters ErrPrefixDelimiters
+
+	inputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			" - inputDelimiters\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"- outputDelimiters\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var ePDto1 *ErrPrefixDto
+
+	_,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		ePDto1,
+		"",
+		"",
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}." +
+			"NewIEmptyWithDelimiters(ePDto1) because\n" +
+			"ePDto1 is nil!\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_001400(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_001400()"
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
+
+	newErrCtx := "7/X=Z  X=0"
+
+	inputDelimiters.Empty()
+
+	_,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		twoDSlice,
+		newErrPrefix,
+		newErrCtx,
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}." +
+			"NewIEmptyWithDelimiters(twoDSlice) because\n" +
+			"inputDelimiters is empty and therefore invalid!\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_NewIEmptyWithDelimiters_001500(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_001500()"
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  #",
+		" ### ",
+		"\n      -",
+		" --- ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var outputDelimiters ErrPrefixDelimiters
+
+	outputDelimiters,
+		err = ErrPrefixDelimiters{}.New(
+		"\n  &",
+		" *&* ",
+		"\n      %",
+		" %%% ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	newErrPrefix := "Tx15.TomorrowWillBeBetter()"
+
+	newErrCtx := "7/X=Z  X=0"
+
+	outputDelimiters.Empty()
+
+	_,
+		err = ErrPrefixDto{}.NewIEmptyWithDelimiters(
+		twoDSlice,
+		newErrPrefix,
+		newErrCtx,
+		inputDelimiters,
+		outputDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("Expected an error return from ErrPrefixDto{}." +
+			"NewIEmptyWithDelimiters(twoDSlice) because\n" +
+			"inputDelimiters is empty and therefore invalid!\n" +
 			"HOWEVER, NO ERROR WAS RETURNED!!\n")
 		return
 	}
