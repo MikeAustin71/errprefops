@@ -841,6 +841,54 @@ func (ePrefDto *ErrPrefixDto) GetMaxTextLineLen() uint {
 	return ePrefDto.maxErrPrefixTextLineLength
 }
 
+// GetMaxTextLineLenDefault - Returns the system default value for
+// Maximum Text Line Length Limit.
+//
+// The Maximum Text Line Length Limit is the number of characters
+// allowed in an error prefix text line output for display
+// purposes.
+//
+// This system default value is provided for information purposes
+// only. The system default value may or may not be applied to the
+// current ErrPrefixDto instance. To learn the Maximum Text Line
+// Length Limit applied to the current ErrPrefixDto instance, call
+// method: ErrPrefixDto.GetMaxTextLineLen()
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  uint
+//     - This unsigned integer specifies the system default value
+//       for the Maximum Text Line Length Limit. This value is
+//       provided for informational purposes only. The system
+//       default value may or may not be applied to the current
+//       ErrPrefixDto instance. To learn the Maximum Text Line
+//       Length Limit applied to the current ErrPrefixDto instance,
+//       call method:  ErrPrefixDto.GetMaxTextLineLen()
+//
+func (ePrefDto *ErrPrefixDto) GetMaxTextLineLenDefault() uint {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return errPrefQuark{}.ptr().
+		getMasterErrPrefDisplayLineLength()
+}
+
 // GetOutputStringDelimiters - Returns the output string delimiters
 // configured for the current instance of ErrPrefixDto.
 //

@@ -204,3 +204,34 @@ func TestErrPrefixDto_SetLeftMarginChar_000200(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDto_SetMaxTextLineLen_000100(t *testing.T) {
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
+
+	ePDto.SetMaxTextLineLen(5)
+
+	defaultMaxTextLineLen := ePDto.GetMaxTextLineLenDefault()
+
+	actualMaxTextLineLen := ePDto.GetMaxTextLineLen()
+
+	if actualMaxTextLineLen != defaultMaxTextLineLen {
+		t.Errorf("ERROR:\n"+
+			"Expected actualMaxTextLineLen == defaultMaxTextLineLen\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			" actualMaxTextLineLen='%v'\n"+
+			"defaultMaxTextLineLen='%v'\n",
+			actualMaxTextLineLen,
+			defaultMaxTextLineLen)
+	}
+
+}
