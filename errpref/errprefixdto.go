@@ -1614,25 +1614,11 @@ func (ePrefDto ErrPrefixDto) NewFromStrings(
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
-	err := inputStrDelimiters.IsValidInstanceError(
-		ePrefix + "inputStrDelimiters ")
-
-	if err != nil {
-		return newErrPrefixDto, err
-	}
-
-	err =
+	err :=
 		newErrPrefixDto.inputStrDelimiters.
 			CopyIn(
 				&inputStrDelimiters,
 				ePrefix+"newErrPrefixDto.inputStrDelimiters ")
-
-	if err != nil {
-		return newErrPrefixDto, err
-	}
-
-	err = outputStrDelimiters.IsValidInstanceError(
-		ePrefix + "outputStrDelimiters ")
 
 	if err != nil {
 		return newErrPrefixDto, err
@@ -2200,6 +2186,11 @@ func (ePrefDto *ErrPrefixDto) SetEPref(
 // All existing error prefix and error context information in this
 // ErrPrefixDto instance will be overwritten and deleted.
 //
+// If the input array 'newEPrefCollection' has zero elements, then
+// the current ErrorPrefixInfo instance will be configured with an
+// array of zero elements thereby effectively deleting all previous
+// existing error prefix information.
+//
 //
 // ----------------------------------------------------------------
 //
@@ -2662,14 +2653,7 @@ func (ePrefDto *ErrPrefixDto) SetInputStringDelimiters(
 	ePrefix += " ErrPrefixDto.SetInputStringDelimiters() \n" +
 		"inputStrDelimiters "
 
-	err := inputStrDelimiters.IsValidInstanceError(
-		ePrefix)
-
-	if err != nil {
-		return err
-	}
-
-	err =
+	err :=
 		ePrefDto.inputStrDelimiters.
 			CopyIn(
 				&inputStrDelimiters,
@@ -2995,14 +2979,7 @@ func (ePrefDto *ErrPrefixDto) SetOutputStringDelimiters(
 
 	ePrefix += " ErrPrefixDto.SetOutputStringDelimiters() "
 
-	err := outputStrDelimiters.IsValidInstanceError(
-		ePrefix)
-
-	if err != nil {
-		return err
-	}
-
-	err =
+	err :=
 		ePrefDto.outputStrDelimiters.
 			CopyIn(
 				&outputStrDelimiters,

@@ -56,6 +56,8 @@
 --- PASS: TestNewErrPref_Multiple_000300 (0.00s)
 === RUN   TestErrPrefixDto_SetEPrefStrings_000100
 --- PASS: TestErrPrefixDto_SetEPrefStrings_000100 (0.00s)
+=== RUN   TestErrPrefixDto_SetEPrefStrings_000200
+--- PASS: TestErrPrefixDto_SetEPrefStrings_000200 (0.00s)
 === RUN   TestErrorPrefixInfo_CopyIn_000100
 --- PASS: TestErrorPrefixInfo_CopyIn_000100 (0.00s)
 === RUN   TestErrorPrefixInfo_CopyOut_000100
@@ -80,6 +82,8 @@
 --- PASS: TestErrPrefixDelimiters_Empty_000100 (0.00s)
 === RUN   TestErrPrefixDelimiters_SetLineLengthValues_000100
 --- PASS: TestErrPrefixDelimiters_SetLineLengthValues_000100 (0.00s)
+=== RUN   TestErrPrefixDelimiters_SetDelimiters_000100
+--- PASS: TestErrPrefixDelimiters_SetDelimiters_000100 (0.00s)
 === RUN   TestErrPrefixDto_AddEPrefCollectionStr_000100
 --- PASS: TestErrPrefixDto_AddEPrefCollectionStr_000100 (0.00s)
 === RUN   TestErrPrefixDto_CopyPtr_000100
@@ -122,16 +126,24 @@
 --- PASS: TestErrPrefixDto_MergeErrPrefixDto_000100 (0.00s)
 === RUN   TestErrPrefixDto_MergeErrPrefixDto_000200
 --- PASS: TestErrPrefixDto_MergeErrPrefixDto_000200 (0.00s)
+=== RUN   TestErrPrefixDto_MergeErrPrefixDto_000300
+--- PASS: TestErrPrefixDto_MergeErrPrefixDto_000300 (0.00s)
 === RUN   TestErrPrefixDto_Multiple_000100
 --- PASS: TestErrPrefixDto_Multiple_000100 (0.00s)
 === RUN   TestErrPrefixDto_Multiple_000200
 --- PASS: TestErrPrefixDto_Multiple_000200 (0.00s)
 === RUN   TestErrPrefixDto_Multiple_000300
 --- PASS: TestErrPrefixDto_Multiple_000300 (0.00s)
-=== RUN   TestErrPrefixDto_NewIBasicErrorPrefix
---- PASS: TestErrPrefixDto_NewIBasicErrorPrefix (0.00s)
-=== RUN   TestErrPrefixDto_NewEPrefCollection
---- PASS: TestErrPrefixDto_NewEPrefCollection (0.00s)
+=== RUN   TestErrPrefixDto_NewIBasicErrorPrefix_000100
+--- PASS: TestErrPrefixDto_NewIBasicErrorPrefix_000100 (0.00s)
+=== RUN   TestErrPrefixDto_NewIBasicErrorPrefix_000200
+--- PASS: TestErrPrefixDto_NewIBasicErrorPrefix_000200 (0.00s)
+=== RUN   TestErrPrefixDto_NewIBasicErrorPrefix_000300
+--- PASS: TestErrPrefixDto_NewIBasicErrorPrefix_000300 (0.00s)
+=== RUN   TestErrPrefixDto_NewIBasicErrorPrefix_000400
+--- PASS: TestErrPrefixDto_NewIBasicErrorPrefix_000400 (0.00s)
+=== RUN   TestErrPrefixDto_NewEPrefCollection_000100
+--- PASS: TestErrPrefixDto_NewEPrefCollection_000100 (0.00s)
 === RUN   TestErrPrefixDto_NewEPrefCtx_000100
 --- PASS: TestErrPrefixDto_NewEPrefCtx_000100 (0.00s)
 === RUN   TestErrPrefixDto_NewEPrefCtx_000200
@@ -144,6 +156,8 @@
 --- PASS: TestErrPrefixDto_NewEPrefOld_000200 (0.00s)
 === RUN   TestErrPrefixDto_NewFromIErrorPrefix_000100
 --- PASS: TestErrPrefixDto_NewFromIErrorPrefix_000100 (0.00s)
+=== RUN   TestErrPrefixDto_NewFromIErrorPrefix_000200
+--- PASS: TestErrPrefixDto_NewFromIErrorPrefix_000200 (0.00s)
 === RUN   TestErrPrefixDto_NewFromStrings_000100
 --- PASS: TestErrPrefixDto_NewFromStrings_000100 (0.00s)
 === RUN   TestErrPrefixDto_NewFromStrings000200
@@ -216,6 +230,8 @@
 --- PASS: TestErrPrefixDto_SetCtx_000400 (0.00s)
 === RUN   TestErrPrefixDto_SetCtxEmpty_000100
 --- PASS: TestErrPrefixDto_SetCtxEmpty_000100 (0.00s)
+=== RUN   TestErrPrefixDto_SetCtxEmpty_000200
+--- PASS: TestErrPrefixDto_SetCtxEmpty_000200 (0.00s)
 === RUN   TestErrPrefixDto_SetEPref_000100
 --- PASS: TestErrPrefixDto_SetEPref_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetEPref_000200
@@ -224,10 +240,12 @@
 --- PASS: TestErrPrefixDto_SetEPref_000300 (0.00s)
 === RUN   TestErrPrefixDto_SetEPref_000400
 --- PASS: TestErrPrefixDto_SetEPref_000400 (0.00s)
-=== RUN   TestErrPrefixDto_SetEPrefCollection000100
---- PASS: TestErrPrefixDto_SetEPrefCollection000100 (0.00s)
-=== RUN   TestErrPrefixDto_SetEPrefCollection000200
---- PASS: TestErrPrefixDto_SetEPrefCollection000200 (0.00s)
+=== RUN   TestErrPrefixDto_SetEPrefCollection_000100
+--- PASS: TestErrPrefixDto_SetEPrefCollection_000100 (0.00s)
+=== RUN   TestErrPrefixDto_SetEPrefCollection_000200
+--- PASS: TestErrPrefixDto_SetEPrefCollection_000200 (0.00s)
+=== RUN   TestErrPrefixDto_SetEPrefCollection_000300
+--- PASS: TestErrPrefixDto_SetEPrefCollection_000300 (0.00s)
 === RUN   TestErrPrefixDto_SetEPrefCtx_000100
 --- PASS: TestErrPrefixDto_SetEPrefCtx_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetEPrefCtx_000200
@@ -337,5 +355,5 @@
 === RUN   TestErrPrefixDto_SetLeftMarginChar_000200
 --- PASS: TestErrPrefixDto_SetLeftMarginChar_000200 (0.00s)
 PASS
-coverage: 86.0% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	1.067s
+coverage: 86.7% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	1.574s

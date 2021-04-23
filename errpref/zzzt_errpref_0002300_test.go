@@ -250,6 +250,24 @@ func TestErrPrefixDto_SetCtxEmpty_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_SetCtxEmpty_000200(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetCtxEmpty()
+
+	collectionLen := ePDto.GetEPrefCollectionLen()
+
+	if collectionLen != 0 {
+		t.Errorf("ERROR:\n"+
+			"Expected a zero collection length return from\n"+
+			"ePDto.GetEPrefCollectionLen().\n"+
+			"HOWEVER, COLLECTION LENGTH > 0!\n"+
+			"Collection Length='%v'\n",
+			collectionLen)
+	}
+}
+
 func TestErrPrefixDto_SetEPref_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()
@@ -399,7 +417,7 @@ func TestErrPrefixDto_SetEPref_000400(t *testing.T) {
 
 }
 
-func TestErrPrefixDto_SetEPrefCollection000100(t *testing.T) {
+func TestErrPrefixDto_SetEPrefCollection_000100(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()
 
@@ -461,7 +479,7 @@ func TestErrPrefixDto_SetEPrefCollection000100(t *testing.T) {
 
 }
 
-func TestErrPrefixDto_SetEPrefCollection000200(t *testing.T) {
+func TestErrPrefixDto_SetEPrefCollection_000200(t *testing.T) {
 
 	ePDto := ErrPrefixDto{}.New()
 
@@ -535,6 +553,52 @@ func TestErrPrefixDto_SetEPrefCollection000200(t *testing.T) {
 			"lenDto2Collection='%v'\n",
 			lenDto1Collection,
 			lenDto2Collection)
+	}
+
+}
+
+func TestErrPrefixDto_SetEPrefCollection_000300(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
+			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
+			"Tx7.TrySomethingNew() : something->newSomething\n" +
+			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
+			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
+			"Tx13.SomeFabulousAndComplexStuff()\n" +
+			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	oldCollectionLen := ePDto.GetEPrefCollectionLen()
+
+	if oldCollectionLen == 0 {
+		t.Error("ERROR:\n" +
+			"Expected oldCollectionLen > 0 because \n" +
+			"ePDto.SetEPrefOld(initialStr)\n was\n" +
+			"called with initialStr containing 14 elements.\n" +
+			"HOWEVER, oldCollectionLen == 0\n")
+		return
+	}
+
+	ePrefEmptyCol := []ErrorPrefixInfo{}
+
+	ePDto.SetEPrefCollection(ePrefEmptyCol)
+
+	newCollectionLen := ePDto.GetEPrefCollectionLen()
+
+	if newCollectionLen != 0 {
+		t.Errorf("ERROR:\n"+
+			"Expected newCollectionLen==0 because \n"+
+			"ePDto.SetEPrefCollection(ePrefEmptyCol) was\n"+
+			"called with a zero length array.\n"+
+			"HOWEVER, newCollectionLen != 0\n"+
+			"newCollectionLen='%v'\n",
+			newCollectionLen)
 	}
 
 }

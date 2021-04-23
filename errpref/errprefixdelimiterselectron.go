@@ -98,14 +98,13 @@ func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyIn(
 			ePrefix)
 	}
 
-	ePrefDelimsQuark := errPrefixDelimitersQuark{}
-
 	// 'incomingDelimiters' line lengths are re-calculated here.
 	_,
-		err := ePrefDelimsQuark.testValidityOfErrPrefixDelimiters(
-		incomingDelimiters,
-		ePrefix+
-			"incomingDelimiters\n")
+		err := errPrefixDelimitersQuark{}.ptr().
+		testValidityOfErrPrefixDelimiters(
+			incomingDelimiters,
+			ePrefix+
+				"incomingDelimiters\n")
 
 	if err != nil {
 		return err

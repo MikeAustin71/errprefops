@@ -477,3 +477,81 @@ func TestErrPrefixDelimiters_SetLineLengthValues_000100(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDelimiters_SetDelimiters_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_SetLineLengthValues()"
+
+	inLinePrefixDelimiters := " - "
+	newLineContextDelimiters := "\n : "
+	inLineContextDelimiters := " : "
+
+	ePrefDelimsOne := ErrPrefixDelimiters{}
+
+	err := ePrefDelimsOne.SetDelimiters(
+		"",
+		inLinePrefixDelimiters,
+		newLineContextDelimiters,
+		inLineContextDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsOne.SetDelimiters()\n" +
+			"because 'newLinePrefixDelimiters' is an empty string.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	newLinePrefixDelimiters := "\n"
+
+	err = ePrefDelimsOne.SetDelimiters(
+		newLinePrefixDelimiters,
+		"",
+		newLineContextDelimiters,
+		inLineContextDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsOne.SetDelimiters()\n" +
+			"because 'inLinePrefixDelimiters' is an empty string.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	err = ePrefDelimsOne.SetDelimiters(
+		newLinePrefixDelimiters,
+		inLinePrefixDelimiters,
+		"",
+		inLineContextDelimiters,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsOne.SetDelimiters()\n" +
+			"because 'newLineContextDelimiters' is an empty string.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	err = ePrefDelimsOne.SetDelimiters(
+		newLinePrefixDelimiters,
+		inLinePrefixDelimiters,
+		newLineContextDelimiters,
+		"",
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsOne.SetDelimiters()\n" +
+			"because 'inLineContextDelimiters' is an empty string.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+}
