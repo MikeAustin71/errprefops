@@ -517,3 +517,122 @@ func TestErrPrefixDto_SetInputStringDelimiters_000100(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDto_SetStrDelimitersToDefault_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_SetStrDelimitersToDefault_000100() "
+
+	inputDelimiters,
+		err := ErrPrefixDelimiters{}.New(
+		"\n  *",
+		" -*- ",
+		"\n      %",
+		" &&& ",
+		funcName)
+
+	if err != nil {
+		t.Errorf("Error from ErrPrefixDelimiters{}.New()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto1 := ErrPrefixDto{}.New()
+
+	ePDto1.SetMaxTextLineLen(40)
+
+	err =
+		ePDto1.SetInputStringDelimiters(
+			inputDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDto1.SetInputStringDelimiters()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	rawInput := "Tx1.Something() -*- Tx2.SomethingElse()\n" +
+		"  *Tx3.DoSomething() -*- Tx4() -*- Tx5()\n" +
+		"  *Tx6.DoSomethingElse()\n  *Tx7.TrySomethingNew()\n" +
+		"      %something->newSomething\n" +
+		"  *Tx8.TryAnyCombination()\n" +
+		"  *Tx9.TryAHammer() &&& x->y -*- Tx10.X()\n" +
+		"  *Tx11.TryAnything() -*- Tx12.TryASalad()\n" +
+		"  *Tx13.SomeFabulousAndComplexStuff()\n" +
+		"  *Tx14.MoreAwesomeGoodness\n" +
+		"      %A=7 B=8 C=9"
+
+	ePDto1.SetEPrefOld(rawInput)
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	ePDtoBase := ErrPrefixDto{}.New()
+
+	ePDtoBase.SetMaxTextLineLen(40)
+
+	ePDtoBase.SetEPrefStrings(twoDSlice)
+
+	expectedOutputStr :=
+		ErrPref{}.ConvertNonPrintableChars(
+			[]rune(ePDtoBase.String()),
+			false)
+
+	ePDto1Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto1.String()),
+		false)
+
+	if expectedOutputStr != ePDto1Str {
+		t.Errorf("ERROR:\n"+
+			"Expected expectedOutputStr == ePDto1St\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedOutputStr = '%v'\n"+
+			"        ePDto1Str = '%v'\n",
+			expectedOutputStr,
+			ePDto1Str)
+	}
+
+}

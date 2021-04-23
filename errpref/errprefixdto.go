@@ -503,61 +503,6 @@ func (ePrefDto *ErrPrefixDto) Equal(
 		ePrefixDto2)
 }
 
-// GetStrDelimiters - Returns two ErrPrefixDelimiters objects which
-// containing the input string delimiters and the output string
-// delimiters configured for the current instance of ErrPrefixDto.
-//
-// Input string delimiters are employed by the current ErrPrefixDto
-// instance when receiving and parsing raw strings containing error
-// prefix information. Such strings are parsed before extracting
-// error prefix information to be stored in the error prefix
-// collection maintained by the current ErrPrefixDto instance.
-//
-// Output string delimiters on the other hand are used by the
-// current ErrPrefixDto instance to format error prefix strings
-// for output. Formatted strings returned for output are generated
-// by the following two methods:
-//    ErrPrefixDto.String()
-//    ErrPrefixDto.StrMaxLineLen()
-//
-//
-// If the input and output string delimiters were not directly
-// configured by the user, the system default string delimiters
-// will be applied. The system default string delimiters are
-// listed as follows:
-//
-//    New Line Error Prefix Delimiter = "\n"
-//    In-Line Error Prefix Delimiter  = " - "
-//    New Line Error Context Delimiter = "\n :  "
-//    In-Line Error Context Delimiter = " : "
-//
-func (ePrefDto *ErrPrefixDto) GetStrDelimiters() (
-	inputStrDelimiters ErrPrefixDelimiters,
-	outputStrDelimiters ErrPrefixDelimiters) {
-
-	if ePrefDto.lock == nil {
-		ePrefDto.lock = new(sync.Mutex)
-	}
-
-	ePrefDto.lock.Lock()
-
-	defer ePrefDto.lock.Unlock()
-
-	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
-
-	inputStrDelimiters,
-		_ = ePrefDto.inputStrDelimiters.
-		CopyOut("")
-
-	outputStrDelimiters,
-		_ = ePrefDto.outputStrDelimiters.
-		CopyOut("")
-
-	return inputStrDelimiters, outputStrDelimiters
-}
-
 // GetInputStringDelimiters - Returns the input string delimiters
 // configured for the current instance of ErrPrefixDto.
 //
@@ -931,6 +876,61 @@ func (ePrefDto *ErrPrefixDto) GetOutputStringDelimiters() ErrPrefixDelimiters {
 		ePrefDto.outputStrDelimiters.CopyOut("")
 
 	return outputDelims
+}
+
+// GetStrDelimiters - Returns two ErrPrefixDelimiters objects which
+// containing the input string delimiters and the output string
+// delimiters configured for the current instance of ErrPrefixDto.
+//
+// Input string delimiters are employed by the current ErrPrefixDto
+// instance when receiving and parsing raw strings containing error
+// prefix information. Such strings are parsed before extracting
+// error prefix information to be stored in the error prefix
+// collection maintained by the current ErrPrefixDto instance.
+//
+// Output string delimiters on the other hand are used by the
+// current ErrPrefixDto instance to format error prefix strings
+// for output. Formatted strings returned for output are generated
+// by the following two methods:
+//    ErrPrefixDto.String()
+//    ErrPrefixDto.StrMaxLineLen()
+//
+//
+// If the input and output string delimiters were not directly
+// configured by the user, the system default string delimiters
+// will be applied. The system default string delimiters are
+// listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+func (ePrefDto *ErrPrefixDto) GetStrDelimiters() (
+	inputStrDelimiters ErrPrefixDelimiters,
+	outputStrDelimiters ErrPrefixDelimiters) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	inputStrDelimiters,
+		_ = ePrefDto.inputStrDelimiters.
+		CopyOut("")
+
+	outputStrDelimiters,
+		_ = ePrefDto.outputStrDelimiters.
+		CopyOut("")
+
+	return inputStrDelimiters, outputStrDelimiters
 }
 
 // GetTurnOffTextDisplay - Returns the current value of the
@@ -3294,6 +3294,75 @@ func (ePrefDto *ErrPrefixDto) SetOutputStringDelimiters(
 				ePrefix)
 
 	return err
+}
+
+// SetStrDelimitersToDefault - Sets the Input String Delimiters and
+// the Output String Delimiters to their system default values.
+//
+// The ErrPrefixDto type maintains two types of string delimiters,
+// Input String Delimiters and Output String Delimiters.
+//
+// Input String Delimiters are used by ErrPrefixDto instances to
+// parse raw string values containing error prefix and error
+// context information received as input parameters from external
+// sources. Methods performing this type of operation include but
+// are not limited to:
+//    ErrPrefixDto.NewIEmptyWithDelimiters()
+//    ErrPrefixDto.NewFromStrings()
+//    ErrPrefixDto.NewEPrefOld()
+//    ErrPrefixDto.SetEPrefOld()
+//
+// Output String Delimiters are used by ErrPrefixDto instances to
+// join or concatenate individual error prefix and error context
+// components to form presentation text for output and use in
+// preparation of error message strings. Methods performing this
+// type of operation are:
+//
+//    ErrPrefixDto.String()
+//    ErrPrefixDto.StrMaxLineLen()
+//
+// Initially, both the Input and Output System Delimiters for any
+// given ErrPrefixDto instance are set to the system default
+// values. This means that if the Input and Output String
+// Delimiters were not directly configured by the user, the system
+// default string delimiters are applied.
+//
+// The system defaults for both Input and Output String Delimiters
+// are listed as follows:
+//
+//    New Line Error Prefix Delimiter = "\n"
+//    In-Line Error Prefix Delimiter  = " - "
+//    New Line Error Context Delimiter = "\n :  "
+//    In-Line Error Context Delimiter = " : "
+//
+// Users have the option of setting custom Input and Output String
+// Delimiters using methods:
+//
+//    ErrPrefixDto.SetOutputStringDelimiters()
+//    ErrPrefixDto.SetInputStringDelimiters()
+//
+// The current settings for String Delimiters can be monitored
+// using methods:
+//    ErrPrefixDto.GetStrDelimiters()
+//    ErrPrefixDto.GetInputStringDelimiters()
+//    ErrPrefixDto.GetOutputStringDelimiters()
+//
+// In the event it becomes necessary to reset the Input and Output
+// String Delimiters to their original system default values, call
+// this method.
+//
+func (ePrefDto *ErrPrefixDto) SetStrDelimitersToDefault() {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+	ePrefDto.inputStrDelimiters.SetToDefault()
+
+	ePrefDto.outputStrDelimiters.SetToDefault()
 }
 
 // SetTurnOffTextDisplay - Controls the "Turn Off Text Display"
