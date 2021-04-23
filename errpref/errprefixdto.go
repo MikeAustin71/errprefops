@@ -3114,7 +3114,7 @@ func (ePrefDto *ErrPrefixDto) SetTurnOffTextDisplay(
 func (ePrefDto ErrPrefixDto) String() string {
 
 	if ePrefDto.lock == nil {
-		return ""
+		ePrefDto.lock = new(sync.Mutex)
 	}
 
 	ePrefDto.lock.Lock()
@@ -3168,13 +3168,14 @@ func (ePrefDto ErrPrefixDto) String() string {
 // Error prefix information is stored internally in the 'ePrefCol'
 // array.
 //
-// Input parameter 'maxLineLen' is used to set the maximum line
-// length for text returned by this method. It does not alter the
-// maximum line length default value for this ErrPrefixDto
-// instance. It temporarily sets the maximum line length for this
-// single string formatting operation. To set the permanent
-// Maximum Text Line Length use method:
-//    ErrPrefixDto.SetMaxTextLineLen()
+// Input parameter 'maxLineLen' is used to set the Maximum Text
+// Line length Limit (in characters) for text returned by this
+// method. If the value of 'maxLineLen' is less than 10, it will
+// be discarded and the current Maximum Text Line Length Limit
+// value will be used. If input parameter 'maxLineLen' is equal to
+// or greater than 10, the Maximum Text Line Length Limit for this
+// current ErrPrefixDto instance will be reset and configured to
+// this new value.
 //
 // If the "Turn Off Text Display Flag" is current set to 'true',
 // this method will return an empty string. The default value for
@@ -3186,9 +3187,9 @@ func (ePrefDto ErrPrefixDto) String() string {
 // formatted using output string delimiters previously configured
 // for this instance of ErrPrefixDto.
 //
-// If output string delimiters were not directly configured by the
-// user and are currently invalid, the default output string
-// delimiters will be applied.
+// If output string delimiters are invalid or were not directly
+// configured by the user, the default output string delimiters
+// will be applied.
 //
 // The default output string delimiters are listed as follows:
 //
@@ -3216,6 +3217,11 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 	if maxErrPrefixTextLineLength < 10 {
 		maxErrPrefixTextLineLength =
 			ePrefDto.maxErrPrefixTextLineLength
+
+	} else {
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			maxErrPrefixTextLineLength
 	}
 
 	if ePrefDto.turnOffTextDisplay ||

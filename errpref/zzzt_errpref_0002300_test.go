@@ -1016,6 +1016,78 @@ func TestErrPrefixDto_String_000300(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_String_000400(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()"
+
+	expectedStr := "Tx1.Something() - Tx2.SomethingElse()\nTx3.DoSomething() - Tx4() - Tx5()\nTx6.DoSomethingElse()"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	actualStr := ePDto.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error Series #1:"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	expectedStr = "Tx1.Something() - Tx2.SomethingElse()\n" +
+		"Tx3.DoSomething() - Tx4() - Tx5()\n" +
+		"Tx6.DoSomethingElse() : A+B=C"
+
+	actualStr = ePDto.XCtx("A+B=C").String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error Series #1:"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	ePDto.SetTurnOffTextDisplay(true)
+
+	expectedStr = ePDto.String()
+
+	if expectedStr != "" {
+		t.Errorf("ERROR:\n"+
+			"Expected String should be an empty zero length string.\n"+
+			"HOWEVER, 'expectedStr' IS NOT EMPTY!\n"+
+			"expectedStr='%v'\n",
+			expectedStr)
+	}
+
+}
+
 func TestErrPrefixDto_StrMaxLineLen_000200(t *testing.T) {
 
 	initialStr := "Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()\n"
@@ -1077,5 +1149,15 @@ func TestErrPrefixDto_StrMaxLineLen_000200(t *testing.T) {
 			actualStr)
 	}
 
-	ePDto.SetMaxTextLineLenToDefault()
+	currentMaxLineLen := ePDto.GetMaxTextLineLen()
+
+	if currentMaxLineLen != 60 {
+		t.Errorf("ERROR:\n"+
+			"Expected final Maximum Text Line Length Limit='60'.\n"+
+			"HOWEVER, final Maximum Text Line Length Limit\n"+
+			"IS NOT EQUAL TO 60!!!\n"+
+			"final Maximum Text Line Length Limit='%v'\n",
+			currentMaxLineLen)
+	}
+
 }
