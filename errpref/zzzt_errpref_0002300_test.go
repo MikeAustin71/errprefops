@@ -585,7 +585,7 @@ func TestErrPrefixDto_SetEPrefCollection_000300(t *testing.T) {
 		return
 	}
 
-	ePrefEmptyCol := []ErrorPrefixInfo{}
+	var ePrefEmptyCol []ErrorPrefixInfo
 
 	ePDto.SetEPrefCollection(ePrefEmptyCol)
 
@@ -1081,6 +1081,79 @@ func TestErrPrefixDto_String_000400(t *testing.T) {
 	if expectedStr != "" {
 		t.Errorf("ERROR:\n"+
 			"Expected String should be an empty zero length string.\n"+
+			"HOWEVER, 'expectedStr' IS NOT EMPTY!\n"+
+			"expectedStr='%v'\n",
+			expectedStr)
+	}
+
+}
+
+func TestErrPrefixDto_String_000500(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	ePDto.SetMaxTextLineLen(40)
+
+	initialStr :=
+		"Tx1.Something()\nTx2.SomethingElse()\nTx3.DoSomething()\nTx4() - Tx5()\nTx6.DoSomethingElse()"
+
+	expectedStr := "Tx1.Something() - Tx2.SomethingElse()\nTx3.DoSomething() - Tx4() - Tx5()\nTx6.DoSomethingElse()"
+
+	ePDto.SetEPrefOld(initialStr)
+
+	actualStr := ePDto.String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error Series #1:"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+
+		return
+	}
+
+	expectedStr = "Tx1.Something() - Tx2.SomethingElse()\n" +
+		"Tx3.DoSomething() - Tx4() - Tx5()\n" +
+		"Tx6.DoSomethingElse() : A+B=C"
+
+	actualStr = ePDto.XCtx("A+B=C").String()
+
+	expectedStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(expectedStr),
+		true)
+
+	actualStr = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(actualStr),
+		true)
+
+	if expectedStr != actualStr {
+
+		t.Errorf("Error Series #1:"+
+			"Expected actualStr= '%v'\n"+
+			"Instead, actualStr= '%v'\n",
+			expectedStr,
+			actualStr)
+		return
+	}
+
+	ePDto.Empty()
+
+	expectedStr = ePDto.String()
+
+	if expectedStr != "" {
+		t.Errorf("ERROR:\n"+
+			"Expected String should be an empty zero length string"+
+			"because ePDto has an empty error prefix collection.\n"+
 			"HOWEVER, 'expectedStr' IS NOT EMPTY!\n"+
 			"expectedStr='%v'\n",
 			expectedStr)

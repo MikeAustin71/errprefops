@@ -268,6 +268,8 @@
 --- PASS: TestErrPrefixDto_String_000300 (0.00s)
 === RUN   TestErrPrefixDto_String_000400
 --- PASS: TestErrPrefixDto_String_000400 (0.00s)
+=== RUN   TestErrPrefixDto_String_000500
+--- PASS: TestErrPrefixDto_String_000500 (0.00s)
 === RUN   TestErrPrefixDto_StrMaxLineLen_000200
 --- PASS: TestErrPrefixDto_StrMaxLineLen_000200 (0.00s)
 === RUN   TestErrPrefixDto_SetIEmpty_000100
@@ -360,4 +362,4 @@
 --- PASS: TestErrPrefixDto_SetMaxTextLineLen_000100 (0.00s)
 PASS
 coverage: 86.8% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.720s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.708s
