@@ -635,4 +635,52 @@ func TestErrPrefixDto_SetStrDelimitersToDefault_000100(t *testing.T) {
 			ePDto1Str)
 	}
 
+	defaultStrDelimiters := ErrPrefixDelimiters{}
+
+	defaultStrDelimiters.SetToDefault()
+
+	err =
+		ePDtoBase.SetInputStringDelimiters(
+			defaultStrDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDtoBase.SetInputStringDelimiters"+
+			"(defaultStrDelimiters)\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	err =
+		ePDtoBase.SetOutputStringDelimiters(
+			defaultStrDelimiters,
+			funcName)
+
+	if err != nil {
+		t.Errorf("Error from ePDtoBase.SetOutputStringDelimiters"+
+			"(defaultStrDelimiters)\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto1.SetStrDelimitersToDefault()
+
+	expectedOutputStr =
+		ErrPref{}.ConvertNonPrintableChars(
+			[]rune(ePDtoBase.String()),
+			false)
+
+	ePDto1Str = ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto1.String()),
+		false)
+
+	if expectedOutputStr != ePDto1Str {
+		t.Errorf("ERROR Default Series #2:\n"+
+			"Expected expectedOutputStr == ePDto1St\n"+
+			"HOWEVER, THEY ARE NOT EQUAL!\n"+
+			"expectedOutputStr = '%v'\n"+
+			"        ePDto1Str = '%v'\n",
+			expectedOutputStr,
+			ePDto1Str)
+	}
 }

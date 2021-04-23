@@ -254,6 +254,8 @@
 --- PASS: TestErrPrefixDto_SetOutputStringDelimiters_000200 (0.00s)
 === RUN   TestErrPrefixDto_SetInputStringDelimiters_000100
 --- PASS: TestErrPrefixDto_SetInputStringDelimiters_000100 (0.00s)
+=== RUN   TestErrPrefixDto_SetStrDelimitersToDefault_000100
+--- PASS: TestErrPrefixDto_SetStrDelimitersToDefault_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetCtx_000100
 --- PASS: TestErrPrefixDto_SetCtx_000100 (0.00s)
 === RUN   TestErrPrefixDto_SetCtx_000200
@@ -403,5 +405,5 @@
 === RUN   TestErrorPrefixInfo_SetErrPrefixStr
 --- PASS: TestErrorPrefixInfo_SetErrPrefixStr (0.00s)
 PASS
-coverage: 87.3% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.803s
+coverage: 87.2% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	1.640s
