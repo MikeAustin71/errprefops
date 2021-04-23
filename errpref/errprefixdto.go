@@ -3126,10 +3126,17 @@ func (ePrefDto ErrPrefixDto) String() string {
 		return ""
 	}
 
-	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
-		ePrefDto.ePrefCol)
+	if ePrefDto.maxErrPrefixTextLineLength < 10 {
+
+		ePrefDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	}
 
 	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
 
 	outPutStr := errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
@@ -3215,6 +3222,14 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 	maxErrPrefixTextLineLength := uint(maxLineLen)
 
 	if maxErrPrefixTextLineLength < 10 {
+
+		if ePrefDto.maxErrPrefixTextLineLength < 10 {
+
+			ePrefDto.maxErrPrefixTextLineLength =
+				errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+		}
+
 		maxErrPrefixTextLineLength =
 			ePrefDto.maxErrPrefixTextLineLength
 
