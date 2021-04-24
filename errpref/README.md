@@ -6,7 +6,7 @@ The ***errpref*** software package was written in the [Go](https://golang.org/) 
 
 ***errpref*** supports [Go Modules]([Go Modules Reference - The Go Programming Language (golang.org)](https://golang.org/ref/mod)).
 
-The current version of ***errpref*** is Version 1.6.0. Most notably, this version implements the [Left Margin Feature](#left-margin-feature) in error prefix string formatting.
+The current version of ***errpref*** is Version 1.6.0. Most notably, this version implements the [Left Margin Feature](#left-margin-feature) in error prefix string formatting and [Customizable String Delimiters](#customizing-input-and-output-string-delimiters) for parsing input and output error prefix strings.
 
 
 
@@ -18,19 +18,25 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this versio
  - [Definition of Terms](#definition-of-terms)
    - [Error Prefix](#error-prefix)
    - [Error Context](#error-context)
- - [String Formatting Conventions](#string-formatting-conventions)
-   - [Error Prefix Delimiters](#error-prefix-delimiters)
-   - [Error Context Delimiters](#error-context-delimiters)
  - [Getting Started](#getting-started)
    - [Two Types To Choose From](#two-types-to-choose-from) 
    - [ErrPrefixDto - A Full Featured Solution](#errprefixdto---a-full-featured-solution)
      - [Public Facing Methods](#public-facing-methods)
      - [Internal or Private Methods](#internal-or-private-methods)
      - [Error Context Example](#error-context-example)
+     - [Customizing Input and Output String Delimiters](#customizing-input-and-output-string-delimiters)
      - [Maximum Text Line Length](#maximum-text-line-length)
      - [Left Margin Feature](#left-margin-feature)
+     - [Text Display On/Off Switch](#text-display-onoff-switch)
+     - [Is Last Text Line Terminated With New Line](#is-last-text-line-terminated-with-new-line)
    - [ErrPref - Quick And Simple Solution](#errpref---quick-and-simple-solution)
+     - [String Formatting Conventions](#string-formatting-conventions)
+       - [Error Prefix Delimiters](#error-prefix-delimiters)
+       - [Error Context Delimiters](#error-context-delimiters)
  - [Exchanging Error Prefix Information with User Defined Types](#exchanging-error-prefix-information-with-user-defined-types)
+   - [IBuilderErrorPrefix](#ibuildererrorprefix)
+   - [IBasicErrorPrefix ](#ibasicerrorprefix)
+   - [Custom Input String Delimiters](#custom-input-string-delimiters)
  - [Usage Examples](#usage-examples)
    - [Test Code](#test-code)
    - [Example Application](#example-application)
@@ -39,6 +45,7 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this versio
    - [Import Configuration](#import-configuration)
  - [External Dependencies](#external-dependencies)
  - [Source Code Documentation](#source-code-documentation)
+ - [Tests](#tests)
  - [Version](#version)
  - [License](#license)
  - [Comments And Questions](#comments-and-questions)
@@ -55,17 +62,19 @@ Basically, when I see an error message, especially during the development phase,
 
 ## The Solution
 
-The ***errpref*** or Error Prefix project is intended to provide better function or method documentation in error messages returned by Go functions. Two types have been defined for this purpose: ***ErrPref*** and ***ErrPrefixDto***. Both of these types are designed to receive function chain information, format it and return the formatted strings for inclusion in error messages.
+The ***errpref*** or Error Prefix project is intended to provide better function or method documentation in error messages returned by **Go** functions. Two types have been defined for this purpose: ***ErrPref*** and ***ErrPrefixDto***. Both of these types are designed to receive function chain information, format it and return the formatted strings for inclusion in error messages.
 
-The idea is not to go overboard. I tried my hand at an error handler for Go Programs earlier and quickly realized that the complexity was growing exponentially. At least at the outset of this project, the idea is to keep the ***errpref*** package simple, as a fast and efficient mechanism for adding error prefix text and function chain lists to error messages.
+From a usage standpoint, ***ErrPref*** and ***ErrPrefixDto*** collect information in string form at each method or function in the execution chain. If an error occurs, the user is responsible for extracting the collected information from ***ErrPref*** or ***ErrPrefixDto*** and integrating that information into the returned error message. While these types are designed to collect error prefix and error context information, they can in fact be used to collect any required informational or error related messaging in string format. This could be error numbers, execution or debugging information or virtually any text specified by the developer. In addition, despite the name 'error prefix', there is no requirement that this information be attached to the beginning of an error message. As a practical matter, the information could be injected as a string anywhere in the returned error message or informational message display.
 
 ### Wait a Minute - Let's Think About This
 
 So, if you only take a quick look at the ***errpref*** package you might be tempted to say, **"Whoopee - all you've done is concatenate a series of strings!"**
 
-That's what I thought, at first. However, there is the problem of delimiting error prefixes and error context information plus the problem of determining how much information to show on each line. 
+That's what I thought, at first. However, there is the problem of delimiting error prefixes and error context information plus the problem of determining how much information to show on each line, plus the problem of receiving error prefix information from external sources in various formats - and the list goes on. 
 
 For types ***ErrPref*** and  ***ErrPrefixDto***, the user may configure the line length which will determine whether a new line character (**\n**) or in-line delimiter string (**[SPACE]-[SPACE]**) is used to separate error prefix information.
+
+***ErrPrefixDto*** utilizes a series of interfaces to receive and exchange data with external sources. In addition, ***ErrPrefixDto*** implements a variable or custom string delimiter feature which allows the user to process error prefix strings received from external sources in a variety of formats.
 
 To summarize: If you are serious about error management and tracking, ***ErrPref*** might be worth a second look.
 
@@ -73,7 +82,7 @@ To summarize: If you are serious about error management and tracking, ***ErrPref
 
 ## What *errpref* Does and Doesn't Do
 
-The ***errpref*** package generates text strings which can be populated with error prefix and error context information. It does NOT create error messages. Error messages are still created by the user with the standard tool provided by the **Go Programming Language**.  
+The ***errpref*** package generates text strings which can be populated with error prefix and error context information. It does NOT create error messages. Error messages are still created by the user with the standard tools provided by the **Go Programming Language**.  
 
 ***errpref*** is used to generate the error prefix, function chain and error context information. After that, it is up to the user to add this information to the error message. 
 
@@ -88,9 +97,9 @@ The ***errpref*** package generates text strings which can be populated with err
 
 ```
 
-In the example above, ***errPrefixDto*** is an instance of ***errpref*** type ***ErrPrefixDto*** previously configured with a series of method names documenting the execution path which led to this point in the code. As the example shows, the user is still responsible for configuring the error message in its entirety. 
+In the example above, ***errPrefixDto*** is an instance of the ***errpref*** type ***ErrPrefixDto*** previously configured with a series of method names documenting the execution path which led to this point in the code. As the example shows, the user is still responsible for configuring the error message in its entirety. 
 
-While ***errpref*** was specifically designed to document function or method chains of execution, the example above shows that, as a practical matter, the user is free to position this text anywhere in the error message. Also, this text is not reserved exclusively for error messages. It could be used in informational messages or any other type of text display.
+While the ***errpref*** package was specifically designed to document function or method chains of execution, the example above shows that, as a practical matter, the user is free to position this text anywhere in the error message. Also, this text is not reserved exclusively for error messages. It could be used in informational messages or any other type of text display.
 
 The typical error message decorated with error prefix and context information will typically look something like this:
 
@@ -119,7 +128,7 @@ This example error message was taken from the ***errpref*** example application,
 
 For our purposes, error prefix information consists of two elements: 
 
-1. One or more function or method name listed in sequence of code execution. 
+1. One or more function or method names listed in sequence of code execution. 
 2. An optional error context string associated with a specific function or method name.
 
 ### Error Prefix
@@ -131,27 +140,7 @@ For our purposes, error prefix information consists of two elements:
 **Error Context** strings are designed to provide additional information about the function or method identified by the
 associated **Error Prefix** text. Typical context information might include variable names, variable values and additional details on function execution.
 
-Error Context strings are optional and are always associated with an Error Prefix string.
-
-
-
-## String Formatting Conventions
-
-When using the methods provided by ***errpref*** types ***ErrPref*** and ***ErrPrefixDto***, the error prefix strings are parsed for function names, method names and error context information based on specific string delimiters. As of the current ***errpref*** release, these string delimiters are standardized, fixed and not subject to customization by the user. 
-
-### Error Prefix Delimiters
-
-Error Prefix Elements are delimited by one of two delimiters: 
-
-- **New Line Delimiter** = "**\n**" Delimits function/method names on a single line.
-- **In-Line Delimiter** = " **-** " (**[SPACE]-[SPACE]**) Delimits multiple function/method names on the same line.
-
-### Error Context Delimiters
-
-Associated Error Context Sub-Elements likewise have two delimiters: 
-
-- **New Line Delimiter String** = "**\n[SPACE]:[SPACE]\[SPACE]**" Delimits error context information on a single line.
-- **In-Line Delimiter String** = "**[SPACE]:[SPACE]**" Delimits error context information displayed with function/method name on same line.
+An Error Context cannot be created as a stand-alone object. It is always paired with an Error Prefix. Error Context strings are optional, but when created they are always associated with an Error Prefix string.
 
 
 
@@ -159,16 +148,16 @@ Associated Error Context Sub-Elements likewise have two delimiters:
 
 ### Two Types To Choose From
 
-Currently, there are two principal ***errpref*** types providing error prefix formatting services: ***ErrPrefixDto*** and ***ErrPref***. Type ***ErrPref*** offers basic error prefix formatting while type ***ErrPrefixDto*** covers a much wider range of formatting and data transmission capabilities.
+Currently, there are two principal ***errpref*** types providing error prefix formatting services: ***ErrPrefixDto*** and ***ErrPref***. Type ***ErrPref*** offers basic error prefix formatting while type ***ErrPrefixDto*** provides a much wider range of formatting and data transmission capabilities.
 
 ### ErrPrefixDto - A Full Featured Solution
 
-The Error Prefix Data Transfer Object, ***ErrPrefixDto***, offers the same services as type, ***ErrPref***, but is packaged in a different architecture. While ***ErrPref*** methods receive a string and instantly return a formatted string, ***ErrPrefixDto*** encapsulates error prefix information in an internal array of Error Prefix Information objects (***ErrorPrefixInfo***). Strings are only created when the type's ***String()*** method is called. Instances of ***ErrPrefixDto*** are designed to be passed as input parameters to subsidiary methods. The act of passing ***ErrPrefixDto*** objects to successive functions in the execution sequence effectively builds documentation of the execution function chain. 
+The Error Prefix Data Transfer Object, ***ErrPrefixDto***, offers the same services as type, ***ErrPref***, but is packaged in a different architecture. While ***ErrPref*** methods receive a string and instantly return a formatted string, ***ErrPrefixDto*** encapsulates error prefix information in an internal array of Error Prefix Information objects (***ErrorPrefixInfo***). Strings are only created when the type's ***String()*** or ***StrMaxLineLen()*** methods are called. Instances of ***ErrPrefixDto*** are designed to be passed as input parameters to subsidiary methods. The act of passing ***ErrPrefixDto*** objects to successive functions in the execution sequence effectively builds documentation of the execution function chain. 
 
 The ***String()*** method has a value receiver.  Virtually all other ***ErrPrefixDto*** methods have pointer receivers.
 
 #### Public Facing Methods
-A public method may receive error prefix information in a variety of formats from sources both internal and external to the package. To date, the best use scenario for a Public Facing Function or Method follows this pattern:
+A public method may receive error prefix information in a variety of formats from sources both internal and external to your application. To date, the best use scenario for a Public Facing Function or Method follows this pattern:
 
 ``` go
 func (numStrBasic *NumStrBasic) GetCountryFormatters(
@@ -235,7 +224,7 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 	error)
 ```
 
-This pattern allows for use of the 'nil' value. This means that parameter ***iEPref*** will accept a 'nil' value. If no error prefix information is present or required, just pass a 'nil' value for the ***iEPref*** parameter.
+This pattern allows for use of the **nil** value. This means that parameter ***iEPref*** will accept a **nil** value. If no error prefix information is present or required, just pass a **nil** value for the ***iEPref*** parameter.
 
 Finally, notice how the currently executing method name (***NumStrBasic.GetCountryFormatters()***) is added to the error prefix method chain:
 
@@ -383,9 +372,78 @@ When this error is returned up the function chain and finally printed out, the t
 
 
 
+#### Customizing Input and Output String Delimiters
+
+Unlike type ***ErrPref***, ***ErrPrefixDto*** allows users to configure the string delimiters used to parse input strings containing error prefix information received from external sources. This facilitates the exchange of error prefix information received from outside sources by ensuring that error prefix string components are properly separated and identified during the parsing operation. In addition, users may also specify the string delimiters used to combine and join error prefix components for generation and formatting of output text incorporated in error messages.
+
+Internally, ***ErrPrefixDto*** maintains two types of string delimiters, **Input String Delimiters** and **Output String Delimiters**.
+
+**Input String Delimiters** are used to parse raw string values containing error prefix and error context information received as input parameters from external sources. Methods performing this type of operation include:
+
+```go
+ErrPrefixDto.NewEPrefOld
+ErrPrefixDto.NewFromStrings()
+ErrPrefixDto.NewFromStrings()
+ErrPrefixDto.NewIEmptyWithDelimiters()
+ErrPrefixDto.SetEPrefOld()
+ErrPrefixDto.XEPrefOld()
+ErrPrefixDto.ZEPrefOld()
+```
+
+ Output String Delimiters are used by ErrPrefixDto instances to join or concatenate individual error prefix and error context components to form presentation text for output and use in preparation of error message strings. Methods performing this type of operation are: 
+
+```go
+ErrPrefixDto.String()
+ErrPrefixDto.StrMaxLineLen()
+```
+
+ Initially, both the Input and Output String Delimiters for any given ErrPrefixDto instance are set to the system default values. This means that if the Input and Output String Delimiters were not directly configured by the user, the system default string delimiters are applied.
+
+The system defaults for both Input and Output String Delimiters are listed as follows:  
+
+```go
+ New Line Error Prefix Delimiter  = "\n"
+ In-Line Error Prefix Delimiter   = " - "
+ New Line Error Context Delimiter = "\n :  "
+ In-Line Error Context Delimiter  = " : "
+```
+
+if required, the Input and Output String Delimiters can always be reset to system default values by calling method:
+
+```go
+func (ePrefDto *ErrPrefixDto) SetStrDelimitersToDefault()
+```
+
+
+
+However, users do have the option of setting custom Input and Output String Delimiters using methods:
+
+```go
+func (ePrefDto *ErrPrefixDto) SetInputStringDelimiters(
+	inputStrDelimiters ErrPrefixDelimiters,
+	ePrefix string) error
+
+func (ePrefDto *ErrPrefixDto) SetOutputStringDelimiters(
+	outputStrDelimiters ErrPrefixDelimiters,
+	ePrefix string) error
+
+```
+
+In terms of output text, a variety of interesting and creative display effects can be achieved through manipulating the Output String Delimiters. However, when configuring Output String Delimiters it may be necessary to coordinate the Maximum Text Line Length which is initially set to a default of 40-characters.  Configuring Output String Delimiters should be coupled with managing the Maximum Text Line Length discussed below.
+
+The current settings for String Delimiters can be monitored using methods:
+
+```go
+ ErrPrefixDto.GetStrDelimiters()
+ ErrPrefixDto.GetInputStringDelimiters()
+ ErrPrefixDto.GetOutputStringDelimiters()
+```
+
+
+
 #### Maximum Text Line Length
 
-Users have the option to set the Maximum Text Line Length for error prefix strings. The default Maximum Text Line Length is 40-characters. The following error prefix text display demonstrates the default 40-character maximum line length.
+Users have the option of setting the Maximum Text Line Length for error prefix strings. The default Maximum Text Line Length is 40-characters. The following error prefix text display demonstrates the default 40-character maximum line length.
 
 ```tex
 main()-mainTest004()
@@ -493,13 +551,100 @@ In the final example, the left margin length is set to three (3), and the left m
 
 
 
+#### Text Display On/Off Switch
+
+***ErrPrefixDto*** implements a feature which allows the user to turn off the generation of output strings containing error prefix information.  The typical means of injecting output text into an error message follows this example:
+
+```go
+    if isDivideByZero {
+      return fmt.Errorf("%v\n" +
+      "I divided by zero and got this error.\n",
+      ePrefDto.String())
+    }
+
+```
+
+In this example. the call to ***ePrefDto.String()*** will generate a string containing error prefix information which is then inserted into the returned error message. However, ***ErrPrefixDto*** now provides a mechanism for "Turning Off" this error prefix string generation. Users control this "On/Off" switch through calls to method:
+
+```go
+func (ePrefDto *ErrPrefixDto) SetTurnOffTextDisplay(
+	turnOffTextDisplay bool)
+```
+
+Calling this method with parameter ***turnOffTextDisplay*** set to **true** will ensure the future calls to ***ErrPrefixDto.String()*** and ***ErrPrefixDto.StrMaxLineLen()*** will return an empty string. Assuming Text Display was turned-off, the call to ***ePrefDto.String()*** in the "Divide By Zero" example above, would return an empty string. The net result is that no error prefix information would be injected in to the error message in this example.
+
+
+
+#### ***Is Last Text Line Terminated With New Line***
+
+By default, the last line of error prefix strings returned by the methods ***ErrPrefixDto.String()***  and ***ErrPrefixDto.StrMaxLineLen()*** **ARE NOT terminated with a new line character ('\n')**. Consider the following example:
+
+```go
+    if isDivideByZero {
+      return fmt.Errorf("%v\n" + // <------ User manually inserted new character after error prefix string.
+      "I divided by zero and got this error.\n",
+      ePrefDto.String())
+    }
+
+```
+
+Here, the user is manually inserting a new line character after the error prefix string because the error prefix does NOT include a new line character.  Therefore, when this error is returned up the function chain and finally printed out, the text will look like this:
+
+``` text
+ Tx1.Something() - Tx2.SomethingElse()
+ Tx3.DoSomething() : A=B/C C== 0.0    <------ User added a new line character
+ I divided by zero and got this error.
+
+```
+
+If the last line of error prefix strings should be automatically terminated with a new line character ('\n'),  call the following method:
+
+```go
+func (ePrefDto *ErrPrefixDto) SetIsLastLineTermWithNewLine(
+	isLastLineTerminatedWithNewLine bool)
+```
+
+Setting input parameter ***isLastLineTerminatedWithNewLine*** to **true** will effectively add a new line character ('\n') to all error prefix strings returned by methods:
+
+```go
+func (ePrefDto ErrPrefixDto) String() string
+
+func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
+	maxLineLen int) string
+```
+
+In the 'Divide by Zero' example, the user no longer needs to manually add the new line character:
+
+```
+ if isDivideByZero {
+      return fmt.Errorf("%v" + <------ // User did NOT insert new character after error prefix string.
+      "I divided by zero and got this error.\n",
+      ePrefDto.String())
+    }
+
+
+```
+
+When this error is returned up the function chain and finally printed out, the text will look like this:
+
+``` tex
+ Tx1.Something() - Tx2.SomethingElse()
+ Tx3.DoSomething() : A=B/C C== 0.0 <--- New line character automatically added to end of error prefix sring.
+ I divided by zero and got this error.
+
+```
+
+
+
+
+
 ### ErrPref - Quick And Simple Solution
 
 Type ***ErrPref*** is designed to format error prefix text strings for use in error messages. ***ErrPref*** is simple, lightweight, easy to use and seems to work in a variety of situations. The concept is straight forward, "**Put raw text strings in - Get formatted error prefix information out**".
 
 The ***ErrPref*** methods do not use pointer receivers. All receivers are value receivers.
 
-The ***ErrPref*** type does not store error prefix information like the ***ErrPrefixDto*** type. Again, the concept is, "Put raw strings in - Get formatted error prefix strings out".
+The ***ErrPref*** type does not store error prefix information like the ***ErrPrefixDto*** type. Again, the concept is, "**Put raw strings in - Get formatted error prefix strings out**".
 
 #### Example Usage Summary
 
@@ -567,16 +712,43 @@ When this error is returned up the function chain and finally printed out, the t
 
 ```
 
+#### String Formatting Conventions
+
+When using the methods provided by type ***ErrPref***, incoming error prefix strings are parsed for function names, method names and error context information based on specific string delimiters. For type ***ErrPref***, these string delimiters are standardized, fixed and not subject to customization by the user. The system default input and output string delimiters are defined as follows:
+
+##### Error Prefix Delimiters
+
+Error Prefix Elements are delimited by one of two delimiters: 
+
+- **New Line Delimiter** = "**\n**" Delimits function/method names on a single line.
+- **In-Line Delimiter** = " **-** " (**[SPACE]-[SPACE]**) Delimits multiple function/method names on the same line.
+
+##### Error Context Delimiters
+
+Associated Error Context Sub-Elements likewise have two delimiters: 
+
+- **New Line Delimiter String** = "**\n[SPACE]:[SPACE]\[SPACE]**" Delimits error context information on a single line.
+- **In-Line Delimiter String** = "**[SPACE]:[SPACE]**" Delimits error context information displayed with function/method name on same line.
+
+If variable or custom input and output string delimiters are required, use type ***ErrPrefixDto***.
+
+
+
 
 
 ## Exchanging Error Prefix Information with User Defined Types
+
+
+
+### *IBuilderErrorPrefix*
 
 Custom user defined types supporting the ***IBuilderErrorPrefix*** interface will be able to receive data from and insert data into instances of ***ErrPrefixDto***. The following ***ErrPrefixDto*** methods interoperate with the ***IBuilderErrorPrefix*** interface:
 
 1. ***ErrPrefixDto.CopyInFromIBuilder()***
 2. ***ErrPrefixDto.CopyOutToIBuilder()***
 3. ***ErrPrefixDto.NewIEmpty()***
-4. ***ErrPrefixDto.SetIBuilder()***
+4. ***ErrPrefixDto.NewIEmptyWithDelimiters()***
+5. ***ErrPrefixDto.SetIBuilder()***
 
 Taken together, these methods facilitate the import and export of error prefix and context information between ***ErrPrefixDto*** and user defined types implementing the ***IBuilderErrorPrefix*** interface.
 
@@ -594,22 +766,53 @@ type IBuilderErrorPrefix interface {
 
 
 
+### IBasicErrorPrefix
+
+Custom user defined types supporting the ***IBasicErrorPrefix*** will be able to transmit error prefix information to an instance of ***ErrPrefixDto***.
+
+```
+type IBasicErrorPrefix interface {
+	GetEPrefStrings() [][2]string
+}
+```
+
+The two-dimensional string array returned by GetEPrefStrings() is intended to be populated with error prefix and error context string pairs.
+
+***ErrPrefixDto*** methods specifically configured to handle and process ***IBasicErrorPrefix*** objects are listed as follows:
+
+1. ***ErrPrefixDto.NewIEmpty()***
+2. ***ErrPrefixDto.NewIEmptyWithDelimiters()***
+3. ***ErrPrefixDto.SetIBasic()***
+
+
+
+### Custom Input String Delimiters
+
+Type ***ErrPrefixDto*** allows users to configure input string delimiters used to parse input strings containing error prefix information received from external sources. This facilitates the exchange of error prefix information received from outside sources by ensuring that error prefix string components are properly separated and identified during the parsing operation. If the string delimiters for incoming strings is known, ***ErrPrefixDto*** input string delimiters can be coordinated and configured to correctly parse the incoming error prefix and error context information.
+
+**Input String Delimiters** are used to parse raw string values containing error prefix and error context information. These parsing operations are routinely handled through the following methods:
+
+1. ***ErrPrefixDto.NewEPrefOld()***
+2. ***ErrPrefixDto.NewFromStrings()***
+3. ***ErrPrefixDto.NewFromStrings()***
+4. ***ErrPrefixDto.NewIEmptyWithDelimiters()***
+5. ***ErrPrefixDto.SetEPrefOld()***
+6. ***ErrPrefixDto.XEPrefOld()***
+7. ***ErrPrefixDto.ZEPrefOld()***
+
+
+
 ## Usage Examples
 
 ### Test Code
 
 Test Code is located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
 
-Test Code provides many examples 
-
-Currently, unit tests show code coverage at 83%.
-
-To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
+Test Code provides many usage examples for types ***ErrPref*** and ***ErrPrefixDto***.
 
 ### Example Application
 
 Additional code examples can be found in the Error Prefix Examples Application located at [https://github.com/MikeAustin71/errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).  This application also contains a "Concurrency" example.
-
 
 
 ## Package Configuration and Import
@@ -654,6 +857,18 @@ None. This software package is not dependent on any external module or package.
 ## Source Code Documentation
 
 [*errpref* Source Code Documentation](https://pkg.go.dev/github.com/MikeAustin71/errpref)
+
+
+
+## Tests
+
+Source code tests are located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
+
+Currently, unit tests show code coverage at 87%.
+
+To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
+
+Test results are stored in the text file, [zzzzz_tests.txt](https://github.com/MikeAustin71/errpref/blob/main/zzzzz_tests.txt)
 
 
 
