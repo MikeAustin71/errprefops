@@ -1,6 +1,6 @@
 # *errpref* - Adding error prefix, function execution chains and error context to Error Messages In Go
 
-**The *errpref* software package is a collection of lightweight GoLang types designed to attach error prefix text, function execution chain lists and error context strings to error messages.**
+**The *errpref* software package contains two GoLang types designed to attach error prefix text, function execution chain lists and error context strings to error messages.**
 
 The ***errpref*** software package was written in the [Go](https://golang.org/) programming language, a.k.a. ***Golang***.
 
@@ -46,6 +46,7 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this versio
  - [External Dependencies](#external-dependencies)
  - [Source Code Documentation](#source-code-documentation)
  - [Tests](#tests)
+ - [OS Support](#os-support)
  - [Version](#version)
  - [License](#license)
  - [Comments And Questions](#comments-and-questions)
@@ -54,7 +55,7 @@ The current version of ***errpref*** is Version 1.6.0. Most notably, this versio
 
 ## The Problem
 
-As my **Go** programs, types and methods have grown in sophistication and complexity, the need for improved error tracking, detailed error messages, and a record of code execution has become more important. The terms 'Function Chains' or 'Method Chains' as used here describes a list of the functions called prior to encountering a particular error. Adding function chain documentation to returned error messages makes error tracking and management a much easier proposition.
+As my **Go** programs, types and methods have grown in sophistication and complexity, the need for improved error tracking, detailed error messages, and a bread crumb trail of code execution has become more important. The terms 'Function Chains' or 'Method Chains', as used here, describes a list of the functions called prior to encountering a particular error. Adding function chain documentation to returned error messages makes error tracking and management a much easier proposition.
 
 Basically, when I see an error message, especially during the development phase, the first question that comes to mind is, **How the Hell did I get here?** Answering that question quickly, and with certainty, usually requires a list of functions ordered by their execution sequence.  Adding that information to error messages is the focus of this project.
 
@@ -72,11 +73,11 @@ So, if you only take a quick look at the ***errpref*** package you might be temp
 
 That's what I thought, at first. However, there is the problem of delimiting error prefixes and error context information plus the problem of determining how much information to show on each line, plus the problem of receiving error prefix information from external sources in various formats - and the list goes on. 
 
-For types ***ErrPref*** and  ***ErrPrefixDto***, the user may configure the line length which will determine whether a new line character (**\n**) or in-line delimiter string (**[SPACE]-[SPACE]**) is used to separate error prefix information.
+With types ***ErrPref*** and  ***ErrPrefixDto***, the user may configure the line length which will determine whether a new line character (**\n**) or in-line delimiter string (**[SPACE]-[SPACE]**) is used to separate error prefix information.
 
 ***ErrPrefixDto*** utilizes a series of interfaces to receive and exchange data with external sources. In addition, ***ErrPrefixDto*** implements a variable or custom string delimiter feature which allows the user to process error prefix strings received from external sources in a variety of formats.
 
-To summarize: If you are serious about error management and tracking, ***ErrPref*** might be worth a second look.
+To summarize: If you are serious about error management and tracking, the ***errpref*** package might be worth a second look.
 
 
 
@@ -133,12 +134,12 @@ For our purposes, error prefix information consists of two elements:
 
 ### Error Prefix
 
-**Error Prefix** text is designed to be configured at the beginning of error messages and is most often used to document the thread of code execution by listing the calling sequence for a specific list of functions and/or methods.
+**Error Prefix** text is designed to be configured at the beginning of error messages and is most often used to document the thread of code execution by listing the calling sequence for a specific list of functions and/or methods. As a previously stated, there is no hard and fast requirement that it be attached to the beginning of an error message. The user is free to inject this text string where ever it is most useful.
 
 ### Error Context
 
 **Error Context** strings are designed to provide additional information about the function or method identified by the
-associated **Error Prefix** text. Typical context information might include variable names, variable values and additional details on function execution.
+associated **Error Prefix** text. Typical context information might include variable names, variable values, error numbers or details about function execution.
 
 An Error Context cannot be created as a stand-alone object. It is always paired with an Error Prefix. Error Context strings are optional, but when created they are always associated with an Error Prefix string.
 
@@ -148,7 +149,7 @@ An Error Context cannot be created as a stand-alone object. It is always paired 
 
 ### Two Types To Choose From
 
-Currently, there are two principal ***errpref*** types providing error prefix formatting services: ***ErrPrefixDto*** and ***ErrPref***. Type ***ErrPref*** offers basic error prefix formatting while type ***ErrPrefixDto*** provides a much wider range of formatting and data transmission capabilities.
+Currently, the ***errpref*** package provides two types offering error prefix formatting services: ***ErrPrefixDto*** and ***ErrPref***. Type ***ErrPref*** offers basic error prefix formatting while type ***ErrPrefixDto*** provides a much wider range of formatting and data transmission capabilities.
 
 ### ErrPrefixDto - A Full Featured Solution
 
@@ -864,12 +865,16 @@ None. This software package is not dependent on any external module or package.
 
 Source code tests are located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
 
-Currently, unit tests show code coverage at 87%.
+Currently, tests show code coverage at 87%.
 
 To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
 
 Test results are stored in the text file, [zzzzz_tests.txt](https://github.com/MikeAustin71/errpref/blob/main/zzzzz_tests.txt)
 
+
+## OS Support
+
+Tests are running successfully on Windows 10, Ubuntu 20.04.2.0 LTS, Fedora 34.9.2 and Mint 20.1 Cinnamon.
 
 
 ## Version

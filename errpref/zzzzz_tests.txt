@@ -412,4 +412,4 @@
 --- PASS: TestErrorPrefixInfo_SetErrPrefixStr (0.00s)
 PASS
 coverage: 87.5% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.797s
+ok  	github.com/MikeAustin71/errprefops/errpref	2.009s
