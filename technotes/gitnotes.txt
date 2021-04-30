@@ -1,6 +1,6 @@
 Latest Tag Setup
-git tag v1.6.0
-git push origin v1.6.0
+git tag v1.6.1
+git push origin v1.6.1
 
 List Existing Tags:
 git tag --list
