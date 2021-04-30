@@ -75,12 +75,45 @@ Storage and distribution of the ***errpref*** software package will be processed
     func (ePrefDto *ErrPrefixDto) GetInputStringDelimiters() ErrPrefixDelimiters
     
     func (ePrefDto *ErrPrefixDto) GetOutputStringDelimiters() ErrPrefixDelimiters
+    
+    func (ePrefDto ErrPrefixDto) NewFromStrings(
+    	oldErrPrefix string,
+    	newErrPrefix string,
+    	newErrContext string,
+    	inputStrDelimiters ErrPrefixDelimiters,
+    	outputStrDelimiters ErrPrefixDelimiters,
+    	ePrefix string) (ErrPrefixDto, error)
+    
+    func (ePrefDto ErrPrefixDto) NewIEmptyWithDelimiters(
+    	iEPref interface{},
+    	newErrPrefix string,
+    	newErrContext string,
+    	inputStrDelimiters ErrPrefixDelimiters,
+    	outputStrDelimiters ErrPrefixDelimiters,
+    	ePrefix string) (
+    	*ErrPrefixDto,
+    	error)
     ```
     
     
     
-12. 
+12. Additional ***IBuilderErrorPrefix*** Interface Support
 
+    ```go
+    func (ePrefDto *ErrPrefixDto) CopyInFromIBuilder(
+    	inComingIBuilder IBuilderErrorPrefix,
+    	eMsg string) error
+    	
+    func (ePrefDto *ErrPrefixDto) CopyOutToIBuilder(
+    	inComingIBuilder IBuilderErrorPrefix)
+    	
+    func (ePrefDto *ErrPrefixDto) SetIBuilder(
+    	inComingIBuilder IBuilderErrorPrefix,
+    	callingMethodName string) error
+    ```
+    
+    
+    
     
 
 ##### ErrPref
