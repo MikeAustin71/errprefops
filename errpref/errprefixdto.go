@@ -1985,30 +1985,30 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 
 	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
-	methodName := newErrPrefix +
+	callingMethodNames := newErrPrefix +
 		"\nErrPrefixDto.NewIEmpty()"
 
 	err := errPrefixDtoMechanics{}.ptr().
 		setFromEmptyInterface(
 			newErrPrefixDto,
 			iEPref,
-			methodName)
+			callingMethodNames)
 
 	if err != nil {
 		return newErrPrefixDto, err
 	}
 
-	if len(newErrPrefix) > 0 {
-
-		errPrefNanobot{}.ptr().addEPrefInfo(
-			newErrPrefix,
-			newErrContext,
-			&newErrPrefixDto.ePrefCol)
-
-		errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
-			newErrPrefixDto.ePrefCol)
-
+	if len(newErrPrefix) == 0 {
+		return newErrPrefixDto, err
 	}
+
+	errPrefNanobot{}.ptr().addEPrefInfo(
+		newErrPrefix,
+		newErrContext,
+		&newErrPrefixDto.ePrefCol)
+
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		newErrPrefixDto.ePrefCol)
 
 	return newErrPrefixDto, err
 }
