@@ -204,6 +204,8 @@
 --- PASS: TestErrPrefixDto_NewIEmpty_001500 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmpty_001600
 --- PASS: TestErrPrefixDto_NewIEmpty_001600 (0.00s)
+=== RUN   TestErrPrefixDto_NewIEmpty_001700
+--- PASS: TestErrPrefixDto_NewIEmpty_001700 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000100
 --- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_000100 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_000200
@@ -391,7 +393,7 @@
 === RUN   TestErrPrefixDto_XMethods_000100
 --- PASS: TestErrPrefixDto_XMethods_000100 (0.00s)
 === RUN   TestErrPrefixDto_YMethods_000200
---- PASS: TestErrPrefixDto_YMethods_000200 (0.00s)
+--- PASS: TestErrPrefixDto_YMethods_000200 (0.01s)
 === RUN   TestErrPrefixDto_CallSeries_000100
 --- PASS: TestErrPrefixDto_CallSeries_000100 (0.00s)
 === RUN   TestErrPrefixDto_CallSeries_000200
@@ -412,4 +414,4 @@
 --- PASS: TestErrorPrefixInfo_SetErrPrefixStr (0.00s)
 PASS
 coverage: 87.5% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	2.009s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.399s

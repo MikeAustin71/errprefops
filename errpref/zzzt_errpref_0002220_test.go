@@ -2591,6 +2591,61 @@ func TestErrPrefixDto_NewIEmpty_001600(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_NewIEmpty_001700(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	calledMethod := "Tx14.MoreAwesomeGoodness"
+	calledMethodCtx := "A=7 B=8 C=9"
+
+	maxTextLineLen := 50
+
+	ePDto.SetMaxTextLineLen(maxTextLineLen)
+
+	ePDto.SetEPrefCtx(calledMethod,
+		calledMethodCtx)
+
+	ePDto2,
+		err := ErrPrefixDto{}.NewIEmpty(
+		nil,
+		calledMethod,
+		calledMethodCtx)
+
+	if err != nil {
+		t.Errorf("Error from  ErrPrefixDto{}.NewIEmpty()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePDto2.SetMaxTextLineLen(maxTextLineLen)
+
+	ePDtoStr := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto.String()),
+		false)
+
+	ePDto2Str := ErrPref{}.ConvertNonPrintableChars(
+		[]rune(ePDto2.String()),
+		false)
+
+	if !ePDto.Equal(ePDto2) {
+		t.Errorf("Error: Expected ePDto==ePDto2.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+		return
+	}
+
+	if ePDtoStr != ePDto2Str {
+		t.Errorf("Error: Expected ePDtoStr==ePDto2Str.\n"+
+			"However, THEY ARE NOT EQUAL!\n"+
+			"ePDto=\n%v\n\nePDto2=\n%v\n\n",
+			ePDtoStr,
+			ePDto2Str)
+	}
+
+}
+
 func TestErrPrefixDto_NewIEmptyWithDelimiters_000100(t *testing.T) {
 	funcName := "TestErrPrefixDto_NewIEmptyWithDelimiters_000100"
 
