@@ -4,6 +4,16 @@ This version of ***errpref*** was compiled and tested using ***Go*** 1.16.3.
 
 This version supports ***Go*** modules.
 
+## Version 1.6.2
+
+##### Documentation Updates
+1. Modified Best Practices documentation for implementing ErrPrefixDto in calls to private, internal methods.
+
+##### ErrPrefixDto
+1. Added new method ErrPrefixDto{}.NewFromErrPrefDto()
+
+
+
 ## Version 1.6.1
 
 #### Changes
