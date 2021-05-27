@@ -1,6 +1,7 @@
 package errpref
 
 import (
+	"fmt"
 	"strings"
 	"sync"
 )
@@ -1419,6 +1420,140 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 	return numberOfCollectionItemsParsed, newErrPrefixDto
 }
 
+// NewFromErrPrefDto - Receives a pointer to an instance of
+// ErrPrefixDto, a new error prefix string and a new error context
+// string. The method then proceeds to merge these three elements
+// into a new instance of ErrPrefixDto.
+//
+// The new returned instance is configured as a pointer to the new
+// ErrPrefixDto instance.
+//
+// If the pointer to the ErrPrefixDto input parameter is nil, this
+// method will not return an error. Instead the new returned
+// instance of ErrPrefixDto will include on the 'newErrPrefix' and
+// 'newErrContext' values.
+//
+// If the pointer to the ErrPrefixDto input parameter is not nil
+// but contains invalid values, this method will return an error.
+//
+// If the pointer to the ErrPrefixDto input parameter is nil and
+// input parameter 'newErrPrefix' is an empty string, this method
+// will return an error.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  dto                 *ErrPrefixDto
+//     - An instance of ErrPrefixDto which will be merged with
+//       input parameters 'newErrPrefix' and 'newErrContext'.
+//
+//       If 'dto' is a nil value no error will be returned and the
+//       new returned instance of ErrPrefixDto will consist solely
+//       of input parameters 'newErrPrefix' and 'newErrContext'.
+//
+//
+//  newErrPrefix        string
+//     - A new error prefix represents typically identifies the
+//       function or method which is currently executing. This
+//       information is used to document source code execution flow
+//       in error messages.
+//
+//       This error prefix information will be added to the
+//       internal collection of error prefixes maintained by the
+//       new instance of ErrPrefixDto returned by this method.
+//
+//       If this parameter is set to an empty string and input
+//       parameter 'dto' is a nil value, this method will return an
+//       error.
+//
+//
+//  newErrContext       string
+//     - This is error context information associated with the new
+//       error prefix ('newErrPrefix') string described above.
+//
+//       This parameter is optional and will accept an empty
+//       string.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  *ErrPrefixDto
+//     - If this method completes successfully, it will return a
+//       pointer to a new instance of ErrPrefixDto containing
+//       consolidated error prefix and error context information
+//       generated from input parameters 'dto, 'newErrPrefix',
+//       and 'newErrContext'.
+//
+//
+//  error
+//     - If this method completes successfully, the returned error
+//       Type is set equal to 'nil'.
+//
+//       If errors are encountered during processing, the returned
+//       error Type will encapsulate an error message.
+//
+//       In the event of an error, the value of parameter
+//       'newErrPrefix' will be prefixed and attached to the
+//       beginning of the error message.
+//
+func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
+	dto *ErrPrefixDto,
+	newErrPrefix string,
+	newErrContext string) (
+	newErrPrefDto *ErrPrefixDto,
+	err error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	methodNames := newErrPrefix + "\n" +
+		"ErrPrefixDto.NewFromErrPrefDto()"
+
+	newErrPrefDto = &ErrPrefixDto{}
+
+	if dto == nil &&
+		len(newErrPrefix) == 0 {
+		err = fmt.Errorf(methodNames + "\n" +
+			"Error: Input parameter 'dto' is nil and input parameter\n" +
+			"'newErrPrefix' is an empty string!\n")
+
+		return newErrPrefDto, err
+	}
+
+	if dto != nil {
+		err = dto.IsValidInstanceError(methodNames)
+
+		if err != nil {
+			return newErrPrefDto, err
+		}
+
+		newErrPrefDto = dto.CopyPtr()
+
+	} else {
+
+		newErrPrefDto.lock = new(sync.Mutex)
+	}
+
+	errPrefNanobot{}.ptr().addEPrefInfo(
+		newErrPrefix,
+		newErrContext,
+		&newErrPrefDto.ePrefCol)
+
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		newErrPrefDto.ePrefCol)
+
+	return newErrPrefDto, err
+}
+
 // NewFromIErrorPrefix - Receives an object which implements the
 // IErrorPrefix interface and returns a new, populated instance of
 // ErrPrefixDto.
@@ -1783,7 +1918,7 @@ func (ePrefDto ErrPrefixDto) NewFromStrings(
 //
 //       In the event of an error, the value of parameter
 //       'newErrPrefix' will be prefixed and attached to the
-//       beginning of the error message
+//       beginning of the error message.
 //
 func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 	iEPref IBasicErrorPrefix,
