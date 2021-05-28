@@ -1520,8 +1520,10 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 
 	newErrPrefDto = &ErrPrefixDto{}
 
+	lenNewErrPrefix := len(newErrPrefix)
+
 	if dto == nil &&
-		len(newErrPrefix) == 0 {
+		lenNewErrPrefix == 0 {
 		err = fmt.Errorf(methodNames + "\n" +
 			"Error: Input parameter 'dto' is nil and input parameter\n" +
 			"'newErrPrefix' is an empty string!\n")
@@ -1530,17 +1532,36 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 	}
 
 	if dto != nil {
+
 		err = dto.IsValidInstanceError(methodNames)
 
 		if err != nil {
 			return newErrPrefDto, err
 		}
 
-		newErrPrefDto = dto.CopyPtr()
+		err = errPrefixDtoAtom{}.ptr().
+			copyInErrPrefDto(
+				newErrPrefDto,
+				dto,
+				methodNames)
+
+		if err != nil {
+			return newErrPrefDto, err
+		}
 
 	} else {
-
+		// dto == nil
 		newErrPrefDto.lock = new(sync.Mutex)
+	}
+
+	errPrefDtoAtom := errPrefixDtoAtom{}
+
+	if lenNewErrPrefix == 0 {
+
+		errPrefDtoAtom.setFlagsErrorPrefixInfoArray(
+			newErrPrefDto.ePrefCol)
+
+		return newErrPrefDto, err
 	}
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
@@ -1548,7 +1569,7 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 		newErrContext,
 		&newErrPrefDto.ePrefCol)
 
-	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+	errPrefDtoAtom.setFlagsErrorPrefixInfoArray(
 		newErrPrefDto.ePrefCol)
 
 	return newErrPrefDto, err
