@@ -299,37 +299,17 @@ func TestErrPrefixDto_CopyIn_000300(t *testing.T) {
 }
 
 func TestErrPrefixDto_CopyIn_000400(t *testing.T) {
-	initialStr :=
-		"Tx1.Something() - Tx2.SomethingElse() - Tx3.DoSomething()\n" +
-			"Tx4() - Tx5() - Tx6.DoSomethingElse()\n" +
-			"Tx7.TrySomethingNew() : something->newSomething\n" +
-			"Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y - Tx10.X()\n" +
-			"Tx11.TryAnything() - Tx12.TryASalad()\n" +
-			"Tx13.SomeFabulousAndComplexStuff()\n" +
-			"Tx14.MoreAwesomeGoodness : A=7 B=8 C=9"
-
-	ePDto := ErrPrefixDto{}.NewEPrefOld(initialStr)
-
-	ePDto.SetMaxTextLineLen(40)
-
-	ePDto.SetLeftMarginLength(5)
-
-	ePDto.SetLeftMarginChar('*')
-
-	ePDto.SetIsLastLineTermWithNewLine(true)
 
 	ePDto2 := ErrPrefixDto{}.Ptr()
 
-	ePDto.Empty()
-
 	err := ePDto2.CopyIn(
-		&ePDto,
+		nil,
 		"TestErrPrefixDto_CopyIn_000200")
 
 	if err == nil {
 		t.Error("Error:\n" +
 			"Expected error return from ePDto2.CopyIn(&ePDto)\n" +
-			"because ePDto is empty and invalid.\n" +
+			"because ePDto is a nil pointer.\n" +
 			"HOWEVER, NO ERROR WAS RETURNED!!\n")
 	}
 }

@@ -258,12 +258,14 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyInErrPrefDto(
 			eMsg)
 	}
 
-	inComingErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+	ePrefDtoQuark := errPrefixDtoQuark{}
 
-	inComingErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	ePrefDtoQuark.normalizeErrPrefixDto(inComingErrPrefixDto)
+
+	ePrefDtoQuark.normalizeErrPrefixDto(targetErrPrefixDto)
 
 	_,
-		err := errPrefixDtoQuark{}.ptr().
+		err := ePrefDtoQuark.
 		testValidityOfErrPrefixDto(
 			inComingErrPrefixDto,
 			eMsg+"Testing validity of inComingErrPrefixDto ")
