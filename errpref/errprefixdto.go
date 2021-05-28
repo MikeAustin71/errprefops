@@ -536,7 +536,8 @@ func (ePrefDto *ErrPrefixDto) GetInputStringDelimiters() ErrPrefixDelimiters {
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().
+		normalizeErrPrefixDto(ePrefDto)
 
 	inputDelims,
 		_ :=
@@ -870,7 +871,8 @@ func (ePrefDto *ErrPrefixDto) GetOutputStringDelimiters() ErrPrefixDelimiters {
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().
+		normalizeErrPrefixDto(ePrefDto)
 
 	outputDelims,
 		_ :=
@@ -919,9 +921,8 @@ func (ePrefDto *ErrPrefixDto) GetStrDelimiters() (
 
 	defer ePrefDto.lock.Unlock()
 
-	ePrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	ePrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().
+		normalizeErrPrefixDto(ePrefDto)
 
 	inputStrDelimiters,
 		_ = ePrefDto.inputStrDelimiters.

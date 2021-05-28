@@ -96,9 +96,9 @@ func (ePrefDtoQuark *errPrefixDtoQuark) newZeroErrPrefixDto() ErrPrefixDto {
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto.inputStrDelimiters.SetToDefault()
 
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto.outputStrDelimiters.SetToDefault()
 
 	return newErrPrefixDto
 }
