@@ -102,13 +102,11 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
 		return false
 	}
 
-	errPrefixDto1.inputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefDtoQuark := errPrefixDtoQuark{}
 
-	errPrefixDto1.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefDtoQuark.normalizeErrPrefixDto(errPrefixDto1)
 
-	errPrefixDto2.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefixDto2.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefDtoQuark.normalizeErrPrefixDto(errPrefixDto2)
 
 	if errPrefixDto1.leftMarginLength !=
 		errPrefixDto2.leftMarginLength {
