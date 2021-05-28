@@ -207,6 +207,10 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 			methodNames)
 	}
 
+	ePrefDtoQuark := errPrefixDtoQuark{}
+
+	ePrefDtoQuark.normalizeErrPrefixDto(errPrefDto)
+
 	errNanobot := errPrefixDtoNanobot{}
 
 	ePrfAtom := errPrefixDtoAtom{}
@@ -224,7 +228,7 @@ func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
 		originalDataIsGood = false
 	}
 
-	_ = errPrefixDtoQuark{}.ptr().
+	_ = ePrefDtoQuark.
 		emptyErrPrefInfoCollection(
 			errPrefDto,
 			"")
