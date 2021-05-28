@@ -591,6 +591,8 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
 			methodName)
 	}
 
+	errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(errPrefDto)
+
 	if iEPref == nil {
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'iEPref' is invalid!\n"+
@@ -616,10 +618,6 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringBuilder(
 	}
 
 	ePrefAtom := errPrefixDtoAtom{}
-
-	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	ePrefAtom.getEPrefContextArray(
 		strVal,
