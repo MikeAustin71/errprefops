@@ -343,7 +343,7 @@ func (ePrefDto *ErrPrefixDto) CopyOutToIBuilder(
 
 	newTwoDSlice,
 		_ := errPrefixDtoMechanics{}.ptr().
-		getEPrefStrings(
+		get2dEPrefStrings(
 			ePrefDto,
 			"")
 
@@ -733,7 +733,7 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 
 	newTwoDSlice,
 		_ := errPrefixDtoMechanics{}.ptr().
-		getEPrefStrings(
+		get2dEPrefStrings(
 			ePrefDto,
 			"")
 
