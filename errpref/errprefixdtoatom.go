@@ -309,22 +309,18 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyInErrPrefDto(
 	targetErrPrefixDto.leftMarginChar =
 		inComingErrPrefixDto.leftMarginChar
 
-	if inComingErrPrefixDto.ePrefCol == nil {
+	lenIncomingEPrefCol :=
+		len(inComingErrPrefixDto.ePrefCol)
+
+	if lenIncomingEPrefCol == 0 {
 		targetErrPrefixDto.ePrefCol = nil
 		return nil
 	}
-
-	lenIncomingEPrefCol :=
-		len(inComingErrPrefixDto.ePrefCol)
 
 	targetErrPrefixDto.ePrefCol =
 		make(
 			[]ErrorPrefixInfo,
 			lenIncomingEPrefCol)
-
-	if lenIncomingEPrefCol == 0 {
-		return nil
-	}
 
 	copy(
 		targetErrPrefixDto.ePrefCol,
