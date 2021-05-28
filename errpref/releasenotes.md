@@ -11,6 +11,18 @@ This version supports ***Go*** modules.
 
 ##### ErrPrefixDto
 1. Added new method ErrPrefixDto{}.NewFromErrPrefDto()
+   This method can be used to reduce the lines of code required to implement ErrPrefixDto objects in private or
+   internal methods and functions.
+   
+   ```go
+   func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
+      dto *ErrPrefixDto,
+      newErrPrefix string,
+      newErrContext string) (
+      newErrPrefDto *ErrPrefixDto,
+      err error)
+   ```
+   
 
 
 
