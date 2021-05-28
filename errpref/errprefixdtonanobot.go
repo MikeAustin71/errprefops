@@ -236,6 +236,10 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
 			methodName)
 	}
 
+	ePrefDtoQuark := errPrefixDtoQuark{}
+
+	ePrefDtoQuark.normalizeErrPrefixDto(errPrefDto)
+
 	if iEPref == nil {
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'iEPref' is invalid!\n"+
@@ -250,7 +254,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBuilder(
 			methodName)
 	}
 
-	err := errPrefixDtoQuark{}.ptr().emptyErrPrefInfoCollection(
+	err := ePrefDtoQuark.emptyErrPrefInfoCollection(
 		errPrefDto,
 		methodName)
 
