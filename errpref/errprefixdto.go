@@ -211,12 +211,12 @@ func (ePrefDto *ErrPrefixDto) CopyPtr() *ErrPrefixDto {
 	defer ePrefDto.lock.Unlock()
 
 	newErrPrefixDto,
-		_ := errPrefixDtoAtom{}.ptr().
-		copyOutErrPrefDto(
+		_ := errPrefixDtoNanobot{}.ptr().
+		copyOutErrPrefDtoPtr(
 			ePrefDto,
 			"")
 
-	return &newErrPrefixDto
+	return newErrPrefixDto
 }
 
 // CopyIn - Copies the data fields from an incoming instance of
