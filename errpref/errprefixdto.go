@@ -1068,7 +1068,7 @@ func (ePrefDto *ErrPrefixDto) IsValidInstanceError(
 		err := errPrefixDtoQuark{}.ptr().
 		testValidityOfErrPrefixDto(
 			ePrefDto,
-			"")
+			ePrefix)
 
 	return err
 }
@@ -1518,7 +1518,8 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 	methodNames := newErrPrefix + "\n" +
 		"ErrPrefixDto.NewFromErrPrefDto()"
 
-	newErrPrefDto = &ErrPrefixDto{}
+	newErrPrefDto = errPrefixDtoElectron{}.
+		ptr().newPtrZeroErrPrefixDto()
 
 	lenNewErrPrefix := len(newErrPrefix)
 
@@ -1532,6 +1533,10 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 	}
 
 	if dto != nil {
+
+		dto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+		dto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 		err = dto.IsValidInstanceError(methodNames)
 
@@ -1549,9 +1554,6 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 			return newErrPrefDto, err
 		}
 
-	} else {
-		// dto == nil
-		newErrPrefDto.lock = new(sync.Mutex)
 	}
 
 	errPrefDtoAtom := errPrefixDtoAtom{}

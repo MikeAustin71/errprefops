@@ -73,6 +73,36 @@ func (ePrefDtoQuark *errPrefixDtoQuark) emptyErrPrefInfoCollection(
 	return nil
 }
 
+// newZeroErrPrefixDto - Returns a new instance of ErrPrefixDto
+// with all internal member variables set to their initial or zero
+// values.
+//
+func (ePrefDtoQuark *errPrefixDtoQuark) newZeroErrPrefixDto() ErrPrefixDto {
+
+	if ePrefDtoQuark.lock == nil {
+		ePrefDtoQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefDtoQuark.lock.Lock()
+
+	defer ePrefDtoQuark.lock.Unlock()
+
+	newErrPrefixDto := ErrPrefixDto{}
+
+	newErrPrefixDto.lock = new(sync.Mutex)
+
+	newErrPrefixDto.ePrefCol = nil
+
+	newErrPrefixDto.maxErrPrefixTextLineLength =
+		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+
+	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	return newErrPrefixDto
+}
+
 // testValidityOfErrorPrefixInfo - Performs a diagnostic review of
 // the input parameter 'ePrefixDto', an instance of ErrPrefixDto.
 // The purpose of this diagnostic review is to determine whether
