@@ -372,9 +372,8 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromIBasicErrorPrefix(
 			methodName)
 	}
 
-	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().
+		normalizeErrPrefixDto(errPrefDto)
 
 	twoDSlice := iEPref.GetEPrefStrings()
 
@@ -498,11 +497,10 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromString(
 		return nil
 	}
 
+	errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(
+		errPrefDto)
+
 	ePrefAtom := errPrefixDtoAtom{}
-
-	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
 	ePrefAtom.getEPrefContextArray(
 		iEPref,
