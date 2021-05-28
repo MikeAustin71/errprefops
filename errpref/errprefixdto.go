@@ -1143,18 +1143,8 @@ func (ePrefDto ErrPrefixDto) New() ErrPrefixDto {
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := ErrPrefixDto{}
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto := errPrefixDtoQuark{}.
+		ptr().newZeroErrPrefixDto()
 
 	return newErrPrefixDto
 }
@@ -1222,18 +1212,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefCtx(
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := ErrPrefixDto{}
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto := errPrefixDtoQuark{}.
+		ptr().newZeroErrPrefixDto()
 
 	errPrefNanobot{}.ptr().addEPrefInfo(
 		newErrPrefix,
@@ -1314,18 +1294,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefOld(
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := ErrPrefixDto{}
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto := errPrefixDtoQuark{}.
+		ptr().newZeroErrPrefixDto()
 
 	ePrefAtom := errPrefixDtoAtom{}
 
@@ -1398,16 +1368,8 @@ func (ePrefDto ErrPrefixDto) NewEPrefCollection(
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto = errPrefixDtoQuark{}.
+		ptr().newZeroErrPrefixDto()
 
 	_ = errPrefixDtoNanobot{}.ptr().setFromString(
 		&newErrPrefixDto,
@@ -1618,18 +1580,8 @@ func (ePrefDto ErrPrefixDto) NewFromIErrorPrefix(
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := ErrPrefixDto{}
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto := errPrefixDtoQuark{}.
+		ptr().newZeroErrPrefixDto()
 
 	var oldErrPrefStr string
 
@@ -1816,16 +1768,8 @@ func (ePrefDto ErrPrefixDto) NewFromStrings(
 
 	ePrefix += " ErrPrefixDto.NewFromStrings() "
 
-	newErrPrefixDto := ErrPrefixDto{}
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.ePrefCol = nil
+	newErrPrefixDto := errPrefixDtoQuark{}.
+		ptr().newZeroErrPrefixDto()
 
 	err :=
 		newErrPrefixDto.inputStrDelimiters.
@@ -1958,18 +1902,8 @@ func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := new(ErrPrefixDto)
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto := errPrefixDtoElectron{}.
+		ptr().newPtrZeroErrPrefixDto()
 
 	methodName := newErrPrefix +
 		"\nErrPrefixDto.NewIBasicErrorPrefix()"
@@ -2130,18 +2064,8 @@ func (ePrefDto ErrPrefixDto) NewIEmpty(
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := new(ErrPrefixDto)
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.ePrefCol = nil
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	newErrPrefixDto := errPrefixDtoElectron{}.
+		ptr().newPtrZeroErrPrefixDto()
 
 	callingMethodNames := newErrPrefix +
 		"\nErrPrefixDto.NewIEmpty()"
@@ -2368,14 +2292,8 @@ func (ePrefDto ErrPrefixDto) NewIEmptyWithDelimiters(
 	ePrefix += newErrPrefix +
 		"\nErrPrefixDto.NewIEmptyWithDelimiters()"
 
-	newErrPrefixDto := new(ErrPrefixDto)
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.ePrefCol = nil
+	newErrPrefixDto := errPrefixDtoElectron{}.
+		ptr().newPtrZeroErrPrefixDto()
 
 	err :=
 		newErrPrefixDto.inputStrDelimiters.
@@ -2452,18 +2370,8 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 
 	defer ePrefDto.lock.Unlock()
 
-	newErrPrefixDto := new(ErrPrefixDto)
-
-	newErrPrefixDto.lock = new(sync.Mutex)
-
-	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
-
-	newErrPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
-
-	newErrPrefixDto.ePrefCol = nil
+	newErrPrefixDto := errPrefixDtoElectron{}.
+		ptr().newPtrZeroErrPrefixDto()
 
 	return newErrPrefixDto
 }

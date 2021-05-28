@@ -75,7 +75,7 @@ func (ePrefDtoElectron errPrefixDtoElectron) emptyErrorPrefixDto(
 // ErrPrefixDto with all internal member variables set to their
 // initial or zero values.
 //
-func (ePrefDtoElectron errPrefixDtoElectron) newPtrZeroErrPrefixDto() *ErrPrefixDto {
+func (ePrefDtoElectron *errPrefixDtoElectron) newPtrZeroErrPrefixDto() *ErrPrefixDto {
 
 	if ePrefDtoElectron.lock == nil {
 		ePrefDtoElectron.lock = new(sync.Mutex)
