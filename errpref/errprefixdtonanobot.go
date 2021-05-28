@@ -822,9 +822,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromTwoDStrArray(
 			methodName)
 	}
 
-	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(errPrefDto)
 
 	if iEPref == nil {
 		errPrefDto.ePrefCol = nil
