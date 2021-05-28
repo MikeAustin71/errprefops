@@ -706,9 +706,7 @@ func (ePrefixDtoNanobot *errPrefixDtoNanobot) setFromStringArray(
 			methodName)
 	}
 
-	errPrefDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(errPrefDto)
 
 	lenEPrefStrs := len(iEPref)
 
