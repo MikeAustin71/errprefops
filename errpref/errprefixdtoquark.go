@@ -103,6 +103,33 @@ func (ePrefDtoQuark *errPrefixDtoQuark) newZeroErrPrefixDto() ErrPrefixDto {
 	return newErrPrefixDto
 }
 
+// normalizeErrPrefixDto - Receives a pointer to an instance of
+// ErrPrefixDto and proceeds to set any uninitialized member variables
+// to their zero values.
+//
+func (ePrefDtoQuark *errPrefixDtoQuark) normalizeErrPrefixDto(
+	ePrefixDto *ErrPrefixDto) {
+
+	if ePrefDtoQuark.lock == nil {
+		ePrefDtoQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefDtoQuark.lock.Lock()
+
+	defer ePrefDtoQuark.lock.Unlock()
+
+	ePrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
+
+	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+
+	if ePrefixDto.maxErrPrefixTextLineLength < 10 {
+		ePrefixDto.maxErrPrefixTextLineLength =
+			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+	}
+
+	return
+}
+
 // testValidityOfErrorPrefixInfo - Performs a diagnostic review of
 // the input parameter 'ePrefixDto', an instance of ErrPrefixDto.
 // The purpose of this diagnostic review is to determine whether
