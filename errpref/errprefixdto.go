@@ -245,11 +245,13 @@ func (ePrefDto *ErrPrefixDto) CopyPtr() *ErrPrefixDto {
 //       ('ePrefDto').
 //
 //
-//  eMsg                       string
+//  eMsg                string
 //     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'eMsg'. This parameter is optional.
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
 //
 //
 // ------------------------------------------------------------------------
@@ -802,11 +804,13 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 //
 // Input Parameters
 //
-//  eMsg                       string
+//  eMsg                string
 //     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'eMsg'. This parameter is optional.
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
 //
 //
 // ------------------------------------------------------------------------
@@ -829,7 +833,7 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 //       invalid.
 //
 //
-//  err                        error
+//  err                 error
 //     - If this method completes successfully, the returned error Type
 //       is set to 'nil'. If errors are encountered during processing,
 //       the returned error Type will encapsulate an error message.
@@ -2507,6 +2511,106 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 	return newErrPrefixDto
 }
 
+// ReplaceLastErrPrefix - This method will delete and replace the
+// Last Error Prefix Information object in the current ErrPrefixDto
+// collection with new error prefix and error context information
+// generated from input parameters 'newErrPrefix' and
+// 'newErrContext'.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  newErrPrefix        string
+//     - The new error prefix represents typically identifies
+//       the function or method which is currently executing. This
+//       information is used to document source code execution flow
+//       in error messages.
+//
+//       This method is designed to process a single new error prefix
+//       string. To process a collection of error prefix strings, see
+//       method 'ErrPrefixDto.SetEPrefOld()'.
+//
+//
+//  newErrContext       string
+//     - This is the error context information associated with the
+//       new error prefix ('newErrPrefix'). This parameter is
+//       optional and will accept an empty string.
+//
+//
+//  eMsg                string
+//     - This is an error prefix which is included in all returned
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  err                 error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'eMsg'.
+//
+func (ePrefDto *ErrPrefixDto) ReplaceLastErrPrefix(
+	newErrPrefix string,
+	newErrContext string,
+	eMsg string) (
+	err error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	eMsg += "ErrPrefixDto.ReplaceLastErrPrefix()\n"
+
+	errPrefixDtoQuark{}.ptr().
+		normalizeErrPrefixDto(ePrefDto)
+
+	if len(newErrPrefix) == 0 {
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'newErrPrefix' is an empty string!\n",
+			eMsg)
+
+		return err
+	}
+
+	lenEPrefCol := len(ePrefDto.ePrefCol)
+
+	if lenEPrefCol > 0 {
+		_,
+			err = errPrefixDtoQuark{}.ptr().
+			deleteLastErrPrefixInfo(
+				ePrefDto,
+				eMsg)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	errPrefNanobot{}.ptr().addEPrefInfo(
+		newErrPrefix,
+		newErrContext,
+		&ePrefDto.ePrefCol)
+
+	errPrefixDtoAtom{}.ptr().setFlagsErrorPrefixInfoArray(
+		ePrefDto.ePrefCol)
+
+	return err
+}
+
 // SetCtx - Sets or resets the error context for the last error
 // prefix. This operation either adds, or replaces, the error
 // context string associated with the last error prefix the
@@ -2969,12 +3073,12 @@ func (ePrefDto *ErrPrefixDto) SetEPrefStrings(
 //
 //
 //  ePrefix             string
-//     - A string containing the name of the function which called
-//       this method. If an error occurs this string will be
-//       prefixed to the beginning of the returned error message.
+//     - This is an error prefix which is included in all returned
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
 //
-//       This parameter is optional. If an error prefix is not
-//       required, submit an empty string for this parameter ("").
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
 //
 //
 // -----------------------------------------------------------------
@@ -4398,11 +4502,13 @@ func (ePrefDto *ErrPrefixDto) XEPrefOld(
 //         ErrPrefixDto.GetOutputStringDelimiters()
 //
 //
-//  ePrefix             string
+//  ePrefix                    string
 //     - This is an error prefix which is included in all returned
-//       error messages. Usually, it contains the names of the calling
-//       method or methods. Note: Be sure to leave a space at the end
-//       of 'ePrefix'. This parameter is optional.
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
 //
 //
 // ------------------------------------------------------------------------
