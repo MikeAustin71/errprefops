@@ -36,9 +36,7 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
 			errPrefStr)
 	}
 
-	errPrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-	errPrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
+	errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(errPrefixDto)
 
 	if twoDStrArray == nil {
 		return nil
@@ -53,6 +51,10 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
 	var ePrefInfo ErrorPrefixInfo
 
 	for i := 0; i < lenTwoDStrAry; i++ {
+
+		if len(twoDStrArray[i][0]) == 0 {
+			continue
+		}
 
 		ePrefInfo = ErrorPrefixInfo{
 			isFirstIdx:             false,
@@ -655,6 +657,12 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) setFlagsErrorPrefixInfoArray(
 	lenCollection := len(prefixContextCol)
 
 	if lenCollection == 0 {
+		return
+	}
+
+	if lenCollection == 1 {
+		prefixContextCol[0].SetIsFirstIndex(true)
+		prefixContextCol[0].SetIsLastIndex(true)
 		return
 	}
 

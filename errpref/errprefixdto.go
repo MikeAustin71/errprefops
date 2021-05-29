@@ -422,8 +422,28 @@ func (ePrefDto *ErrPrefixDto) CopyOut(
 // To delete all Error Prefix Information objects in the
 // collection, call ErrPrefixDto.EmptyEPrefCollection().
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  --- NONE ---
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  isCollectionEmpty   bool
+//     - After this method completes the deletion of the Last Error
+//       Prefix Information object in the current ErrPrefixDto, it
+//       will set this to boolean return value to signal whether
+//       remaining collection of Error Prefix Information objects
+//       is empty. An empty collection means it contains zero
+//       objects.
+//
 func (ePrefDto *ErrPrefixDto) DeleteLastErrPrefix() (
-	isEmpty bool) {
+	isCollectionEmpty bool) {
 
 	if ePrefDto.lock == nil {
 		ePrefDto.lock = new(sync.Mutex)
@@ -433,12 +453,12 @@ func (ePrefDto *ErrPrefixDto) DeleteLastErrPrefix() (
 
 	defer ePrefDto.lock.Unlock()
 
-	isEmpty,
+	isCollectionEmpty,
 		_ = errPrefixDtoQuark{}.ptr().deleteLastErrPrefixInfo(
 		ePrefDto,
 		"")
 
-	return isEmpty
+	return isCollectionEmpty
 }
 
 // Empty - Reinitializes all internal member variables for the
