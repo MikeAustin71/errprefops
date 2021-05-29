@@ -4097,6 +4097,8 @@ func (ePrefDto ErrPrefixDto) String() string {
 
 	outPutStr := errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
+			ePrefDto.leadingTextStr,
+			ePrefDto.trailingTextStr,
 			ePrefDto.maxErrPrefixTextLineLength,
 			ePrefDto.isLastLineTerminatedWithNewLine,
 			ePrefDto.outputStrDelimiters,
@@ -4209,6 +4211,8 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 
 	return errPrefNanobot{}.ptr().
 		formatErrPrefixComponents(
+			ePrefDto.leadingTextStr,
+			ePrefDto.trailingTextStr,
 			maxErrPrefixTextLineLength,
 			ePrefDto.isLastLineTerminatedWithNewLine,
 			ePrefDto.outputStrDelimiters,
