@@ -28,7 +28,11 @@ This version supports ***Go*** modules.
    
 3. Added new method ErrPrefixDto.GetLastErrPrefix()
    This method returns a deep copy of the last Error Prefix Information object in the current ErrPrefixDto collection.
-
+   
+4. Added new method ErrPrefixDto.ReplaceLastErrPrefix()
+   This method deletes and replaces the Last Error Prefix Information object in the current ErrPrefixDto collection 
+   with new error prefix and context information.
+   
 ## Version 1.6.1
 
 #### Changes

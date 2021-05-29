@@ -301,6 +301,36 @@ func (ePrefDto *ErrPrefixDto) CopyIn(
 // likewise be configured with an identical empty set of error
 // prefix information.
 //
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  inComingIBuilder    IBuilderErrorPrefix
+//     - Any object which implements the IBuilderErrorPrefix
+//       interface.
+//
+//
+//  eMsg                string
+//     - This is an error prefix which is included in all returned
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'eMsg'.
+//
 func (ePrefDto *ErrPrefixDto) CopyInFromIBuilder(
 	inComingIBuilder IBuilderErrorPrefix,
 	eMsg string) error {
@@ -331,6 +361,22 @@ func (ePrefDto *ErrPrefixDto) CopyInFromIBuilder(
 //
 // This method will transfer error prefix and context information
 // OUT to object implementing the IBuilderErrorPrefix interface.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  inComingIBuilder    IBuilderErrorPrefix
+//     - Any object which implements the IBuilderErrorPrefix
+//       interface.
+//
+//
+// -----------------------------------------------------------------
+//
+// Return Values
+//
+//  --- NONE ---
 //
 func (ePrefDto *ErrPrefixDto) CopyOutToIBuilder(
 	inComingIBuilder IBuilderErrorPrefix) {
@@ -2511,8 +2557,8 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 	return newErrPrefixDto
 }
 
-// ReplaceLastErrPrefix - This method will delete and replace the
-// Last Error Prefix Information object in the current ErrPrefixDto
+// ReplaceLastErrPrefix - This method deletes and replaces the Last
+// Error Prefix Information object in the current ErrPrefixDto
 // collection with new error prefix and error context information
 // generated from input parameters 'newErrPrefix' and
 // 'newErrContext'.
@@ -2528,9 +2574,10 @@ func (ePrefDto ErrPrefixDto) Ptr() *ErrPrefixDto {
 //       information is used to document source code execution flow
 //       in error messages.
 //
-//       This method is designed to process a single new error prefix
-//       string. To process a collection of error prefix strings, see
-//       method 'ErrPrefixDto.SetEPrefOld()'.
+//       This method is designed to process a single new error
+//       prefix string and therefore 'newErrPrefix' is a required
+//       parameter. If 'newErrPrefix' is passed as a zero length or
+//       empty string, this method will return an error.
 //
 //
 //  newErrContext       string
