@@ -9,9 +9,23 @@ type errPrefixDtoQuark struct {
 	lock *sync.Mutex
 }
 
-// ptr - Returns a pointer to a new instance of errPrefixDtoQuark.
+// deleteLastErrPrefixInfo - Deletes the last Error Prefix
+// Information object in the collection maintained by the input
+// parameter 'ePrefixDto', an instance of ErrPrefixDto.
 //
-func (ePrefDtoQuark errPrefixDtoQuark) ptr() *errPrefixDtoQuark {
+// After the deletion operation is completed, this method returns a
+// boolean value indicating whether the remaining collection of
+// Error Prefix Information objects is empty.
+//
+// Note: After completing the deletion operation, this method will
+// set the appropriate flags on the last Error Prefix Information
+// object in the modified collection.
+//
+func (ePrefDtoQuark *errPrefixDtoQuark) deleteLastErrPrefixInfo(
+	ePrefixDto *ErrPrefixDto,
+	errPrefStr string) (
+	isEmpty bool,
+	err error) {
 
 	if ePrefDtoQuark.lock == nil {
 		ePrefDtoQuark.lock = new(sync.Mutex)
@@ -21,9 +35,59 @@ func (ePrefDtoQuark errPrefixDtoQuark) ptr() *errPrefixDtoQuark {
 
 	defer ePrefDtoQuark.lock.Unlock()
 
-	return &errPrefixDtoQuark{
-		lock: new(sync.Mutex),
+	errPrefStr = errPrefStr +
+		"\nerrPrefixDtoQuark.deleteLastErrPrefixInfo()"
+
+	isEmpty = false
+
+	if ePrefixDto == nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'ePrefixDto' is invalid!\n"+
+			"'ePrefixDto' is a 'nil' pointer.\n",
+			errPrefStr)
+
+		return isEmpty, err
 	}
+
+	lenEPrefCol := len(ePrefixDto.ePrefCol)
+
+	if lenEPrefCol == 0 {
+
+		ePrefixDto.ePrefCol = nil
+
+		isEmpty = true
+
+		return isEmpty, err
+	}
+
+	if lenEPrefCol == 1 {
+
+		ePrefixDto.ePrefCol[0].Empty()
+
+		ePrefixDto.ePrefCol = nil
+
+		isEmpty = true
+
+		return isEmpty, err
+	}
+
+	ePrefixDto.ePrefCol[lenEPrefCol-1].Empty()
+
+	lenEPrefCol--
+
+	tempCol := make([]ErrorPrefixInfo, lenEPrefCol)
+
+	copy(tempCol, ePrefixDto.ePrefCol[:lenEPrefCol])
+
+	ePrefixDto.ePrefCol = make([]ErrorPrefixInfo, lenEPrefCol)
+
+	copy(ePrefixDto.ePrefCol, tempCol)
+
+	ePrefixDto.ePrefCol[lenEPrefCol-1].SetIsLastIndex(true)
+
+	isEmpty = false
+
+	return isEmpty, err
 }
 
 // emptyEPrefCollection - Receives a pointer to an ErrPrefixDto
@@ -52,10 +116,6 @@ func (ePrefDtoQuark *errPrefixDtoQuark) emptyErrPrefInfoCollection(
 			"Error: Input parameter 'ePrefixDto' is invalid!\n"+
 			"'ePrefixDto' is a 'nil' pointer.\n",
 			errPrefStr)
-	}
-
-	if ePrefixDto.ePrefCol == nil {
-		return nil
 	}
 
 	lenEPrefCol := len(ePrefixDto.ePrefCol)
@@ -128,6 +188,23 @@ func (ePrefDtoQuark *errPrefixDtoQuark) normalizeErrPrefixDto(
 	}
 
 	return
+}
+
+// ptr - Returns a pointer to a new instance of errPrefixDtoQuark.
+//
+func (ePrefDtoQuark errPrefixDtoQuark) ptr() *errPrefixDtoQuark {
+
+	if ePrefDtoQuark.lock == nil {
+		ePrefDtoQuark.lock = new(sync.Mutex)
+	}
+
+	ePrefDtoQuark.lock.Lock()
+
+	defer ePrefDtoQuark.lock.Unlock()
+
+	return &errPrefixDtoQuark{
+		lock: new(sync.Mutex),
+	}
 }
 
 // testValidityOfErrorPrefixInfo - Performs a diagnostic review of

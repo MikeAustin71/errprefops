@@ -23,8 +23,11 @@ This version supports ***Go*** modules.
       err error)
    ```
    
-
-
+2. Added new method ErrPrefixDto.DeleteLastErrPrefix()
+   This method deletes the last Error Prefix Information object in the current ErrPrefixDto collection.
+   
+3. Added new method ErrPrefixDto.GetLastErrPrefix()
+   This method returns a deep copy of the last Error Prefix Information object in the current ErrPrefixDto collection.
 
 ## Version 1.6.1
 
