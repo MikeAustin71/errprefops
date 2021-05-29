@@ -35,6 +35,8 @@ type ErrPrefixDto struct {
 	inputStrDelimiters              ErrPrefixDelimiters
 	outputStrDelimiters             ErrPrefixDelimiters
 	maxErrPrefixTextLineLength      uint
+	leadingTextStr                  string
+	trailingTextStr                 string
 	lock                            *sync.Mutex
 }
 
@@ -135,6 +137,80 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 			previousCollectionLen
 
 	return numberOfCollectionItemsParsed
+}
+
+// ClearLeadingTextStr - Clears or resets the internal member
+// variable, 'leadingTextStr' to a zero length or empty string.
+//
+// The leading text string is a string supplied by the user which
+// is stored in the current instance of ErrPrefixDto. It is used to
+// add a string of text characters to the beginning of formatted
+// error prefix text displays.
+//
+// When the output methods ErrPrefixDto.StrMaxLineLen() or
+// ErrPrefixDto.String() are called to display error prefix
+// information, the leading text string will be appended to the
+// beginning of that error prefix text display.
+//
+// The default for the leading text string is a zero length or
+// empty string. To clear or reset the leading text string to an
+// empty string, call this method, ErrPrefixDto.ClearLeadingTextStr().
+//
+// The value of the leading text string is set by calling the
+// method, ErrPrefixDto.SetLeadingTextStr().
+//
+// Calling this method, ErrPrefixDto.ClearLeadingTextStr(), will
+// effectively erase and remove any text characters previously
+// configured in the leading text string.
+//
+func (ePrefDto *ErrPrefixDto) ClearLeadingTextStr() {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.leadingTextStr = ""
+}
+
+// ClearTrailingTextStr - Clears or resets the internal member
+// variable, 'trailingTextStr' to a zero length or empty string.
+//
+// The trailing text string is a string supplied by the user which
+// is stored in the current instance of ErrPrefixDto. It is used to
+// add a string of text characters to the end of formatted error
+// prefix text displays.
+//
+// When the output methods ErrPrefixDto.StrMaxLineLen() or
+// ErrPrefixDto.String() are called to display error prefix
+// information, the trailing text string will be appended to the
+// end of that error prefix text display.
+//
+// The default for the trailing text string is a zero length or
+// empty string. To clear or reset the trailing text string to an
+// empty string, call this method, ErrPrefixDto.ClearTrailingTextStr().
+//
+// The value of the trailing text string is set by calling the
+// method, ErrPrefixDto.SetTrailingTextStr().
+//
+// Calling this method, ErrPrefixDto.ClearTrailingTextStr(), will
+// effectively erase and remove any text characters previously
+// configured in the trailing text string.
+//
+func (ePrefDto *ErrPrefixDto) ClearTrailingTextStr() {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.trailingTextStr = ""
 }
 
 // Copy - Creates a deep copy of the data fields contained in
@@ -3464,6 +3540,51 @@ func (ePrefDto *ErrPrefixDto) SetIsLastLineTermWithNewLine(
 		isLastLineTerminatedWithNewLine
 }
 
+// SetLeadingTextStr - Sets the internal member variable
+// 'leadingTextStr'.
+//
+// The leading text string is a string supplied by the user which
+// is stored in the current instance of ErrPrefixDto. It is used to
+// add a string of text characters to the beginning of formatted
+// error prefix text displays.
+//
+// When the output methods ErrPrefixDto.StrMaxLineLen()
+// or ErrPrefixDto.String() are called to display error prefix
+// information, the leading text string will be appended to the
+// beginning of that error prefix text display.
+//
+// The default for the leading text string is a zero length or
+// empty string. To clear or reset the leading text string to an
+// empty string, call this method, ErrPrefixDto.SetLeadingTextStr(),
+// with an empty string or call the method
+// ErrPrefixDto.ClearLeadingTextStr().
+//
+// The leading text string can be used to add any combination of
+// string characters to the beginning of an error prefix text
+// display. Ideas for usage could include newline characters,
+// dash lines ('-'), asterisk lines ('*'), equal lines ('-') or any
+// other combination of text characters.
+//
+// The leading text string is often used in conjunction with the
+// trailing text string to highlight or separate error prefix
+// information. The trailing text string is configured using method
+// ErrPrefixDto.SetTrailingTextStr().
+//
+func (ePrefDto *ErrPrefixDto) SetLeadingTextStr(
+	leadingTextStr string) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.leadingTextStr = leadingTextStr
+
+}
+
 // SetLeftMarginChar - Sets the character used in creating the left
 // margin applied to all new lines generated in the error prefix
 // string returned by method: ErrPrefixDto.String().
@@ -3826,6 +3947,47 @@ func (ePrefDto *ErrPrefixDto) SetStrDelimitersToDefault() {
 	ePrefDto.inputStrDelimiters.SetToDefault()
 
 	ePrefDto.outputStrDelimiters.SetToDefault()
+}
+
+// SetTrailingTextStr - Sets the internal member variable
+// 'trailingTextStr'. The trailing text string is a string supplied
+// by the user which is stored in the current instance of
+// ErrPrefixDto.
+//
+// When the output methods ErrPrefixDto.SetOutputStringDelimiters()
+// or ErrPrefixDto.String() are called to display error prefix
+// information, the trailing text string will be appended to the
+// end of that error prefix text display.
+//
+// The default for the trailing text string is a zero length or
+// empty string. To clear or reset the trailing text string to an
+// empty string, call this method, ErrPrefixDto.SetTrailingTextStr(),
+// with an empty string or call the method
+// ErrPrefixDto.ClearTrailingTextStr().
+//
+// The trailing text string can be used to add any combination of
+// string characters to the end of an error prefix text display.
+// Ideas for usage could include newline characters ('\n'), dash
+// lines ('-'), asterisk lines ('*'), equal lines ('-') or any
+// other combination of text characters.
+//
+// The trailing text string is often used in conjunction with the
+// leading text string to highlight or separate error prefix
+// information. The leading text string is configured using method
+// ErrPrefixDto.SetLeadingTextStr().
+//
+func (ePrefDto *ErrPrefixDto) SetTrailingTextStr(
+	trailingTextStr string) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	ePrefDto.trailingTextStr = trailingTextStr
 }
 
 // SetTurnOffTextDisplay - Controls the "Turn Off Text Display"

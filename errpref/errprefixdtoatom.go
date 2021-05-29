@@ -145,6 +145,16 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) areEqualErrPrefDtos(
 		return false
 	}
 
+	if errPrefixDto1.leadingTextStr !=
+		errPrefixDto2.leadingTextStr {
+		return false
+	}
+
+	if errPrefixDto1.trailingTextStr !=
+		errPrefixDto2.trailingTextStr {
+		return false
+	}
+
 	if errPrefixDto1.ePrefCol == nil {
 		errPrefixDto1.ePrefCol =
 			make([]ErrorPrefixInfo, 0)
@@ -311,6 +321,12 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyInErrPrefDto(
 	targetErrPrefixDto.leftMarginChar =
 		inComingErrPrefixDto.leftMarginChar
 
+	targetErrPrefixDto.leadingTextStr =
+		inComingErrPrefixDto.leadingTextStr
+
+	targetErrPrefixDto.trailingTextStr =
+		inComingErrPrefixDto.trailingTextStr
+
 	lenIncomingEPrefCol :=
 		len(inComingErrPrefixDto.ePrefCol)
 
@@ -442,6 +458,12 @@ func (ePrefixDtoAtom *errPrefixDtoAtom) copyOutErrPrefDto(
 
 	newEPrefixDto.leftMarginChar =
 		ePrefixDto.leftMarginChar
+
+	newEPrefixDto.leadingTextStr =
+		ePrefixDto.leadingTextStr
+
+	newEPrefixDto.trailingTextStr =
+		ePrefixDto.trailingTextStr
 
 	lenIncomingEPrefCol :=
 		len(ePrefixDto.ePrefCol)

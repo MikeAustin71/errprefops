@@ -153,6 +153,10 @@ func (ePrefDtoQuark *errPrefixDtoQuark) newZeroErrPrefixDto() ErrPrefixDto {
 
 	newErrPrefixDto.ePrefCol = nil
 
+	newErrPrefixDto.leadingTextStr = ""
+
+	newErrPrefixDto.trailingTextStr = ""
+
 	newErrPrefixDto.maxErrPrefixTextLineLength =
 		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
 
