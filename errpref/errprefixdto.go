@@ -769,6 +769,85 @@ func (ePrefDto *ErrPrefixDto) GetIsLastLineTerminatedWithNewLine() bool {
 	return ePrefDto.isLastLineTerminatedWithNewLine
 }
 
+// GetLastErrPrefix - Returns a deep copy of the last Error Prefix
+// Information object in the Error Prefix collection maintained by
+// the current ErrPrefixDto instance.
+//
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//  eMsg                string
+//     - This is an error prefix which is included in all returned
+//       error messages returned by this method. Usually, it
+//       contains the names of the calling method or methods.
+//
+//       Note: Be sure to leave a space at the end of 'eMsg'.
+//       This parameter is optional.
+//
+//
+// ------------------------------------------------------------------------
+//
+// Return Values
+//
+//  errPrefInfo         ErrorPrefixInfo
+//     - If this method completes successfully, a deep copy of the
+//       last Error Prefix Information object in the current
+//       ErrPrefixDto collection will be returned in this
+//       parameter.
+//
+//
+//  collectionIsEmpty   bool
+//     - If the current Error Prefix Information collection
+//       maintained by the current ErrPrefixDto instance is empty,
+//       this returned boolean value will be set to 'true'. A
+//       return value of 'true' also signals that the returned
+//       'errPrefInfo' parameter described above is empty and
+//       invalid.
+//
+//
+//  err                 error
+//     - If this method completes successfully, the returned error Type
+//       is set to 'nil'. If errors are encountered during processing,
+//       the returned error Type will encapsulate an error message.
+//       Note that this error message will incorporate the method
+//       chain and text passed by input parameter, 'eMsg'.
+//
+func (ePrefDto *ErrPrefixDto) GetLastErrPrefix(
+	eMsg string) (
+	errPrefInfo ErrorPrefixInfo,
+	collectionIsEmpty bool,
+	err error) {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	eMsg += "ErrPrefixDto.GetLastErrPrefix()\n"
+
+	errPrefInfo = ErrorPrefixInfo{}.New()
+	collectionIsEmpty = true
+
+	lenEPrefCol := len(ePrefDto.ePrefCol)
+
+	if lenEPrefCol == 0 {
+		return errPrefInfo, collectionIsEmpty, err
+	}
+
+	collectionIsEmpty = false
+
+	err = errPrefInfo.CopyIn(
+		&ePrefDto.ePrefCol[lenEPrefCol-1],
+		eMsg)
+
+	return errPrefInfo, collectionIsEmpty, err
+}
+
 // GetLeadingTextStr - Returns the current value of the leading
 // text string. This value is stored internally in the member
 // variable, 'leadingTextStr'.
@@ -948,85 +1027,6 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 			"")
 
 	return newTwoDSlice
-}
-
-// GetLastErrPrefix - Returns a deep copy of the last Error Prefix
-// Information object in the Error Prefix collection maintained by
-// the current ErrPrefixDto instance.
-//
-//
-// ----------------------------------------------------------------
-//
-// Input Parameters
-//
-//  eMsg                string
-//     - This is an error prefix which is included in all returned
-//       error messages returned by this method. Usually, it
-//       contains the names of the calling method or methods.
-//
-//       Note: Be sure to leave a space at the end of 'eMsg'.
-//       This parameter is optional.
-//
-//
-// ------------------------------------------------------------------------
-//
-// Return Values
-//
-//  errPrefInfo         ErrorPrefixInfo
-//     - If this method completes successfully, a deep copy of the
-//       last Error Prefix Information object in the current
-//       ErrPrefixDto collection will be returned in this
-//       parameter.
-//
-//
-//  collectionIsEmpty   bool
-//     - If the current Error Prefix Information collection
-//       maintained by the current ErrPrefixDto instance is empty,
-//       this returned boolean value will be set to 'true'. A
-//       return value of 'true' also signals that the returned
-//       'errPrefInfo' parameter described above is empty and
-//       invalid.
-//
-//
-//  err                 error
-//     - If this method completes successfully, the returned error Type
-//       is set to 'nil'. If errors are encountered during processing,
-//       the returned error Type will encapsulate an error message.
-//       Note that this error message will incorporate the method
-//       chain and text passed by input parameter, 'eMsg'.
-//
-func (ePrefDto *ErrPrefixDto) GetLastErrPrefix(
-	eMsg string) (
-	errPrefInfo ErrorPrefixInfo,
-	collectionIsEmpty bool,
-	err error) {
-
-	if ePrefDto.lock == nil {
-		ePrefDto.lock = new(sync.Mutex)
-	}
-
-	ePrefDto.lock.Lock()
-
-	defer ePrefDto.lock.Unlock()
-
-	eMsg += "ErrPrefixDto.GetLastErrPrefix()\n"
-
-	errPrefInfo = ErrorPrefixInfo{}.New()
-	collectionIsEmpty = true
-
-	lenEPrefCol := len(ePrefDto.ePrefCol)
-
-	if lenEPrefCol == 0 {
-		return errPrefInfo, collectionIsEmpty, err
-	}
-
-	collectionIsEmpty = false
-
-	err = errPrefInfo.CopyIn(
-		&ePrefDto.ePrefCol[lenEPrefCol-1],
-		eMsg)
-
-	return errPrefInfo, collectionIsEmpty, err
 }
 
 // GetMaxTextLineLen - Returns the maximum limit on the
