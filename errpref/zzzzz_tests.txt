@@ -452,6 +452,8 @@
 --- PASS: TestErrPrefixDelimiters_Quark_000100 (0.00s)
 === RUN   TestEPrefixLineLenCalc_Electron_000100
 --- PASS: TestEPrefixLineLenCalc_Electron_000100 (0.00s)
+=== RUN   TestErrorPrefixInfo_Electron_000100
+--- PASS: TestErrorPrefixInfo_Electron_000100 (0.00s)
 PASS
-coverage: 88.7% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.945s
+coverage: 89.2% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	1.578s

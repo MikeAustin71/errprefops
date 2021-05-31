@@ -2,6 +2,27 @@ package errpref
 
 import "fmt"
 
+func getValidErrorPrefixInfo() ErrorPrefixInfo {
+
+	ePrefInfoOne := ErrorPrefixInfo{}.New()
+
+	testMethod := "TxDoSomethingNow()"
+
+	ePrefInfoOne.SetErrPrefixStr(testMethod)
+
+	errContext := "A/B=C B=0"
+
+	ePrefInfoOne.SetErrContextStr(errContext)
+
+	ePrefInfoOne.SetIsFirstIndex(true)
+
+	ePrefInfoOne.SetIsLastIndex(true)
+
+	ePrefInfoOne.SetIsPopulated(true)
+
+	return ePrefInfoOne
+}
+
 func getValidEPrefixLineLenCalc(errPref string) (
 	EPrefixLineLenCalc,
 	error) {

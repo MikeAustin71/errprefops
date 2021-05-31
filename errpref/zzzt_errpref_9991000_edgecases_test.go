@@ -532,3 +532,233 @@ func TestEPrefixLineLenCalc_Electron_000100(t *testing.T) {
 	}
 
 }
+
+func TestErrorPrefixInfo_Electron_000100(t *testing.T) {
+
+	funcName := "TestErrorPrefixInfo_Electron_000100() "
+
+	ePrefInfoElectron := errorPrefixInfoElectron{}
+
+	targetErrPrefixInfo := ErrorPrefixInfo{}
+
+	inComingErrPrefixInfo := getValidErrorPrefixInfo()
+
+	err :=
+		ePrefInfoElectron.copyIn(
+			nil,
+			&inComingErrPrefixInfo,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefInfoElectron.copyIn()\n" +
+			"because targetErrPrefixInfo is a nil pointer.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	err =
+		ePrefInfoElectron.copyIn(
+			&targetErrPrefixInfo,
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefInfoElectron.copyIn()\n" +
+			"because inComingErrPrefixInfo is a nil pointer.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo.errorPrefixStr = ""
+
+	err =
+		ePrefInfoElectron.copyIn(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefInfoElectron.copyIn()\n" +
+			"because inComingErrPrefixInfo is invalid.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	_,
+		err =
+		ePrefInfoElectron.copyOut(
+			&inComingErrPrefixInfo,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefInfoElectron.copyOut()\n" +
+			"because inComingErrPrefixInfo is invalid.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	_,
+		err =
+		ePrefInfoElectron.copyOut(
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefInfoElectron.copyOut()\n" +
+			"because inComingErrPrefixInfo is a nil pointer.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	targetErrPrefixInfo = getValidErrorPrefixInfo()
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	areEqual :=
+		ePrefInfoElectron.equal(
+			nil,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because ePrefixInfo01 is a nil pointer.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			nil)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because ePrefixInfo02 is a nil pointer.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo.isFirstIdx = false
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because isFirstIdx is 'false'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	inComingErrPrefixInfo.isLastIdx = false
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because isLastIdx is 'false'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	inComingErrPrefixInfo.isPopulated = false
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because isPopulated is 'false'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	inComingErrPrefixInfo.errorPrefixStr = "Nothing"
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because the errorPrefixStr values are not equal.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	inComingErrPrefixInfo.lenErrorPrefixStr = 9999999
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because the lenErrorPrefixStr values are not equal.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	inComingErrPrefixInfo.errorContextStr = "XXX-NOTHING-XXX"
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because the errorContextStr values are not equal.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	inComingErrPrefixInfo.lenErrorContextStr = 55998823
+
+	areEqual =
+		ePrefInfoElectron.equal(
+			&targetErrPrefixInfo,
+			&inComingErrPrefixInfo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected areEqual=='false' from ePrefInfoElectron.equal()\n" +
+			"because the lenErrorContextStr values are not equal.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
