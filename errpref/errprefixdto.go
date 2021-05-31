@@ -769,6 +769,39 @@ func (ePrefDto *ErrPrefixDto) GetIsLastLineTerminatedWithNewLine() bool {
 	return ePrefDto.isLastLineTerminatedWithNewLine
 }
 
+// GetLeadingTextStr - Returns the current value of the leading
+// text string. This value is stored internally in the member
+// variable, 'leadingTextStr'.
+//
+// The leading text string is a string supplied by the user which
+// is stored in the current instance of ErrPrefixDto. It is used to
+// add a string of text characters to the beginning of formatted
+// error prefix text output for display purposes.
+//
+// When the output methods ErrPrefixDto.StrMaxLineLen() or
+// ErrPrefixDto.String() are called to display error prefix
+// information, the leading text string will be appended to the
+// beginning of that error prefix text display.
+//
+// The value of the leading text string is set by calling the
+// method, ErrPrefixDto.SetLeadingTextStr().
+//
+// The default for the leading text string is a zero length or
+// empty string.
+//
+func (ePrefDto *ErrPrefixDto) GetLeadingTextStr() string {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return ePrefDto.leadingTextStr
+}
+
 // GetLeftMarginChar - Returns a rune or text character which will
 // be used to populate the left margin of formatted error prefix
 // strings returned by method ErrPrefixDto.String().
