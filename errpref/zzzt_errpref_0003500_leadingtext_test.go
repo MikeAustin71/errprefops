@@ -190,3 +190,55 @@ func TestErrPrefixDto_ClearLeadingTextStr_000100(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDto_ClearTrailingTextStr_000100(t *testing.T) {
+
+	ePDto := ErrPrefixDto{}.New()
+
+	maxLineLen := 50
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	twoDSlice := make([][2]string, 2)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	leadingText := "\n" +
+		strings.Repeat("-", maxLineLen)
+
+	trailingText := strings.Repeat("-", maxLineLen) +
+		"\n"
+
+	ePDto.SetLeadingTextStr(leadingText)
+	ePDto.SetTrailingTextStr(trailingText)
+	ePDto.SetIsLastLineTermWithNewLine(true)
+
+	actualTrailingTxt := ePDto.GetTrailingTextStr()
+
+	if trailingText != actualTrailingTxt {
+		t.Errorf("ERROR: Expected Trailing Text String DOES "+
+			"NOT MATCH\nActual Trailing Text String!\n"+
+			"Expected Trailing Text String= '%v'\n"+
+			"  Actual Trailing Text String= '%v'\n",
+			trailingText,
+			actualTrailingTxt)
+		return
+	}
+
+	ePDto.ClearTrailingTextStr()
+
+	actualTrailingTxt = ePDto.GetTrailingTextStr()
+
+	if len(actualTrailingTxt) != 0 {
+		t.Errorf("ERROR: After calling ePDto.ClearTrailingTextStr(),"+
+			"the trailing text string NOT EMPTY!\n"+
+			"Actual Trailing Text String= '%v'\n",
+			actualTrailingTxt)
+	}
+}
