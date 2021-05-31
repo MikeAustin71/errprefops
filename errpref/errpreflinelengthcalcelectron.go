@@ -276,7 +276,7 @@ func (ePrefLineLenCalcElectron *ePrefixLineLenCalcElectron) equal(
 
 	defer ePrefLineLenCalcElectron.lock.Unlock()
 
-	ePrefix += "ePrefixLineLenCalcElectron.copyIn() "
+	ePrefix += "ePrefixLineLenCalcElectron.equal() "
 
 	areEqual = false
 

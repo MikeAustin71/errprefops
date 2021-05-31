@@ -444,6 +444,14 @@
 --- PASS: TestErrPrefixDto_SetMaxTextLineLen_000100 (0.00s)
 === RUN   TestErrorPrefixInfo_SetErrPrefixStr
 --- PASS: TestErrorPrefixInfo_SetErrPrefixStr (0.00s)
+=== RUN   TestErrPref_Mechanics_000100
+--- PASS: TestErrPref_Mechanics_000100 (0.00s)
+=== RUN   TestErrPref_Molecule_000100
+--- PASS: TestErrPref_Molecule_000100 (0.00s)
+=== RUN   TestErrPrefixDelimiters_Quark_000100
+--- PASS: TestErrPrefixDelimiters_Quark_000100 (0.00s)
+=== RUN   TestEPrefixLineLenCalc_Electron_000100
+--- PASS: TestEPrefixLineLenCalc_Electron_000100 (0.00s)
 PASS
-coverage: 87.4% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	1.411s
+coverage: 88.7% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.945s
