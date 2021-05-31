@@ -1224,6 +1224,39 @@ func (ePrefDto *ErrPrefixDto) GetStrDelimiters() (
 	return inputStrDelimiters, outputStrDelimiters
 }
 
+// GetTrailingTextStr - Returns the current value of the trailing
+// text string. This value is stored internally in the member
+// variable, 'trailingTextStr'.
+//
+// The trailing text string is a string supplied by the user which
+// is stored in the current instance of ErrPrefixDto. It is used to
+// append a string of text characters to the end of formatted error
+// prefix text output for display purposes.
+//
+// When the output methods ErrPrefixDto.StrMaxLineLen() or
+// ErrPrefixDto.String() are called to display error prefix
+// information, the trailing text string will be appended to the
+// end of that error prefix text display.
+//
+// The value of the trailing text string is set by calling the
+// method, ErrPrefixDto.SetTrailingTextStr().
+//
+// The default for the trailing text string is a zero length or
+// empty string.
+//
+func (ePrefDto *ErrPrefixDto) GetTrailingTextStr() string {
+
+	if ePrefDto.lock == nil {
+		ePrefDto.lock = new(sync.Mutex)
+	}
+
+	ePrefDto.lock.Lock()
+
+	defer ePrefDto.lock.Unlock()
+
+	return ePrefDto.trailingTextStr
+}
+
 // GetTurnOffTextDisplay - Returns the current value of the
 // "Turn Off Text Display" flag represented by internal member
 // variable:
