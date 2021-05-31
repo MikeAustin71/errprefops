@@ -412,6 +412,8 @@
 --- PASS: TestErrPrefixDto_ZEPrefOld_000100 (0.00s)
 === RUN   TestErrPrefixDto_ZEPrefOld_000200
 --- PASS: TestErrPrefixDto_ZEPrefOld_000200 (0.00s)
+=== RUN   TestLeadingText_000100
+--- PASS: TestLeadingText_000100 (0.00s)
 === RUN   TestErrPrefixDto_XMethods_000100
 --- PASS: TestErrPrefixDto_XMethods_000100 (0.00s)
 === RUN   TestErrPrefixDto_YMethods_000200
@@ -435,5 +437,5 @@
 === RUN   TestErrorPrefixInfo_SetErrPrefixStr
 --- PASS: TestErrorPrefixInfo_SetErrPrefixStr (0.00s)
 PASS
-coverage: 86.8% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.821s
+coverage: 87.2% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.849s

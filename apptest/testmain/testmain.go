@@ -10,6 +10,49 @@ type TestMain struct {
 	testStr01 string
 }
 
+func (tMain TestMain) TestMain025() {
+
+	ePDto := errpref.ErrPrefixDto{}.New()
+
+	maxLineLen := 50
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	twoDSlice := make([][2]string, 2)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	leadingText := "\n" +
+		strings.Repeat("-", maxLineLen)
+
+	trailingText := strings.Repeat("-", maxLineLen) +
+		"\n"
+
+	ePDto.SetLeadingTextStr(leadingText)
+	ePDto.SetTrailingTextStr(trailingText)
+	ePDto.SetIsLastLineTermWithNewLine(true)
+
+	outputStr := fmt.Sprintf("%v"+
+		"Error: Divide by Zero!",
+		ePDto.String())
+
+	fmt.Printf(outputStr)
+
+	expectedStr := errpref.ErrPref{}.ConvertNonPrintableChars(
+		[]rune(outputStr),
+		true)
+
+	fmt.Println()
+	fmt.Printf(expectedStr + "\n")
+
+}
+
 func (tMain TestMain) TestMain024() {
 
 	ePDto := errpref.ErrPrefixDto{}.New()
