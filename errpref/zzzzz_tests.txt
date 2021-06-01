@@ -452,8 +452,12 @@
 --- PASS: TestErrPrefixDelimiters_Electron_000100 (0.00s)
 === RUN   TestErrPrefixDelimiters_Quark_000100
 --- PASS: TestErrPrefixDelimiters_Quark_000100 (0.00s)
+=== RUN   TestEPrefixLineLenCalc_000100
+--- PASS: TestEPrefixLineLenCalc_000100 (0.00s)
 === RUN   TestEPrefixLineLenCalc_Electron_000100
 --- PASS: TestEPrefixLineLenCalc_Electron_000100 (0.00s)
+=== RUN   TestEPrefixLineLenCalc_Quark_000100
+--- PASS: TestEPrefixLineLenCalc_Quark_000100 (0.00s)
 === RUN   TestErrorPrefixInfo_Electron_000100
 --- PASS: TestErrorPrefixInfo_Electron_000100 (0.00s)
 === RUN   TestErrPrefixDto_Mechanics_000100
@@ -461,5 +465,5 @@
 === RUN   TestErrPrefixDto_Nanobot_000100
 --- PASS: TestErrPrefixDto_Nanobot_000100 (0.00s)
 PASS
-coverage: 90.6% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.554s
+coverage: 91.1% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.646s

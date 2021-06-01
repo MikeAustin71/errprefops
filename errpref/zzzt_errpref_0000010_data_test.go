@@ -121,5 +121,20 @@ func getValidEPrefixLineLenCalc(errPref string) (
 				err.Error())
 	}
 
+	err =
+		ePrefLineLenOne.SetEPrefDelimiters(
+			ErrPrefixDelimiters{}.NewDefaults(),
+			errPref)
+
+	if err != nil {
+
+		return EPrefixLineLenCalc{},
+			fmt.Errorf("%v\n"+
+				"ERROR returned by ePrefLineLenOne.SetEPrefDelimiters()\n"+
+				"%v\n",
+				errPref,
+				err.Error())
+	}
+
 	return ePrefLineLenOne, nil
 }

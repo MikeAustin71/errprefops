@@ -48,6 +48,8 @@ func TestErrPref_Mechanics_000100(t *testing.T) {
 
 	maxErrStringLength = 0
 
+	ePrefMech = errPrefMechanics{}
+
 	outputStr =
 		ePrefMech.formatErrPrefix(
 			maxErrStringLength,
@@ -70,6 +72,8 @@ func TestErrPref_Mechanics_000100(t *testing.T) {
 
 	maxErrStringLength = 0
 	newErrContext = "X=7; Y=92"
+
+	ePrefMech = errPrefMechanics{}
 
 	outputStr =
 		ePrefMech.setErrorContext(
@@ -115,6 +119,8 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 		return
 	}
 
+	ePrefMolecule = errPrefMolecule{}
+
 	err = ePrefMolecule.writeNewEPrefWithOutContext(
 		strBuilder,
 		lineLenCalc)
@@ -131,6 +137,8 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 
 	lineLenCalc = nil
 
+	ePrefMolecule = errPrefMolecule{}
+
 	err = ePrefMolecule.writeNewEPrefWithContext(
 		strBuilder,
 		lineLenCalc)
@@ -142,6 +150,8 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 			"HOWEVER, NO ERROR WAS RETURNED!\n")
 		return
 	}
+
+	ePrefMolecule = errPrefMolecule{}
 
 	err = ePrefMolecule.writeNewEPrefWithOutContext(
 		strBuilder,
@@ -442,6 +452,8 @@ func TestErrPrefixDelimiters_Quark_000100(t *testing.T) {
 		return
 	}
 
+	ePrefDelimsQuark = errPrefixDelimitersQuark{}
+
 	_,
 		err = ePrefDelimsQuark.testValidityOfErrPrefixDelimiters(
 		delimiters,
@@ -527,6 +539,56 @@ func TestErrPrefixDelimiters_Quark_000100(t *testing.T) {
 
 }
 
+func TestEPrefixLineLenCalc_000100(t *testing.T) {
+
+	ePrefLineLenCalc := EPrefixLineLenCalc{}
+
+	ePrefLineLenCalc.currentLineStr =
+		"Now is the time for all good men to enlist!"
+
+	ePrefLineLenCalc.maxErrStringLength = 11
+
+	if ePrefLineLenCalc.CurrLineLenExceedsMaxLineLen() == false {
+		t.Error("ERROR:\n" +
+			"Expected ePrefLineLenCalc.CurrLineLenExceedsMaxLineLen()\n" +
+			"to return 'true'.\n" +
+			"HOWEVER, IT RETURNED FALSE INSTEAD!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	_,
+		_ = ePrefLineLenCalc.CopyOut("")
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	ePrefLineLenCalc.Empty()
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	/*
+
+		_ =
+		ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen()
+
+		ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+		ePrefLineLenCalc.currentLineStr =
+			"Now is the time for all good men to come to the aid"
+
+		ePrefLineLenCalc.maxErrStringLength = 11
+
+		if ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == false {
+			t.Error("ERROR\n" +
+				"Expected ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == 'true'\n" +
+				"HOWEVER, IT RETURNED FALSE!\n")
+			return
+		}
+	*/
+
+}
+
 func TestEPrefixLineLenCalc_Electron_000100(t *testing.T) {
 
 	funcName := "TestEPrefixLineLenCalc_Electron_000100() "
@@ -591,6 +653,8 @@ func TestEPrefixLineLenCalc_Electron_000100(t *testing.T) {
 
 	targetLineLenCalc = nil
 
+	ePrefLineLenCalcElectron = ePrefixLineLenCalcElectron{}
+
 	_,
 		err = ePrefLineLenCalcElectron.copyOut(
 		targetLineLenCalc,
@@ -649,6 +713,8 @@ func TestEPrefixLineLenCalc_Electron_000100(t *testing.T) {
 		t.Error(err.Error())
 		return
 	}
+
+	ePrefLineLenCalcElectron = ePrefixLineLenCalcElectron{}
 
 	_,
 		err = ePrefLineLenCalcElectron.equal(
@@ -794,6 +860,79 @@ func TestEPrefixLineLenCalc_Electron_000100(t *testing.T) {
 
 }
 
+func TestEPrefixLineLenCalc_Quark_000100(t *testing.T) {
+
+	funcName := "TestErrorPrefixInfo_Electron_000100() "
+
+	ePrefLineLenCalcQuark := ePrefixLineLenCalcQuark{}
+
+	_,
+		err := ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc()\n" +
+			"because ePrefLineLenCalc is a nil pointer.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	var ePrefLineLenCalc EPrefixLineLenCalc
+
+	ePrefLineLenCalc,
+		err = getValidEPrefixLineLenCalc(funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by getValidEPrefixLineLenCalc()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	ePrefLineLenCalcQuark = ePrefixLineLenCalcQuark{}
+
+	ePrefLineLenCalc.errorPrefixInfo = nil
+	_,
+		err = ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
+		&ePrefLineLenCalc,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc()\n" +
+			"because ePrefLineLenCalc.errorPrefixInfo == nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefLineLenCalc,
+		err = getValidEPrefixLineLenCalc(funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by getValidEPrefixLineLenCalc()\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	ePrefLineLenCalc.maxErrStringLength = 0
+	_,
+		err = ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
+		&ePrefLineLenCalc,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc()\n" +
+			"because ePrefLineLenCalc.maxErrStringLength == 0.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
+
 func TestErrorPrefixInfo_Electron_000100(t *testing.T) {
 
 	funcName := "TestErrorPrefixInfo_Electron_000100() "
@@ -848,6 +987,7 @@ func TestErrorPrefixInfo_Electron_000100(t *testing.T) {
 		return
 	}
 
+	ePrefInfoElectron = errorPrefixInfoElectron{}
 	_,
 		err =
 		ePrefInfoElectron.copyOut(
@@ -878,6 +1018,8 @@ func TestErrorPrefixInfo_Electron_000100(t *testing.T) {
 
 	targetErrPrefixInfo = getValidErrorPrefixInfo()
 	inComingErrPrefixInfo = getValidErrorPrefixInfo()
+
+	ePrefInfoElectron = errorPrefixInfoElectron{}
 
 	areEqual :=
 		ePrefInfoElectron.equal(
