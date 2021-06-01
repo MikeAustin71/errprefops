@@ -167,6 +167,44 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDelimiters_Mechanics(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_Mechanics()"
+
+	ePrefDelimitersMech := errPrefixDelimitersMechanics{}
+
+	err := ePrefDelimitersMech.setErrPrefDelimiters(
+		nil,
+		"X",
+		"Y",
+		"Z",
+		"A",
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR: Expected an error return from " +
+			"ePrefDelimitersMech.setErrPrefDelimiters()\n" +
+			"because the ePrefDelimiters parameter is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefDelimitersMech = errPrefixDelimitersMechanics{}
+
+	err = ePrefDelimitersMech.setToDefault(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR: Expected an error return from " +
+			"ePrefDelimitersMech.setToDefault()\n" +
+			"because the ePrefDelimiters parameter is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
+
 func TestErrPrefixDelimiters_Electron_000100(t *testing.T) {
 
 	funcName := "TestErrPrefixDelimiters_Electron_000100() "
