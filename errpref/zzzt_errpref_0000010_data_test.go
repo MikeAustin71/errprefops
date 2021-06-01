@@ -2,6 +2,10 @@ package errpref
 
 import "fmt"
 
+func getValidErrPrefixDelimiters() ErrPrefixDelimiters {
+	return ErrPrefixDelimiters{}.NewDefaults()
+}
+
 func getValidErrorPrefixDto() ErrPrefixDto {
 
 	ePDto := ErrPrefixDto{}.New()

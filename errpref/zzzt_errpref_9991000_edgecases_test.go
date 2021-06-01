@@ -157,6 +157,267 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 
 }
 
+func TestErrPrefixDelimiters_Electron_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDelimiters_Electron_000100() "
+
+	/*
+		func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyIn(
+			targetDelimiters *ErrPrefixDelimiters,
+			incomingDelimiters *ErrPrefixDelimiters,
+			ePrefix string) error
+	*/
+
+	delimiters := getValidErrPrefixDelimiters()
+
+	ePrefDelimsElectron := errPrefixDelimitersElectron{}
+
+	err :=
+		ePrefDelimsElectron.copyIn(
+			nil,
+			&delimiters,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsElectron.copyIn()\n" +
+			"because the 'targetDelimiters' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	err =
+		ePrefDelimsElectron.copyIn(
+			&delimiters,
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsElectron.copyIn()\n" +
+			"because the 'incomingDelimiters' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	/*
+		func (ePrefDelimsElectron *errPrefixDelimitersElectron) copyOut(
+			delimiters *ErrPrefixDelimiters,
+		ePrefix string) (
+			ErrPrefixDelimiters,
+			error)
+	*/
+
+	delimiters = getValidErrPrefixDelimiters()
+
+	ePrefDelimsElectron = errPrefixDelimitersElectron{}
+
+	_,
+		err =
+		ePrefDelimsElectron.copyOut(
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsElectron.copyOut()\n" +
+			"because the 'delimiters' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	delimiters = getValidErrPrefixDelimiters()
+
+	delimiters2 := getValidErrPrefixDelimiters()
+
+	ePrefDelimsElectron = errPrefixDelimitersElectron{}
+
+	_,
+		err =
+		ePrefDelimsElectron.equal(
+			nil,
+			&delimiters2,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsElectron.equal()\n" +
+			"because the 'delimitersOne' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	_,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDelimsElectron.equal()\n" +
+			"because the 'delimitersTwo' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	var areEqual bool
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.inLinePrefixDelimiter = "9999!XXX"
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.inLinePrefixDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.lenInLinePrefixDelimiter = 469521
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.lenInLinePrefixDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.newLinePrefixDelimiter = "FX91!!!!"
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.newLinePrefixDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.lenNewLinePrefixDelimiter = 6712385
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.lenNewLinePrefixDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.inLineContextDelimiter = "!x%^#"
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.inLineContextDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.lenInLineContextDelimiter = 5894
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.lenInLineContextDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.newLineContextDelimiter = "!@!#$%^"
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.newLineContextDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+	delimiters2 = getValidErrPrefixDelimiters()
+
+	delimiters2.lenNewLineContextDelimiter = 578
+
+	areEqual,
+		err =
+		ePrefDelimsElectron.equal(
+			&delimiters,
+			&delimiters2,
+			funcName)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefDelimsElectron.equal() would return areEqual=='false'\n" +
+			"because the 'delimitersTwo.lenNewLineContextDelimiter' parameter is NOT EQUAL.\n" +
+			"HOWEVER,  areEqual=='true'!\n")
+		return
+	}
+
+}
+
 func TestErrPrefixDelimiters_Quark_000100(t *testing.T) {
 	/*
 		func (ePrefDelimsQuark *errPrefixDelimitersQuark) empty(
