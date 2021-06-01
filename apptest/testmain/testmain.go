@@ -12,6 +12,8 @@ type TestMain struct {
 
 func (tMain TestMain) TestMain026() {
 
+	funcName := "TestMain026()"
+
 	var twoDSlice01 [][2]string
 
 	twoDSlice01 = make([][2]string, 14)
@@ -181,7 +183,11 @@ func (tMain TestMain) TestMain026() {
 			"ePDto3.String()=\n%v\n\n",
 			ePDto1.String(),
 			ePDto3.String())
+		return
 	}
+
+	fmt.Printf("\n\nSUCCESSFUL COMPLETION!\n" +
+		funcName + "\n")
 
 }
 

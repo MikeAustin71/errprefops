@@ -567,25 +567,133 @@ func TestEPrefixLineLenCalc_000100(t *testing.T) {
 
 	ePrefLineLenCalc = EPrefixLineLenCalc{}
 
-	/*
-
-		_ =
+	_ =
 		ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen()
 
-		ePrefLineLenCalc = EPrefixLineLenCalc{}
+	ePrefLineLenCalc = EPrefixLineLenCalc{}.New()
 
-		ePrefLineLenCalc.currentLineStr =
-			"Now is the time for all good men to come to the aid"
+	ePrefLineLenCalc.currentLineStr =
+		"Now is the time for all good men to come to the aid"
 
-		ePrefLineLenCalc.maxErrStringLength = 11
+	ePrefLineLenCalc.maxErrStringLength = 11
 
-		if ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == false {
-			t.Error("ERROR\n" +
-				"Expected ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == 'true'\n" +
-				"HOWEVER, IT RETURNED FALSE!\n")
-			return
-		}
-	*/
+	if ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == false {
+		t.Error("ERROR\n" +
+			"Expected ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}.New()
+
+	ePrefLineLenCalc.currentLineStr =
+		"Now is the time for all good men to come to the aid"
+
+	ePrefLineLenCalc.maxErrStringLength = 11
+
+	if ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == false {
+		t.Error("ERROR\n" +
+			"Expected ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}.New()
+
+	ePrefLineLenCalc.currentLineStr =
+		"Now is the time for all good men to come to the aid"
+
+	ePrefLineLenCalc.maxErrStringLength = 11
+
+	if ePrefLineLenCalc.EPrefixWithContextExceedsRemainLineLen() == false {
+		t.Error("ERROR\n" +
+			"Expected ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	if ePrefLineLenCalc.EPrefixWithContextExceedsRemainLineLen() == true {
+		t.Error("ERROR\n" +
+			"Expected ePrefLineLenCalc.EPrefWithoutContextExceedsRemainLineLen() == 'false'\n" +
+			"HOWEVER, IT RETURNED TRUE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	if ePrefLineLenCalc.ErrPrefixHasContext() == true {
+		t.Error("ERROR\n" +
+			"Expected ePrefLineLenCalc.ErrPrefixHasContext() == 'false'\n" +
+			"HOWEVER, IT RETURNED TRUE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	if ePrefLineLenCalc.ErrorContextIsEmpty() == false {
+		t.Error("ERROR\n" +
+			"Expected #1 ePrefLineLenCalc.ErrorContextIsEmpty() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}.New()
+
+	if ePrefLineLenCalc.ErrorContextIsEmpty() == false {
+		t.Error("ERROR\n" +
+			"Expected #2 ePrefLineLenCalc.ErrorContextIsEmpty() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	if ePrefLineLenCalc.ErrorPrefixIsEmpty() == false {
+		t.Error("ERROR\n" +
+			"Expected #1 ePrefLineLenCalc.ErrorPrefixIsEmpty() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}.New()
+
+	if ePrefLineLenCalc.ErrorPrefixIsEmpty() == false {
+		t.Error("ERROR\n" +
+			"Expected #2 ePrefLineLenCalc.ErrorPrefixIsEmpty() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	_ = ePrefLineLenCalc.GetErrorContextStr()
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	_ = ePrefLineLenCalc.GetCurrLineStr()
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	_ = ePrefLineLenCalc.GetCurrLineStrLength()
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	_ = ePrefLineLenCalc.GetDelimiterInLineErrContext()
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	_ = ePrefLineLenCalc.GetErrorPrefixStr()
+
+	ePrefLineLenCalc = EPrefixLineLenCalc{}
+
+	if !ePrefLineLenCalc.IsErrPrefixLastIndex() {
+		t.Error("ERROR\n" +
+			"Expected ePrefLineLenCalc.IsErrPrefixLastIndex() == 'true'\n" +
+			"HOWEVER, IT RETURNED FALSE!\n")
+		return
+	}
 
 }
 
@@ -1467,6 +1575,105 @@ func TestErrPrefixDto_Nanobot_000100(t *testing.T) {
 			"ePDto2.ePrefCol==nil because the 'iEPref' parameter is" +
 			"nil.\n" +
 			"HOWEVER,  ePDto2.ePrefCol != nil!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_Quark_000100(t *testing.T) {
+
+	funcName := "ePrefDtoQuark.errPrefixDtoQuark()"
+
+	ePrefDtoQuark := errPrefixDtoQuark{}
+
+	_,
+		err := ePrefDtoQuark.deleteLastErrPrefixInfo(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR\n" +
+			"Expected an error return from ePrefDtoQuark.deleteLastErrPrefixInfo()\n" +
+			"because parameter ePrefixDto is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	ePrefDtoQuark = errPrefixDtoQuark{}
+
+	err = ePrefDtoQuark.emptyErrPrefInfoCollection(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR\n" +
+			"Expected an error return from ePrefDtoQuark.deleteLastErrPrefixInfo()\n" +
+			"because parameter ePrefixDto is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	/*
+		func (ePrefDtoQuark *errPrefixDtoQuark) testValidityOfErrPrefixDto(
+			ePrefixDto *ErrPrefixDto,
+		errPrefStr string) (
+			isValid bool,
+			err error)
+	*/
+
+	ePrefDtoQuark = errPrefixDtoQuark{}
+
+	_,
+		err = ePrefDtoQuark.testValidityOfErrPrefixDto(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR\n" +
+			"Expected an error return from ePrefDtoQuark.deleteLastErrPrefixInfo()\n" +
+			"because parameter ePrefixDto is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	epDto := getValidErrorPrefixDto()
+
+	epDto.inputStrDelimiters.newLinePrefixDelimiter = ""
+	epDto.inputStrDelimiters.inLinePrefixDelimiter = ""
+
+	_,
+		err = ePrefDtoQuark.testValidityOfErrPrefixDto(
+		&epDto,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR\n" +
+			"Expected an error return from ePrefDtoQuark.testValidityOfErrPrefixDto()\n" +
+			"because parameter epDto.inputStrDelimiters are invalid.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
+		return
+	}
+
+	epDto = getValidErrorPrefixDto()
+
+	epDto.outputStrDelimiters.newLinePrefixDelimiter = ""
+	epDto.outputStrDelimiters.inLinePrefixDelimiter = ""
+
+	_,
+		err = ePrefDtoQuark.testValidityOfErrPrefixDto(
+		&epDto,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR\n" +
+			"Expected an error return from ePrefDtoQuark.testValidityOfErrPrefixDto()\n" +
+			"because parameter epDto.outputStrDelimiters are invalid.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
 		return
 	}
 
