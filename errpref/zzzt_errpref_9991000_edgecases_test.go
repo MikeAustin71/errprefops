@@ -726,10 +726,10 @@ func TestEPrefixLineLenCalc_000100(t *testing.T) {
 
 	ePrefLineLenCalc = EPrefixLineLenCalc{}
 
-	if !ePrefLineLenCalc.IsErrPrefixLastIndex() {
+	if ePrefLineLenCalc.IsErrPrefixLastIndex() {
 		t.Error("ERROR\n" +
-			"Expected ePrefLineLenCalc.IsErrPrefixLastIndex() == 'true'\n" +
-			"HOWEVER, IT RETURNED FALSE!\n")
+			"Expected ePrefLineLenCalc.IsErrPrefixLastIndex() == 'false'\n" +
+			"HOWEVER, IT RETURNED 'true'!\n")
 		return
 	}
 
@@ -1039,7 +1039,7 @@ func TestEPrefixLineLenCalc_Quark_000100(t *testing.T) {
 
 	ePrefLineLenCalcQuark = ePrefixLineLenCalcQuark{}
 
-	ePrefLineLenCalc.errorPrefixInfo = nil
+	ePrefLineLenCalc.errorPrefixInfo = ErrorPrefixInfo{}
 	_,
 		err = ePrefLineLenCalcQuark.testValidityOfEPrefixLineLenCalc(
 		&ePrefLineLenCalc,

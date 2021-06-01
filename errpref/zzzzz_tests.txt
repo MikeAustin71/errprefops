@@ -353,7 +353,7 @@
 === RUN   TestErrPrefixDto_SetIEmpty_000700
 --- PASS: TestErrPrefixDto_SetIEmpty_000700 (0.00s)
 === RUN   TestErrPrefixDto_SetIEmpty_000800
---- PASS: TestErrPrefixDto_SetIEmpty_000800 (0.00s)
+--- PASS: TestErrPrefixDto_SetIEmpty_000800 (0.01s)
 === RUN   TestErrPrefixDto_SetIEmpty_000900
 --- PASS: TestErrPrefixDto_SetIEmpty_000900 (0.00s)
 === RUN   TestErrPrefixDto_SetIEmpty_001000
@@ -469,5 +469,5 @@
 === RUN   TestErrPrefixDto_Quark_000100
 --- PASS: TestErrPrefixDto_Quark_000100 (0.00s)
 PASS
-coverage: 92.6% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	1.047s
+coverage: 92.8% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.781s

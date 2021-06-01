@@ -14,7 +14,7 @@ import (
 //
 type EPrefixLineLenCalc struct {
 	ePrefDelimiters    ErrPrefixDelimiters
-	errorPrefixInfo    *ErrorPrefixInfo
+	errorPrefixInfo    ErrorPrefixInfo
 	currentLineStr     string
 	maxErrStringLength uint
 	lock               *sync.Mutex
@@ -188,10 +188,7 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) Empty() {
 
 	ePrefixLineLenCalc.ePrefDelimiters = ErrPrefixDelimiters{}
 
-	if ePrefixLineLenCalc.errorPrefixInfo != nil {
-		ePrefixLineLenCalc.errorPrefixInfo.Empty()
-		ePrefixLineLenCalc.errorPrefixInfo = nil
-	}
+	ePrefixLineLenCalc.errorPrefixInfo.Empty()
 
 	ePrefixLineLenCalc.currentLineStr = ""
 	ePrefixLineLenCalc.maxErrStringLength = 0
@@ -266,12 +263,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefWithoutContextExceedsRemainLi
 
 	var errPrefixLen uint
 
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-		return false
-	}
-
 	errPrefixLen =
 		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
 			ePrefixLineLenCalc.errorPrefixInfo.GetLengthErrPrefixStr()
@@ -316,12 +307,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) EPrefixWithContextExceedsRemainLin
 	defer ePrefixLineLenCalc.lock.Unlock()
 
 	var prefixWithContextLen uint
-
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-		return false
-	}
 
 	prefixWithContextLen =
 		ePrefixLineLenCalc.ePrefDelimiters.GetLengthInLinePrefixDelimiter() +
@@ -370,14 +355,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) ErrPrefixHasContext() bool {
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-
-		return false
-	}
-
 	return ePrefixLineLenCalc.
 		errorPrefixInfo.
 		GetErrPrefixHasContextStr()
@@ -398,14 +375,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) ErrorContextIsEmpty() bool {
 	ePrefixLineLenCalc.lock.Lock()
 
 	defer ePrefixLineLenCalc.lock.Unlock()
-
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-
-		return true
-	}
 
 	if ePrefixLineLenCalc.
 		errorPrefixInfo.GetLengthErrContextStr() == 0 {
@@ -431,14 +400,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) ErrorPrefixIsEmpty() bool {
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-
-		return true
-	}
-
 	if ePrefixLineLenCalc.
 		errorPrefixInfo.GetLengthErrPrefixStr() == 0 {
 		return true
@@ -458,10 +419,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetErrorContextStr() string {
 	ePrefixLineLenCalc.lock.Lock()
 
 	defer ePrefixLineLenCalc.lock.Unlock()
-
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-		return "Error: ePrefixLineLenCalc.errorPrefixInfo == nil\n"
-	}
 
 	return ePrefixLineLenCalc.errorPrefixInfo.GetErrContextStr()
 }
@@ -602,10 +559,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) GetErrorPrefixStr() string {
 
 	defer ePrefixLineLenCalc.lock.Unlock()
 
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-		return "Error: ePrefixLineLenCalc.errorPrefixInfo == nil\n"
-	}
-
 	return ePrefixLineLenCalc.errorPrefixInfo.GetErrPrefixStr()
 }
 
@@ -689,14 +642,6 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) IsErrPrefixLastIndex() bool {
 	ePrefixLineLenCalc.lock.Lock()
 
 	defer ePrefixLineLenCalc.lock.Unlock()
-
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-
-		return true
-	}
 
 	return ePrefixLineLenCalc.errorPrefixInfo.GetIsLastIndex()
 }
@@ -825,9 +770,6 @@ func (ePrefixLineLenCalc EPrefixLineLenCalc) New() EPrefixLineLenCalc {
 
 	newEPrefixLineLenCalc := EPrefixLineLenCalc{}
 
-	newEPrefixLineLenCalc.errorPrefixInfo =
-		ErrorPrefixInfo{}.Ptr()
-
 	return newEPrefixLineLenCalc
 }
 
@@ -845,9 +787,6 @@ func (ePrefixLineLenCalc EPrefixLineLenCalc) Ptr() *EPrefixLineLenCalc {
 	defer ePrefixLineLenCalc.lock.Unlock()
 
 	newEPrefixLineLenCalc := EPrefixLineLenCalc{}
-
-	newEPrefixLineLenCalc.errorPrefixInfo =
-		ErrorPrefixInfo{}.Ptr()
 
 	return &newEPrefixLineLenCalc
 }
@@ -1038,16 +977,11 @@ func (ePrefixLineLenCalc *EPrefixLineLenCalc) SetErrPrefixInfo(
 			err.Error())
 	}
 
-	if ePrefixLineLenCalc.errorPrefixInfo == nil {
-		ePrefixLineLenCalc.errorPrefixInfo =
-			ErrorPrefixInfo{}.Ptr()
-	}
-
 	err = ePrefixLineLenCalc.errorPrefixInfo.CopyIn(
 		errPrefixInfo,
 		ePrefix)
 
-	return nil
+	return err
 }
 
 // SetMaxErrStringLength - Sets EPrefixLineLenCalc.maxErrStringLength
