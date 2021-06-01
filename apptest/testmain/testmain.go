@@ -395,11 +395,11 @@ func (tMain TestMain) TestMain020() {
 func (tMain TestMain) TestMain019() {
 
 	var err error
-	var ePDto2 *errpref.ErrPrefixDto
+	//var ePDto2 *errpref.ErrPrefixDto
 
 	_,
 		err = errpref.ErrPrefixDto{}.NewIEmpty(
-		ePDto2,
+		nil,
 		"",
 		"")
 

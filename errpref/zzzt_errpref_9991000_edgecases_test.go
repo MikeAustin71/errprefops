@@ -762,3 +762,309 @@ func TestErrorPrefixInfo_Electron_000100(t *testing.T) {
 	}
 
 }
+
+func TestErrPrefixDto_Mechanics_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_Mechanics_000100() "
+
+	/*
+		func (ePrefDtoMech *errPrefixDtoMechanics) get2dEPrefStrings(
+			errPrefDto *ErrPrefixDto,
+		errorPrefStr string) (
+			twoDStrArray [][2]string,
+			err error)
+	*/
+
+	ePrefDtoMech := errPrefixDtoMechanics{}
+
+	var ePDto ErrPrefixDto
+
+	_,
+		err := ePrefDtoMech.get2dEPrefStrings(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDtoMech.get2dEPrefStrings()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePDto = getValidErrorPrefixDto()
+
+	ePDto.ePrefCol = nil
+
+	_,
+		err = ePrefDtoMech.get2dEPrefStrings(
+		&ePDto,
+		funcName)
+
+	if err != nil {
+		t.Errorf("ERROR:\n"+
+			"ePrefDtoMech.get2dEPrefStrings() SHOULD NOT HAVE RETURNED AND Error.\n"+
+			"'ePDto.ePrefCol' parameter is 'nil'.\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!\n"+
+			"Error=\n%v\n",
+			err.Error())
+		return
+	}
+
+	/*
+		func (ePrefDtoMech *errPrefixDtoMechanics) setFromEmptyInterface(
+			errPrefDto *ErrPrefixDto,
+		iEPref interface{},
+		errorPrefStr string) error
+	*/
+
+	ePDto = getValidErrorPrefixDto()
+
+	var twoDStrings [][2]string
+
+	twoDStrings = ePDto.GetEPrefStrings()
+
+	ePrefDtoMech = errPrefixDtoMechanics{}
+
+	err = ePrefDtoMech.setFromEmptyInterface(
+		nil,
+		twoDStrings,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefDtoMech.setFromEmptyInterface()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_Nanobot_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_Nanobot_000100() "
+
+	ePrefixDtoNanobot := errPrefixDtoNanobot{}
+
+	_,
+		err :=
+		ePrefixDtoNanobot.copyOutErrPrefDtoPtr(
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.copyOutErrPrefDtoPtr()\n" +
+			"because the 'ePrefixDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	ePrefixDtoNanobot.deleteLastErrContext(nil)
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	ePDto2 := getValidErrorPrefixDto()
+
+	err =
+		ePrefixDtoNanobot.setFromIBuilder(
+			nil,
+			&ePDto2,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromIBuilder()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	err =
+		ePrefixDtoNanobot.setFromIBuilder(
+			&ePDto2,
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromIBuilder()\n" +
+			"because the 'iEPref' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	err =
+		ePrefixDtoNanobot.setFromIBasicErrorPrefix(
+			nil,
+			&ePDto2,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromIBasicErrorPrefix()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	err =
+		ePrefixDtoNanobot.setFromIBasicErrorPrefix(
+			&ePDto2,
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromIBasicErrorPrefix()\n" +
+			"because the 'iEPref' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	err =
+		ePrefixDtoNanobot.setFromString(
+			nil,
+			"Hello",
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromString()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	err =
+		ePrefixDtoNanobot.setFromString(
+			&ePDto2,
+			"",
+			funcName)
+
+	if ePDto2.ePrefCol != nil {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoNanobot.setFromString() would return\n" +
+			"ePDto2.ePrefCol==nil because the 'iEPref' parameter is" +
+			"an empty string.\n" +
+			"HOWEVER,  ePDto2.ePrefCol != nil!\n")
+		return
+	}
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	strBuilder := strings.Builder{}
+
+	err =
+		ePrefixDtoNanobot.setFromStringBuilder(
+			nil,
+			&strBuilder,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromStringBuilder()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePDto2 = getValidErrorPrefixDto()
+
+	err =
+		ePrefixDtoNanobot.setFromStringBuilder(
+			&ePDto2,
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromStringBuilder()\n" +
+			"because the 'iEPref' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	strArray := []string{"Hello", "Goodbye", "Come to dinner"}
+
+	err =
+		ePrefixDtoNanobot.setFromStringArray(
+			nil,
+			strArray,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromStringArray()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePDto2 = getValidErrorPrefixDto()
+	strArray = nil
+
+	_ =
+		ePrefixDtoNanobot.setFromStringArray(
+			&ePDto2,
+			strArray,
+			funcName)
+
+	if ePDto2.ePrefCol != nil {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoNanobot.setFromStringArray() would return\n" +
+			"ePDto2.ePrefCol==nil because the 'iEPref' parameter is" +
+			"nil.\n" +
+			"HOWEVER,  ePDto2.ePrefCol != nil!\n")
+		return
+	}
+
+	ePrefixDtoNanobot = errPrefixDtoNanobot{}
+
+	str2DArray := make([][2]string, 3)
+
+	str2DArray[0][0] = "Hello()"
+	str2DArray[1][0] = "GoodBye()"
+	str2DArray[2][0] = "ComeAgain()"
+
+	err =
+		ePrefixDtoNanobot.setFromTwoDStrArray(
+			nil,
+			str2DArray,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoNanobot.setFromTwoDStrArray()\n" +
+			"because the 'errPrefDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePDto2 = getValidErrorPrefixDto()
+
+	_ =
+		ePrefixDtoNanobot.setFromTwoDStrArray(
+			&ePDto2,
+			nil,
+			funcName)
+
+	if ePDto2.ePrefCol != nil {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoNanobot.setFromTwoDStrArray() would return\n" +
+			"ePDto2.ePrefCol==nil because the 'iEPref' parameter is" +
+			"nil.\n" +
+			"HOWEVER,  ePDto2.ePrefCol != nil!\n")
+		return
+	}
+
+}
