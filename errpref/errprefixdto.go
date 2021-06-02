@@ -1134,8 +1134,8 @@ func (ePrefDto *ErrPrefixDto) GetMaxTextLineLenDefault() uint {
 
 	defer ePrefDto.lock.Unlock()
 
-	return errPrefQuark{}.ptr().
-		getMasterErrPrefDisplayLineLength()
+	return errPrefPreon{}.ptr().
+		getDefaultErrPrefLineLength()
 }
 
 // GetOutputStringDelimiters - Returns the output string delimiters
@@ -1832,9 +1832,7 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 
 	if dto != nil {
 
-		dto.inputStrDelimiters.SetToDefaultIfEmpty()
-
-		dto.outputStrDelimiters.SetToDefaultIfEmpty()
+		errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(dto)
 
 		err = dto.IsValidInstanceError(methodNames)
 

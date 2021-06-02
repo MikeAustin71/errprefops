@@ -487,5 +487,5 @@
 === RUN   TestErrPrefixDto_Quark_000100
 --- PASS: TestErrPrefixDto_Quark_000100 (0.00s)
 PASS
-coverage: 94.4% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.640s
+coverage: 95.3% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.654s

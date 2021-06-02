@@ -1621,41 +1621,122 @@ func TestErrPrefixDto_MainFile_0001000(t *testing.T) {
 
 	ePrefDto.AddEPrefCollectionStr(colStr)
 
-	/*
+	ePrefDto = ErrPrefixDto{}
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto.ClearLeadingTextStr()
 
-		ePrefDto.ClearLeadingTextStr()
+	ePrefDto = ErrPrefixDto{}
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto.ClearTrailingTextStr()
 
-		ePrefDto.ClearTrailingTextStr()
+	ePrefDto = ErrPrefixDto{}
 
+	_ = ePrefDto.Copy()
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto = ErrPrefixDto{}
 
-		_ = ePrefDto.Copy()
+	_ = ePrefDto.CopyPtr()
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto = ErrPrefixDto{}
 
-		_ = ePrefDto.CopyPtr()
+	_ = ePrefDto.CopyIn(nil, "")
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto = ErrPrefixDto{}
 
-		_ = ePrefDto.CopyIn(nil, "")
+	_ = ePrefDto.CopyInFromIBuilder(
+		nil, "")
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto = ErrPrefixDto{}
 
-		_ = ePrefDto.CopyInFromIBuilder(
-			nil, "")
+	ePrefDto2 := ErrPrefixDto{}
 
-		ePrefDto = ErrPrefixDto{}
+	ePrefDto.CopyOutToIBuilder(
+		&ePrefDto2)
 
-		ePrefDto2 := ErrPrefixDto{}
+	ePrefDto = ErrPrefixDto{}
 
-		ePrefDto.CopyOutToIBuilder(
-			&ePrefDto2)
-	*/
+	_,
+		_ = ePrefDto.CopyOut("")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.DeleteLastErrPrefix()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.Empty()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.EmptyEPrefCollection()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.Equal(nil)
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetInputStringDelimiters()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetIsLastLineTerminatedWithNewLine()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetIsLastLineTerminatedWithNewLine()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_,
+		_,
+		_ = ePrefDto.GetLastErrPrefix("")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetLeadingTextStr()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetLeftMarginChar()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetEPrefCollectionLen()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetEPrefStrings()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetMaxTextLineLenDefault()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetOutputStringDelimiters()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_,
+		_ = ePrefDto.GetStrDelimiters()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetTrailingTextStr()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetTurnOffTextDisplay()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.MergeErrPrefixDto(nil)
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.GetTurnOffTextDisplay()
+
 }
 
 func TestErrPrefixDto_Mechanics_000100(t *testing.T) {
