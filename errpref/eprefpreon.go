@@ -30,7 +30,7 @@ func (ePrefPreon errPrefPreon) ptr() *errPrefPreon {
 // either return an error or reset the value to the default Error
 // Prefix Line Length.
 //
-func (ePrefPreon errPrefPreon) getMinErrPrefLineLength() uint {
+func (ePrefPreon *errPrefPreon) getMinErrPrefLineLength() uint {
 
 	if ePrefPreon.lock == nil {
 		ePrefPreon.lock = new(sync.Mutex)
@@ -41,4 +41,17 @@ func (ePrefPreon errPrefPreon) getMinErrPrefLineLength() uint {
 	defer ePrefPreon.lock.Unlock()
 
 	return 10
+}
+
+func (ePrefPreon *errPrefPreon) getDefaultErrPrefLineLength() uint {
+
+	if ePrefPreon.lock == nil {
+		ePrefPreon.lock = new(sync.Mutex)
+	}
+
+	ePrefPreon.lock.Lock()
+
+	defer ePrefPreon.lock.Unlock()
+
+	return 40
 }
