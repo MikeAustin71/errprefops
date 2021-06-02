@@ -1029,15 +1029,19 @@ func (ePrefDto *ErrPrefixDto) GetEPrefStrings() [][2]string {
 	return newTwoDSlice
 }
 
-// GetMaxTextLineLen - Returns the maximum limit on the
-// number of characters allowed in an error prefix text line output
-// for display purposes.
+// GetMaxTextLineLen - Returns the Maximum Error Prefix Line Length
+// value for the current ErrPrefixDto instance.
 //
-// This unsigned integer value controls the maximum character limit
-// for this specific ErrPrefixDto instance. This maximum limit will
-// remain in force for the life of this ErrPrefixDto instance or
-// until a call is made to the method 'SetMaxTextLineLen()'
-// which is used to change the value.
+// The Maximum Error Prefix Line Length is the maximum number of
+// characters allowed in a single line of error prefix information
+// output for display purposes.
+//
+// The returned unsigned integer value returned by this method
+// controls the maximum line length character limit for this
+// specific ErrPrefixDto instance. This maximum limit will remain
+// in force for the life of this ErrPrefixDto instance or until a
+// call is made to the method ErrPrefixDto.SetMaxTextLineLen()
+// which is used to manage and change this value.
 //
 //
 // ----------------------------------------------------------------
@@ -1067,7 +1071,10 @@ func (ePrefDto *ErrPrefixDto) GetMaxTextLineLen() uint {
 
 	defer ePrefDto.lock.Unlock()
 
-	if ePrefDto.maxErrPrefixTextLineLength < 10 {
+	minimumLineLen := errPrefPreon{}.ptr().
+		getMinErrPrefLineLength()
+
+	if ePrefDto.maxErrPrefixTextLineLength < minimumLineLen {
 
 		ePrefDto.maxErrPrefixTextLineLength =
 			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -3858,13 +3865,23 @@ func (ePrefDto *ErrPrefixDto) SetMaxTextLineLen(
 	errPrefixDtoQuark{}.ptr().
 		normalizeErrPrefixDto(ePrefDto)
 
-	if maxErrPrefixTextLineLength < 10 {
+	minimumLineLen := errPrefPreon{}.ptr().getMinErrPrefLineLength()
 
-		return
+	normalizedMaxErrPrefTextLineLen :=
+		uint(maxErrPrefixTextLineLength)
+
+	if normalizedMaxErrPrefTextLineLen <
+		minimumLineLen ||
+		normalizedMaxErrPrefTextLineLen >
+			1000000 {
+
+		normalizedMaxErrPrefTextLineLen =
+			errPrefQuark{}.ptr().
+				getMasterErrPrefDisplayLineLength()
 	}
 
 	ePrefDto.maxErrPrefixTextLineLength =
-		uint(maxErrPrefixTextLineLength)
+		normalizedMaxErrPrefTextLineLen
 }
 
 // SetMaxTextLineLenToDefault - Maximum Error Prefix Line
@@ -4133,6 +4150,11 @@ func (ePrefDto *ErrPrefixDto) SetTurnOffTextDisplay(
 // To set and control output string delimiters, use method:
 //    ErrPrefixDto.SetOutputStringDelimiters()
 //
+// If the Maximum Error Prefix Line Length value is less than
+// 10-characters, this method will reset this value to the
+// default of 40-characters. For more information, see the
+// documentation for method:
+//      ErrPrefixDto.SetMaxTextLineLen()
 //
 func (ePrefDto ErrPrefixDto) String() string {
 
@@ -4149,7 +4171,10 @@ func (ePrefDto ErrPrefixDto) String() string {
 		return ""
 	}
 
-	if ePrefDto.maxErrPrefixTextLineLength < 10 {
+	minimumLineLen := errPrefPreon{}.ptr().
+		getMinErrPrefLineLength()
+
+	if ePrefDto.maxErrPrefixTextLineLength < minimumLineLen {
 
 		ePrefDto.maxErrPrefixTextLineLength =
 			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
@@ -4249,9 +4274,13 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 
 	maxErrPrefixTextLineLength := uint(maxLineLen)
 
-	if maxErrPrefixTextLineLength < 10 {
+	minimumErrPrefixTextLineLen := errPrefPreon{}.ptr().
+		getMinErrPrefLineLength()
 
-		if ePrefDto.maxErrPrefixTextLineLength < 10 {
+	if maxErrPrefixTextLineLength <
+		minimumErrPrefixTextLineLen {
+
+		if ePrefDto.maxErrPrefixTextLineLength < minimumErrPrefixTextLineLen {
 
 			ePrefDto.maxErrPrefixTextLineLength =
 				errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
