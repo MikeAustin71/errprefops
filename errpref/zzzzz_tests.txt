@@ -167,7 +167,7 @@
 === RUN   TestErrPrefixDto_NewFromErrPrefDto_000100
 --- PASS: TestErrPrefixDto_NewFromErrPrefDto_000100 (0.00s)
 === RUN   TestErrPrefixDto_NewFromErrPrefDto_000200
---- PASS: TestErrPrefixDto_NewFromErrPrefDto_000200 (0.00s)
+--- PASS: TestErrPrefixDto_NewFromErrPrefDto_000200 (0.01s)
 === RUN   TestErrPrefixDto_NewFromErrPrefDto_000300
 --- PASS: TestErrPrefixDto_NewFromErrPrefDto_000300 (0.00s)
 === RUN   TestErrPrefixDto_NewFromErrPrefDto_000400
@@ -243,7 +243,7 @@
 === RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001000
 --- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001000 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001100
---- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001100 (0.00s)
+--- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001100 (0.01s)
 === RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001200
 --- PASS: TestErrPrefixDto_NewIEmptyWithDelimiters_001200 (0.00s)
 === RUN   TestErrPrefixDto_NewIEmptyWithDelimiters_001300
@@ -353,7 +353,7 @@
 === RUN   TestErrPrefixDto_SetIEmpty_000700
 --- PASS: TestErrPrefixDto_SetIEmpty_000700 (0.00s)
 === RUN   TestErrPrefixDto_SetIEmpty_000800
---- PASS: TestErrPrefixDto_SetIEmpty_000800 (0.01s)
+--- PASS: TestErrPrefixDto_SetIEmpty_000800 (0.00s)
 === RUN   TestErrPrefixDto_SetIEmpty_000900
 --- PASS: TestErrPrefixDto_SetIEmpty_000900 (0.00s)
 === RUN   TestErrPrefixDto_SetIEmpty_001000
@@ -448,6 +448,8 @@
 --- PASS: TestErrPref_Mechanics_000100 (0.00s)
 === RUN   TestErrPref_Molecule_000100
 --- PASS: TestErrPref_Molecule_000100 (0.00s)
+=== RUN   TestErrPref_Quark_000100
+--- PASS: TestErrPref_Quark_000100 (0.00s)
 === RUN   TestErrPrefixDelimiters_Mechanics
 --- PASS: TestErrPrefixDelimiters_Mechanics (0.00s)
 === RUN   TestErrPrefixDelimiters_Electron_000100
@@ -462,12 +464,18 @@
 --- PASS: TestEPrefixLineLenCalc_Quark_000100 (0.00s)
 === RUN   TestErrorPrefixInfo_Electron_000100
 --- PASS: TestErrorPrefixInfo_Electron_000100 (0.00s)
+=== RUN   TestErrorPrefixInfo_Quark_000100
+--- PASS: TestErrorPrefixInfo_Quark_000100 (0.00s)
 === RUN   TestErrPrefixDto_Mechanics_000100
 --- PASS: TestErrPrefixDto_Mechanics_000100 (0.00s)
 === RUN   TestErrPrefixDto_Nanobot_000100
 --- PASS: TestErrPrefixDto_Nanobot_000100 (0.00s)
+=== RUN   TestErrPrefixDto_Atom_000100
+--- PASS: TestErrPrefixDto_Atom_000100 (0.00s)
+=== RUN   TestErrPrefixDto_Electron_000100
+--- PASS: TestErrPrefixDto_Electron_000100 (0.00s)
 === RUN   TestErrPrefixDto_Quark_000100
 --- PASS: TestErrPrefixDto_Quark_000100 (0.00s)
 PASS
-coverage: 92.8% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.781s
+coverage: 93.4% of statements
+ok  	github.com/MikeAustin71/errprefops/errpref	0.790s

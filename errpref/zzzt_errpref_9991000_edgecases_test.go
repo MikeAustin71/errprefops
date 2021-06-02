@@ -167,6 +167,45 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 
 }
 
+func TestErrPref_Quark_000100(t *testing.T) {
+
+	funcName := "TestErrPref_Quark_000100()"
+
+	ePrefQuark := errPrefQuark{}
+
+	/*
+		func (ePrefQuark *errPrefQuark) convertPrintableChars(
+			printableChars string,
+			ePrefix string) (
+			nonPrintableChars []rune,
+			err error)
+	*/
+
+	_,
+		err :=
+		ePrefQuark.convertPrintableChars(
+			"",
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR: Expected an error return from " +
+			"ePrefQuark.convertPrintableChars()\n" +
+			"because the printableChars parameter is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	ePrefQuark = errPrefQuark{}
+
+	/*
+		func (ePrefQuark *errPrefQuark) setErrPrefDisplayLineLength(
+			maxErrPrefixStringLength uint)
+	*/
+
+	ePrefQuark.setErrPrefDisplayLineLength(0)
+
+}
+
 func TestErrPrefixDelimiters_Mechanics(t *testing.T) {
 
 	funcName := "TestErrPrefixDelimiters_Mechanics()"
@@ -1312,6 +1351,35 @@ func TestErrorPrefixInfo_Electron_000100(t *testing.T) {
 
 }
 
+func TestErrorPrefixInfo_Quark_000100(t *testing.T) {
+
+	funcName := "TestErrorPrefixInfo_Quark_000100()"
+
+	ePrefInfoQuark := errorPrefixInfoQuark{}
+
+	/*
+		func (ePrefDtoQuark *errorPrefixInfoQuark) testValidityOfErrorPrefixInfo(
+			errPrefixInfo *ErrorPrefixInfo,
+		ePrefix string) (
+			isValid bool,
+			err error)
+	*/
+
+	_,
+		err := ePrefInfoQuark.testValidityOfErrorPrefixInfo(
+		nil,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefInfoQuark.testValidityOfErrorPrefixInfo()\n" +
+			"because the 'errPrefixInfo' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+}
+
 func TestErrPrefixDto_Mechanics_000100(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_Mechanics_000100() "
@@ -1613,6 +1681,277 @@ func TestErrPrefixDto_Nanobot_000100(t *testing.T) {
 			"ePDto2.ePrefCol==nil because the 'iEPref' parameter is" +
 			"nil.\n" +
 			"HOWEVER,  ePDto2.ePrefCol != nil!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_Atom_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_Atom_000100() "
+
+	/*
+		func (ePrefixDtoAtom *errPrefixDtoAtom) addTwoDimensionalStringArray(
+			errPrefixDto *ErrPrefixDto,
+			twoDStrArray [][2]string,
+			errPrefStr string) error
+	*/
+
+	ePrefixDtoAtom := errPrefixDtoAtom{}
+
+	twoDSlice := getValidTwoDStrArray()
+
+	err := ePrefixDtoAtom.addTwoDimensionalStringArray(
+		nil,
+		twoDSlice,
+		funcName)
+
+	if err == nil {
+		t.Error("ERROR:\n" +
+			"Expected an error return from ePrefixDtoAtom.addTwoDimensionalStringArray()\n" +
+			"because the 'errPrefixDto' parameter is 'nil'.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+		return
+	}
+
+	nPDtoOne := getValidErrorPrefixDto()
+
+	err = ePrefixDtoAtom.addTwoDimensionalStringArray(
+		&nPDtoOne,
+		nil,
+		funcName)
+
+	if err != nil {
+		t.Errorf("ERROR:\n"+
+			"Did NOT expect an error return from ePrefixDtoAtom.addTwoDimensionalStringArray()\n"+
+			"even though the 'twoDStrArray' parameter is 'nil'.\n"+
+			"HOWEVER, AN ERROR WAS RETURNED!\n"+
+			"%v", err.Error())
+		return
+	}
+
+	ePrefixDtoAtom = errPrefixDtoAtom{}
+
+	areEqual := ePrefixDtoAtom.areEqualErrPrefDtos(
+		nil,
+		&nPDtoOne)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto1' parameter is 'nil'.\n" +
+			"HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		nil)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2' parameter is 'nil'.\n" +
+			"HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoOne = getValidErrorPrefixDto()
+
+	nPDtoTwo := getValidErrorPrefixDto()
+
+	nPDtoTwo.leftMarginLength = 99999999
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.leftMarginLength'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoOne = getValidErrorPrefixDto()
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.leftMarginChar = '%'
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.leftMarginChar'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.isLastLineTerminatedWithNewLine =
+		!nPDtoOne.isLastLineTerminatedWithNewLine
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.isLastLineTerminatedWithNewLine'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.turnOffTextDisplay =
+		!nPDtoOne.turnOffTextDisplay
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.turnOffTextDisplay'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.inputStrDelimiters.newLinePrefixDelimiter =
+		"!@$%^&*"
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.inputStrDelimiters.newLinePrefixDelimiter'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.outputStrDelimiters.newLinePrefixDelimiter =
+		"!@$%^&*"
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.outputStrDelimiters.newLinePrefixDelimiter'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.maxErrPrefixTextLineLength =
+		99999999
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.maxErrPrefixTextLineLength'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.leadingTextStr =
+		"!@#$%^&*()"
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.leadingTextStr'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.trailingTextStr =
+		"!@#$%^&*()"
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.trailingTextStr'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+	nPDtoTwo = getValidErrorPrefixDto()
+
+	nPDtoTwo.ePrefCol = nil
+
+	areEqual = ePrefixDtoAtom.areEqualErrPrefDtos(
+		&nPDtoOne,
+		&nPDtoTwo)
+
+	if areEqual {
+		t.Error("ERROR:\n" +
+			"Expected ePrefixDtoAtom.areEqualErrPrefDtos() would return\n" +
+			"areEqual=='false' because the 'errPrefixDto2.ePrefCol'\n" +
+			"is NOT equal. HOWEVER, areEqual=='true'!\n")
+		return
+	}
+
+}
+
+func TestErrPrefixDto_Electron_000100(t *testing.T) {
+
+	funcName := "TestErrPrefixDto_Electron_000100"
+
+	/*
+		func (ePrefDtoElectron errPrefixDtoElectron) emptyErrorPrefixDto(
+			ePrefixDto *ErrPrefixDto,
+			errPrefStr string) error
+	*/
+
+	ePrefDtoElectron := errPrefixDtoElectron{}
+
+	err :=
+		ePrefDtoElectron.emptyErrorPrefixDto(
+			nil,
+			funcName)
+
+	if err == nil {
+		t.Error("ERROR\n" +
+			"Expected an error return from ePrefDtoElectron.emptyErrorPrefixDto()\n" +
+			"because parameter ePrefixDto is nil.\n" +
+			"HOWEVER, NO ERROR WAS RETURNED!\n")
+
 		return
 	}
 
