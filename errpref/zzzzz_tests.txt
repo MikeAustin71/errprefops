@@ -490,4 +490,4 @@
 --- PASS: TestErrPrefixDto_Quark_000100 (0.00s)
 PASS
 coverage: 96.4% of statements
-ok  	github.com/MikeAustin71/errprefops/errpref	0.687s
+ok  	github.com/MikeAustin71/errprefops/errpref	0.536s

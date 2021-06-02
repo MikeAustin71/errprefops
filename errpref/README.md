@@ -6,7 +6,7 @@ The ***errpref*** software package was written in the [Go](https://golang.org/) 
 
 ***errpref*** supports [Go Modules](https://golang.org/ref/mod).
 
-The current version of ***errpref*** is Version 1.6.1. Most notably, this version implements the [Left Margin Feature](#left-margin-feature) in error prefix string formatting and [Customizable String Delimiters](#customizing-input-and-output-string-delimiters) for parsing input and output error prefix strings.
+The current version of ***errpref*** is Version 1.7.0. Most notably, this version implements the [Left Margin Feature](#left-margin-feature) in error prefix string formatting and [Customizable String Delimiters](#customizing-input-and-output-string-delimiters) for parsing input and output error prefix strings.
 
 
 
@@ -444,7 +444,9 @@ The current settings for String Delimiters can be monitored using methods:
 
 #### Maximum Text Line Length
 
-Users have the option of setting the Maximum Text Line Length for error prefix strings. The default Maximum Text Line Length is 40-characters. The following error prefix text display demonstrates the default 40-character maximum line length.
+Users have the option of setting the Maximum Text Line Length for error prefix strings. The default Maximum Text Line Length is 40-characters. The Minimum Text Line Length is 10-characters.
+
+The following error prefix text display demonstrates the default 40-character maximum line length.
 
 ```tex
 main()-mainTest004()
@@ -823,7 +825,7 @@ Additional code examples can be found in the Error Prefix Examples Application l
 ### Go Get Command
 
 ```go
-go get github.com/MikeAustin71/errpref/@v1.6.1
+go get github.com/MikeAustin71/errpref/@v1.7.0
 ```
 
 ​	-- or --
@@ -881,7 +883,7 @@ Tests are running successfully on Windows 10, Ubuntu 20.04.2.0 LTS, Fedora 34.9.
 
 ## Version
 
-The latest version is Version 1.6.1.
+The latest version is Version 1.7.0.
 
 As with all previous versions, this Version supports [Go Modules](https://golang.org/ref/mod).
 
