@@ -5028,27 +5028,29 @@ func (ePrefDto *ErrPrefixDto) ZCtx(
 
 	var newErrPrefixDto ErrPrefixDto
 
-	if len(ePrefDto.ePrefCol) == 0 {
+	if len(ePrefDto.ePrefCol) > 0 {
 
-	} else if len(newErrContext) == 0 {
+		if len(newErrContext) == 0 {
 
-		errPrefixDtoNanobot{}.ptr().
-			deleteLastErrContext(ePrefDto)
+			errPrefixDtoNanobot{}.ptr().
+				deleteLastErrContext(ePrefDto)
 
-	} else {
+		} else {
 
-		errPrefNanobot{}.ptr().
-			setLastCtx(
-				newErrContext,
-				ePrefDto.ePrefCol)
+			errPrefNanobot{}.ptr().
+				setLastCtx(
+					newErrContext,
+					ePrefDto.ePrefCol)
 
-	}
+		}
+
+	} // End of if len(ePrefDto.ePrefCol) > 0
 
 	newErrPrefixDto,
 		_ = errPrefixDtoAtom{}.ptr().
 		copyOutErrPrefDto(
 			ePrefDto,
-			"")
+			"ErrPrefixDto.ZCtx() ")
 
 	return newErrPrefixDto
 }

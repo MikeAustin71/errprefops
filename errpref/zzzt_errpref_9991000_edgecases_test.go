@@ -1776,6 +1776,134 @@ func TestErrPrefixDto_MainFile_0001000(t *testing.T) {
 
 }
 
+func TestErrPrefixDto_MainFile_000200(t *testing.T) {
+
+	ePrefDto := ErrPrefixDto{}
+
+	_ =
+		ePrefDto.ReplaceLastErrPrefix(
+			"",
+			"",
+			"")
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetCtx(
+		"")
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetCtxEmpty()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetEPrefCollection(nil)
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetEPrefCtx("", "")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ =
+		ePrefDto.SetInputStringDelimiters(
+			ErrPrefixDelimiters{}, "")
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetIsLastLineTermWithNewLine(true)
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetLeadingTextStr("")
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetLeftMarginChar(rune(0))
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetLeftMarginLength(-99)
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetMaxTextLineLenToDefault()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ =
+		ePrefDto.SetOutputStringDelimiters(
+			ErrPrefixDelimiters{}, "")
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetStrDelimitersToDefault()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetTrailingTextStr("Hello")
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.SetTurnOffTextDisplay(true)
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.maxErrPrefixTextLineLength = 2
+
+	_ = ePrefDto.String()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.StrMaxLineLen(2)
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.maxErrPrefixTextLineLength = 2
+
+	_ = ePrefDto.StrMaxLineLen(2)
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.ePrefCol = nil
+
+	_ = ePrefDto.XCtxEmpty()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.XEPref("")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.XEPrefCtx("", "")
+
+	/*
+		func (ePrefDto *ErrPrefixDto) XSetFromStrings(
+			oldErrPrefix string,
+			newErrPrefix string,
+			newErrContext string,
+			inputStrDelimiters ErrPrefixDelimiters,
+			outputStrDelimiters ErrPrefixDelimiters,
+			ePrefix string) (*ErrPrefixDto, error)
+	*/
+
+	ePrefDto = ErrPrefixDto{}
+
+	_,
+		_ = ePrefDto.XSetFromStrings(
+		"",
+		"",
+		"",
+		ErrPrefixDelimiters{},
+		ErrPrefixDelimiters{},
+		"")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.ZCtx("NeverMind()")
+
+}
+
 func TestErrPrefixDto_Mechanics_000100(t *testing.T) {
 
 	funcName := "TestErrPrefixDto_Mechanics_000100() "
