@@ -5,6 +5,27 @@ import (
 	"testing"
 )
 
+func TestErrPref_EPrefFile_000100(t *testing.T) {
+	/*
+		func (ePref ErrPref) SetCtxt(
+			oldErrPref string,
+			newErrContext string) string
+	*/
+
+	ePref := ErrPref{}
+
+	_ = ePref.SetCtxt(
+		"oldErrPref",
+		"")
+
+	ePref = ErrPref{}
+
+	_ = ePref.SetCtxt(
+		"",
+		"newErrContext")
+
+}
+
 func TestErrPref_Mechanics_000100(t *testing.T) {
 
 	/*	func (ePrefMech *errPrefMechanics) assembleErrPrefix(
@@ -167,6 +188,146 @@ func TestErrPref_Molecule_000100(t *testing.T) {
 
 }
 
+func TestErrPref_Nanobot_000100(t *testing.T) {
+
+	/*
+		func (ePrefNanobot *errPrefNanobot) formatErrPrefixComponents(
+			leadingTextStr string,
+			trailingTextStr string,
+			maxErrPrefixTextLineLength uint,
+			isLastLineTerminatedWithNewLine bool,
+			delimiters ErrPrefixDelimiters,
+			prefixContextCol []ErrorPrefixInfo) string
+	*/
+
+	ePrefNanobot := errPrefNanobot{}
+
+	errPrefDelimiters := getValidErrPrefixDelimiters()
+
+	var prefixContextCol []ErrorPrefixInfo
+
+	prefixContextCol = nil
+
+	_ = ePrefNanobot.formatErrPrefixComponents(
+		"",
+		"",
+		70,
+		false,
+		errPrefDelimiters,
+		prefixContextCol)
+
+	prefixContextCol = getValidErrorPrefixInfoArray()
+	errPrefDelimiters = getValidErrPrefixDelimiters()
+
+	errPrefDelimiters.newLinePrefixDelimiter = ""
+
+	errPrefDelimiters.newLineContextDelimiter = ""
+
+	_ = ePrefNanobot.formatErrPrefixComponents(
+		"",
+		"",
+		70,
+		false,
+		errPrefDelimiters,
+		prefixContextCol)
+
+	prefixContextCol = getValidErrorPrefixInfoArray()
+	errPrefDelimiters = getValidErrPrefixDelimiters()
+
+	_ = ePrefNanobot.formatErrPrefixComponents(
+		"",
+		"",
+		0,
+		false,
+		errPrefDelimiters,
+		prefixContextCol)
+
+	/*
+		func (ePrefNanobot *errPrefNanobot) setLastCtx(
+			newErrContext string,
+			errPrefixCollection []ErrorPrefixInfo)
+
+	*/
+
+	ePrefNanobot = errPrefNanobot{}
+
+	prefixContextCol = getValidErrorPrefixInfoArray()
+
+	ePrefNanobot.setLastCtx(
+		"",
+		prefixContextCol)
+
+	prefixContextCol = nil
+
+	ePrefNanobot.setLastCtx(
+		"Tx92.Awesome()",
+		prefixContextCol)
+
+	prefixContextCol = make([]ErrorPrefixInfo, 0)
+
+	ePrefNanobot.setLastCtx(
+		"Tx92.Awesome()",
+		prefixContextCol)
+
+	/*
+		func (ePrefNanobot *errPrefNanobot) extractLastErrPrfInfo(
+			errPref string) ErrorPrefixInfo
+	*/
+
+	ePrefNanobot = errPrefNanobot{}
+
+	_ = ePrefNanobot.extractLastErrPrfInfo(
+		"")
+
+}
+
+func TestErrPref_Neutron_000100(t *testing.T) {
+
+	funcName := "TestErrPref_Neutron_000100() "
+	/*
+		func (ePrefNeutron *errPrefNeutron) writeCurrentLineStr(
+			strBuilder *strings.Builder,
+		ePrefLineLenCalc *EPrefixLineLenCalc)
+	*/
+
+	ePrefNeutron := errPrefNeutron{}
+
+	strBuilder := &strings.Builder{}
+
+	ePrefLineLenCalc,
+		err := getValidEPrefixLineLenCalc(funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by getValidEPrefixLineLenCalc()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePrefNeutron.writeCurrentLineStr(
+		strBuilder,
+		nil)
+
+	ePrefNeutron.writeCurrentLineStr(
+		nil,
+		&ePrefLineLenCalc)
+
+	ePrefLineLenCalc,
+		err = getValidEPrefixLineLenCalc(funcName)
+
+	if err != nil {
+		t.Errorf("Error returned by getValidEPrefixLineLenCalc()\n"+
+			"%v\n", err.Error())
+		return
+	}
+
+	ePrefLineLenCalc.currentLineStr = ""
+
+	ePrefNeutron.writeCurrentLineStr(
+		nil,
+		&ePrefLineLenCalc)
+
+}
+
 func TestErrPref_Quark_000100(t *testing.T) {
 
 	funcName := "TestErrPref_Quark_000100()"
@@ -203,6 +364,72 @@ func TestErrPref_Quark_000100(t *testing.T) {
 	*/
 
 	ePrefQuark.setErrPrefDisplayLineLength(0)
+
+}
+
+func TestErrPrefixDelimiters_MainFile_000100(t *testing.T) {
+
+	/*
+		func (ePrefDelims *ErrPrefixDelimiters) Equal(
+			incomingDelimiters *ErrPrefixDelimiters) (
+			areEqual bool)
+	*/
+
+	ePrefDelims := ErrPrefixDelimiters{}
+
+	delimitersOne := getValidErrPrefixDelimiters()
+
+	_ = ePrefDelims.Equal(&delimitersOne)
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	_ = ePrefDelims.GetInLinePrefixDelimiter()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.lenInLineContextDelimiter = 0
+
+	_ = ePrefDelims.GetLengthInLineContextDelimiter()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.lenNewLineContextDelimiter = 0
+
+	_ = ePrefDelims.GetLengthNewLineContextDelimiter()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.lenNewLinePrefixDelimiter = 0
+
+	_ = ePrefDelims.GetLengthNewLinePrefixDelimiter()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	_ = ePrefDelims.GetNewLineContextDelimiter()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	_ = ePrefDelims.GetNewLinePrefixDelimiter()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.SetInLineContextDelimiter("Xray")
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.SetNewLineContextDelimiter("Xray")
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.SetNewLinePrefixDelimiter("Xray")
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	ePrefDelims.SetLineLengthValues()
+
+	ePrefDelims = ErrPrefixDelimiters{}
+
+	_ = ePrefDelims.String()
 
 }
 
@@ -1378,6 +1605,57 @@ func TestErrorPrefixInfo_Quark_000100(t *testing.T) {
 		return
 	}
 
+}
+
+func TestErrPrefixDto_MainFile_0001000(t *testing.T) {
+
+	ePrefDto := ErrPrefixDto{}
+
+	twoDSlice := getValidTwoDStrArray()
+
+	ePrefDto.AddEPrefStrings(twoDSlice)
+
+	colStr := getValidErrorPrefixCollectionStr()
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.AddEPrefCollectionStr(colStr)
+
+	/*
+
+		ePrefDto = ErrPrefixDto{}
+
+		ePrefDto.ClearLeadingTextStr()
+
+		ePrefDto = ErrPrefixDto{}
+
+		ePrefDto.ClearTrailingTextStr()
+
+
+		ePrefDto = ErrPrefixDto{}
+
+		_ = ePrefDto.Copy()
+
+		ePrefDto = ErrPrefixDto{}
+
+		_ = ePrefDto.CopyPtr()
+
+		ePrefDto = ErrPrefixDto{}
+
+		_ = ePrefDto.CopyIn(nil, "")
+
+		ePrefDto = ErrPrefixDto{}
+
+		_ = ePrefDto.CopyInFromIBuilder(
+			nil, "")
+
+		ePrefDto = ErrPrefixDto{}
+
+		ePrefDto2 := ErrPrefixDto{}
+
+		ePrefDto.CopyOutToIBuilder(
+			&ePrefDto2)
+	*/
 }
 
 func TestErrPrefixDto_Mechanics_000100(t *testing.T) {

@@ -120,6 +120,12 @@ func (ePrefDto *ErrPrefixDto) AddEPrefCollectionStr(
 
 	defer ePrefDto.lock.Unlock()
 
+	errPrefixDtoQuark{}.ptr().normalizeErrPrefixDto(ePrefDto)
+
+	if len(errorPrefixCollectionStr) == 0 {
+		return numberOfCollectionItemsParsed
+	}
+
 	previousCollectionLen := len(ePrefDto.ePrefCol)
 
 	ePrefixAtom := errPrefixDtoAtom{}

@@ -158,7 +158,7 @@ func (ePrefDtoQuark *errPrefixDtoQuark) newZeroErrPrefixDto() ErrPrefixDto {
 	newErrPrefixDto.trailingTextStr = ""
 
 	newErrPrefixDto.maxErrPrefixTextLineLength =
-		errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+		errPrefPreon{}.ptr().getDefaultErrPrefLineLength()
 
 	newErrPrefixDto.inputStrDelimiters.SetToDefault()
 
@@ -186,9 +186,13 @@ func (ePrefDtoQuark *errPrefixDtoQuark) normalizeErrPrefixDto(
 
 	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()
 
-	if ePrefixDto.maxErrPrefixTextLineLength < 10 {
+	ePrefPreon := errPrefPreon{}
+
+	minimumTextLineLen := ePrefPreon.getMinErrPrefLineLength()
+
+	if ePrefixDto.maxErrPrefixTextLineLength < minimumTextLineLen {
 		ePrefixDto.maxErrPrefixTextLineLength =
-			errPrefQuark{}.ptr().getMasterErrPrefDisplayLineLength()
+			ePrefPreon.getDefaultErrPrefLineLength()
 	}
 
 	return
