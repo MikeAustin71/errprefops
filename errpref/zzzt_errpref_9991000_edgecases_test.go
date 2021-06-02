@@ -1902,6 +1902,26 @@ func TestErrPrefixDto_MainFile_000200(t *testing.T) {
 
 	_ = ePrefDto.ZCtx("NeverMind()")
 
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto.ZCtxEmpty()
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.ZEPref("")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.ZEPrefCtx("", "")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.ZEPrefCtx("Hello()", "E=MC^2")
+
+	ePrefDto = ErrPrefixDto{}
+
+	_ = ePrefDto.ZEPrefOld("Hello()\nGoodbye()")
+
 }
 
 func TestErrPrefixDto_Mechanics_000100(t *testing.T) {

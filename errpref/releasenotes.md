@@ -56,6 +56,10 @@ information see the documentation on the following methods:
 2. ErrPrefixDto.SetMaxTextLineLen()
 3. ErrPrefixDto.GetMaxTextLineLen()
 
+##### Added More Tests
+Code coverage for tests is now at 96%.
+
+
 ## Version 1.6.1
 
 #### Changes
