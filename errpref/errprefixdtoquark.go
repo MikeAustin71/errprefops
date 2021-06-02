@@ -182,6 +182,10 @@ func (ePrefDtoQuark *errPrefixDtoQuark) normalizeErrPrefixDto(
 
 	defer ePrefDtoQuark.lock.Unlock()
 
+	if ePrefixDto == nil {
+		return
+	}
+
 	ePrefixDto.inputStrDelimiters.SetToDefaultIfEmpty()
 
 	ePrefixDto.outputStrDelimiters.SetToDefaultIfEmpty()

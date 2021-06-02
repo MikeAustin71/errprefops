@@ -1736,6 +1736,43 @@ func TestErrPrefixDto_MainFile_0001000(t *testing.T) {
 	ePrefDto = ErrPrefixDto{}
 
 	_ = ePrefDto.GetTurnOffTextDisplay()
+	/*
+		func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
+			dto *ErrPrefixDto,
+		newErrPrefix string,
+			newErrContext string) (
+			newErrPrefDto *ErrPrefixDto,
+			err error)
+	*/
+
+	ePrefDto = ErrPrefixDto{}
+
+	_,
+		_ = ePrefDto.NewFromErrPrefDto(
+		nil,
+		"TX2.Awesome() ",
+		"")
+	/*
+		func (ePrefDto ErrPrefixDto) NewIBasicErrorPrefix(
+			iEPref IBasicErrorPrefix,
+			newErrPrefix string,
+			newErrContext string) (
+			*ErrPrefixDto,
+			error)
+	*/
+
+	ePrefDto = ErrPrefixDto{}
+
+	ePrefDto2 = getValidErrorPrefixDto()
+
+	ePrefDto2.inputStrDelimiters.newLinePrefixDelimiter = ""
+	ePrefDto2.outputStrDelimiters.newLinePrefixDelimiter = ""
+
+	_,
+		_ = ePrefDto.NewIBasicErrorPrefix(
+		&ePrefDto2,
+		"TX2.Awesome() ",
+		"")
 
 }
 
@@ -2350,6 +2387,15 @@ func TestErrPrefixDto_Quark_000100(t *testing.T) {
 
 		return
 	}
+
+	/*
+		func (ePrefDtoQuark *errPrefixDtoQuark) normalizeErrPrefixDto(
+			ePrefixDto *ErrPrefixDto)
+	*/
+
+	ePrefDtoQuark = errPrefixDtoQuark{}
+
+	ePrefDtoQuark.normalizeErrPrefixDto(nil)
 
 	/*
 		func (ePrefDtoQuark *errPrefixDtoQuark) testValidityOfErrPrefixDto(
