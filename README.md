@@ -18,7 +18,7 @@ Storage, distribution and documentation of the ***errpref*** software package wi
 
 ## Background
 
-***errpref*** stands for **Error Prefix**.  The ***errpref*** software package is a collection of lightweight ***GoLang*** types designed to attach error prefix text, function chain lists and error context strings to error messages. This software package is stored in, and distributed from, the software repository, [**https://github.com/MikeAustin71/errpref**](https://github.com/MikeAustin71/errpref).
+***errpref*** stands for **Error Prefix**.  The ***errpref*** software package is a collection of ***GoLang*** types designed to attach error prefix text, function chain lists and error context strings to error messages. This software package is stored in, and distributed from, the software repository, [**https://github.com/MikeAustin71/errpref**](https://github.com/MikeAustin71/errpref).
 
 This project, the ***errprefops*** development environment, is stored in software repository [**https://github.com/MikeAustin71/errprefops**](https://github.com/MikeAustin71/errprefops) . It is used for development and testing of ***errpref*** software package releases. The goal is to synchronize the version numbers of ***errprefops***, the development environment, and ***errpref***, the software package.
 
@@ -34,7 +34,7 @@ Source Code Documentation for the ***errpref*** software package is located here
 
 ## Version
 
-The latest version of ***errprefops*** is Version 1.6.1.
+The latest version of ***errprefops*** is Version 1.7.0.
 
 ***errprefops*** supports [Go Modules](https://golang.org/ref/mod).
 
