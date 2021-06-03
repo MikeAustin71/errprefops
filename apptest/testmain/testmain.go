@@ -306,6 +306,21 @@ func (tMain TestMain) TestMain024() {
 
 	fmt.Printf(outputStr)
 
+	/*  outputStr
+
+	--------------------------------------------------
+	Tx1.Something() - Tx2.SomethingElse()
+	Tx3.DoSomething() - Tx4() - Tx5()
+	Tx6.DoSomethingElse()
+	Tx7.TrySomethingNew() : something->newSomething
+	Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y
+	Tx10.X() - Tx11.TryAnything() - Tx12.TryASalad()
+	Tx13.SomeFabulousAndComplexStuff()
+	Tx14.MoreAwesomeGoodness() : A=7 B=8 C=9
+	--------------------------------------------------
+	Error: Divide by Zero!
+	*/
+
 }
 
 func (tMain TestMain) TestMain023() {

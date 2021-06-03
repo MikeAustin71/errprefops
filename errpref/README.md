@@ -27,6 +27,7 @@ The current version of ***errpref*** is Version 1.7.0. Most notably, this versio
      - [Customizing Input and Output String Delimiters](#customizing-input-and-output-string-delimiters)
      - [Maximum Text Line Length](#maximum-text-line-length)
      - [Left Margin Feature](#left-margin-feature)
+     - [Leading And Trailing Text Strings](#leading-and-trailing-text-strings)
      - [Text Display On/Off Switch](#text-display-onoff-switch)
      - [Is Last Text Line Terminated With New Line](#is-last-text-line-terminated-with-new-line)
    - [ErrPref - Quick And Simple Solution](#errpref---quick-and-simple-solution)
@@ -571,7 +572,11 @@ In the final example, the left margin length is set to three (3), and the left m
 
 #### Leading And Trailing Text Strings
 
-Users have the option of adding leading or trailing text strings to the error prefix display. Leading Text Strings will be added to the beginning of the text display while Trailing Text Strings will be added to the end of the text display. The addition of Leading and Trailing Text Strings are controlled by the following methods:
+Users have the option of adding leading or trailing text strings to the error prefix display. Leading Text Strings will be added to the beginning of the text display while Trailing Text Strings will be added to the end of the text display. 
+
+Leading and Trailing Text Strings may be comprised of any valid string of characters including new lines ('\n'), tabs ('\t') and line separators.
+
+The addition of Leading and Trailing Text Strings are controlled by the following methods:
 
 - ***ErrPrefixDto.SetLeadingTextStr(***)
 - ***ErrPrefixDto.SetTrailingTextStr()***
@@ -579,6 +584,102 @@ Users have the option of adding leading or trailing text strings to the error pr
 - ***ErrPrefixDto.GetTrailingTextStr()***
 - ***ErrPrefixDto.ClearLeadingTextStr()***
 - ***ErrPrefixDto.ClearTrailingTextStr()***
+
+
+
+Consider the following example:
+
+```go
+	ePDto := errpref.ErrPrefixDto{}.New()
+
+	maxLineLen := 50
+
+	ePDto.SetMaxTextLineLen(maxLineLen)
+
+	var twoDSlice [][2]string
+
+	twoDSlice = make([][2]string, 14)
+
+	twoDSlice[0][0] = "Tx1.Something()"
+	twoDSlice[0][1] = ""
+
+	twoDSlice[1][0] = "Tx2.SomethingElse()"
+	twoDSlice[1][1] = ""
+
+	twoDSlice[2][0] = "Tx3.DoSomething()"
+	twoDSlice[2][1] = ""
+
+	twoDSlice[3][0] = "Tx4()"
+	twoDSlice[3][1] = ""
+
+	twoDSlice[4][0] = "Tx5()"
+	twoDSlice[4][1] = ""
+
+	twoDSlice[5][0] = "Tx6.DoSomethingElse()"
+	twoDSlice[5][1] = ""
+
+	twoDSlice[6][0] = "Tx7.TrySomethingNew()"
+	twoDSlice[6][1] = "something->newSomething"
+
+	twoDSlice[7][0] = "Tx8.TryAnyCombination()"
+	twoDSlice[7][1] = ""
+
+	twoDSlice[8][0] = "Tx9.TryAHammer()"
+	twoDSlice[8][1] = "x->y"
+
+	twoDSlice[9][0] = "Tx10.X()"
+	twoDSlice[9][1] = ""
+
+	twoDSlice[10][0] = "Tx11.TryAnything()"
+	twoDSlice[10][1] = ""
+
+	twoDSlice[11][0] = "Tx12.TryASalad()"
+	twoDSlice[11][1] = ""
+
+	twoDSlice[12][0] = "Tx13.SomeFabulousAndComplexStuff()"
+	twoDSlice[12][1] = ""
+
+	twoDSlice[13][0] = "Tx14.MoreAwesomeGoodness()"
+	twoDSlice[13][1] = "A=7 B=8 C=9"
+
+	ePDto.SetEPrefStrings(twoDSlice)
+
+	leadingText := "\n" +
+		strings.Repeat("-", maxLineLen)
+
+	trailingText := strings.Repeat("-", maxLineLen) +
+		"\n"
+
+	ePDto.SetLeadingTextStr(leadingText)
+	ePDto.SetTrailingTextStr(trailingText)
+	ePDto.SetIsLastLineTermWithNewLine(true)
+
+	outputStr := fmt.Sprintf("%v"+
+		"Error: Divide by Zero!",
+		ePDto.String())
+
+	fmt.Printf(outputStr)
+
+```
+
+
+
+The the example above the final ***outputStr*** will be formatted as:
+
+```tex
+ --------------------------------------------------
+ Tx1.Something() - Tx2.SomethingElse()
+ Tx3.DoSomething() - Tx4() - Tx5()
+ Tx6.DoSomethingElse()
+ Tx7.TrySomethingNew() : something->newSomething
+ Tx8.TryAnyCombination() - Tx9.TryAHammer() : x->y
+ Tx10.X() - Tx11.TryAnything() - Tx12.TryASalad()
+ Tx13.SomeFabulousAndComplexStuff()
+ Tx14.MoreAwesomeGoodness() : A=7 B=8 C=9
+ --------------------------------------------------
+ Error: Divide by Zero!
+
+```
 
 
 
