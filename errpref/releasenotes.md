@@ -1,6 +1,6 @@
-# *errpref* (Error Prefix) Release Notes Version 1.6.1
+# *errpref* (Error Prefix) Release Notes Version 1.7.0
 
-This version of ***errpref*** was compiled and tested using ***Go*** 1.16.3.
+This version of ***errpref*** was compiled and tested using ***Go*** 1.16.4.
 
 This version supports ***Go*** modules.
 
