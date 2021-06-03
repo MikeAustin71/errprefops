@@ -9,9 +9,12 @@ This version supports ***Go*** modules.
 ##### Documentation Updates
 Modified Best Practices documentation for implementing ErrPrefixDto in calls to **Internal or Private Methods**. See the [REAEDME File](README.md).
 
+
+
 ##### ErrPrefixDto
+
 1. Added new method ***ErrPrefixDto{}.NewFromErrPrefDto()***
-   This method can be used to reduce the lines of code required to implement ErrPrefixDto objects in **Internal or Private Methods**. See the [REAEDME File](README.md).
+   This method can be used to reduce the lines of code required to implement ***ErrPrefixDto*** objects in **Internal or Private Methods**. See the [REAEDME File](README.md).
    
    ```go
    func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
@@ -23,16 +26,19 @@ Modified Best Practices documentation for implementing ErrPrefixDto in calls to 
    ```
    
 2. Added new method ***ErrPrefixDto.DeleteLastErrPrefix()***
-   This method deletes the last Error Prefix Information object in the current ErrPrefixDto collection.
+   This method deletes the last Error Prefix Information object in the current ***ErrPrefixDto*** collection.
    
 3. Added new method ***ErrPrefixDto.GetLastErrPrefix()***
-   This method returns a deep copy of the last Error Prefix Information object in the current ErrPrefixDto collection.
+   This method returns a deep copy of the last Error Prefix Information object in the current ***ErrPrefixDto*** collection.
    
 4. Added new method ***ErrPrefixDto.ReplaceLastErrPrefix()***
-   This method deletes and replaces the Last Error Prefix Information object in the current ErrPrefixDto collection with new error prefix and context information.
+   This method deletes and replaces the Last Error Prefix Information object in the current ***ErrPrefixDto*** collection with new error prefix and context information.
+
+
 
 ##### New Leading and Trailing Text Feature
-ErrPrefixDto has added a new feature which allows the user to configure leading and trailing strings. These strings will be added to the beginning and ending of error prefix text displays. The leading and trailing text strings may be comprised of any string of characters including new lines ('\n'), tabs ('\t') and line separators.
+
+***ErrPrefixDto*** has added a new feature which allows the user to configure leading and trailing strings. These strings will be added to the beginning and ending of error prefix text displays. The leading and trailing text strings may be comprised of any string of characters including new lines ('\n'), tabs ('\t') and line separators.
 
 For more information see the documentation on the following methods:
 1. **ErrPrefixDto.SetLeadingTextStr()**
@@ -42,8 +48,11 @@ For more information see the documentation on the following methods:
 5. ***ErrPrefixDto.ClearLeadingTextStr()***
 6. ***ErrPrefixDto.ClearTrailingTextStr()***
 
+
+
 ##### Enforcing Minimum Error Prefix Line Length
-Users have always had the ability to set the maximum line length for error prefix text displays. As of this release, the minimum line length will be enforced by methods in the ***ErrPrefixDto*** and ***ErrPref*** types. The Minimum Error Prefix Line Length is '10' characters. Depending on the function called, any attempt to set a value less than the Minimum Error Prefix Line Length will cause a reset to the default Line Length value, or generate an error. For more information see the documentation on the following methods:
+
+Users have always had the ability to set the maximum line length for error prefix text displays. As of this release, the minimum line length will be enforced by methods in the ***ErrPrefixDto*** and ***ErrPref*** types. The Minimum Error Prefix Line Length is '10' characters. Depending on the function called, any attempt to set a value less than the Minimum Error Prefix Line Length will cause a reset to the default Line Length value (40-characters), or generate an error. For more information see the documentation on the following methods:
 1. ***ErrPref.SetMaxErrPrefTextLineLength()***
 2. ***ErrPrefixDto.SetMaxTextLineLen()***
 3. ***ErrPrefixDto.GetMaxTextLineLen()***

@@ -6,7 +6,12 @@ The ***errpref*** software package was written in the [Go](https://golang.org/) 
 
 ***errpref*** supports [Go Modules](https://golang.org/ref/mod).
 
-The current version of ***errpref*** is Version 1.7.0. Most notably, this version implements the [Left Margin Feature](#left-margin-feature) in error prefix string formatting and [Customizable String Delimiters](#customizing-input-and-output-string-delimiters) for parsing input and output error prefix strings.
+The current version of ***errpref*** is Version 1.7.0 which includes two important upgrades:
+
+- The [Leading and Trailing Text Feature](#leading-and-trailing-text-strings)
+-  The new new method ***ErrPrefixDto{}.NewFromErrPrefDto()*** which reduces the lines of code required to configure error prefix information in [Internal or Private Methods](#internal-or-private-methods). 
+
+For more details, see the [Release Notes](./releasenotes.md).
 
 
 
@@ -49,6 +54,7 @@ The current version of ***errpref*** is Version 1.7.0. Most notably, this versio
  - [Tests](#tests)
  - [OS Support](#os-support)
  - [Version](#version)
+ - [Release Notes](#release-notes)
  - [License](#license)
  - [Comments And Questions](#comments-and-questions)
 
@@ -299,9 +305,9 @@ func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
 
 This method makes provision for the inclusion of an optional error context string.
 
-Notice that this pattern also allows for use of the **nil** value for parameter, ***dto***. If no error prefix information is present or required, just pass a **nil** parameter value.
+Also, notice that this pattern allows for use of the **nil** value for parameter, ***dto***. If no error prefix information is present or required, just pass a **nil** parameter value.
 
-This pattern provides a separate function chain string for each method. This architecture allows for multiple calls from parent methods without adding unnecessary and irrelevant text to the function chain. If an error occurs, only the relevant error prefix and error context information will be returned.
+This pattern provides a separate function chain string for each method. This architecture allows for multiple calls from parent methods without adding unnecessary and irrelevant text to the function chain. If an error occurs, only the relevant error prefix and error context information will be returned in the formatted error message.
 
 
 
@@ -576,7 +582,7 @@ Users have the option of adding leading or trailing text strings to the error pr
 
 Leading and Trailing Text Strings may be comprised of any valid string of characters including new lines ('\n'), tabs ('\t') and line separators.
 
-The addition of Leading and Trailing Text Strings are controlled by the following methods:
+The addition of Leading and Trailing Text Strings is controlled through the following methods:
 
 - ***ErrPrefixDto.SetLeadingTextStr(***)
 - ***ErrPrefixDto.SetTrailingTextStr()***
@@ -1017,6 +1023,12 @@ The latest version is Version 1.7.0.
 As with all previous versions, this Version supports [Go Modules](https://golang.org/ref/mod).
 
 For more details, see the [Release Notes](./releasenotes.md).
+
+
+
+## Release Notes
+
+ [Release Notes](./releasenotes.md)
 
 
 
