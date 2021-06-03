@@ -1022,6 +1022,8 @@ The latest version is Version 1.7.0.
 
 As with all previous versions, this Version supports [Go Modules](https://golang.org/ref/mod).
 
+This version was compiled and tested using using ***Go*** Version 1.16.4.
+
 For more details, see the [Release Notes](./releasenotes.md).
 
 
