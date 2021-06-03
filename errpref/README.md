@@ -996,7 +996,7 @@ None. This software package is not dependent on any external module or package.
 
 Source code tests are located in the **errpref** directory of the source code repository. All files beginning with the letters "**zzzt_**" and ending with "**_test.go**" contain test code. The **errpref** directory is located here: [Test Code](https://github.com/MikeAustin71/errpref)
 
-Currently, tests show code coverage at 87%.
+Currently, tests show code coverage at 96%.
 
 To run the test code, first review the command syntax in [zzzzHowToRunTests](https://github.com/MikeAustin71/errpref/blob/main/zzzzHowToRunTests.md).
 
@@ -1006,7 +1006,7 @@ Test results are stored in the text file, [zzzzz_tests.txt](https://github.com/M
 
 ## OS Support
 
-Tests are running successfully on Windows 10, Ubuntu 20.04.2.0 LTS, Fedora 34.9.2 and Mint 20.1 Cinnamon.
+Tests are running successfully on Windows 10 and Ubuntu 20.04 LTS.
 
 
 
