@@ -250,18 +250,18 @@ In the **Public Facing Methods** example, above, method ***GetCountryFormatters(
 func (nStrBasicQuark numStrBasicQuark) getCountryFormatters(
 	fmtCollection *FormatterCollection,
 	countryCulture CountryCultureId,
-	ePrefix *ErrPrefixDto) (
+	errPrefix *ErrPrefixDto) (
 	err error) {
+	
+    ePrefix,
+	err := ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefix,
+		"numStrBasicQuark.getCountryFormatters()",
+		"")
 
-	if ePrefix == nil {
-		ePrefix = ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefix = ePrefix.CopyPtr()
+	if err != nil {
+		return err
 	}
-
-	ePrefix.SetEPref(
-		"numStrBasicQuark." +
-			"getCountryFormatters()")
 
 	if fmtCollection == nil {
 		err = fmt.Errorf("%v\n"+
@@ -278,14 +278,27 @@ func (nStrBasicQuark numStrBasicQuark) getCountryFormatters(
 Notice how the function name is added to the error prefix chain:
 
 ``` go
-ePrefix.SetEPref(
-		"numStrBasicQuark." +
-			"getCountryFormatters()")
+	ePrefix,
+	err := ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefix,
+		"numStrBasicQuark.getCountryFormatters()",
+		"")
 ```
 
+This is the method signature for ***NewFromErrPrefDto()***:
 
+```
+func (ePrefDto ErrPrefixDto) NewFromErrPrefDto(
+	dto *ErrPrefixDto,
+	newErrPrefix string,
+	newErrContext string) (
+	newErrPrefDto *ErrPrefixDto,
+	err error)
+```
 
-Notice that this pattern also allows for use of the **nil** value for parameter, ***ePrefix***. If no error prefix information is present or required, just pass a **nil** parameter value.
+This method makes provision for the inclusion of an optional error context string.
+
+Notice that this pattern also allows for use of the **nil** value for parameter, ***dto***. If no error prefix information is present or required, just pass a **nil** parameter value.
 
 This pattern provides a separate function chain string for each method. This architecture allows for multiple calls from parent methods without adding unnecessary and irrelevant text to the function chain. If an error occurs, only the relevant error prefix and error context information will be returned.
 
@@ -293,8 +306,7 @@ This pattern provides a separate function chain string for each method. This arc
 
 #### Error Context Example
 
-Recall that **Error Context** strings are designed to provide additional information about the function or method identified by the
-associated **Error Prefix** text. Typical context information might include variable names, variable values and additional details on function execution.
+Recall that **Error Context** strings are designed to provide additional information about the function or method identified by the associated **Error Prefix** text. Typical context information might include variable names, variable values and additional details on function execution.
 
 In this example, a function chain is built by calls to multiple levels of the code hierarchy.  The final call to method **Tx3.DoSomething()** triggers an error thereby returning the names of all methods in the call chain plus error context information associated with those methods.
 
@@ -307,7 +319,7 @@ func(tx1 *Tx1) Something() {
 
   tx2 := Tx2{}
 
-  err := Tx2.SomethingElse(&ePrefDto)
+  err := tx2.SomethingElse(&ePrefDto)
 
   if err !=nil {
     fmt.Printf("%v\n",
@@ -319,17 +331,19 @@ func(tx1 *Tx1) Something() {
 
 func(tx2 *Tx2) SomethingElse(ePrefDto *ErrPrefixDto) error {
 
-	if ePrefDto == nil {
-		ePrefDto = ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefDto = ePrefDto.CopyPtr()
-	}
+	ePrefix,
+		err := ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"Tx2.SomethingElse()",
+		"")
 
-  	ePrefDto.SetEPref("Tx2.SomethingElse()")
+	if err != nil {
+		return err
+	}
 
   	tx3 := Tx3{}
 
-  	err := Tx3.DoSomething(ePrefDto)
+  	err := tx3.DoSomething(ePrefix)
 
   	if err !=nil {
     	return err
@@ -338,24 +352,24 @@ func(tx2 *Tx2) SomethingElse(ePrefDto *ErrPrefixDto) error {
 
 func(tx3 *Tx3) DoSomething(ePrefDto *ErrPrefixDto) error {
 
-	if ePrefDto == nil {
-		ePrefDto = ErrPrefixDto{}.Ptr()
-	} else {
-		ePrefDto = ePrefDto.CopyPtr()
-	}
-
-    // Add error prefix and error context
+   // Add error prefix and error context
     // information.
-    ePrefDto.SetEPrefCtx(
-       "Tx3.DoSomething()",
-       "A=B/C C== 0.0")
+	ePrefix,
+		err := ErrPrefixDto{}.NewFromErrPrefDto(
+		ePrefDto,
+		"Tx3.DoSomething()",
+		"A=B/C C= 0")
+
+	if err != nil {
+		return err
+	}
 
     .... bad code ....
 
     if isDivideByZero {
       return fmt.Errorf("%v\n" +
       "I divided by zero and got this error.\n",
-      ePrefDto.String())
+      ePrefix.String())
     }
 }
 
@@ -366,7 +380,7 @@ When this error is returned up the function chain and finally printed out, the t
 
 ``` text
  Tx1.Something() - Tx2.SomethingElse()
- Tx3.DoSomething() : A=B/C C== 0.0
+ Tx3.DoSomething() : A=B/C C= 0
  I divided by zero and got this error.
 
 ```
@@ -484,6 +498,7 @@ The Maximum Text Line Length is monitored and controlled using methods:
 
 -  ***ErrPrefixDto.SetMaxTextLineLen()***
 -  ***ErrPrefixDto.GetMaxTextLineLen()***
+-  ***ErrPrefixDto.SetMaxTextLineLenToDefault()*** 
 
 Be advised that the minimum text line Length is 10-characters. Any attempt to set the Maximum Text Line Length to a value less than 10-characters will result in reinstatement of the default Maximum Text Line Length.
 
@@ -551,6 +566,19 @@ In the final example, the left margin length is set to three (3), and the left m
 ***Tx14.MoreAwesomeGoodness()
 *** :  A=7 B=8 C=9
 ```
+
+
+
+#### Leading And Trailing Text Strings
+
+Users have the option of adding leading or trailing text strings to the error prefix display. Leading Text Strings will be added to the beginning of the text display while Trailing Text Strings will be added to the end of the text display. The addition of Leading and Trailing Text Strings are controlled by the following methods:
+
+- ***ErrPrefixDto.SetLeadingTextStr(***)
+- ***ErrPrefixDto.SetTrailingTextStr()***
+- ***ErrPrefixDto.GetLeadingTextStr()***
+- ***ErrPrefixDto.GetTrailingTextStr()***
+- ***ErrPrefixDto.ClearLeadingTextStr()***
+- ***ErrPrefixDto.ClearTrailingTextStr()***
 
 
 
@@ -907,3 +935,4 @@ Send questions or comments to:
 ``` text
     mike.go@paladinacs.net
 ```
+
