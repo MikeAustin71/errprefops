@@ -34,7 +34,7 @@ Source Code Documentation for the ***errpref*** software package is located here
 
 ## Version
 
-The latest version of ***errprefops*** is Version 1.7.0.
+The latest version of ***errprefops*** is Version 1.7.1.
 
 ***errprefops*** supports [Go Modules](https://golang.org/ref/mod).
 
