@@ -4320,7 +4320,7 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 
 // XCpy - Creates a copy of the current ErrPrefixDto instance and
 // modifies that copy to set the last error prefix with the text
-// string passed as an input paramter ('newErrContext'). A pointer
+// string passed as an input parameter ('newErrContext'). A pointer
 // to this deep copy is returned to the calling function.
 //
 // ----------------------------------------------------------------
@@ -4351,7 +4351,7 @@ func (ePrefDto *ErrPrefixDto) StrMaxLineLen(
 //     - This string holds the new error context information. This
 //       method creates a copy of the current ErrPrefixDto instance
 //       and modifies that copy to set the last error prefix with
-//       the text string passed by this input paramter.
+//       the text string passed by this input parameter.
 //
 //       A pointer to this deep copy is returned to the calling
 //       function.
