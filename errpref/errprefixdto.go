@@ -4439,6 +4439,25 @@ func (ePrefDto *ErrPrefixDto) XCpy(
 // Be advised: The 'X' methods always return a pointer to current,
 // modified, ErrPrefixDto instance.
 //
+// ----------------------------------------------------------------
+//
+// IMPORTANT
+//
+// This method, 'ErrPrefixDto.XCtx()', differs from method
+// 'ErrPrefixDto.XCpy()'. This method first modifies the original
+// current ErrPrefixDto instance by setting the error context
+// information supplied by input parameter, 'newErrContext'. Next
+// this method will create a deep copy of that modified instance
+// before returning a pointer to that deep copy to the calling function.
+//
+// This method, 'ErrPrefixDto.XCtx()' modifies the original current
+// ErrPrefixDto instance. In contrast 'ErrPrefixDto.XCpy()' DOES
+// NOT modify the original current ErrPrefixDto instance.
+//
+// Method 'ErrPrefixDto.XCpy()' first makes a deep copy of the
+// current ErrPrefixDto instance and then modifies the copy by
+// setting the error context information.
+//
 //
 // ----------------------------------------------------------------
 //
