@@ -40,6 +40,10 @@ The latest version of ***errprefops*** is Version 1.7.1.
 
 
 
+Supports Go Version **1.16**.
+
+
+
 ## License
 
 Use of this source code is governed by the (open-source) MIT-style license which can be found in the LICENSE file
