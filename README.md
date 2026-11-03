@@ -33,20 +33,15 @@ Source Code Documentation for the ***errpref*** software package is located here
 
 ## Version
 
-The latest version of ***errprefops*** is Version 1.8.0.
+The latest version of ***errprefops*** is Version 2.0.0.
 
-***errprefops*** supports [Go Modules](https://golang.org/ref/mod).
-
-
-
-Supports Go Version **1.27.3**.
+***errprefops*** now supports Go Version **1.27.3**.
 
 
 
 ## License
 
-Use of this source code is governed by the (open-source) MIT-style license which can be found in the LICENSE file
-located in this directory.
+Use of this source code is governed by the (open-source) MIT-style license which can be found in the LICENSE file located in this directory.
 
 [MIT License](./LICENSE)
 
