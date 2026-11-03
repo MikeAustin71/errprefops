@@ -1,12 +1,12 @@
-[TOC]
+# Running Tests
 
-# Running Tests in Project ***errprefops***
+## Test Files Naming Convention
+For this project, source files containing tests are named with a prefix of: **zzzt_**
 
-Open a command prompt in this directory (***MikeAustin71/errprefops/errpref***) and run the
-following commands.
+In addition, test file names always end in: **_test.go**
+
 
 ## Run Basic Tests
-
 Open a command prompt in this directory:
  ***MikeAustin71/errpref***
 
@@ -19,77 +19,36 @@ contains all the test results.
 
 The **-v** option signals a request for verbose output.
 
-## Test Execution WITHOUT Code Coverage
-Run these test commands in the ***MikeAustin71/errprefops/errpref*** directory:
+## Resources
+***http://codesamplez.com/development/golang-unit-testing***
 
-### Windows Command Without Coverage
-```go
-go test -v > zzzzz_tests.txt
-```
-
-
-
-### Linux Command Without Coverage
-```go
-go test -v | tee zzzzz_tests.txt
-```
-
-This will generate test results in the ***MikeAustin71/errprefops/errpref***
-directory. The test results will be stored in the text file, ***MikeAustin71/errprefops/errpref/zzzzz_tests.txt***. 
-
-
+## Dependencies
+None so far.
 
 ## Running Tests with code coverage
 
-First, pull down and install the `cover` package.
+First pull down and install the ***cover*** package.
 
-```go
-go get golang.org/x/tools/cmd/cover
-```
+***go get golang.org/x/tools/cmd/cover***
 
 Next, follow the test execution protocol.  
 
-Run these test commands in the ***MikeAustin71/errprefops/errpref*** directory:
+### Test Execution with Code Coverage
 
+***go test -cover -v > zzzzz_tests.txt***  
+     
 
+### Cover Profile
 
-## Test Execution WITH Code Coverage
+Generate the code coverage detail:
 
-Run this in the ***MikeAustin71/errprefops/errpref*** directory:
-
-### Windows Command With Coverage
-```go
-go test -cover -v > zzzzz_tests.txt
-
-// Tests for race conditions
-go test -cover -v -race > zzzzz_tests.txt
-```
-
-### Linux Command With Coverage
-```go
-go test -cover -v | tee zzzzz_tests.txt
-```
-
-
-
-
-## Cover Profile
-
-Generate the code coverage detail. Run this command
-in the ***MikeAustin71/errprefops/errpref*** directory:
-
-```go
-go test -coverprofile=zzzzz_coverage.out
-```
-
-This will output results to file: **`zzzzz_coverage.out`**
+***go test -coverprofile=zzzzz_coverage.out***
 
 The following provides for code coverage display in your
-browser. Run this on the terminal command line and run it
-in the ***MikeAustin71/errprefops/errpref*** directory:
+browser. Run this on the command line:
 
-```go
-go tool cover -html=zzzzz_coverage.out
-```
+  ***go tool cover -html=zzzzz_coverage.out***
 
-This will output results to file: **`zzzzz_coverage.out`**
+## Output File Naming Convention
+The use of **zzzzz_** as a file name prefix for output files ensures
+that the output file will be listed last in the directory.
