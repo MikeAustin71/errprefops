@@ -21,7 +21,7 @@ Storage, distribution and documentation of the ***errpref*** software package wi
 
 This project, the ***errprefops*** development environment, is stored in a software repository [**https://github.com/MikeAustin71/errprefops**](https://github.com/MikeAustin71/errprefops) . It is used for development and testing of ***errpref*** software package releases. The goal is to synchronize the version numbers of ***errprefops***, the development environment, and ***errpref***, the software package.
 
-
+***errpref*** Version 2.0.1 introduced the first custom error type designed to add context and error identification information using a **bubble up** technique.
 
 ## *errpref* Source Code Documentation
 
@@ -33,7 +33,7 @@ Source Code Documentation for the ***errpref*** software package is located here
 
 ## Version
 
-The latest version of ***errprefops*** is Version 2.0.0.
+The latest version of ***errprefops*** is Version 2.0.1.
 
 ***errprefops*** now supports Go Version **1.27.3**.
 
