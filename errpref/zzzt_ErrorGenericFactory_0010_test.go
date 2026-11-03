@@ -89,6 +89,8 @@ func TestFunc04(t *testing.T) {
 	}
 
 	// 1. Print the entire combined error string to visualize the stack trace
+	fmt.Println("--- zzzt_ErrorGenericFactory_0010_test.go TestFunc04 ---")
+	fmt.Println("--- Testing ErrorGenericFactory ---")
 	fmt.Println("--- FULL COMBINED ERROR OUTPUT ---")
 	fmt.Println(err.Error())
 	fmt.Println("---------------------------------")
