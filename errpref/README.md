@@ -1,5 +1,70 @@
 ## Table of Contents
-- *errpref* - Adding function execution chains and error context to Error Messages In Go
+- [***errpref*** - Adding function execution chains and error context to Error Messages In Go](#errpref---adding-function-execution-chains-and-error-context-to-error-messages-in-go)
+- [The Problem](#the-problem)
+- [A New Solution: ***ErrorGenericFactory***](#a-new-solution-errorgenericfactory)
+		- [Specialized Error Types](#specialized-error-types)
+		- [Custom Error Creation and Usage](#custom-error-creation-and-usage)
+			- [1. Create an Instance of the Factory](#1-create-an-instance-of-the-factory)
+			- [2. Select and Generate a Specialized Custom Error Instance](#2-select-and-generate-a-specialized-custom-error-instance)
+			- [3. Apply the Specialized Error Instance As Needed](#3-apply-the-specialized-error-instance-as-needed)
+		- [***ErrorGenericFactory*** Example Usage](#errorgenericfactory-example-usage)
+			- [Call Tree for Test](#call-tree-for-test)
+			- [Test Source Code](#test-source-code)
+		- [***ErrorGenericFactory*** Source Code](#errorgenericfactory-source-code)
+- [An Earlier Solution](#an-earlier-solution)
+		- [Wait a Minute - Let's Think About This](#wait-a-minute---lets-think-about-this)
+	- [What *errpref* Does and Doesn't Do](#what-errpref-does-and-doesnt-do)
+	- [Definition of Terms](#definition-of-terms)
+		- [Error Prefix](#error-prefix)
+		- [Error Context](#error-context)
+	- [Getting Started](#getting-started)
+		- [Two Types To Choose From](#two-types-to-choose-from)
+		- [ErrPrefixDto - A Full Featured Solution](#errprefixdto---a-full-featured-solution)
+			- [Public Facing Methods](#public-facing-methods)
+			- [Internal or Private Methods](#internal-or-private-methods)
+			- [Error Context Examples](#error-context-examples)
+				- [Example-1 Error Flow](#example-1-error-flow)
+				- [Example-2 Calling Subsidiary Functions](#example-2-calling-subsidiary-functions)
+			- [Customizing Input and Output String Delimiters](#customizing-input-and-output-string-delimiters)
+			- [Maximum Text Line Length](#maximum-text-line-length)
+			- [Left Margin Feature](#left-margin-feature)
+			- [Leading And Trailing Text Strings](#leading-and-trailing-text-strings)
+			- [Text Display On/Off Switch](#text-display-onoff-switch)
+			- [***Is Last Text Line Terminated With New Line***](#is-last-text-line-terminated-with-new-line)
+		- [ErrPref - Quick And Simple Solution](#errpref---quick-and-simple-solution)
+			- [Example Usage Summary](#example-usage-summary)
+			- [String Formatting Conventions](#string-formatting-conventions)
+				- [Error Prefix Delimiters](#error-prefix-delimiters)
+				- [Error Context Delimiters](#error-context-delimiters)
+	- [Exchanging Error Prefix Information with User Defined Types](#exchanging-error-prefix-information-with-user-defined-types)
+		- [*IBuilderErrorPrefix*](#ibuildererrorprefix)
+		- [IBasicErrorPrefix](#ibasicerrorprefix)
+		- [Custom Input String Delimiters](#custom-input-string-delimiters)
+	- [Usage Examples](#usage-examples)
+		- [Test Code](#test-code)
+		- [Example Application](#example-application)
+	- [User Package Import and Configuration](#user-package-import-and-configuration)
+		- [Required ***Golang*** Source Code File Import Statement](#required-golang-source-code-file-import-statement)
+		- [***go.mod*** File Configuration](#gomod-file-configuration)
+			- [Option 1: Go Get Command](#option-1-go-get-command)
+				- [How a User Employs `go get` (The Standard Workflow)](#how-a-user-employs-go-get-the-standard-workflow)
+				- [Step 1: Initialize Their Own Project (If they haven't already)](#step-1-initialize-their-own-project-if-they-havent-already)
+				- [Step 2: Run the Modern `go get` Command](#step-2-run-the-modern-go-get-command)
+				- [Step 3: What Go Autonomously Does to `go.mod`](#step-3-what-go-autonomously-does-to-gomod)
+			- [Option 2: ***go.mod*** Manual Configuration](#option-2-gomod-manual-configuration)
+		- [](#)
+	- [External Dependencies](#external-dependencies)
+	- [Tests](#tests)
+	- [OS Support](#os-support)
+	- [Version](#version)
+	- [***errPref*** Source Code Repository](#errpref-source-code-repository)
+	- [Release Notes](#release-notes)
+	- [License](#license)
+	- [Comments And Questions](#comments-and-questions)
+
+
+
+# ***errpref*** - Adding function execution chains and error context to Error Messages In Go
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/MikeAustin71/errpref.svg)](https://pkg.go.dev/github.com/MikeAustin71/errpref)
 
@@ -1559,14 +1624,43 @@ Test Code provides many usage examples for types ***ErrPref*** and ***ErrPrefixD
 Additional code examples can be found in the Error Prefix Examples Application located at [https://github.com/MikeAustin71/errorPrefixExamples](https://github.com/MikeAustin71/errorPrefixExamples).  This application also contains a "Concurrency" example.
 
 
-## Package Configuration and Import
 
+## User Package Import and Configuration
 
+There are two basic requirements:
 
-### Go Get Command
+1. **The User must add `import` statements to those source code files incorporating `errPref` functions, types, methods, constants etc.**
+2. **The User MUST configure the local `go.mod` file to reference the `errPref` package.**
+
+### Required ***Golang*** Source Code File Import Statement
 
 ```go
-go get github.com/MikeAustin71/errpref/@v1.7.1
+// For the later errpref versions (Version 2)
+
+import (
+
+	ePref "github.com/MikeAustin71/errpref/v2"
+)
+
+// For earlier 'errpref' versions (Version 1)
+import (
+
+	ePref "github.com/MikeAustin71/errpref"
+)
+
+
+```
+
+The import example above shows an alias of '**ePref**' which is optional.
+
+### ***go.mod*** File Configuration
+
+**Users** must also configure their local ***go.mod*** file. There are two options to accomplish this: 
+
+#### Option 1: Go Get Command
+
+```go
+go get github.com/MikeAustin71/errpref/@v2.0.1
 ```
 
 ​	-- or --
@@ -1575,22 +1669,55 @@ go get github.com/MikeAustin71/errpref/@v1.7.1
 go get github.com/MikeAustin71/errpref/@latest
 ```
 
+##### How a User Employs `go get` (The Standard Workflow)
 
+When a developer wants to use your `errpref` library in their own source code, they will follow these exact steps from their terminal:
 
-### Import Configuration
+##### Step 1: Initialize Their Own Project (If they haven't already)
 
-```go
+The **User** creates their project folder and initializes their own ***`gomod`*** module:
 
-import (
-
-	erPref "github.com/MikeAustin71/errpref"
-)
-
+```bash
+go mod init mytestproject
 ```
 
-The import example above shows an alias of 'erPref' which is optional.
+At this point, their `go.mod` file is completely empty of dependencies.
 
+##### Step 2: Run the Modern `go get` Command
 
+Instead of opening `go.mod` and guessing the syntax, the user simply runs the command in their terminal:
+
+```
+go get github.com/MikeAustin71/errpref/v2@v2.0.1
+```
+
+##### Step 3: What Go Autonomously Does to `go.mod`
+
+The moment that command executes, the Go toolchain does three things simultaneously:
+
+1. **Downloads the source code** for `v2.0.1` into the local machine's global module cache.
+
+2. **Modifies the user's `go.mod` file automatically**, adding the exact block you expected:
+
+   ```
+   require github.com/MikeAustin71/errpref/v2 v2.0.1
+   ```
+
+   
+
+3. **Creates or updates a `go.sum` file** next to it, which stores the cryptographic security hashes of your code to ensure it's never altered downstream.
+
+------
+
+#### Option 2: ***go.mod*** Manual Configuration
+
+If the ***go.mod*** file was previously created, simply add the following ***require*** statement to the existing ***go.mod*** file.
+
+```bash
+require github.com/MikeAustin71/errpref/v2 v2.0.1
+```
+
+###  
 
 ## External Dependencies
 
@@ -1612,19 +1739,27 @@ All 500+ tests are currently passing including new tests for newly added type **
 
 ## OS Support
 
-***errpref*** versions prior to **Version 2.0.0** were tested successfully on Windows 10 and Ubuntu 20.04 LTS.
+***errpref*** versions prior to **Version 2.0.1** were tested successfully on Windows 10 and Ubuntu 20.04 LTS.
 
-***errpref*** **Version 2.0.0** has been tested on Windows 11. It should have no problems running on **Linux**, but as yet <u>no tests have been run on **Linux** operating systems</u>.
+***errpref*** **Version 2.0.1** has been tested on Windows 11. It should have no problems running on **Linux**, but as yet, <u>no tests have been run on **Linux** operating systems</u>.
 
 
 
 ## Version
 
-The latest version is ***Version 2.0.0***.
+The latest version is ***Version 2.0.1***.
 
 This version was compiled and tested using using ***Go*** ***Version 1.27.3***.
 
 For more details, see the [Release Notes](./releasenotes.md).
+
+
+
+## ***errPref*** Source Code Repository
+
+The source code repository for ***errPref*** is **github.com/MikeAustin71/errpref/** . This repository is used to distribute release versions.
+
+The development repository is ***errprefops*** located at ***github.com/MikeAustin71/errprefops***
 
 
 
